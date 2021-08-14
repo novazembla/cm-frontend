@@ -1,4 +1,4 @@
-import React, { MouseEventHandler,useState, useEffect, useContext } from "react";
+import React, { MouseEventHandler,useState, useEffect } from "react";
 import {
   HiMenu,
   HiOutlineHome,
@@ -21,7 +21,8 @@ import {
 } from "@chakra-ui/react";
 import { useTranslation } from "next-i18next";
 import { InlineLanguageButtons, ActiveLink } from "~/components/ui";
-import { MapContext } from "~/provider";
+
+import { useSSRSaveMediaQuery } from "~/hooks";
 
 const NavItem = ({
   title,
@@ -72,23 +73,10 @@ const NavItem = ({
 
 export const Sidebar = () => {
   const { t } = useTranslation();
-  const { setPins } = useContext(MapContext);
-
-  const [mounted, setMounted] = useState(false)
-  const [tw] = useMediaQuery("(min-width: 55em)");
-
-  useEffect(()=>{ 
-    setMounted(true)
-  },[])
-
+  
+  const tw = useSSRSaveMediaQuery("(min-width: 55em)");
   
   const isMobile = tw ? false : true;
-
-  console.log(tw, isMobile, mounted);
-  // TODO: fix sidebar to at least be desktop first ... 
-  // https://github.com/chakra-ui/chakra-ui/issues/4319
-  // >>> https://github.com/chakra-ui/chakra-ui/issues/3124
-
 
   const { isOpen, onToggle } = useDisclosure();
 
@@ -145,16 +133,15 @@ export const Sidebar = () => {
       )}
       <Box
         w="100%"
-        maxW={{ base: "100%", tw: "calc(260px + 1rem)" }}
+        maxW={{ base: "100%", tw: "calc(260px + 2rem)" }}
         className={`${isMobile ? "active" : "inactive"} ${
           !isOpen || !isMobile ? "closed" : "open"
         }`}
-        transition="all 0.2s"
         pr={{ base: 3, tw: 0 }}
         pl={{ base: 3, tw: 4 }}
         pb={{ base: 3, tw: 4 }}
         position="sticky"
-        top={{ base: "48px", tw: "72px" }}
+        top={{ base: "48px", tw: "68px" }}
         sx={{
           "&.active": {
             position: "fixed",
@@ -164,6 +151,7 @@ export const Sidebar = () => {
             top: 0,
             height: "100%",
             overflow: "auto",
+            transition: "all 0.2s"
           },
           "&.active > div": {
             shadow: "none",
@@ -182,16 +170,7 @@ export const Sidebar = () => {
             return <NavItem key={link.path} {...link} onClick={onToggle} />;
           })}
 
-          <Box mt="8">
-          <Button onClick={() => setPins([
-  {lng: 52.536821,  lat: 13.514006},
-  {lng: 52.522971,  lat: 13.492928},
-  {lng: 52.517696,  lat: 13.437911},
-  {lng: 52.529969,  lat: 13.472438},
-  {lng: 52.522971, lat:  13.491897},
-
-])} >SET PINS</Button>
-          </Box>
+         
         </Box>
       </Box>
     </>

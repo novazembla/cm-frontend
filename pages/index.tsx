@@ -8,12 +8,12 @@ import { Box, Heading } from "@chakra-ui/react";
 
 export default function Home() {
   return (
-    <Box layerStyle="pageContainerWhite">
-      <Heading as="h1" mb="3">
-        XXX 
-      </Heading>
-      <Box maxW="800px">dklajsklflksdafkljdfskljflkdsajklj</Box>
-    </Box>
+      <Box layerStyle="pageContainerWhite">
+        <Heading as="h1" mb="3">
+          Startseite/Home
+        </Heading>
+        <Box maxW="800px">Proin tincidunt enim in felis aliquet, a ultricies purus bibendum.</Box>
+      </Box>
   );
 }
 

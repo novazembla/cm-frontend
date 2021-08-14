@@ -4,10 +4,19 @@
 export const components = {
   Button: {
     baseStyle: {
-      borderRadius: "md",
+      borderRadius: "0",
       _focus: {
         boxShadow: "blue",
       },
+      textDecoration: "none !important",
+      _hover: {
+        color: "white"
+      },
+      _disabled: {
+        _hover: {
+          color: "white"
+        }
+      }
     },
     variants: {
       outline: {
@@ -40,6 +49,7 @@ export const components = {
       outline: {
         field: {
           bg: "#fff",
+          borderRadius: "0px",
           borderColor: "gray.400",
           _hover: {
             borderColor: "gray.500",

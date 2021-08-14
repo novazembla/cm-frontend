@@ -4,12 +4,12 @@ import { ActiveLink } from "~/components/ui";
 import { Flex, HStack, Link } from "@chakra-ui/react";
 import { useTranslation } from "next-i18next";
 
-import { useConfig } from "~/hooks";
+import { useConfigContext } from "~/provider";
 import { MultiLangValue } from "../ui";
 import { HiLink } from "react-icons/hi";
 
 export const Footer = ({ type = "full" }: { type?: string }) => {
-  const config = useConfig();
+  const config = useConfigContext();
 
   const { t } = useTranslation();
 

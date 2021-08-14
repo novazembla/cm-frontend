@@ -1,11 +1,13 @@
-import React, { createContext } from "react";
+import React, { createContext, useContext } from "react";
 import { AppConfig } from "~/types";
 
 import { appConfig } from "~/config";
 
 
 // create context
-export const ConfigContext = createContext<AppConfig>(appConfig);
+const ConfigContext = createContext<AppConfig>(appConfig);
+
+export const useConfigContext = () => useContext(ConfigContext);
 
 // context provider
 export const ConfigContextProvider = ({

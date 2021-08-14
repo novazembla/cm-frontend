@@ -80,8 +80,6 @@ const themeConfig = {
         mt: 2
       }
     },
-
-    
   },
   colors: {
     wine: 
@@ -127,13 +125,13 @@ const themeConfig = {
   layerStyles: {
     pageContainerGray: {
       bg: "gray.100",
-      borderRadius: "lg",
+      // borderRadius: "lg",
       shadow: "sm",
     },
     pageContainerWhite: {
       bg: "white",
-      borderRadius: "lg",
-      shadow: "md",
+      // borderRadius: "lg",
+      shadow: "xl",
       p:{ base: 4, tw: 5 },
     },
   },

@@ -14,3 +14,26 @@ export interface AppConfig {
   defaultLanguage: string;
   activeLanguages: string[];
 }
+
+export interface MapPin {
+  id: number;
+  type: string;
+  lat: number;
+  lng: number;
+}
+
+export interface QuickSearchResult {
+  items: QuickSearchResultItem[];
+  totalCount: number;
+}
+
+export interface QuickSearchResultItem {
+  id: number;
+  type: string;
+  lat: number;
+  lng: number;
+  title: Record<string, string>;
+  excerpt: Record<string, string>;
+  slug: Record<string, string>;
+  geopoint: Record<string, number>;
+}

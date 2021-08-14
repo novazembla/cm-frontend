@@ -1,5 +1,5 @@
 import React from "react";
-import { appWithTranslation } from 'next-i18next';
+import { appWithTranslation } from "next-i18next";
 import { ChakraProvider } from "@chakra-ui/react";
 
 import "../styles/globals.scss";
@@ -7,7 +7,12 @@ import type { AppProps } from "next/app";
 
 import { LayoutFull } from "~/components/app";
 
-import { ConfigContextProvider, AppApolloProvider, MapContextProvider } from "~/provider";
+import {
+  ConfigContextProvider,
+  AppApolloProvider,
+  MapContextProvider,
+  QuickSearchContextProvider,
+} from "~/provider";
 
 import "@fontsource/raleway/400.css";
 import "@fontsource/raleway/700.css";
@@ -25,9 +30,11 @@ function MyApp({ Component, pageProps }: AppProps) {
       <AppApolloProvider>
         <ChakraProvider theme={chakraTheme}>
           <MapContextProvider>
-            <LayoutFull>
-              <Component {...pageProps} />
-            </LayoutFull>
+            <QuickSearchContextProvider>
+              <LayoutFull>
+                <Component {...pageProps} />
+              </LayoutFull>
+            </QuickSearchContextProvider>
           </MapContextProvider>
         </ChakraProvider>
       </AppApolloProvider>
@@ -35,5 +42,3 @@ function MyApp({ Component, pageProps }: AppProps) {
   );
 }
 export default appWithTranslation(MyApp);
-
-

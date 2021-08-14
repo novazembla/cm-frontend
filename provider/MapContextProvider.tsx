@@ -1,16 +1,12 @@
-import React, { createContext } from "react";
+import React, { createContext, useContext } from "react";
 import { useState } from "react";
+import type { MapPin } from "~/types";
 
-type MapContextData = { 
-  setPins: any;
-  pins: any[]; 
-}
+const MapSetPinsContext = createContext<Function>(() => {});
+const MapPinsContext = createContext<MapPin[]>([]);
 
-// create context
-export const MapContext = createContext<MapContextData>({
-  setPins: () => {},
-  pins: []
-});
+export const useMapSetPinsContext = () => useContext(MapSetPinsContext);
+export const useMapPinsContext = () => useContext(MapPinsContext);
 
 // context provider
 export const MapContextProvider = ({
@@ -18,11 +14,21 @@ export const MapContextProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [pins, setPins] = useState<any[]>([])
+  const [mapPinsInContext, setMapPins] = useState<MapPin[]>([]);
+
+  const setMapPinsInContext = (pins: MapPin[]) => {
+    //if (pins.length > 0) {
+      setMapPins(pins);
+    // } else {
+    //   setMapPins([]);
+    // }
+  };
 
   return (
-    <MapContext.Provider value={{pins, setPins}}>
-      {children}
-    </MapContext.Provider>
+    <MapPinsContext.Provider value={mapPinsInContext}>
+      <MapSetPinsContext.Provider value={setMapPinsInContext}>
+        {children}
+      </MapSetPinsContext.Provider>
+    </MapPinsContext.Provider>
   );
 };
