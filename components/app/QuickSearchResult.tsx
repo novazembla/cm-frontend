@@ -3,17 +3,12 @@ import { Box, Divider, Heading, Text } from "@chakra-ui/react";
 
 
 import { useQuickSearchResultContext } from "~/provider";
-import { MultiLangValue, ListLocation } from "~/components/ui";
+import { MultiLangValue, QuickSearchItem } from "~/components/ui";
 import { useTranslation } from "next-i18next";
 
 export const QuickSearchResult = () => {
   const quickSearchResultInContext = useQuickSearchResultContext();
   const { t} = useTranslation();
-
-  console.log("QR", quickSearchResultInContext);
-
-
-
 
   return (
     <Box
@@ -30,8 +25,6 @@ export const QuickSearchResult = () => {
         {(quickSearchResultInContext && Object.keys(quickSearchResultInContext).length > 0) && Object.keys(quickSearchResultInContext).map((key) => {
           let title;
 
-          console.log(key);
-          
           switch (key) {
             case "location":
               title = t("quicksearch.module.title.location", "Location(s)");
@@ -55,7 +48,7 @@ export const QuickSearchResult = () => {
             <Heading as="h2" fontSize="2xl" mb="4">
               {quickSearchResultInContext[key].totalCount} {title} {t("found","found")}
             </Heading>
-            {quickSearchResultInContext[key].items.map((item, i) => <ListLocation key={`log-${i}`} location={item} />
+            {quickSearchResultInContext[key].items.map((item, i) => <QuickSearchItem module={key} key={`${key}-${i}`} location={item} />
             )}
           </Box>
         )})}

@@ -18,6 +18,7 @@ export interface AppConfig {
 export interface MapPin {
   id: number;
   type: string;
+  slug: Record<string, string>;
   lat: number;
   lng: number;
 }

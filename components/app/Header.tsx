@@ -1,12 +1,7 @@
-import React, {
-  useState,
-  ChangeEvent,
-  useEffect,
-  useMemo,
-  useContext,
-} from "react";
+import React, { useState, ChangeEvent, useEffect, useMemo } from "react";
 import { useTranslation } from "next-i18next";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useRouter } from "next/router";
 
 import { ActiveLink } from "~/components/ui";
 import { object, string } from "yup";
@@ -25,7 +20,6 @@ import {
   Input,
   IconButton,
   HStack,
-  useWhyDidYouUpdate,
 } from "@chakra-ui/react";
 
 import { useSSRSaveMediaQuery } from "~/hooks";
@@ -33,7 +27,10 @@ import { useSSRSaveMediaQuery } from "~/hooks";
 import { InlineLanguageButtons } from "~/components/ui";
 import { useLazyQuery, gql } from "@apollo/client";
 import { useForm, Controller } from "react-hook-form";
-import { useMapSetPinsContext, useQuickSearchSetSearchResultContext } from "~/provider";
+import {
+  useMapContext,
+  useQuickSearchSetSearchResultContext,
+} from "~/provider";
 
 const menuLinkStyling = {
   bg: "#fff",
@@ -48,15 +45,6 @@ const debounce = (fn: Function, ms = 300) => {
   };
 };
 
-// const debounce = (callback: Function, delay: number) => {
-//   let timer: ReturnType<typeof setTimeout>;
-//   return (...args: any) => {
-//     clearTimeout(timer);
-//     timer = setTimeout(() => callback(args), delay);
-//   };
-// };
-
-// TODO expand search capability
 const searchQuery = gql`
   query quickSearch($search: String!) {
     quickSearch(search: $search) {
@@ -82,11 +70,12 @@ export const SearchFormSchema = object().shape({
 });
 
 export const Header = (/* props */) => {
+  const router = useRouter();
   const [currentSearchTerm, setCurrentSearchTerm] = useState("");
   const [triggerSearch, { data, loading, error }] = useLazyQuery(searchQuery, {
     variables: { search: "" },
   });
-  const setMapPinsInContext = useMapSetPinsContext();
+  const cultureMap = useMapContext();
   const setQuickSearchResultInContext = useQuickSearchSetSearchResultContext();
 
   const { t } = useTranslation();
@@ -102,100 +91,95 @@ export const Header = (/* props */) => {
     getValues,
     register,
     control,
+    setValue,
     formState: { isSubmitting, isValid, isDirty, errors },
   } = useForm({
     mode: "onChange",
     resolver: yupResolver(SearchFormSchema),
   });
-  useWhyDidYouUpdate("header", {
-    searchTerm,
-    triggerSearch,
-    setMapPinsInContext,
-    setCurrentSearchTerm,
-    currentSearchTerm,
-    setQuickSearchResultInContext,
 
-  })
   useEffect(() => {
-    console.log("Updated search term ", currentSearchTerm, searchTerm);
-
     if (currentSearchTerm !== searchTerm) {
       if (searchTerm.length > 2) {
-        console.log(`Trigger ${searchTerm}`);
         triggerSearch({
           variables: {
             search: searchTerm,
           },
         });
       } else {
-        console.log("clearing results");
-        setMapPinsInContext([]);
+        if (cultureMap)
+          cultureMap.clear();
         setQuickSearchResultInContext({});
       }
       setCurrentSearchTerm(searchTerm);
     }
-    
   }, [
     searchTerm,
     triggerSearch,
-    setMapPinsInContext,
+    cultureMap,
     setCurrentSearchTerm,
     currentSearchTerm,
     setQuickSearchResultInContext,
   ]);
 
   const searchResult = useMemo(() => {
-    if (currentSearchTerm.length < 3)
-      return [];
+    if (currentSearchTerm.length < 3) return [];
 
-    console.log("DATA", data, error, data?.quickSearch);
     if (error || !data?.quickSearch || data?.quickSearch.length === 0)
       return [];
-
-    console.log("return quicksearch data result", data.quickSearch);
 
     return data.quickSearch;
   }, [currentSearchTerm, data, error]);
 
   useEffect(() => {
     if (!loading) {
-      console.log("useEffect: searchResult", searchResult);
-      // if ()
-      // // TODO: this needs to filter out pages and stuff like that as they only show in the sidebar
-      // // const pins = searchResult.reduce(
-      // //   (acc: any, module: any) => [
-      // //     ...acc,
-      // //     ...module.items.map((item: any) => ({
-      // //       id: item.id,
-      // //       type: "location",
-      // //       lat: item.geopoint.lat,
-      // //       lng: item.geopoint.lng,
-      // //     })),
-      // //   ],
-      // //   []
-      // // );
+      // TODO: can events be shown?
+      const pins = searchResult.reduce((acc: any, result: any) => {
+        if (result.module !== "location") return acc;
 
-      console.log("RESULT", searchResult);
-
-      // // setMapPinsInContext(pins);
-
-      setQuickSearchResultInContext(searchResult.reduce(
-        (acc: any, result: any) => ({
+        return [
           ...acc,
-          [result.module]: {
-            totalCount: result.totalCount,
-            items: result.items
-          }
-        }),
-        {}
-      ));
+          ...result.items.map((item: any) => ({
+            id: item.id,
+            type: "location",
+            lat: item.geopoint.lat,
+            lng: item.geopoint.lng,
+          })),
+        ];
+      }, []);
+
+      if (cultureMap) {
+        cultureMap.clear();
+        cultureMap.addMarkers(pins);
+      }
+      
+      setQuickSearchResultInContext(
+        searchResult.reduce(
+          (acc: any, result: any) => ({
+            ...acc,
+            [result.module]: {
+              totalCount: result.totalCount,
+              items: result.items,
+            },
+          }),
+          {}
+        )
+      );
     }
-  }, [loading, searchResult, setMapPinsInContext, setQuickSearchResultInContext]);
+  }, [loading, searchResult, cultureMap, setQuickSearchResultInContext]);
 
   const onSubmit = async (data: yup.InferType<typeof SearchFormSchema>) => {
-    console.log("on submit");
     setSearchTerm(data.search);
   };
+
+  useEffect(() => {
+    setSearchTerm("");
+  }, [router.asPath, setSearchTerm]);
+
+  const isFieldInValid =
+    (!isValid && isDirty) ||
+    "search" in errors ||
+    (searchTerm.length > 3 && (!data || data?.quickSearch?.length === 0));
 
   return (
     <Box
@@ -231,14 +215,15 @@ export const Header = (/* props */) => {
             </Link>
           </Heading>
         </Box>
-        
-        <Box w={{ base: "100%", tw: "40%" }} pl={{base:"60px", tw: "0"}} maxW="400px">
+
+        <Box
+          w={{ base: "100%", tw: "40%" }}
+          pl={{ base: "60px", tw: "0" }}
+          maxW="400px"
+        >
           <form noValidate onSubmit={handleSubmit(onSubmit)}>
             <HStack>
-              <FormControl
-                isInvalid={(!isValid && isDirty) || "search" in errors}
-                isRequired
-              >
+              <FormControl isInvalid={isFieldInValid} isRequired>
                 <VisuallyHidden>
                   <FormLabel>Search</FormLabel>
                 </VisuallyHidden>
@@ -265,6 +250,12 @@ export const Header = (/* props */) => {
                       }}
                       placeholder={t("search", "Search")}
                       ref={ref}
+                      sx={{
+                        "[aria-invalid=true]": {
+                          borderTop: "10px",
+                          boxShadow: "0 0 0 1px #F56565 !important",
+                        },
+                      }}
                     />
                   )}
                 />

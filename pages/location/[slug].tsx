@@ -7,9 +7,30 @@ import { isEmptyHtml, getMultilangValue } from "../../utils";
 import { useTranslation } from "next-i18next";
 import Link from "next/link";
 import i18n from "i18next";
+import { useEffect } from "react";
+import { useMapContext } from "~/provider";
 
 const Page = ({ location }: { location: any }) => {
+  const cultureMap = useMapContext();
+
   const { t } = useTranslation();
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      if (cultureMap && location?.lng && location?.lat) {
+        cultureMap.clear();
+        cultureMap.addMarkers([
+          {
+            type: "location",
+            id: location.id,
+            slug: location.slug,
+            lng: location.lng,
+            lat: location.lat,
+          },
+        ]);
+        cultureMap.panTo(location.lng, location.lat);
+      }
+    }
+  }, [location, cultureMap]);
 
   return (
     <Box layerStyle="pageContainerWhite">
@@ -68,7 +89,7 @@ const Page = ({ location }: { location: any }) => {
         </Box>
       )}
 
-      {location.terms && location.terms.length && (
+      {location.terms && location.terms.length > 0 && (
         <Box
           maxW="800px"
           size="md"
@@ -87,7 +108,7 @@ const Page = ({ location }: { location: any }) => {
         </Box>
       )}
 
-      {location.events && location.events.length && (
+      {location.events && location.events.length > 0 && (
         <Box
           maxW="800px"
           size="md"
@@ -105,7 +126,7 @@ const Page = ({ location }: { location: any }) => {
               key={`evnt-${i}`}
               mt="4"
               _first={{
-                mt:3
+                mt: 3,
               }}
             >
               <Link href={`/event/${getMultilangValue(event.slug)}`}>
@@ -120,24 +141,28 @@ const Page = ({ location }: { location: any }) => {
                       <MultiLangValue json={event.title} />
                     </Heading>
                     <Box fontSize="sm">
-                    {event.dates &&
-                      event.dates.length > 0 &&
-                      event.dates
-                        .map(
-                          (date: any, i: number) =>
-                            `${new Date(date.date).toLocaleDateString(
-                              i18n.language,
-                              { year: "numeric", month: "long", day: "numeric" }
-                            )} ${new Date(date.begin).toLocaleTimeString(
-                              i18n.language,
-                              { hour: "2-digit", minute: "2-digit" }
-                            )}-${new Date(date.end).toLocaleTimeString(
-                              i18n.language,
-                              { hour: "2-digit", minute: "2-digit" }
-                            )}`
-                        )
-                        .join(", ")}
-                        </Box>
+                      {event.dates &&
+                        event.dates.length > 0 &&
+                        event.dates
+                          .map(
+                            (date: any, i: number) =>
+                              `${new Date(date.date).toLocaleDateString(
+                                i18n.language,
+                                {
+                                  year: "numeric",
+                                  month: "long",
+                                  day: "numeric",
+                                }
+                              )} ${new Date(date.begin).toLocaleTimeString(
+                                i18n.language,
+                                { hour: "2-digit", minute: "2-digit" }
+                              )}-${new Date(date.end).toLocaleTimeString(
+                                i18n.language,
+                                { hour: "2-digit", minute: "2-digit" }
+                              )}`
+                          )
+                          .join(", ")}
+                    </Box>
                   </chakra.span>
                 </a>
               </Link>

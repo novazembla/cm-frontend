@@ -6,7 +6,7 @@ import { getApolloClient } from "~/services";
 
 import { useMapContext } from "~/provider";
 
-export const Home = ({ locations }: { locations: any }) => {
+export const Locations = ({ locations }: { locations: any }) => {
   const cultureMap = useMapContext();
 
   useEffect(() => {
@@ -29,7 +29,7 @@ export const Home = ({ locations }: { locations: any }) => {
   return (
     <Box layerStyle="pageContainerWhite">
       <Heading as="h1" mb="3">
-        Startseite/Home
+      ???
       </Heading>
       <Box maxW="800px">
         Proin tincidunt enim in felis aliquet, a ultricies purus bibendum.
@@ -77,4 +77,4 @@ export async function getServerSideProps({
   };
 }
 
-export default Home;
+export default Locations;

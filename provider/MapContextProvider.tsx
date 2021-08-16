@@ -1,12 +1,11 @@
-import React, { createContext, useContext } from "react";
+import React, { createContext, useContext, useRef, useEffect } from "react";
 import { useState } from "react";
 import type { MapPin } from "~/types";
+import { CultureMap } from "~/services";
 
-const MapSetPinsContext = createContext<Function>(() => {});
-const MapPinsContext = createContext<MapPin[]>([]);
+const MapContext = createContext<CultureMap | undefined>(undefined)
 
-export const useMapSetPinsContext = () => useContext(MapSetPinsContext);
-export const useMapPinsContext = () => useContext(MapPinsContext);
+export const useMapContext = () => useContext(MapContext);
 
 // context provider
 export const MapContextProvider = ({
@@ -14,21 +13,11 @@ export const MapContextProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [mapPinsInContext, setMapPins] = useState<MapPin[]>([]);
-
-  const setMapPinsInContext = (pins: MapPin[]) => {
-    //if (pins.length > 0) {
-      setMapPins(pins);
-    // } else {
-    //   setMapPins([]);
-    // }
-  };
-
+  const cultureMapRef = useRef<CultureMap>(new CultureMap());
+ 
   return (
-    <MapPinsContext.Provider value={mapPinsInContext}>
-      <MapSetPinsContext.Provider value={setMapPinsInContext}>
-        {children}
-      </MapSetPinsContext.Provider>
-    </MapPinsContext.Provider>
+    <MapContext.Provider value={cultureMapRef.current}>
+      {children}
+    </MapContext.Provider>
   );
 };

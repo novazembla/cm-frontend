@@ -12,12 +12,12 @@ export const LayoutFull = ({ children }: AppProps) => {
   const hasQuickSearchResults = useQuickSearchHasResultContext();
   const router = useRouter();
   const isMobile = useSSRSaveMediaQuery("(max-width: 55em)");
-  console.log("Rrrrrouter" , router);
+  
   const hideSidebar = ["/location/[slug]", "/event/[slug]", "/events"].includes(router.pathname);
 
   const columns = hasQuickSearchResults
     ? "100%"
-    : { base: "100%", tw: hideSidebar ? "max(500px, 25vw) 1fr" : "calc(260px + 1em) calc(100% - 260px - 3em)" };
+    : { base: "100%", tw: hideSidebar ? "max(500px, 25vw)" : "calc(260px + 1em) calc(100% - 260px - 3em)" };
   return (
     <>
       <Head>
@@ -28,7 +28,7 @@ export const LayoutFull = ({ children }: AppProps) => {
       </Head>
       <Map />
       <Grid
-        w="100%"
+        w={hideSidebar && !isMobile ? "max(500px, 25vw)" : "100%"}
         // templateColumns={{ base: "1fr", tw: "260px 1fr" }}
         templateColumns={columns}
         gap="4"

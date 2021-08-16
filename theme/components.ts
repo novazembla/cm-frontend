@@ -17,6 +17,7 @@ export const components = {
           color: "white"
         }
       }
+      
     },
     variants: {
       outline: {
@@ -57,6 +58,19 @@ export const components = {
           _autofill: {
             bg: "wine.300",
           },
+          _invalid: {
+            _focus: {
+              borderColor: "red.500",
+              boxShadow: "0 0 0 1px #F56565",
+
+            },
+            _hover: {
+              borderColor: "red.500",
+              boxShadow: "0 0 0 1px #F56565",
+
+            }
+
+          }
         },
       },
     },
