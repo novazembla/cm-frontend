@@ -100,7 +100,7 @@ export const Sidebar = () => {
       icon: RiCalendarEventLine,
     },
     {
-      title: t("mainnav.page.title", "Pages"),
+      title: t("mainnav.page.title", "About Us"),
       path: "/page/about-us",
       exact: false,
       icon: HiOutlineDocumentText,

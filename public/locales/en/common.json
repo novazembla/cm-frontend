@@ -1,0 +1,33 @@
+{
+  "footer": {
+    "contactLink": {
+      "title": "Contact"
+    }
+  },
+  "search": "Search",
+  "locations": "Locations",
+  "found": "found",
+  "mainnav": {
+    "home": {
+      "title": "Home"
+    },
+    "locations": {
+      "title": "Locations"
+    },
+    "events": {
+      "title": "Events"
+    },
+    "page": {
+      "title": "About Us"
+    }
+  },
+  "menu": {
+    "close": "Close menu",
+    "open": "Open menu"
+  },
+  "translationnotfound": "Trans. not found",
+  "error": {
+    "pagenotfound": "Page not found",
+    "pleasetryagain": "Please try again"
+  }
+}
