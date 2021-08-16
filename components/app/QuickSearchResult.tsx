@@ -3,7 +3,7 @@ import { Box, Divider, Heading, Text } from "@chakra-ui/react";
 
 
 import { useQuickSearchResultContext } from "~/provider";
-import { MultiLangValue } from "../ui";
+import { MultiLangValue, ListLocation } from "~/components/ui";
 import { useTranslation } from "next-i18next";
 
 export const QuickSearchResult = () => {
@@ -11,6 +11,9 @@ export const QuickSearchResult = () => {
   const { t} = useTranslation();
 
   console.log("QR", quickSearchResultInContext);
+
+
+
 
   return (
     <Box
@@ -24,28 +27,35 @@ export const QuickSearchResult = () => {
       bg="white"
     >
       <Box mt="1" p="0">
-        {Object.keys(quickSearchResultInContext).map((key) => {
+        {(quickSearchResultInContext && Object.keys(quickSearchResultInContext).length > 0) && Object.keys(quickSearchResultInContext).map((key) => {
+          let title;
 
-          console.log(quickSearchResultInContext[key]);
+          console.log(key);
           
-          
+          switch (key) {
+            case "location":
+              title = t("quicksearch.module.title.location", "Location(s)");
+              break;
+            
+            case "event":
+              title = t("quicksearch.module.title.event","Event(s)");
+              break;
+
+            case "tour":
+              title = t("quicksearch.module.title.tour","Tour(s)");
+              break;
+
+            case "page":
+              title = t("quicksearch.module.title.pgae","Page(s)");
+              break;
+          }
+
           return (
-          <Box key={`${key}`}>
+          <Box key={`${key}`} mb="4">
             <Heading as="h2" fontSize="2xl" mb="4">
-              {quickSearchResultInContext[key].totalCount} {t("locations","Locations")} {t("found","found")}
+              {quickSearchResultInContext[key].totalCount} {title} {t("found","found")}
             </Heading>
-            {quickSearchResultInContext[key].items.map((item, i) => 
-              <Box key={`${key}${i}`} sx={{
-                _last: {
-                  "> hr": {
-                    display: "none"
-                  }
-                }
-              }}>
-                <Text><b><MultiLangValue json={item.title}/></b></Text>
-                <Text><MultiLangValue json={item.excerpt}/></Text>
-                <Divider />
-              </Box>
+            {quickSearchResultInContext[key].items.map((item, i) => <ListLocation key={`log-${i}`} location={item} />
             )}
           </Box>
         )})}

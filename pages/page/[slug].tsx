@@ -15,8 +15,7 @@ const Page = ({page}: {page:any}) => {
 // This gets called on every request
 export async function getServerSideProps({ params, locale }: { params: any, locale: any }) {
   const client = getApolloClient();
-  const slug = "about-us";
-
+  
   const pageQuery = gql`
   query($slug: String!) {
     page(slug: $slug) {

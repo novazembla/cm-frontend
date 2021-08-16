@@ -18,12 +18,7 @@ import {
   Heading,
   Grid,
   Link,
-  Avatar,
   Box,
-  Icon,
-  Menu,
-  MenuButton,
-  InputLeftElement,
   VisuallyHidden,
   FormControl,
   FormLabel,
@@ -180,7 +175,7 @@ export const Header = (/* props */) => {
       // //   []
       // // );
 
-      // // console.log("RESULT", searchResult);
+      console.log("RESULT", searchResult);
 
       // // setMapPinsInContext(pins);
 
@@ -236,7 +231,8 @@ export const Header = (/* props */) => {
             </Link>
           </Heading>
         </Box>
-        <Box w={{ base: "80%", tw: "40%" }} maxW="400px">
+        
+        <Box w={{ base: "100%", tw: "40%" }} pl={{base:"60px", tw: "0"}} maxW="400px">
           <form noValidate onSubmit={handleSubmit(onSubmit)}>
             <HStack>
               <FormControl

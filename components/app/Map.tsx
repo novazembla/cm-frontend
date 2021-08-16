@@ -148,7 +148,7 @@ export const Map = () => {
       center: [lng, lat],
       zoom: zoom,
     });
-    map.current.addControl(new maplibregl.NavigationControl(), "bottom-left"); //added
+    map.current.addControl(new maplibregl.NavigationControl(), "bottom-right"); //added
 
     mapMarkers.current = new MapMarkers();
   });

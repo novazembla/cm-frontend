@@ -14,7 +14,7 @@ export const Footer = ({ type = "full" }: { type?: string }) => {
   const { t } = useTranslation();
 
   return (
-    <Flex textAlign="center" justifyContent="center">
+    <Flex textAlign="center" justifyContent="center" position="fixed" bottom="0" left="50%" zIndex="5" transform="translateX(-50%) translateY(-25%)">
       <HStack spacing="8" >
         <Link
           href={`mailto:${config.contactEmail}`}
