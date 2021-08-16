@@ -31,7 +31,11 @@ export const QuickSearchContextProvider = ({
   const setQuickSearchResultInContext = (
     result: Record<string, QuickSearchResult>
   ) => {
-    console.log("setQuickSearchResultInContext", result, quickSearchResultInContext);
+    console.log(
+      "setQuickSearchResultInContext",
+      result,
+      quickSearchResultInContext
+    );
     if (JSON.stringify(result) !== JSON.stringify(quickSearchResultInContext)) {
       console.log("setQuickSearchResultInContext");
       // if (Object.keys(result).length != )
@@ -40,16 +44,14 @@ export const QuickSearchContextProvider = ({
   };
 
   return (
-    <QuickSearchSetSearchResultContext.Provider
-      value={setQuickSearchResultInContext}
-    >
-      <QuickSearchResultContext.Provider
-        value={quickSearchResultInContext}
-      >
-        <QuickSearchHasResultContext.Provider value={hasQuickSearchResults}>
+    <QuickSearchResultContext.Provider value={quickSearchResultInContext}>
+      <QuickSearchHasResultContext.Provider value={hasQuickSearchResults}>
+        <QuickSearchSetSearchResultContext.Provider
+          value={setQuickSearchResultInContext}
+        >
           {children}
-        </QuickSearchHasResultContext.Provider>
-      </QuickSearchResultContext.Provider>
-    </QuickSearchSetSearchResultContext.Provider>
+        </QuickSearchSetSearchResultContext.Provider>
+      </QuickSearchHasResultContext.Provider>
+    </QuickSearchResultContext.Provider>
   );
 };
