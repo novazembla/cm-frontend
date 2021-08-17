@@ -15,9 +15,7 @@ import {
   Icon,
   useDisclosure,
   IconButton,
-  chakra,
-  useMediaQuery,
-  Button,
+  chakra
 } from "@chakra-ui/react";
 import { useTranslation } from "next-i18next";
 import { InlineLanguageButtons, ActiveLink } from "~/components/ui";
@@ -34,7 +32,7 @@ const NavItem = ({
   path: string;
   exact: boolean;
   icon: any;
-  onClick: MouseEventHandler;
+  onClick: Function;
 }) => {
   return (
     <Box>
@@ -62,7 +60,7 @@ const NavItem = ({
             color: "var(--chakra-colors-wine-600) !important",
           },
         }}
-        onClick={onClick}
+        onClick={onClick as any}
       >
         <chakra.span><Icon as={icon} mr="2" />
         {title}</chakra.span>
@@ -78,7 +76,7 @@ export const Sidebar = () => {
   
   const isMobile = tw ? false : true;
 
-  const { isOpen, onToggle } = useDisclosure();
+  const { isOpen, onToggle, onClose } = useDisclosure();
 
   const mainNavLinks = [
     {
@@ -163,11 +161,11 @@ export const Sidebar = () => {
       >
         <Box
           layerStyle="pageContainerWhite"
-          mt={{ base: 12, tw: 4 }}
+          mt={{ base: 12, tw: "1.37rem" }}
           w={{ base: "100%", tw: "260px" }}
         >
           {mainNavLinks.map((link) => {
-            return <NavItem key={link.path} {...link} onClick={onToggle} />;
+            return <NavItem key={link.path} {...link} onClick={onClose} />;
           })}
 
          

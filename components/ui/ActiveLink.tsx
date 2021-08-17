@@ -22,7 +22,7 @@ export const ActiveLink = ({ children, activeClassName = "active", href, ...prop
   return (
     
       <Link href={href}>
-        <a {...{className}}>{children}</a>
+        <a {...{className}} onClick={(props as any)?.onClick}>{children}</a>
       </Link>
       
   )

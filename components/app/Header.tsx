@@ -198,12 +198,12 @@ export const Header = (/* props */) => {
       <Grid
         bg="white"
         gap={6}
-        templateColumns={{ base: "1fr 62px", tw: "260px 1fr 60px" }}
+        templateColumns={{ base: "1fr 80px", tw: "260px 1fr 80px" }}
         alignItems="center"
         p={{ base: 2, tw: 3 }}
       >
         <Box display={showLogo}>
-          <Heading as="h2" ml="2">
+          <Heading as="h2" ml="2" fontSize="38px">
             <Link
               as={ActiveLink}
               activeClassName="active"

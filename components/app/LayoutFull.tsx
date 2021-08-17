@@ -33,7 +33,8 @@ export const LayoutFull = ({ children }: AppProps) => {
         templateColumns={columns}
         gap="4"
         alignItems="start"
-        pt={{ base: "60px", tw: "68px" }}
+        pt={{ base: "3.8rem", tw: "4rem" }}
+        pb={{ base: "1.5rem", tw: "1.5rem" }}
         className="content"
       >
         <Header />
@@ -43,7 +44,7 @@ export const LayoutFull = ({ children }: AppProps) => {
           <>
             {(isMobile || !isMobile && !hideSidebar) && <Sidebar />}
 
-            <Box py={{ base: 3, tw: 4 }} px={{base:"4", tw: hideSidebar? "4": "0"}}w="100%">
+            <Box py={{ base: 3, tw: "1.3rem" }} px={{base:"4", tw: hideSidebar? "4": "0"}} w="100%">
               <Box mb={{ base: 2, tw: 3 }}>{children}</Box>
 
               
