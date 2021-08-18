@@ -4,3 +4,4 @@ export * from "./MultiLangValue";
 export * from "./MultiLangHtml";
 export * from "./ListLocation";
 export * from "./QuickSearchItem";
+export * from "./ApiImage";

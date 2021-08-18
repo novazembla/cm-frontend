@@ -39,3 +39,27 @@ a {
 * {
   box-sizing: border-box;
 }
+
+
+.aspect {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: 66%;
+  .ratio {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top:0;
+
+    left: 0;
+
+    div,
+    img,picture {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+} 
