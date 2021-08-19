@@ -1,8 +1,8 @@
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { gql } from "@apollo/client";
-import { MultiLangValue, MultiLangHtml } from "~/components/ui";
+import { MultiLangValue, MultiLangHtml, ApiImage } from "~/components/ui";
 import { getApolloClient } from "~/services";
-import { Box, chakra, Heading } from "@chakra-ui/react";
+import { Box, chakra, Heading, Text } from "@chakra-ui/react";
 import { isEmptyHtml, getMultilangValue } from "../../utils";
 import { useTranslation } from "next-i18next";
 import Link from "next/link";
@@ -37,9 +37,27 @@ const Page = ({ location }: { location: any }) => {
       <Heading as="h1" mb="3" fontSize="2xl">
         <MultiLangValue json={location.title} />
       </Heading>
-      <Box maxW="800px" size="lg" color="gray.600" fontWeight="bold">
+      <Box maxW="800px" size="lg" color="gray.600" fontWeight="bold" mb="3">
         <MultiLangHtml json={location.description} />
       </Box>
+
+      {location.heroImage && location.heroImage.id && (
+        <Box w="100%" maxW="800px" mb="3">
+          <ApiImage
+            id={location.heroImage.id}
+            alt={location.heroImage.alt}
+            meta={location.heroImage.meta}
+            forceAspectRatioPB={75}
+            status={location.heroImage.status}
+            sizes="(min-widht: 55rem) 800px, 100vw"
+          />
+          {location.heroImage.credits !== "" && (
+            <Text fontSize="xs" mt="0.5" color="gray.400">
+              <MultiLangValue json={location.heroImage.credits} />
+            </Text>
+          )}
+        </Box>
+      )}
 
       {!isEmptyHtml(getMultilangValue(location.address)) && (
         <Box
@@ -210,6 +228,13 @@ export async function getServerSideProps({
             end
             date
           }
+        }
+        heroImage {
+          id
+          status
+          meta
+          alt
+          credits
         }
       }
     }
