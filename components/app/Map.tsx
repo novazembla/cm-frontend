@@ -21,7 +21,7 @@ export const Map = () => {
 
     const map = new maplibregl.Map({
       container: mapContainer.current as HTMLElement,
-      style: `https://api.maptiler.com/maps/streets/style.json?key=${config.mapApiKey}`,
+      style: `https://www.vincentvanuffelen.com/lichtenberg/osm_liberty_culturemap.json`,
       center: [config.lng, config.lat],
       zoom: config.zoom,
     });

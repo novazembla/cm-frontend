@@ -35,22 +35,7 @@ const Page = ({ event }: { event: any }) => {
           )}
         </Box>
       )}
-      {!isEmptyHtml(getMultilangValue(event.descriptionLocation)) && (
-        <Box
-          maxW="800px"
-          size="md"
-          mt="3"
-          borderTop="1px solid"
-          borderColor="gray.200"
-          pt="4"
-        >
-          <Heading as="h2" mb="1" fontSize="md">
-            {t("event.title.descriptionLocation", "Location information")}:
-          </Heading>
-          <MultiLangHtml json={event.descriptionLocation} />
-        </Box>
-      )}
-
+     
       {event.terms && event.terms.length && (
         <Box
           maxW="800px"
@@ -109,7 +94,6 @@ export async function getServerSideProps({
         title
         slug
         description
-        descriptionLocation
         terms {
           id
           name
