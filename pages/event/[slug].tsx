@@ -36,7 +36,7 @@ const Page = ({ event }: { event: any }) => {
         </Box>
       )}
      
-      {event.terms && event.terms.length && (
+      {event.terms && event.terms.length > 0 && (
         <Box
           maxW="800px"
           size="md"
@@ -55,7 +55,7 @@ const Page = ({ event }: { event: any }) => {
         </Box>
       )}
 
-      {event.locations && event.locations.length && (
+      {event.locations && event.locations.length > 0 && (
         <Box
           maxW="800px"
           size="md"
