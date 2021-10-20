@@ -33,6 +33,10 @@ const Page = ({ page }: { page: any }) => {
             )}
           </Box>
         )}
+        <Box fontSize="lg">
+          <MultiLangHtml json={page.intro} />
+        </Box>
+
         <MultiLangHtml json={page.content} />
       </Box>
     </Box>
@@ -69,7 +73,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     }
   `;
 
-  const accessToken = (context?.previewData as any)?.accessToken
+  const accessToken = (context?.previewData as any)?.accessToken;
 
   const { data } = await client.query({
     query: pageQuery,
