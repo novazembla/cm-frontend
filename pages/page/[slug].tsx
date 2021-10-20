@@ -3,6 +3,7 @@ import { gql } from "@apollo/client";
 import { MultiLangValue, MultiLangHtml, ApiImage } from "~/components/ui";
 import { getApolloClient } from "~/services";
 import { Box, Heading, Text } from "@chakra-ui/react";
+import { GetStaticPaths, GetStaticProps } from "next";
 
 const Page = ({ page }: { page: any }) => {
   if (page.heroImage) {
@@ -25,7 +26,11 @@ const Page = ({ page }: { page: any }) => {
               status={page.heroImage.status}
               sizes="(min-widht: 55rem) 800px, 100vw"
             />
-            {page.heroImage.credits !== "" && <Text fontSize="xs" mt="0.5" color="gray.400"><MultiLangValue json={page.heroImage.credits}/></Text>}
+            {page.heroImage.credits !== "" && (
+              <Text fontSize="xs" mt="0.5" color="gray.400">
+                <MultiLangValue json={page.heroImage.credits} />
+              </Text>
+            )}
           </Box>
         )}
         <MultiLangHtml json={page.content} />
@@ -34,14 +39,15 @@ const Page = ({ page }: { page: any }) => {
   );
 };
 
+export const getStaticPaths: GetStaticPaths = async () => {
+  return {
+    paths: [], //indicates that no page needs be created at build time
+    fallback: "blocking", //indicates the type of fallback
+  };
+};
+
 // This gets called on every request
-export async function getServerSideProps({
-  params,
-  locale,
-}: {
-  params: any;
-  locale: any;
-}) {
+export const getStaticProps: GetStaticProps = async (context) => {
   const client = getApolloClient();
 
   const pageQuery = gql`
@@ -50,6 +56,7 @@ export async function getServerSideProps({
         id
         title
         slug
+        intro
         content
         heroImage {
           id
@@ -62,19 +69,37 @@ export async function getServerSideProps({
     }
   `;
 
+  const accessToken = (context?.previewData as any)?.accessToken
+
   const { data } = await client.query({
     query: pageQuery,
     variables: {
-      slug: params.slug,
+      slug: context?.params?.slug,
     },
+    ...(context?.preview && accessToken
+      ? {
+          context: {
+            headers: {
+              authorization: `Bearer ${accessToken}`,
+            },
+          },
+        }
+      : {}),
   });
+
+  if (!data?.page)
+    return {
+      notFound: true,
+      revalidate: 240,
+    };
 
   return {
     props: {
-      ...(await serverSideTranslations(locale)),
-      page: data.page,
+      ...(await serverSideTranslations((context as any)?.locale)),
+      page: data?.page,
     },
+    revalidate: 240,
   };
-}
+};
 
 export default Page;

@@ -9,6 +9,7 @@ import Link from "next/link";
 import i18n from "i18next";
 import { useEffect } from "react";
 import { useMapContext } from "~/provider";
+import { GetStaticPaths, GetStaticProps } from "next";
 
 const Page = ({ location }: { location: any }) => {
   const cultureMap = useMapContext();
@@ -192,14 +193,15 @@ const Page = ({ location }: { location: any }) => {
   );
 };
 
+export const getStaticPaths: GetStaticPaths = async () => {
+  return {
+    paths: [], //indicates that no page needs be created at build time
+    fallback: "blocking", //indicates the type of fallback
+  };
+};
+
 // This gets called on every request
-export async function getServerSideProps({
-  params,
-  locale,
-}: {
-  params: any;
-  locale: any;
-}) {
+export const getStaticProps: GetStaticProps = async (context) => {
   const client = getApolloClient();
 
   const locationQuery = gql`
@@ -240,19 +242,38 @@ export async function getServerSideProps({
     }
   `;
 
+  const accessToken = (context?.previewData as any)?.accessToken
+
   const { data } = await client.query({
     query: locationQuery,
     variables: {
-      slug: params.slug,
+      slug: context?.params?.slug,
     },
+    ...(context?.preview && accessToken
+      ? {
+          context: {
+            headers: {
+              authorization: `Bearer ${accessToken}`,
+            },
+          },
+        }
+      : {}),
   });
+
+  if (!data?.location)
+    return {
+      notFound: true,
+      revalidate: 240,
+    };
 
   return {
     props: {
-      ...(await serverSideTranslations(locale)),
-      location: data.location,
+      ...(await serverSideTranslations((context as any)?.locale)),
+      location: data?.location,
     },
+    revalidate: 240,
   };
+
 }
 
 export default Page;

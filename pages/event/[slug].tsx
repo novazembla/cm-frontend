@@ -6,6 +6,7 @@ import { Box, chakra, Heading, Text } from "@chakra-ui/react";
 import { isEmptyHtml, getMultilangValue } from "../../utils";
 import { useTranslation } from "next-i18next";
 import { ListLocation } from "~/components/ui";
+import { GetStaticPaths, GetStaticProps } from "next";
 
 const Page = ({ event }: { event: any }) => {
   const { t } = useTranslation();
@@ -35,7 +36,7 @@ const Page = ({ event }: { event: any }) => {
           )}
         </Box>
       )}
-     
+
       {event.terms && event.terms.length > 0 && (
         <Box
           maxW="800px"
@@ -77,14 +78,15 @@ const Page = ({ event }: { event: any }) => {
   );
 };
 
+export const getStaticPaths: GetStaticPaths = async () => {
+  return {
+    paths: [], //indicates that no page needs be created at build time
+    fallback: "blocking", //indicates the type of fallback
+  };
+};
+
 // This gets called on every request
-export async function getServerSideProps({
-  params,
-  locale,
-}: {
-  params: any;
-  locale: any;
-}) {
+export const getStaticProps: GetStaticProps = async (context) => {
   const client = getApolloClient();
 
   const eventQuery = gql`
@@ -123,19 +125,37 @@ export async function getServerSideProps({
     }
   `;
 
+  const accessToken = (context?.previewData as any)?.accessToken;
+
   const { data } = await client.query({
     query: eventQuery,
     variables: {
-      slug: params.slug,
+      slug: context?.params?.slug,
     },
+    ...(context?.preview && accessToken
+      ? {
+          context: {
+            headers: {
+              authorization: `Bearer ${accessToken}`,
+            },
+          },
+        }
+      : {}),
   });
+
+  if (!data?.event)
+    return {
+      notFound: true,
+      revalidate: 240,
+    };
 
   return {
     props: {
-      ...(await serverSideTranslations(locale)),
-      event: data.event,
+      ...(await serverSideTranslations((context as any)?.locale)),
+      event: data?.event,
     },
+    revalidate: 240,
   };
-}
+};
 
 export default Page;
