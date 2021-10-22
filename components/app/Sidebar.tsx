@@ -131,15 +131,15 @@ export const Sidebar = () => {
       )}
       <Box
         w="100%"
-        maxW={{ base: "100%", tw: "calc(260px + 2rem)" }}
+        maxW={{ base: "100%", md: "calc(260px + 2rem)" }}
         className={`${isMobile ? "active" : "inactive"} ${
           !isOpen || !isMobile ? "closed" : "open"
         }`}
-        pr={{ base: 3, tw: 0 }}
-        pl={{ base: 3, tw: 4 }}
-        pb={{ base: 3, tw: 4 }}
+        pr={{ base: 3, md: 0 }}
+        pl={{ base: 3, md: 4 }}
+        pb={{ base: 3, md: 4 }}
         position="sticky"
-        top={{ base: "48px", tw: "68px" }}
+        top={{ base: "48px", md: "68px" }}
         sx={{
           "&.active": {
             position: "fixed",
@@ -161,8 +161,8 @@ export const Sidebar = () => {
       >
         <Box
           layerStyle="pageContainerWhite"
-          mt={{ base: 12, tw: "1.37rem" }}
-          w={{ base: "100%", tw: "260px" }}
+          mt={{ base: 12, md: "1.37rem" }}
+          w={{ base: "100%", md: "260px" }}
         >
           {mainNavLinks.map((link) => {
             return <NavItem key={link.path} {...link} onClick={onClose} />;

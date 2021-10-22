@@ -1,4 +1,5 @@
 export * from "./useSSRSaveMediaQuery";
+export * from "./useIsBreakPoint";
 export * from "./useImageStatusPoll";
 
 // TODO: this awkward import should help ESLINt to work with the layout effect properly

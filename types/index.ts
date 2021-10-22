@@ -13,6 +13,7 @@ export interface AppConfig {
   mapApiKey: string;
   defaultLanguage: string;
   activeLanguages: string[];
+  nav: Record<string, any[]>;
 }
 
 export interface MapPin {

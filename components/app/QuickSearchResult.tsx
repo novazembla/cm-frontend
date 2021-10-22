@@ -14,10 +14,10 @@ export const QuickSearchResult = () => {
     <Box
       w="100%"
       position="absolute"
-      p={{ base: 3, tw: 4 }}
-      top={{ base: "40px", tw: "66px" }}
-      height={{ base: "calc(100vh - 40px)", tw: "calc(100vh - 66px)" }}
-      width={{ base: "100%", tw: "340px" }}
+      p={{ base: 3, md: 4 }}
+      top={{ base: "40px", md: "66px" }}
+      height={{ base: "calc(100vh - 40px)", md: "calc(100vh - 66px)" }}
+      width={{ base: "100%", md: "340px" }}
       overflowY="auto"
       bg="white"
     >

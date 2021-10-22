@@ -1,6 +1,9 @@
 // Defaults are defined here:
 // https://github.com/chakra-ui/chakra-ui/tree/main/packages/theme/src/components
 
+import { chakraToBreakpointArray } from "./helpers";
+
+
 export const components = {
   Button: {
     baseStyle: {
@@ -10,39 +13,54 @@ export const components = {
       },
       textDecoration: "none !important",
       _hover: {
-        color: "white"
+        color: "white",
       },
       _disabled: {
         _hover: {
-          color: "white"
-        }
-      }
-      
+          color: "white",
+        },
+      },
     },
     variants: {
       outline: {
-        bg: "white"
-      }
-    }
+        bg: "white",
+      },
+    },
   },
   Checkbox: {
     baseStyle: {
       control: {
-        borderColor:"gray.500",
+        borderColor: "gray.500",
 
         _disabled: {
           bg: "gray.100",
           borderColor: "gray.300",
         },
-      }
-    }
+      },
+    },
   },
   Divider: {
     baseStyle: {
       borderColor: "gray.300",
       maxW: "80%",
       my: 6,
-      mx: "auto"
+      mx: "auto",
+    },
+  },
+  Heading: {
+    sizes: {
+      xl2:  {
+        lineHeight: chakraToBreakpointArray({
+          base: "25px",
+          md: "31px",
+          xl:  "31px",
+        }),
+        fontSize: chakraToBreakpointArray({
+          base: "22px",
+          md: "28px",
+          xl:  "28px",
+        }),
+      },
     },
   },
   Input: {
@@ -62,15 +80,12 @@ export const components = {
             _focus: {
               borderColor: "red.500",
               boxShadow: "0 0 0 1px #F56565",
-
             },
             _hover: {
               borderColor: "red.500",
               boxShadow: "0 0 0 1px #F56565",
-
-            }
-
-          }
+            },
+          },
         },
       },
     },
@@ -95,18 +110,19 @@ export const components = {
     baseStyle: {
       color: "wine.600",
       _hover: {
-        color: "wine.800"
+        color: "wine.800",
       },
     },
   },
   Switch: {
     baseStyle: {
       track: {
-        bg:"gray.400",
+        bg: "gray.400",
         _invalid: {
           bg: "red.400",
-        }
-      }
-    }
-  }
+        },
+      },
+    },
+  },
+  
 };

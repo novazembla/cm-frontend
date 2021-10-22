@@ -14,18 +14,31 @@ export const InlineLanguageButtons = () => {
   return (
     <HStack spacing="2">
       {config.activeLanguages &&
-        config.activeLanguages.map((lang) => (
-          <RouterLink key={lang} href={router.asPath} locale={lang}>
-            <Button
-              as={Link}
-              size="sm"
-              disabled={router.locale === lang}
-              textTransform="uppercase"
-            >
-              {lang}
-            </Button>
-          </RouterLink>
-        ))}
+        config.activeLanguages
+          .reduce((acc: any, lang: any) => {
+            if (lang === i18n.language) return acc;
+
+            acc.push(
+              <RouterLink
+                key={lang}
+                href={router.asPath}
+                locale={lang}
+                passHref
+              >
+                <Link
+                  textTransform="uppercase"
+                  color="cm.accentLight"
+                  textStyle="navigation"
+                  textDecoration="none !important"
+                  _hover={{ color: "cm.text" }}
+                >
+                  {lang}
+                </Link>
+              </RouterLink>
+            );
+            return acc;
+          }, [] as any)
+          .map((e: any) => e)}
     </HStack>
   );
 };

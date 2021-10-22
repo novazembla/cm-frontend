@@ -3,22 +3,32 @@ import { useTranslation } from "next-i18next";
 import { useConfigContext } from "~/provider";
 import { Box } from "@chakra-ui/react";
 
-export const MultiLangHtml = ({ json }: { json?: Record<string, string> | string }) => {
-  
+export const MultiLangHtml = ({
+  json,
+}: {
+  json?: Record<string, string> | string;
+}) => {
   const { t, i18n } = useTranslation();
   const config = useConfigContext();
 
-  if (!json)
-    return <></>;
-    
-  if (typeof json === "string")
-    return <>{json}</>
-    
-  const defVal = json[config.defaultLanguage ?? ""] ? `${json[config.defaultLanguage ?? ""]} *`: undefined;
+  if (!json) return <></>;
 
-  let value = json[i18n.language] ?? defVal ?? t("translationnotfound", "Trans. not found");
+  if (typeof json === "string") return <>{json}</>;
 
-  return <Box dangerouslySetInnerHTML={{
-    __html: value
-  }}/>;
+  const defVal = json[config.defaultLanguage ?? ""]
+    ? `${json[config.defaultLanguage ?? ""]}`
+    : undefined;
+
+  let value =
+    json[i18n.language] ??
+    defVal ??
+    t("translationnotfound", "Trans. not found");
+
+  return (
+    <Box
+      dangerouslySetInnerHTML={{
+        __html: value,
+      }}
+    />
+  );
 };

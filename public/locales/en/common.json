@@ -4,8 +4,20 @@
       "title": "Contact"
     }
   },
+  "header": {
+    "logo": "CultureMap Lichtenberg"
+  },
   "search": "Search",
-  "locations": "Locations",
+  "quicksearch": {
+    "module": {
+      "title": {
+        "location": "Location(s)",
+        "event": "Event(s)",
+        "tour": "Tour(s)",
+        "pgae": "Page(s)"
+      }
+    }
+  },
   "found": "found",
   "mainnav": {
     "home": {
@@ -25,9 +37,40 @@
     "close": "Close menu",
     "open": "Open menu"
   },
+  "apiimage": {
+    "errormsg": "The image could unfortunately not be processed. Please try uploading again.",
+    "processsing": "Image successfuly uploaded. We are processing it now",
+    "placeholder": "Image"
+  },
+  "card": {
+    "meta": {
+      "location": "Location",
+      "event": "Event",
+      "tour": "Tour"
+    }
+  },
   "translationnotfound": "Trans. not found",
   "error": {
     "pagenotfound": "Page not found",
     "pleasetryagain": "Please try again"
+  },
+  "event": {
+    "title": {
+      "categories": "Categories",
+      "locations": "Locations"
+    }
+  },
+  "page": {
+    "title": "Events",
+    "eventcount": "Events"
+  },
+  "location": {
+    "title": {
+      "address": "Address",
+      "contactInfo": "Contact information",
+      "offers": "Offering the following",
+      "categories": "Categories",
+      "events": "Events"
+    }
   }
 }

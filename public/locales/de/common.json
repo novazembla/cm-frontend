@@ -4,9 +4,21 @@
       "title": "Kontakt"
     }
   },
-  "search": "Search",
-  "locations": "Locations",
-  "found": "found",
+  "header": {
+    "logo": "Kulturkarte Lichtenberg"
+  },
+  "search": "Suche",
+  "quicksearch": {
+    "module": {
+      "title": {
+        "location": "Kartenpunkte",
+        "event": "Veranstaltungen",
+        "tour": "Touren",
+        "pgae": "Seiten"
+      }
+    }
+  },
+  "found": "gefunden",
   "mainnav": {
     "home": {
       "title": "Startseite"
@@ -25,9 +37,40 @@
     "close": "Menü schließen",
     "open": "Menü öffnen"
   },
+  "apiimage": {
+    "errormsg": "The image could unfortunately not be processed. Please try uploading again.",
+    "processsing": "Image successfuly uploaded. We are processing it now",
+    "placeholder": "Image"
+  },
+  "card": {
+    "meta": {
+      "location": "Location",
+      "event": "Event",
+      "tour": "Tour"
+    }
+  },
   "translationnotfound": "Trans. not found",
   "error": {
     "pagenotfound": "Seite nicht gefunden",
     "pleasetryagain": "Die von Ihnen gewünschte URL konnte leider nicht gefunden werden"
+  },
+  "event": {
+    "title": {
+      "categories": "Categories",
+      "locations": "Locations"
+    }
+  },
+  "page": {
+    "title": "Events",
+    "eventcount": "Events"
+  },
+  "location": {
+    "title": {
+      "address": "Address",
+      "contactInfo": "Contact information",
+      "offers": "Offering the following",
+      "categories": "Categories",
+      "events": "Events"
+    }
   }
 }

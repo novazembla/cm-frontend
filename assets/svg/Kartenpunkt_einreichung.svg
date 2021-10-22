@@ -1,0 +1,12 @@
+<svg id="Komponente_57_1" data-name="Komponente 57 – 1" xmlns="http://www.w3.org/2000/svg" width="70" height="70" viewBox="0 0 70 70">
+  <g id="Gruppe_267" data-name="Gruppe 267" transform="translate(-173.75 -753.453)">
+    <line id="Linie_93" data-name="Linie 93" x2="8.589" y2="9.339" transform="translate(195.75 787.792)" fill="none" stroke="#660d36" stroke-linecap="round" stroke-width="1.5"/>
+    <line id="Linie_94" data-name="Linie 94" x2="25" transform="translate(204.339 797.131) rotate(-45)" fill="none" stroke="#660d36" stroke-linecap="round" stroke-width="1.5"/>
+  </g>
+  <g id="Gruppe_268" data-name="Gruppe 268" transform="translate(-1 -0.778)">
+    <g id="Ellipse_1" data-name="Ellipse 1" transform="translate(1 0.778)" fill="none" stroke="#660d36" stroke-width="1.5">
+      <circle cx="35" cy="35" r="35" stroke="none"/>
+      <circle cx="35" cy="35" r="34.25" fill="none"/>
+    </g>
+  </g>
+</svg>

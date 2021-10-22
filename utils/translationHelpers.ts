@@ -7,7 +7,7 @@ export const getMultilangValue = (
 
   if (typeof json === "string") return json;
 
-  const defaultLanguage = "en"; // Todo: make this configurable! 
+  const defaultLanguage = "de"; // Todo: make this configurable! 
 
   const defVal = json[defaultLanguage]
     ? `${json[defaultLanguage]}`

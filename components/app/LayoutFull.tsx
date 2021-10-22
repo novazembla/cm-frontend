@@ -1,23 +1,30 @@
 import React, { useContext } from "react";
 import Head from "next/head";
-import { useRouter } from 'next/router'
+import { useRouter } from "next/router";
 import { Box, Grid } from "@chakra-ui/react";
 
-import { Footer, Header, Sidebar, Map, QuickSearchResult } from ".";
-import { useSSRSaveMediaQuery} from "~/hooks";
+import { Header, Map, QuickSearchResult, MobileNav } from ".";
+import { useIsBreakPoint } from "~/hooks";
 import { AppProps } from "~/types";
 import { useQuickSearchHasResultContext } from "~/provider";
 
 export const LayoutFull = ({ children }: AppProps) => {
   const hasQuickSearchResults = useQuickSearchHasResultContext();
   const router = useRouter();
-  const isMobile = useSSRSaveMediaQuery("(max-width: 55em)");
-  
-  const hideSidebar = ["/location/[slug]", "/event/[slug]", "/events"].includes(router.pathname);
+  const {isMobile} = useIsBreakPoint();
+
+  const hideSidebar = ["/location/[slug]", "/event/[slug]", "/events"].includes(
+    router.pathname
+  );
 
   const columns = hasQuickSearchResults
     ? "100%"
-    : { base: "100%", tw: hideSidebar ? "max(500px, 25vw)" : "calc(260px + 1em) calc(100% - 260px - 3em)" };
+    : {
+        base: "100%",
+        md: hideSidebar
+          ? "max(500px, 25vw)"
+          : "calc(260px + 1em) calc(100% - 260px - 3em)",
+      };
   return (
     <>
       <Head>
@@ -27,32 +34,32 @@ export const LayoutFull = ({ children }: AppProps) => {
         />
       </Head>
       <Map />
-      <Grid
-        w={hideSidebar && !isMobile ? "max(500px, 25vw)" : "100%"}
-        // templateColumns={{ base: "1fr", tw: "260px 1fr" }}
-        templateColumns={columns}
-        gap="4"
-        alignItems="start"
-        pt={{ base: "3.8rem", tw: "4rem" }}
-        pb={{ base: "1.5rem", tw: "1.5rem" }}
+      <Header />
+      <Box
         className="content"
+        pt={{
+          base: "60px",
+          sm: "60px",
+          md: "60px",
+          xl:  "100",
+          xl2:  "80px",
+        }}
+        pb={isMobile ? "100px" : undefined}
+        w={{
+          base: "100%",
+          lg: "50%",
+          xl: "675px",
+        }}
+
+        left={{
+          base: 0,
+          xl: "50px",
+        }}
       >
-        <Header />
-
         {hasQuickSearchResults && <QuickSearchResult />}
-        {!hasQuickSearchResults && (
-          <>
-            {(isMobile || !isMobile && !hideSidebar) && <Sidebar />}
-
-            <Box py={{ base: 3, tw: "1.3rem" }} px={{base:"4", tw: hideSidebar? "4": "0"}} w="100%">
-              <Box mb={{ base: 2, tw: 3 }}>{children}</Box>
-
-              
-            </Box>
-          </>
-        )}
-      </Grid>
-      <Footer />
+        {!hasQuickSearchResults && <>{children}</>}
+      </Box>
+      {isMobile && <MobileNav />}
     </>
   );
 };

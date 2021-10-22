@@ -13,7 +13,7 @@ const Page = ({ event }: { event: any }) => {
 
   return (
     <Box layerStyle="pageContainerWhite">
-      <Heading as="h1" mb="3" fontSize="2xl">
+      <Heading as="h1" mb="3" size="xl">
         <MultiLangValue json={event.title} />
       </Heading>
       <Box maxW="800px" size="lg" color="gray.600" fontWeight="bold" mb="3">

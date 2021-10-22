@@ -1,3 +1,19 @@
+@font-face {
+  font-family: 'Berlin Type';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url('/fonts/BerlinType/BerlinTypeWeb-Regular.woff') format('woff');
+}
+@font-face {
+  font-family: 'Berlin Type';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url('/fonts/BerlinType/BerlinTypeWeb-Bold.woff') format('woff');
+}
+
+
 html,
 body {
   padding: 0;
@@ -6,6 +22,7 @@ body {
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   height: 100%;
 }
+
 #__next {
   height: 100%;
 }
