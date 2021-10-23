@@ -14,8 +14,11 @@ export const ActiveLink = ({ children, activeClassName = "active", href, ...prop
   // pages/index.js will be matched via props.href
   // pages/about.js will be matched via props.href
   // pages/[slug].js will be matched via props.as
+
+  console.log(asPath, (props as any).as, href);
+
   const className =
-    asPath === (props as any).href || asPath === (props as any).as
+    asPath === href || asPath === (props as any).as
       ? `${activeClassName}`.trim()
       : ""
 

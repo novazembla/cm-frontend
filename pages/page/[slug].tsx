@@ -10,7 +10,7 @@ const Page = ({ page }: { page: any }) => {
   return (
     <>
       <Box layerStyle="page">
-        <Box layerStyle="headingPullOut"  mb="3">
+        <Box layerStyle="headingPullOut" mb="3">
           <Heading as="h1" className="highlight" color="cm.text">
             <MultiLangValue json={page.title} />
           </Heading>
@@ -18,7 +18,7 @@ const Page = ({ page }: { page: any }) => {
 
         <Box color="cm.text">
           {page.heroImage && page.heroImage.id && (
-            <Box w="100%" mb="3em" position="relative">
+            <Box w="100%" mt="1em" mb="3em" position="relative">
               <ApiImage
                 id={page.heroImage.id}
                 alt={page.heroImage.alt}

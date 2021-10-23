@@ -5,3 +5,4 @@ export * from "./LayoutFull";
 export * from "./Sidebar";
 export * from "./QuickSearchResult";
 export * from "./MobileNav";
+export * from "./Logo";

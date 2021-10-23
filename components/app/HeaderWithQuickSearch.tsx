@@ -228,7 +228,7 @@ export const Header = (/* props */) => {
         base: "60px",
         md:"80px",
         xl:  "100",
-        xl2:  "80px",
+        "2xl":  "80px",
       }}
       zIndex="overlay"
       layerStyle="blurredWhite"

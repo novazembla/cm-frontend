@@ -11,7 +11,7 @@ import { useQuickSearchHasResultContext } from "~/provider";
 export const LayoutFull = ({ children }: AppProps) => {
   const hasQuickSearchResults = useQuickSearchHasResultContext();
   const router = useRouter();
-  const {isMobile} = useIsBreakPoint();
+  const { isMobile, isTablet } = useIsBreakPoint();
 
   const hideSidebar = ["/location/[slug]", "/event/[slug]", "/events"].includes(
     router.pathname
@@ -39,10 +39,11 @@ export const LayoutFull = ({ children }: AppProps) => {
         className="content"
         pt={{
           base: "60px",
-          sm: "60px",
-          md: "60px",
-          xl:  "100",
-          xl2:  "80px",
+          // sm: "60px",
+          // md: "60px",
+          // lg: "60px",
+          xl: "80px",
+          // xxl: "80px",
         }}
         pb={isMobile ? "100px" : undefined}
         w={{
@@ -50,16 +51,16 @@ export const LayoutFull = ({ children }: AppProps) => {
           lg: "50%",
           xl: "675px",
         }}
-
         left={{
           base: 0,
           xl: "50px",
+          "2xl": "calc(8% - 55px)",
         }}
       >
         {hasQuickSearchResults && <QuickSearchResult />}
         {!hasQuickSearchResults && <>{children}</>}
       </Box>
-      {isMobile && <MobileNav />}
+      {(isMobile || isTablet) && <MobileNav />}
     </>
   );
 };

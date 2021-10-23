@@ -11,6 +11,7 @@ import Arrow from "~/assets/svg/Pfeil_hoch.svg";
 
 import { getMultilangValue } from "~/utils";
 import { useIsBreakPoint } from "~/hooks";
+import { Logo } from ".";
 
 export const Footer = ({ type = "full" }: { type?: string }) => {
   const config = useConfigContext();
@@ -25,38 +26,24 @@ export const Footer = ({ type = "full" }: { type?: string }) => {
         base: "20px",
         sm: "20px",
         md: "45px",
-        xl:  "55px",
+        xl: "55px",
       }}
     >
       <Box
-        textStyle="logo"
-        textDecoration="none !important"
-        whiteSpace="nowrap"
-        w={{
-          xl:  "40%",
-        }}
         mb={{
           base: "1em",
           md: "2em",
         }}
       >
-        <Link
-          as={ActiveLink}
-          activeClassName="active"
-          href="/"
-          color="black"
-          textDecoration="none !important"
-          whiteSpace="nowrap"
-        >
-          {t("header.logo", "CultureMap")}
-        </Link>
+        <Logo />
       </Box>
       <Flex alignItems="flex-end" justifyContent="space-between">
         <Box
           w={{
             base: "auto",
-            md: "33.33%",
-            xl:  "50%",
+            md: "50%",
+            lg: "33.33%",
+            xl: "50%",
           }}
         >
           <IconButton
@@ -88,30 +75,17 @@ export const Footer = ({ type = "full" }: { type?: string }) => {
             },
           }}
           w={{
-            base: "auto",
-            md: "66.66%",
-            xl:  "auto",
+            base: "75%",
+
+            md: "50%",
+            lg: "66.66%",
+            xl: "50%",
           }}
           direction={{
             base: "column",
-            md: "row",
           }}
         >
-          <Flex
-            direction="column"
-            mb={{
-              base: "1em",
-              md: 0,
-            }}
-            w={{
-              base: "100%",
-              md: "50%",
-            }}
-            display={{
-              base:"flex",
-
-            }}
-          >
+          <Flex direction="column" mb="1em">
             {config.nav.main.map((link: any, index: number) => (
               <ActiveLink
                 key={`nav-link-${index}`}
@@ -121,13 +95,7 @@ export const Footer = ({ type = "full" }: { type?: string }) => {
               </ActiveLink>
             ))}
           </Flex>
-          <Flex
-            direction="column"
-            w={{
-              base: "100%",
-              md: "50%",
-            }}
-          >
+          <Flex direction="column">
             {config.nav.footer.map((link: any, index: number) => (
               <ActiveLink
                 key={`nav-footer-${index}`}

@@ -49,7 +49,7 @@ export const components = {
   },
   Heading: {
     sizes: {
-      xl2:  {
+      "2xl":  {
         lineHeight: chakraToBreakpointArray({
           base: "25px",
           md: "31px",

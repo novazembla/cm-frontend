@@ -3,8 +3,8 @@ import type { AppConfig } from "~/types";
 export const appConfigMainNav = [
   {
     path: {
-      de: "/karte/",
-      en: "/map/",
+      de: "/karte",
+      en: "/map",
     },
     title: {
       de: "Karte",
@@ -13,8 +13,8 @@ export const appConfigMainNav = [
   },
   {
     path: {
-      de: "/page/uber-uns/",
-      en: "/page/about-us/",
+      de: "/page/ueber-uns",
+      en: "/page/about-us",
     },
     title: {
       de: "Über die Kulturkarte",
@@ -23,8 +23,8 @@ export const appConfigMainNav = [
   },
   {
     path: {
-      de: "/page/nutzungshinweise/",
-      en: "/page/useage-guidance/",
+      de: "/page/nutzungshinweise",
+      en: "/page/useage-guidance",
     },
     title: {
       de: "Nutzungshinweise",
@@ -33,8 +33,8 @@ export const appConfigMainNav = [
   },
   {
     path: {
-      de: "/kartenpunktvorschlag/",
-      en: "/suggest-a-location/",
+      de: "/kartenpunktvorschlag",
+      en: "/suggest-a-location",
     },
     title: {
       de: "Kartenpunkt vorschlagen",
@@ -43,8 +43,8 @@ export const appConfigMainNav = [
   },
   {
     path: {
-      de: "/touren/",
-      en: "/tours/",
+      de: "/touren",
+      en: "/tours",
     },
     title: {
       de: "Touren",
@@ -53,8 +53,8 @@ export const appConfigMainNav = [
   },
   {
     path: {
-      de: "/veranstaltungen/",
-      en: "/events/",
+      de: "/veranstaltungen",
+      en: "/events",
     },
     title: {
       de: "Veranstaltungen",
@@ -63,8 +63,8 @@ export const appConfigMainNav = [
   },
   {
     path: {
-      de: "/suche/",
-      en: "/search/",
+      de: "/suche",
+      en: "/search",
     },
     title: {
       de: "Detailsuche",
@@ -76,8 +76,8 @@ export const appConfigMainNav = [
 export const appConfigFooterNav = [
   {
     path: {
-      de: "/impressum/",
-      en: "/imprint/",
+      de: "/impressum",
+      en: "/imprint",
     },
     title: {
       de: "Impressum",
@@ -86,8 +86,8 @@ export const appConfigFooterNav = [
   },
   {
     path: {
-      de: "/page/datenschutz/",
-      en: "/page/gdpr/",
+      de: "/page/datenschutz",
+      en: "/page/gdpr",
     },
     title: {
       de: "Datenschutzinformation",

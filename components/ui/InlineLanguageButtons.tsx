@@ -30,7 +30,7 @@ export const InlineLanguageButtons = () => {
                   color="cm.accentLight"
                   textStyle="navigation"
                   textDecoration="none !important"
-                  _hover={{ color: "cm.text" }}
+                  _hover={{ color: "cm.accentDark" }}
                 >
                   {lang}
                 </Link>

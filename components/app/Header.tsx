@@ -1,50 +1,28 @@
-import React, { useState, ChangeEvent, useEffect, useMemo } from "react";
-import { useTranslation } from "next-i18next";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useRouter } from "next/router";
-
-import { object, string } from "yup";
-import type * as yup from "yup";
-
-import { HiOutlineSearch } from "react-icons/hi";
-
-import {
-  Heading,
-  Flex,
-  Link,
-  Box,
-  VisuallyHidden,
-  FormControl,
-  FormLabel,
-  Input,
-  IconButton,
-  HStack,
-  useToken,
-} from "@chakra-ui/react";
+import React from "react";
+import { Flex, Box, IconButton } from "@chakra-ui/react";
 
 import { useIsBreakPoint } from "~/hooks";
+import Menu from "~/assets/svg/tablet_menu.svg";
+import Cross from "~/assets/svg/Kreuz.svg";
+import { motion } from "framer-motion";
 
 import {
   InlineLanguageButtons,
   ActiveLink,
   MultiLangValue,
 } from "~/components/ui";
-import { useLazyQuery, gql } from "@apollo/client";
-import { useForm, Controller } from "react-hook-form";
-import {
-  useMapContext,
-  useConfigContext,
-  useQuickSearchSetSearchResultContext,
-} from "~/provider";
+import { useConfigContext, useMenuButtonContext } from "~/provider";
 import { getMultilangValue } from "~/utils";
 import { chakraToBreakpointArray } from "~/theme";
+import { Logo } from ".";
+import { useTranslation } from "react-i18next";
 
 export const Header = (/* props */) => {
-  const {isMobile} = useIsBreakPoint();
+  const { isDesktopAndUp, isTablet } = useIsBreakPoint();
 
   const config = useConfigContext();
-
   const { t } = useTranslation();
+  const { onMenuToggle, isMenuOpen } = useMenuButtonContext();
 
   return (
     <Box
@@ -52,18 +30,20 @@ export const Header = (/* props */) => {
       px={chakraToBreakpointArray({
         base: "20px",
         md: "45px",
-        xl:  "55px",
-        xl2:  "0px",
+        xl: "55px",
+        "2xl": "0px",
       })}
       position="fixed"
       w="100%"
       top="0"
+      // also adjust in LayoutFull and MobileNav
       h={{
         base: "60px",
         sm: "60px",
         md: "60px",
-        xl:  "100",
-        xl2:  "80px",
+        lg: "60px",
+        xl: "80px",
+        // "2xl": "80px",
       }}
       zIndex="overlay"
       layerStyle="blurredWhite"
@@ -71,55 +51,58 @@ export const Header = (/* props */) => {
       borderColor={chakraToBreakpointArray({
         base: "red",
         md: "blue",
-        xl:  "orange",
-        xl2:  "green",
+        lg: "cyan",
+        xl: "orange",
+        "2xl": "green",
       })}
     >
       <Flex
         alignItems="flex-end"
         w={{
           base: "100%",
-          xl2:  "80%",
+          "2xl": "84%",
         }}
         h="100%"
         marginX="auto"
-        justifyContent="space-between"
-        pb="2"
+        justifyContent={{
+          base: "space-between",
+          xl: "flex-end",
+        }}
+        pl={{
+          xl: "50px",
+          "2xl": "0"
+        }}
+        pb={{
+          base: "2",
+          xl: "3",
+        }}
       >
-        <Box
-          textStyle="logo"
-          textDecoration="none !important"
-          whiteSpace="nowrap"
-          w={{
-            xl:  "40%",
-          }}
-        >
-          <Link
-            as={ActiveLink}
-            activeClassName="active"
-            href="/"
-            color="black"
-            textDecoration="none !important"
-            whiteSpace="nowrap"
-          >
-            {t("header.logo", "CultureMap")}
-          </Link>
-        </Box>
+        <Logo />
 
-        {!isMobile && (
+        {isDesktopAndUp && (
           <Box
             sx={{
-              textAlign: "right",
-              textDirection: "ltr",
               a: {
                 textTransform: "uppercase",
                 marginTop: "0.4em",
                 marginLeft: "1em",
                 display: "inline-block",
+                whiteSpace: "nowrap",
+                _hover: {
+                  color: "cm.accentDark",
+                },
+                _first: {
+                  marginLeft: 0,
+                },
               },
             }}
             textStyle="navigation"
-            px="5"
+            textAlign="right"
+            pl={{
+              base: "2em",
+              "2xl": "0",
+            }}
+            flexGrow={10}
           >
             {config.nav.main.map((link: any, index: number) => (
               <ActiveLink
@@ -131,9 +114,85 @@ export const Header = (/* props */) => {
             ))}
           </Box>
         )}
-        <Box>
+
+        <Flex
+          w={{
+            base: "40px",
+            md: "120px",
+            xl: "80px",
+          }}
+          justifyContent="flex-end"
+        >
+          {isTablet && (
+            <Box position="relative" w="40px" h="40px" pr="3em">
+              <motion.div
+                animate={{ opacity: isMenuOpen ? 1 : 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Box
+                  position="absolute"
+                  top="0"
+                  left="0"
+                  w="40px"
+                  h="40px"
+                  zIndex={isMenuOpen ? 2 : 1}
+                >
+                  <IconButton
+                    aria-label={t("menu.button.toggleMenu", "Menu")}
+                    icon={<Cross />}
+                    borderRadius="100"
+                    p="0"
+                    paddingInlineStart="0"
+                    paddingInlineEnd="0"
+                    w="40px"
+                    h="40px"
+                    onClick={() => {
+                      onMenuToggle();
+                    }}
+                    pointerEvents={isMenuOpen ? undefined : "none"}
+                    transition="all 0.3s"
+                    _hover={{
+                      filter: "brightness(70%)",
+                    }}
+                  />
+                </Box>
+              </motion.div>
+              <motion.div
+                animate={{ opacity: isMenuOpen ? 0 : 1 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Box
+                  position="absolute"
+                  top="0"
+                  left="0"
+                  w="40px"
+                  h="40px"
+                  zIndex={isMenuOpen ? 1 : 2}
+                >
+                  <IconButton
+                    aria-label={t("menu.button.toggleMenu", "Menu")}
+                    icon={<Menu />}
+                    borderRadius="100"
+                    p="0"
+                    paddingInlineStart="0"
+                    paddingInlineEnd="0"
+                    w="40px"
+                    h="40px"
+                    onClick={() => {
+                      onMenuToggle();
+                    }}
+                    transition="all 0.3s"
+                    _hover={{
+                      filter: "brightness(70%)",
+                    }}
+                    pointerEvents={isMenuOpen ? "none" : undefined}
+                  />
+                </Box>
+              </motion.div>
+            </Box>
+          )}
           <InlineLanguageButtons />
-        </Box>
+        </Flex>
       </Flex>
     </Box>
   );

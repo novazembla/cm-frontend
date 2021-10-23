@@ -12,14 +12,13 @@ import {
   AppApolloProvider,
   MapContextProvider,
   QuickSearchContextProvider,
+  MenuButtonContextProvider,
 } from "~/provider";
 
 import { chakraTheme } from "~/theme";
 
 function MyApp({ Component, pageProps }: AppProps) {
-
-  if (typeof window !== "undefined")
-    console.log(chakraTheme);
+  if (typeof window !== "undefined") console.log(chakraTheme);
 
   /* eslint-disable react/jsx-props-no-spreading */
   return (
@@ -28,9 +27,11 @@ function MyApp({ Component, pageProps }: AppProps) {
         <ChakraProvider theme={chakraTheme}>
           <MapContextProvider>
             <QuickSearchContextProvider>
-              <LayoutFull>
-                <Component {...pageProps} />
-              </LayoutFull>
+              <MenuButtonContextProvider>
+                <LayoutFull>
+                  <Component {...pageProps} />
+                </LayoutFull>
+              </MenuButtonContextProvider>
             </QuickSearchContextProvider>
           </MapContextProvider>
         </ChakraProvider>
