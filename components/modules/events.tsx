@@ -94,7 +94,6 @@ export const ModuleComponentEvents = ({ ...props }) => {
           </Heading>
         </Box>
         <Box
-          maxW="800px"
           p="10"
           size="lg"
           color="gray.600"
@@ -111,7 +110,7 @@ export const ModuleComponentEvents = ({ ...props }) => {
           {error && <ErrorMessage type="dataLoad" />}
 
           {data?.events?.events?.length && (
-            <Box maxW="800px" size="md" mt="3">
+            <Box size="md" mt="3">
               <VirtualScroller
                 items={data?.events?.events}
                 itemComponent={Event}

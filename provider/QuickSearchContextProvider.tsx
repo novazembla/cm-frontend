@@ -2,18 +2,9 @@ import React, { createContext, useContext } from "react";
 import { useState } from "react";
 import type { QuickSearchResult } from "~/types";
 
-const QuickSearchSetSearchResultContext = createContext<Function>(() => {});
-const QuickSearchResultContext = createContext<
-  Record<string, QuickSearchResult>
->({});
-const QuickSearchHasResultContext = createContext<boolean>(false);
+const QuickSearchContext = createContext<any>({});
 
-export const useQuickSearchSetSearchResultContext = () =>
-  useContext(QuickSearchSetSearchResultContext);
-export const useQuickSearchResultContext = () =>
-  useContext(QuickSearchResultContext);
-export const useQuickSearchHasResultContext = () =>
-  useContext(QuickSearchHasResultContext);
+export const useQuickSearchContext = () => useContext(QuickSearchContext);
 
 // context provider
 export const QuickSearchContextProvider = ({
@@ -21,32 +12,31 @@ export const QuickSearchContextProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [quickSearchResultInContext, setQuickSearchResult] = useState<
+  const [isQuickSearchOpen, onQuickSearchToggle] = useState(false);
+  const [quickSearchResult, setQuickSearchResultState] = useState<
     Record<string, QuickSearchResult>
   >({});
 
-  const hasQuickSearchResults =
-    Object.keys(quickSearchResultInContext).length > 0;
+  const hasQuickSearchResults = Object.keys(quickSearchResult).length > 0;
 
-  const setQuickSearchResultInContext = (
-    result: Record<string, QuickSearchResult>
-  ) => {
-    if (JSON.stringify(result) !== JSON.stringify(quickSearchResultInContext)) {
+  const setQuickSearchResult = (result: Record<string, QuickSearchResult>) => {
+    if (JSON.stringify(result) !== JSON.stringify(quickSearchResult)) {
       console.log("setQuickSearchResultInContext");
       // if (Object.keys(result).length != )
-      setQuickSearchResult(result);
+      setQuickSearchResultState(result);
     }
   };
 
   return (
-    <QuickSearchResultContext.Provider value={quickSearchResultInContext}>
-      <QuickSearchHasResultContext.Provider value={hasQuickSearchResults}>
-        <QuickSearchSetSearchResultContext.Provider
-          value={setQuickSearchResultInContext}
-        >
-          {children}
-        </QuickSearchSetSearchResultContext.Provider>
-      </QuickSearchHasResultContext.Provider>
-    </QuickSearchResultContext.Provider>
+    <QuickSearchContext.Provider
+      value={{
+        quickSearchResult,
+        setQuickSearchResult,
+        isQuickSearchOpen,
+        onQuickSearchToggle: () => onQuickSearchToggle(!isQuickSearchOpen),
+      }}
+    >
+      {children}
+    </QuickSearchContext.Provider>
   );
 };

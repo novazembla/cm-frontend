@@ -32,7 +32,7 @@ export const Locations = ({ locations }: { locations: any }) => {
       <Heading as="h1" mb="3">
       ???
       </Heading>
-      <Box maxW="800px">
+      <Box>
         Proin tincidunt enim in felis aliquet, a ultricies purus bibendum.
       </Box>
     </Box>

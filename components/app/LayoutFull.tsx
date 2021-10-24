@@ -1,31 +1,33 @@
-import React, { useContext } from "react";
+import React from "react";
+import Search from "~/assets/svg/mobil_navigation_leiste_suche.svg";
+import Cross from "~/assets/svg/Kreuz.svg";
+import { motion } from "framer-motion";
+
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { Box, Grid } from "@chakra-ui/react";
+import { Box, IconButton } from "@chakra-ui/react";
 
-import { Header, Map, QuickSearchResult, MobileNav } from ".";
+import { Header, Map, QuickSearch, MobileNav } from ".";
 import { useIsBreakPoint } from "~/hooks";
 import { AppProps } from "~/types";
-import { useQuickSearchHasResultContext } from "~/provider";
 import { LoadingBar } from ".";
+import { useMenuButtonContext, useQuickSearchContext } from "~/provider";
+import { useTranslation } from "react-i18next";
 
 export const LayoutFull = ({ children }: AppProps) => {
-  const hasQuickSearchResults = useQuickSearchHasResultContext();
+  //  const { hasQuickSearchResults } = useQuickSearchContext();
   const router = useRouter();
-  const { isMobile, isTablet } = useIsBreakPoint();
 
-  const hideSidebar = ["/location/[slug]", "/event/[slug]", "/events"].includes(
-    router.pathname
-  );
+  const { t } = useTranslation();
+  const { isMobile, isTablet, isTabletWide, isDesktopAndUp } =
+    useIsBreakPoint();
+  const { onMenuToggle, isMenuOpen } = useMenuButtonContext();
+  const { isQuickSearchOpen, onQuickSearchToggle } = useQuickSearchContext();
 
-  const columns = hasQuickSearchResults
-    ? "100%"
-    : {
-        base: "100%",
-        md: hideSidebar
-          ? "max(500px, 25vw)"
-          : "calc(260px + 1em) calc(100% - 260px - 3em)",
-      };
+  // const hideSidebar = ["/location/[slug]", "/event/[slug]", "/events"].includes(
+  //   router.pathname
+  // );
+
   return (
     <>
       <Head>
@@ -34,7 +36,7 @@ export const LayoutFull = ({ children }: AppProps) => {
           rel="stylesheet"
         />
       </Head>
-      <LoadingBar color="cm.accentLight"/>
+      <LoadingBar color="cm.accentLight" />
       <Map />
       <Header />
       <Box
@@ -59,10 +61,86 @@ export const LayoutFull = ({ children }: AppProps) => {
           "2xl": "calc(8% - 55px)",
         }}
       >
-        {hasQuickSearchResults && <QuickSearchResult />}
-        {!hasQuickSearchResults && <>{children}</>}
+        {/* {hasQuickSearchResults && <QuickSearchResult />}
+        {!hasQuickSearchResults && <>{children}</>} */}
+
+        {children}
       </Box>
       {(isMobile || isTablet) && <MobileNav />}
+      <QuickSearch />
+      <Box position="fixed" right="20px" top="100px" zIndex="3">
+        {(isTabletWide || isDesktopAndUp) && (
+          <Box position="relative" w="55px" h="55px" bg="#fff" borderRadius="55px">
+            <motion.div
+              animate={{ opacity: isQuickSearchOpen ? 1 : 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <Box
+                position="absolute"
+                top="0"
+                left="0"
+                w="55px"
+                h="55px"
+                zIndex={isQuickSearchOpen ? 2 : 1}
+              >
+                <IconButton
+                  aria-label={t("menu.button.togggleSearch", "Search")}
+                  icon={<Cross />}
+                  borderRadius="100"
+                  p="0"
+                  paddingInlineStart="0"
+                  paddingInlineEnd="0"
+                  w="55px"
+                  h="55px"
+                  onClick={() => {
+                    onQuickSearchToggle();
+                  }}
+                  pointerEvents={isQuickSearchOpen ? undefined : "none"}
+                  transition="all 0.3s"
+                  _hover={{
+                    filter: "brightness(70%)",
+                  }}
+                />
+              </Box>
+            </motion.div>
+            <motion.div
+              animate={{ opacity: isQuickSearchOpen ? 0 : 1 }}
+              transition={{ duration: 0.3 }}
+            >
+              <Box
+                position="absolute"
+                top="0"
+                left="0"
+                w="55px"
+                h="55px"
+                zIndex={isQuickSearchOpen ? 1 : 2}
+              >
+                <IconButton
+                  aria-label={t("menu.button.togggleSearch", "Search")}
+                  icon={<Search />}
+                  borderRadius="100"
+                  p="0"
+                  paddingInlineStart="0"
+                  paddingInlineEnd="0"
+                  w="55px"
+                  h="55px"
+                  onClick={() => {
+                    if (isMenuOpen && !isQuickSearchOpen) {
+                      onMenuToggle();
+                    }
+                    onQuickSearchToggle();
+                  }}
+                  transition="all 0.3s"
+                  _hover={{
+                    filter: "brightness(70%)",
+                  }}
+                  pointerEvents={isQuickSearchOpen ? "none" : undefined}
+                />
+              </Box>
+            </motion.div>
+          </Box>
+        )}
+      </Box>
     </>
   );
 };

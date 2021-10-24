@@ -2,6 +2,7 @@ import React from "react";
 import { Flex, Box, IconButton } from "@chakra-ui/react";
 
 import { useIsBreakPoint } from "~/hooks";
+import Search from "~/assets/svg/mobil_navigation_leiste_suche.svg";
 import Menu from "~/assets/svg/tablet_menu.svg";
 import Cross from "~/assets/svg/Kreuz.svg";
 import { motion } from "framer-motion";
@@ -11,18 +12,23 @@ import {
   ActiveLink,
   MultiLangValue,
 } from "~/components/ui";
-import { useConfigContext, useMenuButtonContext } from "~/provider";
+import {
+  useConfigContext,
+  useMenuButtonContext,
+  useQuickSearchContext,
+} from "~/provider";
 import { getMultilangValue } from "~/utils";
 import { chakraToBreakpointArray } from "~/theme";
 import { Logo } from ".";
 import { useTranslation } from "react-i18next";
 
 export const Header = (/* props */) => {
-  const { isDesktopAndUp, isTablet } = useIsBreakPoint();
+  const { isDesktopAndUp, isTablet, isTabletWide } = useIsBreakPoint();
 
   const config = useConfigContext();
   const { t } = useTranslation();
   const { onMenuToggle, isMenuOpen } = useMenuButtonContext();
+  const { isQuickSearchOpen, onQuickSearchToggle } = useQuickSearchContext();
 
   return (
     <Box
@@ -70,7 +76,7 @@ export const Header = (/* props */) => {
         }}
         pl={{
           xl: "50px",
-          "2xl": "0"
+          "2xl": "0",
         }}
         pb={{
           base: "2",
@@ -118,78 +124,154 @@ export const Header = (/* props */) => {
         <Flex
           w={{
             base: "40px",
-            md: "120px",
+            md: "160px",
             xl: "80px",
           }}
           justifyContent="flex-end"
         >
           {isTablet && (
-            <Box position="relative" w="40px" h="40px" pr="3em">
-              <motion.div
-                animate={{ opacity: isMenuOpen ? 1 : 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                <Box
-                  position="absolute"
-                  top="0"
-                  left="0"
-                  w="40px"
-                  h="40px"
-                  zIndex={isMenuOpen ? 2 : 1}
+            <>
+              {!isTabletWide && (
+                <Box position="relative" w="40px" h="40px" pr="3em">
+                  <motion.div
+                    animate={{ opacity: isQuickSearchOpen ? 1 : 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <Box
+                      position="absolute"
+                      top="0"
+                      left="0"
+                      w="40px"
+                      h="40px"
+                      zIndex={isQuickSearchOpen ? 2 : 1}
+                    >
+                      <IconButton
+                        aria-label={t("menu.button.togggleSearch", "Search")}
+                        icon={<Cross />}
+                        borderRadius="100"
+                        p="0"
+                        paddingInlineStart="0"
+                        paddingInlineEnd="0"
+                        w="40px"
+                        h="40px"
+                        onClick={() => {
+                          onQuickSearchToggle();
+                        }}
+                        pointerEvents={isQuickSearchOpen ? undefined : "none"}
+                        transition="all 0.3s"
+                        _hover={{
+                          filter: "brightness(70%)",
+                        }}
+                      />
+                    </Box>
+                  </motion.div>
+                  <motion.div
+                    animate={{ opacity: isQuickSearchOpen ? 0 : 1 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <Box
+                      position="absolute"
+                      top="0"
+                      left="0"
+                      w="40px"
+                      h="40px"
+                      zIndex={isQuickSearchOpen ? 1 : 2}
+                    >
+                      <IconButton
+                        aria-label={t("menu.button.togggleSearch", "Search")}
+                        icon={<Search />}
+                        borderRadius="100"
+                        p="0"
+                        paddingInlineStart="0"
+                        paddingInlineEnd="0"
+                        w="40px"
+                        h="40px"
+                        onClick={() => {
+                          if (isMenuOpen && !isQuickSearchOpen) {
+                            onMenuToggle();
+                          }
+                          onQuickSearchToggle();
+                        }}
+                        transition="all 0.3s"
+                        _hover={{
+                          filter: "brightness(70%)",
+                        }}
+                        pointerEvents={isQuickSearchOpen ? "none" : undefined}
+                      />
+                    </Box>
+                  </motion.div>
+                </Box>
+              )}
+              <Box position="relative" w="40px" h="40px" pr="3em">
+                <motion.div
+                  animate={{ opacity: isMenuOpen ? 1 : 0 }}
+                  transition={{ duration: 0.3 }}
                 >
-                  <IconButton
-                    aria-label={t("menu.button.toggleMenu", "Menu")}
-                    icon={<Cross />}
-                    borderRadius="100"
-                    p="0"
-                    paddingInlineStart="0"
-                    paddingInlineEnd="0"
+                  <Box
+                    position="absolute"
+                    top="0"
+                    left="0"
                     w="40px"
                     h="40px"
-                    onClick={() => {
-                      onMenuToggle();
-                    }}
-                    pointerEvents={isMenuOpen ? undefined : "none"}
-                    transition="all 0.3s"
-                    _hover={{
-                      filter: "brightness(70%)",
-                    }}
-                  />
-                </Box>
-              </motion.div>
-              <motion.div
-                animate={{ opacity: isMenuOpen ? 0 : 1 }}
-                transition={{ duration: 0.3 }}
-              >
-                <Box
-                  position="absolute"
-                  top="0"
-                  left="0"
-                  w="40px"
-                  h="40px"
-                  zIndex={isMenuOpen ? 1 : 2}
+                    zIndex={isMenuOpen ? 2 : 1}
+                  >
+                    <IconButton
+                      aria-label={t("menu.button.toggleMenu", "Menu")}
+                      icon={<Cross />}
+                      borderRadius="100"
+                      p="0"
+                      paddingInlineStart="0"
+                      paddingInlineEnd="0"
+                      w="40px"
+                      h="40px"
+                      onClick={() => {
+                        onMenuToggle();
+                      }}
+                      pointerEvents={isMenuOpen ? undefined : "none"}
+                      transition="all 0.3s"
+                      _hover={{
+                        filter: "brightness(70%)",
+                      }}
+                    />
+                  </Box>
+                </motion.div>
+                <motion.div
+                  animate={{ opacity: isMenuOpen ? 0 : 1 }}
+                  transition={{ duration: 0.3 }}
                 >
-                  <IconButton
-                    aria-label={t("menu.button.toggleMenu", "Menu")}
-                    icon={<Menu />}
-                    borderRadius="100"
-                    p="0"
-                    paddingInlineStart="0"
-                    paddingInlineEnd="0"
+                  <Box
+                    position="absolute"
+                    top="0"
+                    left="0"
                     w="40px"
                     h="40px"
-                    onClick={() => {
-                      onMenuToggle();
-                    }}
-                    transition="all 0.3s"
-                    _hover={{
-                      filter: "brightness(70%)",
-                    }}
-                    pointerEvents={isMenuOpen ? "none" : undefined}
-                  />
-                </Box>
-              </motion.div>
-            </Box>
+                    zIndex={isMenuOpen ? 1 : 2}
+                  >
+                    <IconButton
+                      aria-label={t("menu.button.toggleMenu", "Menu")}
+                      icon={<Menu />}
+                      borderRadius="100"
+                      p="0"
+                      paddingInlineStart="0"
+                      paddingInlineEnd="0"
+                      w="40px"
+                      h="40px"
+                      onClick={() => {
+                        if (!isMenuOpen && isQuickSearchOpen) {
+                          onQuickSearchToggle();
+                        }
+                        onMenuToggle();
+                      }}
+                      transition="all 0.3s"
+                      _hover={{
+                        filter: "brightness(70%)",
+                      }}
+                      pointerEvents={isMenuOpen ? "none" : undefined}
+                    />
+                  </Box>
+                </motion.div>
+              </Box>
+            </>
           )}
           <InlineLanguageButtons />
         </Flex>

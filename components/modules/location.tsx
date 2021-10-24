@@ -182,8 +182,8 @@ export const ModuleComponentEvent = ({
                   id={event.heroImage.id}
                   alt={event.heroImage.alt}
                   meta={event.heroImage.meta}
+                  forceAspectRatioPB={75}
                   status={event.heroImage.status}
-                  useImageAspectRatioPB
                   sizes="(min-width: 55rem) 800px, 100vw"
                 />
               </Box>
@@ -294,9 +294,9 @@ export const ModuleComponentEvent = ({
       <Box layerStyle="blurredLightGray">
         {event.locations && event.locations.length > 0 && (
           <Box p="20px" pn="40px">
-            <chakra.h3 className="highlight" color="cm.text" pb="1em">
+            <Heading as="h3" className="highlight" color="cm.text" pb="1em">
               {t("event.title.location", "Location")}
-            </chakra.h3>
+            </Heading>
 
             {event.locations.map((location: any, i: number) => (
               <CardLocation key={`loc-${location.id}`} location={location} />

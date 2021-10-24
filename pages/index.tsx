@@ -2,12 +2,20 @@ import { GetStaticProps } from "next";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { Box, Heading } from "@chakra-ui/react";
+import { Box, Flex, chakra } from "@chakra-ui/react";
 import { gql, useQuery } from "@apollo/client";
 import { getMultilangValue } from "~/utils";
-import {  MultiLangHtml, Card } from "~/components/ui";
+import {
+  MultiLangHtml,
+  CardTour,
+  CardLocation,
+  CardEvent,
+} from "~/components/ui";
+
+import { useIsBreakPoint } from "~/hooks";
 
 import { useMapContext } from "~/provider";
+import { useTranslation } from "react-i18next";
 
 const homepageQuery = gql`
   query {
@@ -21,6 +29,10 @@ const homepageQuery = gql`
 
 export const Home = () => {
   const cultureMap = useMapContext();
+
+  const { t } = useTranslation();
+
+  const { isMobile, isTablet, isDesktopAndUp } = useIsBreakPoint();
 
   const [locations, setLocations] = useState([]);
   const { data, loading, error } = useQuery(homepageQuery);
@@ -46,9 +58,13 @@ export const Home = () => {
 
   return (
     <>
-      <Box layerStyle="pageContainerWhite">
+      <Box
+        layerStyle="pageContainerWhite"
+        borderBottom="1px solid"
+        borderColor="cm.accentDark"
+      >
         {data?.homepage?.missionStatement && (
-          <Box maxW="800px">
+          <Box>
             <b>
               <MultiLangHtml json={data?.homepage?.missionStatement} />
             </b>
@@ -66,29 +82,56 @@ export const Home = () => {
         )}
       </Box>
       {data?.homepage?.highlights?.length > 0 && (
-        <Box w="270px">
-          {data?.homepage?.highlights.map((h: any) => (
-            <Card key={`h-${h.id}`} item={h} />
-          ))}
+        <Box
+          layerStyle="blurredLightGray"
+          overflow="hidden"
+          position={isMobile ? "fixed" : "static"}
+          bottom="100px"
+          px="20px"
+          sx={{
+            article: {
+              mb: !isMobile ? "20px" : "0",
+              mr: !isMobile ? "0" : "20px",
+            },
+          }}
+          w="100%"
+        >
+          <chakra.h3 className="highlight" color="cm.text" mt="0.5em">
+            {t("homepage.title.highlights", "Highlights")}
+          </chakra.h3>
+
+          <Box overflowY={isMobile ? "auto" : "hidden"} w="100%">
+            <Flex
+              flexDirection={isMobile ? "row" : "column"}
+              w={isMobile ? "2000px" : "100%"}
+              sx={{
+                "@media (max-width: 44.9999em)": {
+                  flexDirection: "row",
+                  w: "2000px",
+                  overflowY: "auto",
+                },
+                "@media (min-width: 45em)": {
+                  flexDirection: "column",
+                  w: "auto",
+                  overflowY: "hidden",
+                },
+              }}
+            >
+              {data?.homepage?.highlights.map((h: any) => {
+                if (h.type === "location") {
+                  return <CardLocation key={`h-${h.id}`} location={h} />;
+                } else if (h.type === "event") {
+                  return <CardEvent key={`h-${h.id}`} event={h} />;
+                } else if (h.type === "tour") {
+                  return <CardTour key={`h-${h.id}`} tour={h} />;
+                } else {
+                  return <></>;
+                }
+              })}
+            </Flex>
+          </Box>
         </Box>
       )}
-
-      <Box textStyle="navigation">
-
-        Lorem Lipsum Is det allet?
-      </Box>
-      <Box textStyle="larger">
-
-        Lorem Lipsum Is det allet?
-      </Box>
-      <Box textStyle="categories">
-
-        Lorem Lipsum Is det allet?
-      </Box>
-      <Box textStyle="finePrint">
-
-        Lorem Lipsum Is det allet?
-      </Box>
     </>
   );
 };
@@ -100,6 +143,6 @@ export const getStaticProps: GetStaticProps = async (context) => {
       ...(await serverSideTranslations(context.locale ?? "en")),
     },
   };
-}
+};
 
 export default Home;

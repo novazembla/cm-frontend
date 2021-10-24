@@ -38,12 +38,12 @@ const Page = ({ location }: { location: any }) => {
       <Heading as="h1" mb="3" fontSize="2xl">
         <MultiLangValue json={location.title} />
       </Heading>
-      <Box maxW="800px" size="lg" color="gray.600" fontWeight="bold" mb="3">
+      <Box size="lg" color="gray.600" fontWeight="bold" mb="3">
         <MultiLangHtml json={location.description} />
       </Box>
 
       {location.heroImage && location.heroImage.id && (
-        <Box w="100%" maxW="800px" mb="3">
+        <Box w="100%" mb="3">
           <ApiImage
             id={location.heroImage.id}
             alt={location.heroImage.alt}
@@ -62,7 +62,7 @@ const Page = ({ location }: { location: any }) => {
 
       {!isEmptyHtml(getMultilangValue(location.address)) && (
         <Box
-          maxW="800px"
+         
           size="md"
           mt="3"
           borderTop="1px solid"
@@ -78,7 +78,7 @@ const Page = ({ location }: { location: any }) => {
 
       {!isEmptyHtml(getMultilangValue(location.contactInfo)) && (
         <Box
-          maxW="800px"
+         
           size="md"
           mt="3"
           borderTop="1px solid"
@@ -94,7 +94,7 @@ const Page = ({ location }: { location: any }) => {
 
       {!isEmptyHtml(getMultilangValue(location.offers)) && (
         <Box
-          maxW="800px"
+         
           size="md"
           mt="3"
           borderTop="1px solid"
@@ -110,7 +110,7 @@ const Page = ({ location }: { location: any }) => {
 
       {location.terms && location.terms.length > 0 && (
         <Box
-          maxW="800px"
+         
           size="md"
           mt="3"
           borderTop="1px solid"
@@ -129,7 +129,7 @@ const Page = ({ location }: { location: any }) => {
 
       {location.events && location.events.length > 0 && (
         <Box
-          maxW="800px"
+         
           size="md"
           mt="3"
           borderTop="1px solid"
@@ -211,15 +211,27 @@ export const getStaticProps: GetStaticProps = async (context) => {
         title
         slug
         description
+        offers
+        accessibilityInformation
         address
         contactInfo
-        offers
+        socialMedia
         lat
         lng
+        agency
+        primaryTerms {
+          id
+          name
+          slug
+          color
+          colorDark
+        }
         terms {
           id
           name
           slug
+          color
+          colorDark
         }
         events {
           id
@@ -230,6 +242,13 @@ export const getStaticProps: GetStaticProps = async (context) => {
             end
             date
           }
+        }
+        images{
+          id
+          status
+          meta
+          alt
+          credits
         }
         heroImage {
           id

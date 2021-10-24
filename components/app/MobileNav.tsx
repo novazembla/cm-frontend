@@ -7,17 +7,25 @@ import Menu from "~/assets/svg/mobil_navigation_leiste_menu.svg";
 import Cross from "~/assets/svg/Kreuz.svg";
 import Suggest from "~/assets/svg/mobil_navigation_leiste_vorschlag.svg";
 
-import { useMenuButtonContext, useConfigContext } from "~/provider";
+import {
+  useMenuButtonContext,
+  useConfigContext,
+  useQuickSearchContext,
+} from "~/provider";
 import { useIsBreakPoint } from "~/hooks";
 import { getMultilangValue } from "~/utils";
 import { ActiveLink, MultiLangValue } from "~/components/ui";
+import { useRouter } from "next/router";
 
 export const MobileNav = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const config = useConfigContext();
+  const router = useRouter();
 
   const { onMenuToggle, isMenuOpen } = useMenuButtonContext();
-  const { isMobile, isTablet, isTabletWide, isDesktopAndUp } = useIsBreakPoint();
+  const { isQuickSearchOpen, onQuickSearchToggle } = useQuickSearchContext();
+  const { isMobile, isTablet, isTabletWide, isDesktopAndUp } =
+    useIsBreakPoint();
 
   return (
     <>
@@ -33,7 +41,7 @@ export const MobileNav = () => {
               top: 0,
               left: 0,
               height: "100vh",
-              width: isTabletWide ? "50%":"100%",
+              width: isTabletWide ? "50%" : "100%",
               zIndex: 1100,
               overflowY: "auto",
             }}
@@ -71,7 +79,10 @@ export const MobileNav = () => {
               >
                 {config.nav.main.map((link: any, index: number) => (
                   <chakra.span key={`nav-link-${index}`}>
-                    <ActiveLink href={getMultilangValue(link.path)} onClick={() => onMenuToggle()}>
+                    <ActiveLink
+                      href={getMultilangValue(link.path)}
+                      onClick={() => onMenuToggle()}
+                    >
                       <MultiLangValue json={link.title} />
                     </ActiveLink>
                   </chakra.span>
@@ -98,12 +109,15 @@ export const MobileNav = () => {
             transition={{ duration: 0.3 }}
           >
             <IconButton
-              aria-label={t("menu.button.search", "Search")}
+              aria-label={t("menu.button.togggleSearch", "Search")}
               borderRadius="55px"
               icon={<Search />}
               w="55px"
               h="55px"
               pointerEvents={isMenuOpen ? "none" : undefined}
+              onClick={() => {
+                onQuickSearchToggle();
+              }}
             />
           </motion.div>
           <Box position="relative" w="70px" h="70px">
@@ -159,6 +173,9 @@ export const MobileNav = () => {
                   w="70px"
                   h="70px"
                   onClick={() => {
+                    if (!isMenuOpen && isQuickSearchOpen) {
+                      onQuickSearchToggle();  
+                    }                    
                     onMenuToggle();
                   }}
                   pointerEvents={isMenuOpen ? "none" : undefined}
@@ -180,6 +197,13 @@ export const MobileNav = () => {
               icon={<Suggest />}
               w="55px"
               h="55px"
+              onClick={() => {
+                if (i18n.language === "de") {
+                  router.push(`/kartenpunktvorschlag`);
+                } else {
+                  router.push(`/suggest-a-location`);
+                }
+              }}
               pointerEvents={isMenuOpen ? "none" : undefined}
             />
           </motion.div>

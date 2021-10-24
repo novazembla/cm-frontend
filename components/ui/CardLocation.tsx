@@ -1,7 +1,7 @@
 import React from "react";
 import {
   Box,
-  Heading,
+  chakra,
   Flex,
   Img,
   AspectRatio,
@@ -15,7 +15,7 @@ import { useIsBreakPoint } from "~/hooks";
 import { useConfigContext, useSettingsContext } from "~/provider";
 import Arrow from "~/assets/svg/Pfeil_quer.svg";
 
-export const LocationCard = ({ location }: { location: any }) => {
+export const CardLocation = ({ location }: { location: any }) => {
   const { t, i18n } = useTranslation();
   const settings = useSettingsContext();
   const { isMobile, isTablet, isDesktopAndUp } = useIsBreakPoint();
@@ -64,7 +64,10 @@ export const LocationCard = ({ location }: { location: any }) => {
       w={isMobile ? "80%" : "100%"}
       maxW={isMobile ? "275px" : "100%"}
     >
-      <Flex flexDirection={isMobile ? "column" : "row-reverse"} alignItems={isMobile ? "flex-end" : "flex-start"}>
+      <Flex
+        flexDirection={isMobile ? "column" : "row-reverse"}
+        alignItems={isMobile ? "flex-end" : "flex-start"}
+      >
         <Box w={isMobile ? "50%" : "33.33%"} pb={isMobile ? "0px" : "20px"}>
           <AspectRatio w="100%" ratio={3 / 2}>
             <Box bg={color} filter="li">
@@ -87,6 +90,7 @@ export const LocationCard = ({ location }: { location: any }) => {
                     forceAspectRatioPB={66.66}
                     status={location?.heroImage.status}
                     sizes="(min-width: 45rem) 400px, 40vw"
+                    cropPosition={location?.heroImage?.cropPosition}
                   />
                 </Box>
               )}
@@ -109,8 +113,8 @@ export const LocationCard = ({ location }: { location: any }) => {
               {meta}
             </Flex>
           )}
-          <Heading
-            as="h2"
+          <chakra.h2
+            mb="0.3em !important"
             sx={{
               a: {
                 _hover: {
@@ -119,10 +123,13 @@ export const LocationCard = ({ location }: { location: any }) => {
               },
             }}
           >
-            <LinkOverlay href={`/${type}/${getMultilangValue(location.slug)}/`} textStyle="headline">
+            <LinkOverlay
+              href={`/${type}/${getMultilangValue(location.slug)}/`}
+              textStyle="headline"
+            >
               <MultiLangValue json={location.title} />
             </LinkOverlay>
-          </Heading>
+          </chakra.h2>
         </Box>
       </Flex>
 

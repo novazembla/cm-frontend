@@ -1,10 +1,11 @@
 import React from "react";
-import Image from 'next/image'
-import { Box, Flex, Text } from "@chakra-ui/react";
+import Image from "next/image";
+import { Box, Flex, Text, chakra } from "@chakra-ui/react";
 import { useTranslation } from "react-i18next";
 import { BeatLoader } from "react-spinners";
 
 import { useImageStatusPoll } from "~/hooks";
+import { getMultilangValue } from "~/utils";
 
 export type ApiConfigImageFormatType = "square" | "normal";
 
@@ -29,7 +30,6 @@ export type ApiImageMetaInformation = {
   >;
 };
 
-
 export enum ImageStatusEnum {
   UPLOADED,
   PROCESSING,
@@ -40,11 +40,20 @@ export enum ImageStatusEnum {
   DELETED,
 }
 
+export enum ImageCropPosition {
+  CENTER, // 0
+  TOP, // 1
+  RIGHT, // 2
+  BOTTOM, // 3
+  LEFT, // 4
+}
+
 export type ApiImageProps = {
   id: number | undefined;
   alt: string;
   meta?: ApiImageMetaInformation;
   status: ImageStatusEnum;
+  cropPosition?: ImageCropPosition;
   forceAspectRatioPB?: number;
   useImageAspectRatioPB?: boolean;
   showPlaceholder?: boolean;
@@ -61,6 +70,7 @@ export const ApiImage = ({
   forceAspectRatioPB,
   placeholder,
   showPlaceholder,
+  cropPosition,
   sizes = "100vw",
 }: ApiImageProps) => {
   const { t } = useTranslation();
@@ -68,7 +78,28 @@ export const ApiImage = ({
   const [polledStatus, polledMeta] = useImageStatusPoll(id, status);
 
   let content;
-  let imageAspectRationPB;
+  let imageAspectRatioPB;
+
+  let objectFit = "center center";
+  if (cropPosition) {
+    switch (cropPosition) {
+      case ImageCropPosition.BOTTOM:
+        objectFit = "center bottom";
+        break;
+
+      case ImageCropPosition.TOP:
+        objectFit = "center top";
+        break;
+
+      case ImageCropPosition.LEFT:
+        objectFit = "left center";
+        break;
+
+      case ImageCropPosition.RIGHT:
+        objectFit = "right center";
+        break;
+    }
+  }
 
   if (
     status === ImageStatusEnum.READY ||
@@ -80,11 +111,11 @@ export const ApiImage = ({
     if (aSizes) {
       const originalUrl = aSizes.original?.url ?? "";
       const originalWidth = aSizes.original?.width ?? 0;
-      const originalHeight = aSizes.original?.width ?? 0;
+      const originalHeight = aSizes.original?.height ?? 0;
 
       if (useImageAspectRatioPB && originalWidth > 0)
-        imageAspectRationPB = Math.floor(
-          (originalHeight / originalHeight) * 100
+        imageAspectRatioPB = Math.floor(
+          (originalHeight / originalWidth) * 100
         );
 
       const sourceWebp = Object.keys(aSizes).reduce((acc: any, key: any) => {
@@ -120,13 +151,13 @@ export const ApiImage = ({
                 type="image/jpeg"
               />
             )}
-            <Image
+            <chakra.img
+              objectPosition={objectFit}
               src={originalUrl}
-              alt={alt}
+              alt={getMultilangValue(alt)}
               width={originalWidth}
               height={originalHeight}
             />
-            
           </picture>
         );
       }
@@ -208,8 +239,8 @@ export const ApiImage = ({
       </Flex>
     );
 
-  if (content && (forceAspectRatioPB || imageAspectRationPB)) {
-    const aPB = forceAspectRatioPB ?? imageAspectRationPB;
+  if (content && (forceAspectRatioPB || imageAspectRatioPB)) {
+    const aPB = forceAspectRatioPB ?? imageAspectRatioPB;
     content = (
       <Box className="aspect" pb={`${aPB}%`}>
         <Box className="ratio">{content}</Box>

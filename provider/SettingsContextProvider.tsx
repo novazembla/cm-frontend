@@ -89,6 +89,7 @@ export const SettingsContextProvider = ({
     if (!settings) {
       getSettings();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
