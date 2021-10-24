@@ -100,6 +100,9 @@ const themeConfig = {
         },
       },
       a: {
+        // display: "inline-block",
+        // borderBottom: "1px solid",
+        // borderColor: "cm.accentLight",
         transitionProperty: "common",
         transitionDuration: "fast",
         cursor: "pointer",

@@ -8,7 +8,7 @@ import {
 import { Footer } from "~/components/app";
 import { getApolloClient } from "~/services";
 import { Box, SimpleGrid, Text, chakra, Heading } from "@chakra-ui/react";
-import { getMultilangValue } from "~/utils";
+import { getMultilangValue, isEmptyHtml } from "~/utils";
 import { useTranslation } from "next-i18next";
 import { GetStaticPaths, GetStaticProps } from "next";
 
@@ -130,12 +130,16 @@ export const ModuleComponentEvent = ({
           dateInfo = `${t(
             "event.label.dateFrom",
             "From"
-          )} ${begin.toLocaleDateString(i18n.language === "de" ? "de-DE":"en-GB")}`;
+          )} ${begin.toLocaleDateString(
+            i18n.language === "de" ? "de-DE" : "en-GB"
+          )}`;
         } else {
           dateInfo = `${t(
             "event.label.dateUntil",
             "Until"
-          )} ${end.toLocaleDateString(i18n.language === "de" ? "de-DE":"en-GB")}`;
+          )} ${end.toLocaleDateString(
+            i18n.language === "de" ? "de-DE" : "en-GB"
+          )}`;
         }
       } catch (err) {}
 
@@ -144,9 +148,11 @@ export const ModuleComponentEvent = ({
           const dd = new Date(date.date);
           if (dd >= today) {
             acc.push(
-              `${dd.toLocaleDateString(i18n.language === "de" ? "de-DE":"en-GB")} ${getTime(
+              `${dd.toLocaleDateString(
+                i18n.language === "de" ? "de-DE" : "en-GB"
+              )} ${getTime(
                 date,
-                i18n.language === "de" ? "de-DE":"en-GB",
+                i18n.language === "de" ? "de-DE" : "en-GB",
                 true
               )}<br/>`
             );
@@ -157,10 +163,14 @@ export const ModuleComponentEvent = ({
     } else {
       try {
         dateInfo = `${new Date(event?.dates[0].date).toLocaleDateString(
-          i18n.language === "de" ? "de-DE":"en-GB"
+          i18n.language === "de" ? "de-DE" : "en-GB"
         )}`;
 
-        timeInfo = getTime(event?.dates[0], i18n.language === "de" ? "de-DE":"en-GB", true);
+        timeInfo = getTime(
+          event?.dates[0],
+          i18n.language === "de" ? "de-DE" : "en-GB",
+          true
+        );
       } catch (err) {}
     }
   }
@@ -211,11 +221,12 @@ export const ModuleComponentEvent = ({
                 dangerouslySetInnerHTML={{ __html: `${dateInfo} ${timeInfo}` }}
               />
             </Box>
-
-            <MultiLangHtml json={event.description} />
+            {!isEmptyHtml(getMultilangValue(event?.description ?? "")) && (
+              <MultiLangHtml json={event.description} />
+            )}
           </Box>
           <SimpleGrid columns={2} spacingX="0.5em" spacingY="1em">
-            {event?.address?.trim() && (
+            {!isEmptyHtml(event?.address ?? "") && (
               <Box className="item">
                 <Box
                   mb="0.5em"
@@ -230,7 +241,7 @@ export const ModuleComponentEvent = ({
                 </Box>
               </Box>
             )}
-            {event?.organiser?.trim() && (
+            {!isEmptyHtml(event?.organiser ?? "") && (
               <Box className="item">
                 <Box
                   mb="0.5em"
@@ -293,7 +304,7 @@ export const ModuleComponentEvent = ({
 
       <Box layerStyle="blurredLightGray">
         {event.locations && event.locations.length > 0 && (
-          <Box p="20px" pn="40px">
+          <Box p="20px">
             <chakra.h3 className="highlight" color="cm.text" pb="1em">
               {t("event.title.location", "Location")}
             </chakra.h3>

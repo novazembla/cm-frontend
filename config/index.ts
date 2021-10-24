@@ -13,7 +13,7 @@ export const appConfigMainNav = [
   },
   {
     path: {
-      de: "/page/ueber-uns",
+      de: "/seite/ueber-uns",
       en: "/page/about-us",
     },
     title: {
@@ -23,7 +23,7 @@ export const appConfigMainNav = [
   },
   {
     path: {
-      de: "/page/nutzungshinweise",
+      de: "/seite/nutzungshinweise",
       en: "/page/usage-guidance",
     },
     title: {
@@ -76,8 +76,8 @@ export const appConfigMainNav = [
 export const appConfigFooterNav = [
   {
     path: {
-      de: "/impressum",
-      en: "/imprint",
+      de: "/seite/impressum",
+      en: "/page/imprint",
     },
     title: {
       de: "Impressum",
@@ -86,7 +86,7 @@ export const appConfigFooterNav = [
   },
   {
     path: {
-      de: "/page/datenschutz",
+      de: "/seite/datenschutz",
       en: "/page/privacy-information",
     },
     title: {

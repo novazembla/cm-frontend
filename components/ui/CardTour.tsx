@@ -91,7 +91,7 @@ export const CardTour = ({ tour }: { tour: any }) => {
                 color="#fff"
                 py="3px"
                 px="5px"
-                transform="translateY(+50%) translateX(-10%)"
+                transform="translateY(+10px) translateX(-10px)"
               >
                 {meta}
               </Box>

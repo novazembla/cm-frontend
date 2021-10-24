@@ -25,12 +25,12 @@ const settingsQuery = gql`
         id
         name
         slug
-
         terms {
           id
           name
           slug
           color
+          taxonomyId
           colorDark
         }
       }

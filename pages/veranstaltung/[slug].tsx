@@ -1,4 +1,3 @@
-import { useTranslation } from "next-i18next";
 import { GetStaticPaths, GetStaticProps } from "next";
 
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
@@ -15,8 +14,6 @@ const Event = ({
   event: any;
   props: any;
 }) => {
-  const { t } = useTranslation();
-
   return (
     <ModuleComponentEvent
       event={event}
