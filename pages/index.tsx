@@ -1,11 +1,11 @@
-import { GetStaticPaths, GetStaticProps } from "next";
+import { GetStaticProps } from "next";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { Box, Heading } from "@chakra-ui/react";
 import { gql, useQuery } from "@apollo/client";
 import { getMultilangValue } from "~/utils";
-import { MultiLangValue, MultiLangHtml, ApiImage, Card } from "~/components/ui";
+import {  MultiLangHtml, Card } from "~/components/ui";
 
 import { useMapContext } from "~/provider";
 
@@ -94,10 +94,10 @@ export const Home = () => {
 };
 
 // This gets called on every request
-export async function getStaticProps(context: GetStaticProps) {
+export const getStaticProps: GetStaticProps = async (context) => {
   return {
     props: {
-      ...(await serverSideTranslations((context as any)?.locale)),
+      ...(await serverSideTranslations(context.locale ?? "en")),
     },
   };
 }

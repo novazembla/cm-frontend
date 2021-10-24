@@ -72,8 +72,7 @@ const createApolloClient = (config: AppConfig) => {
         errorPolicy: "ignore",
       },
       query: {
-        // TODO: revist better caching at some point
-        fetchPolicy: "network-only",
+        fetchPolicy: "cache-first",
         errorPolicy: "all",
       },
       mutate: {

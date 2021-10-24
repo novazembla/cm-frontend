@@ -6,3 +6,7 @@ export * from "./ListLocation";
 export * from "./QuickSearchItem";
 export * from "./ApiImage";
 export * from "./Card";
+export * from "./LocationCard";
+export * from "./Event";
+export * from "./LoadingIcon";
+export * from "./ErrorMessage";

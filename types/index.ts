@@ -5,6 +5,8 @@ export interface AppProps {
 }
 
 export interface AppConfig {
+  colorLight: string;
+  colorDark: string;
   lat: number;
   lng: number;
   zoom: number;

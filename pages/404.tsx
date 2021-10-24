@@ -1,8 +1,6 @@
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
-import Head from "next/head";
-import Image from "next/image";
-import Link from "next/link";
+import { GetStaticProps } from "next";
 
 import { Box, Heading, Text } from "@chakra-ui/react";
 import { useTranslation } from "next-i18next";
@@ -26,8 +24,10 @@ export default function Page404() {
   );
 }
 
-export const getStaticProps = async ({ locale }: { locale: any }) => ({
-  props: {
-    ...(await serverSideTranslations(locale, ["common"])),
-  },
-});
+export const getStaticProps: GetStaticProps = async (context) => {
+  return {
+    props: {
+      ...(await serverSideTranslations(context.locale ?? "en")),
+    },
+  };
+};

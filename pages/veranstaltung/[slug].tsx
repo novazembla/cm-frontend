@@ -16,7 +16,7 @@ const Event = ({
   props: any;
 }) => {
   const { t } = useTranslation();
-  
+
   return (
     <ModuleComponentEvent
       event={event}

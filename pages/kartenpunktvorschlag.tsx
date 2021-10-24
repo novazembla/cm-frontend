@@ -1,19 +1,19 @@
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import {
-  ModuleComponentEvents,
-} from "~/components/modules";
 import { GetStaticProps } from "next";
 
-const Events = ({ ...props }) => {
-  return <ModuleComponentEvents {...props} />;
+import { ModuleComponentSuggest } from "~/components/modules";
+
+const SuggestLocation = ({ page }: { page: any }) => {
+  return <ModuleComponentSuggest />;
 };
 
+// This gets called on every request
 export const getStaticProps: GetStaticProps = async (context) => {
   return {
     props: {
       ...(await serverSideTranslations(context.locale ?? "en")),
     },
   };
-}
+};
 
-export default Events;
+export default SuggestLocation;

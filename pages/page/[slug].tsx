@@ -6,7 +6,7 @@ import { Box, Heading, Text } from "@chakra-ui/react";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { Footer } from "~/components/app";
 
-const Page = ({ page }: { page: any }) => {
+const Page = ({ page }: { page: any; }) => {
   return (
     <>
       <Box layerStyle="page">
@@ -19,14 +19,16 @@ const Page = ({ page }: { page: any }) => {
         <Box color="cm.text">
           {page.heroImage && page.heroImage.id && (
             <Box w="100%" mt="1em" mb="3em" position="relative">
-              <ApiImage
-                id={page.heroImage.id}
-                alt={page.heroImage.alt}
-                meta={page.heroImage.meta}
-                forceAspectRatioPB={75}
-                status={page.heroImage.status}
-                sizes="(min-widht: 55rem) 800px, 100vw"
-              />
+              <Box bg="#333">
+                <ApiImage
+                  id={page.heroImage.id}
+                  alt={page.heroImage.alt}
+                  meta={page.heroImage.meta}
+                  forceAspectRatioPB={75}
+                  status={page.heroImage.status}
+                  sizes="(min-width: 55rem) 800px, 100vw"
+                />
+              </Box>
               {page.heroImage.credits && (
                 <Text fontSize="xs" mt="0.5" color="cm.text">
                   <MultiLangValue json={page.heroImage.credits} />
@@ -35,7 +37,7 @@ const Page = ({ page }: { page: any }) => {
             </Box>
           )}
           {page.intro && (
-            <Box textStyle="larger" mb="3em">
+            <Box textStyle="larger" mb="3em" fontWeight="bold">
               <MultiLangHtml json={page.intro} />
             </Box>
           )}

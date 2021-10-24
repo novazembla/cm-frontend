@@ -92,7 +92,6 @@ export const useImageStatusPoll = (
 
     return () => {
       if (intervalTimeout) {
-        console.log("clear interval");
         clearInterval(intervalTimeout);
       }
         

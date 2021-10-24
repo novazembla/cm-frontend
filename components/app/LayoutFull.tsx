@@ -7,6 +7,7 @@ import { Header, Map, QuickSearchResult, MobileNav } from ".";
 import { useIsBreakPoint } from "~/hooks";
 import { AppProps } from "~/types";
 import { useQuickSearchHasResultContext } from "~/provider";
+import { LoadingBar } from ".";
 
 export const LayoutFull = ({ children }: AppProps) => {
   const hasQuickSearchResults = useQuickSearchHasResultContext();
@@ -33,6 +34,7 @@ export const LayoutFull = ({ children }: AppProps) => {
           rel="stylesheet"
         />
       </Head>
+      <LoadingBar color="cm.accentLight"/>
       <Map />
       <Header />
       <Box

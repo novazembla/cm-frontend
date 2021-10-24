@@ -1,10 +1,10 @@
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { GetStaticProps } from "next";
 import {
   ModuleComponentEvents,
 } from "~/components/modules";
-import { GetStaticProps } from "next";
 
-const Events = ({ ...props }) => {
+const Veranstaltungen = ({ ...props }) => {
   return <ModuleComponentEvents {...props} />;
 };
 
@@ -16,4 +16,4 @@ export const getStaticProps: GetStaticProps = async (context) => {
   };
 }
 
-export default Events;
+export default Veranstaltungen;

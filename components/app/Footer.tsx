@@ -13,7 +13,13 @@ import { getMultilangValue } from "~/utils";
 import { useIsBreakPoint } from "~/hooks";
 import { Logo } from ".";
 
-export const Footer = ({ type = "full" }: { type?: string }) => {
+export const Footer = ({
+  type = "full",
+  noBackground,
+}: {
+  type?: string;
+  noBackground?: boolean;
+}) => {
   const config = useConfigContext();
   const { isMobile, isTablet } = useIsBreakPoint();
 
@@ -21,7 +27,7 @@ export const Footer = ({ type = "full" }: { type?: string }) => {
 
   return (
     <Box
-      layerStyle="blurredLightGray"
+      layerStyle={!noBackground ? "blurredLightGray" : undefined}
       p={{
         base: "20px",
         sm: "20px",
@@ -43,7 +49,6 @@ export const Footer = ({ type = "full" }: { type?: string }) => {
             base: "auto",
             md: "50%",
             lg: "33.33%",
-            xl: "50%",
           }}
         >
           <IconButton
@@ -79,7 +84,6 @@ export const Footer = ({ type = "full" }: { type?: string }) => {
 
             md: "50%",
             lg: "66.66%",
-            xl: "50%",
           }}
           direction={{
             base: "column",

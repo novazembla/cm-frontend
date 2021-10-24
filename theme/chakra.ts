@@ -69,7 +69,7 @@ const themeConfig = {
           mb: "0",
         },
       },
-      "h1.highlight": {
+      "h1.highlight,h2.highlight,h3.highlight": {
         fontSize: chakraToBreakpointArray({
           base: "12px !important",
           md: "18px !important",
@@ -176,11 +176,11 @@ const themeConfig = {
       transform: {
         base: "translateX(-10px)",
         sm: "translateX(-10px)",
-        md: "translateX(-30px)",
+        md: "translateX(-35px)",
       },
     },
     blurredLightGray: {
-      bg: "rgba(200,200,200,0.7)",
+      bg: "rgba(180,180,180,0.65)",
       backdropFilter: "blur(20px)",
       backgroundBlendMode: "lighten",
     },
@@ -260,14 +260,14 @@ const themeConfig = {
     },
     finePrint: {
       fontSize: chakraToBreakpointArray({
-        base: "9px",
-        md: "9px",
-        xl: "9px",
+        base: "10px",
+        md: "12px",
+        xl: "12px",
       }),
       lineHeight: chakraToBreakpointArray({
-        base: "13px",
-        md: "13px",
-        xl: "13px",
+        base: "15px",
+        md: "18px",
+        xl: "18px",
       }),
     },
     categories: {

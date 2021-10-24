@@ -24,7 +24,7 @@ export const appConfigMainNav = [
   {
     path: {
       de: "/page/nutzungshinweise",
-      en: "/page/useage-guidance",
+      en: "/page/usage-guidance",
     },
     title: {
       de: "Nutzungshinweise",
@@ -87,7 +87,7 @@ export const appConfigFooterNav = [
   {
     path: {
       de: "/page/datenschutz",
-      en: "/page/gdpr",
+      en: "/page/privacy-information",
     },
     title: {
       de: "Datenschutzinformation",
@@ -97,6 +97,8 @@ export const appConfigFooterNav = [
 ];
 
 export const appConfig: AppConfig = {
+  colorLight: "#E42B20",
+  colorDark: "#660D36",
   contactEmail: "info@culturemap.test",
   apiGraphQLURL: `${process.env.NEXT_PUBLIC_API_GRAPHQL_URL}`,
   mapApiKey: `${process.env.NEXT_PUBLIC_MAP_API_KEY}`,
