@@ -86,15 +86,12 @@ export const ModuleComponentTours = ({ ...props }) => {
 
         <Box>
           {error && <ErrorMessage type="dataLoad" />}
-
-          {data?.tours?.tours?.length && (
-            <Box pb="20px">
-              {data?.tours?.tours.map((tour: any) => (
-                <CardTour key={`tour-${tour.id}`} tour={tour} />
-              ))}
-              
-            </Box>
-          )}
+          {data?.tours?.tours?.length &&
+            data?.tours?.tours.map((tour: any) => (
+              <Box key={`tour-${tour.id}`} pb="20px">
+                <CardTour tour={tour} />
+              </Box>
+            ))}
 
           {showLoadMore && !loading && !error && (
             <Box>
@@ -131,7 +128,7 @@ export const ModuleComponentTours = ({ ...props }) => {
           )}
           {loading && <LoadingIcon />}
         </Box>
-        <Footer noBackground/>
+        <Footer noBackground />
       </Box>
     </Box>
   );
