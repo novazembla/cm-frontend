@@ -1,3 +1,22 @@
 {
-  "locations": "Locations"
+  "locations": "Locations",
+  "footer": {
+    "contactLink": {
+      "title": "Contact"
+    }
+  },
+  "event": {
+    "title": {
+      "categories": "Categories",
+      "locations": "Locations"
+    }
+  },
+  "location": {
+    "title": {
+      "address": "Address",
+      "contactInfo": "Contact information",
+      "categories": "Categories",
+      "events": "Events"
+    }
+  }
 }

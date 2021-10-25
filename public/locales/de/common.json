@@ -1,8 +1,13 @@
 {
-  "footer": {
-    "contactLink": {
-      "title": "Kontakt"
-    }
+  "menu": {
+    "button": {
+      "backToTop": "Nach oben",
+      "togggleSearch": "Suche",
+      "toggleMenu": "Menü",
+      "suggestLocation": "Kartenpunktvorschlag"
+    },
+    "close": "Menü schließen",
+    "open": "Menü öffnen"
   },
   "header": {
     "logo": "Kulturkarte Lichtenberg"
@@ -33,44 +38,81 @@
       "title": "Über uns"
     }
   },
-  "menu": {
-    "close": "Menü schließen",
-    "open": "Menü öffnen"
+  "event": {
+    "missingData": {
+      "eventDate": "Wird zu einem späteren Zeitpunkt bekannt gegeben",
+      "eventLocation": "Wird zu einem späteren Zeitpunkt bekannt gegeben"
+    },
+    "label": {
+      "dateFrom": "Ab",
+      "dateUntil": "Bis",
+      "eventLocation": "Veranstaltungsort",
+      "eventOrganiser": "Veranstalter",
+      "category": "Veranstaltungsart",
+      "eventDatesMultiple": "Weitere Termine"
+    },
+    "detail": {
+      "title": "Veranstaltung"
+    },
+    "title": {
+      "location": "Kartenpunkt"
+    }
+  },
+  "page": {
+    "title": "Veranstaltungen",
+    "eventcount": "Veranstaltungen"
+  },
+  "card": {
+    "meta": {
+      "location": "Kartenpunkt",
+      "event": "Veranstaltung",
+      "tour": "Tour"
+    }
+  },
+  "location": {
+    "detail": {
+      "title": "Kartenpunkt"
+    },
+    "title": {
+      "offers": "Angebot",
+      "accessibilityInformation": "Informationen zur Barrierefreiheit",
+      "eventsHeldAt": "Veranstaltungen"
+    },
+    "label": {
+      "agency": "Träger"
+    }
+  },
+  "taxonomy": {
+    "label": {
+      "typeOfInstitution": "Einrichtungsart",
+      "targetAudience": "Zielgruppe",
+      "typeOfOrganisation": "Trägerart"
+    }
+  },
+  "suggest": {
+    "title": "Suggest location"
   },
   "apiimage": {
     "errormsg": "The image could unfortunately not be processed. Please try uploading again.",
     "processsing": "Image successfuly uploaded. We are processing it now",
     "placeholder": "Image"
   },
-  "card": {
-    "meta": {
-      "location": "Location",
-      "event": "Event",
-      "tour": "Tour"
+  "tour": {
+    "card": {
+      "tourStops": "Stops"
     }
   },
-  "translationnotfound": "Trans. not found",
   "error": {
+    "dataLoad": "Leider konnten wir die benötigten Daten nicht laden. Bitte versuchen Sie es zu einem späteren Zeitpunkt wieder.",
     "pagenotfound": "Seite nicht gefunden",
+    "pleaseReloadInAFewMoments": "Leider konnten wir die angforderte Seite nicht laden. Bitte versuchen Sie es zu einem späteren Zeitpunkt wieder.",
+    "internalServerError": "Ein interner Fehler verhindert leider die Darstellung dieses Inhaltes",
     "pleasetryagain": "Leider konnten wir den von Ihnen angeforderten Inhalt nicht darstellen. Bitte versuchen Sie es erneut."
   },
-  "event": {
+  "translationnotfound": "Übersetzung nicht gefunden",
+  "homepage": {
     "title": {
-      "categories": "Categories",
-      "locations": "Locations"
-    }
-  },
-  "page": {
-    "title": "Events",
-    "eventcount": "Events"
-  },
-  "location": {
-    "title": {
-      "address": "Address",
-      "contactInfo": "Contact information",
-      "offers": "Offering the following",
-      "categories": "Categories",
-      "events": "Events"
+      "highlights": "Highlights"
     }
   }
 }

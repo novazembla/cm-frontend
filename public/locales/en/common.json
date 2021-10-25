@@ -1,8 +1,13 @@
 {
-  "footer": {
-    "contactLink": {
-      "title": "Contact"
-    }
+  "menu": {
+    "button": {
+      "backToTop": "Back to top",
+      "togggleSearch": "Search",
+      "toggleMenu": "Menu",
+      "suggestLocation": "Suggest a new location"
+    },
+    "close": "Close menu",
+    "open": "Open menu"
   },
   "header": {
     "logo": "CultureMap Lichtenberg"
@@ -33,14 +38,29 @@
       "title": "About Us"
     }
   },
-  "menu": {
-    "close": "Close menu",
-    "open": "Open menu"
+  "event": {
+    "missingData": {
+      "eventDate": "TBD",
+      "eventLocation": "TBD"
+    },
+    "label": {
+      "dateFrom": "From",
+      "dateUntil": "Until",
+      "eventLocation": "Event Location",
+      "eventOrganiser": "Event Organiser",
+      "category": "Category",
+      "eventDatesMultiple": "Upcoming dates"
+    },
+    "detail": {
+      "title": "Event"
+    },
+    "title": {
+      "location": "Location"
+    }
   },
-  "apiimage": {
-    "errormsg": "The image could unfortunately not be processed. Please try uploading again.",
-    "processsing": "Image successfuly uploaded. We are processing it now",
-    "placeholder": "Image"
+  "page": {
+    "title": "Events",
+    "eventcount": "Events"
   },
   "card": {
     "meta": {
@@ -49,28 +69,50 @@
       "tour": "Tour"
     }
   },
-  "translationnotfound": "Trans. not found",
-  "error": {
-    "pagenotfound": "Page not found",
-    "pleasetryagain": "Please try again"
-  },
-  "event": {
+  "location": {
+    "detail": {
+      "title": "Location"
+    },
     "title": {
-      "categories": "Categories",
-      "locations": "Locations"
+      "offers": "Offering the following",
+      "accessibilityInformation": "Accessibility Information",
+      "eventsHeldAt": "Events held at the location"
+    },
+    "label": {
+      "agency": "Agency"
     }
   },
-  "page": {
-    "title": "Events",
-    "eventcount": "Events"
+  "taxonomy": {
+    "label": {
+      "typeOfInstitution": "Type of Institution",
+      "targetAudience": "Target Audience",
+      "typeOfOrganisation": "Type of Organisation"
+    }
   },
-  "location": {
+  "suggest": {
+    "title": "Suggest location"
+  },
+  "apiimage": {
+    "errormsg": "The image could unfortunately not be processed. Please try uploading again.",
+    "processsing": "Image successfuly uploaded. We are processing it now",
+    "placeholder": "Image"
+  },
+  "tour": {
+    "card": {
+      "tourStops": "Stops"
+    }
+  },
+  "error": {
+    "dataLoad": "Oops, something went wrong and we could not load the required data. Please try again later!",
+    "pagenotfound": "Page not found",
+    "pleaseReloadInAFewMoments": "Please try again",
+    "internalServerError": "Oops, an error happened on our server",
+    "pleasetryagain": "Please try again"
+  },
+  "translationnotfound": "Trans. not found",
+  "homepage": {
     "title": {
-      "address": "Address",
-      "contactInfo": "Contact information",
-      "offers": "Offering the following",
-      "categories": "Categories",
-      "events": "Events"
+      "highlights": "Highlights"
     }
   }
 }
