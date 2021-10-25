@@ -1,3 +1,17 @@
+Einrichtungen H:#15968F D: #005252
+KünstlerInnen H:#3283D5 D:#003F7E
+Kirchen H: #D6B227 D: #695400
+Kultureinrichtungen H: #0B4E8D D: #001A33
+Kulturinitiativen H: #D3736F D: #81413E
+Begegenungsstätten H: #4C9D62 D: #30603D
+Stiftungen H: #30603D  D: #535353
+Hochschulen H: #003E4A D: #003E4A
+Kreativ: H: #9D4C4C D: #503030
+Erinnerungsorte: H: #554577 D: #554577
+KimSt H: #8F4B9A  D: #7B4084
+
+
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
