@@ -61,7 +61,7 @@ import { useTranslation } from "next-i18next";
 //   }
 // `;
 
-export const ModuleComponentSearch = () => {
+export const ModuleComponentMap = () => {
   const { t, i18n } = useTranslation();
   return (
     <>
@@ -82,7 +82,7 @@ export const ModuleComponentSearch = () => {
             mb="1em"
             h="200"
           >
-            Formular, .... Detailsuche
+            Kartenansicht (alle katenpunkte)
           </Box>
         </Box>
       </Box>
