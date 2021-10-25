@@ -34,7 +34,7 @@ export const ModuleComponentPage = ({ page }: { page: any }) => {
     <>
       <Box layerStyle="page">
         <Box layerStyle="headingPullOut" mb="3">
-          <chakra.h1 className="highlight" color="cm.text">
+          <chakra.h1 className="highlight" color="cm.text" fontWeight="bold">
             <MultiLangValue json={page.title} />
           </chakra.h1>
         </Box>

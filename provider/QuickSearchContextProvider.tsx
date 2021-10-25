@@ -2,7 +2,24 @@ import React, { createContext, useContext } from "react";
 import { useState } from "react";
 import type { QuickSearchResult } from "~/types";
 
-const QuickSearchContext = createContext<any>({});
+
+type QuickSearchContext = {
+  quickSearchResult: any;
+  isQuickSearchOpen: boolean;
+  setQuickSearchResult: (results: Record<string, QuickSearchResult>) => void;
+  onQuickSearchToggle: Function;
+  onQuickSearchClose: Function;
+  onQuickSearchOpen: Function;
+};
+
+const QuickSearchContext = createContext<QuickSearchContext>({
+  quickSearchResult: null,
+  isQuickSearchOpen: false,
+  setQuickSearchResult: (results: Record<string, QuickSearchResult>) => {},
+  onQuickSearchToggle: () => {},
+  onQuickSearchClose: () => {},
+  onQuickSearchOpen: () => {},
+});
 
 export const useQuickSearchContext = () => useContext(QuickSearchContext);
 
@@ -34,6 +51,8 @@ export const QuickSearchContextProvider = ({
         setQuickSearchResult,
         isQuickSearchOpen,
         onQuickSearchToggle: () => onQuickSearchToggle(!isQuickSearchOpen),
+        onQuickSearchClose: () => onQuickSearchToggle(false),
+        onQuickSearchOpen: () => onQuickSearchToggle(true),
       }}
     >
       {children}

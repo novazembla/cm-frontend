@@ -17,7 +17,8 @@ import i18n from "i18next";
 import { NextPageContext } from "next";
 import Arrow from "~/assets/svg/Pfeil_quer.svg";
 
-export const Event = ({ children: event }: { children: any }) => {
+// export const Event = ({ children: event }: { children: any }) => {
+export const Event = ({ event }: { event: any }) => {
   const { t, i18n } = useTranslation();
 
   let dateInfo: any = t("event.missingData.eventDate", "TBD");

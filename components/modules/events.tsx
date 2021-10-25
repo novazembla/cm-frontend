@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { gql, useQuery } from "@apollo/client";
 import {
   MultiLangValue,
@@ -61,6 +61,8 @@ const initialQueryState = {
 };
 
 export const ModuleComponentEvents = ({ ...props }) => {
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
 
   const { t, i18n } = useTranslation();
@@ -86,12 +88,12 @@ export const ModuleComponentEvents = ({ ...props }) => {
       initialQueryState?.pageSize * currentPageIndex;
 
   return (
-    <>
-      <Box layerStyle="page" w="100%">
+    <Box w="100%">
+      <Box layerStyle="page">
         <Box layerStyle="headingPullOut" mb="3">
-          <Heading as="h1" className="highlight" color="cm.text">
+          <chakra.h1 className="highlight" color="cm.text" fontWeight="bold">
             {t("page.title", "Events")}
-          </Heading>
+          </chakra.h1>
         </Box>
         <Box
           p="10"
@@ -111,10 +113,14 @@ export const ModuleComponentEvents = ({ ...props }) => {
 
           {data?.events?.events?.length && (
             <Box size="md" mt="3">
-              <VirtualScroller
+              {data?.events?.events.map((event: any) => (
+                <Event key={`event-${event.id}`} event={event} />
+              ))}
+              {/* <VirtualScroller
+                scrollableContainer={scrollContainerRef.current}
                 items={data?.events?.events}
                 itemComponent={Event}
-              />
+              /> */}
             </Box>
           )}
 
@@ -155,6 +161,6 @@ export const ModuleComponentEvents = ({ ...props }) => {
         </Box>
       </Box>
       <Footer />
-    </>
+    </Box>
   );
 };

@@ -63,14 +63,29 @@ export const LayoutFull = ({ children }: AppProps) => {
       >
         {/* {hasQuickSearchResults && <QuickSearchResult />}
         {!hasQuickSearchResults && <>{children}</>} */}
-
-        {children}
+        <Box
+          h={{
+            md: "calc(100vh - 60px)",
+            xl: "calc(100vh - 80px)",
+          }}
+          overflowY={{
+            md: "auto",
+          }}
+        >
+          {children}
+        </Box>
       </Box>
       {(isMobile || isTablet) && <MobileNav />}
       <QuickSearch />
       <Box position="fixed" right="20px" top="100px" zIndex="3">
         {(isTabletWide || isDesktopAndUp) && (
-          <Box position="relative" w="55px" h="55px" bg="#fff" borderRadius="55px">
+          <Box
+            position="relative"
+            w="55px"
+            h="55px"
+            bg="#fff"
+            borderRadius="55px"
+          >
             <motion.div
               animate={{ opacity: isQuickSearchOpen ? 1 : 0 }}
               transition={{ duration: 0.3 }}

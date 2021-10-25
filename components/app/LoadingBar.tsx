@@ -1,14 +1,33 @@
 import React, { useEffect, useState } from "react";
 import Router from "next/router";
 import { Box } from "@chakra-ui/react";
+import {
+  useMenuButtonContext,
+  useQuickSearchContext,
+} from "~/provider";
 
 export const LoadingBar = ({ color }: { color: string }) => {
   const [barVisible, setBarVisible] = useState(false);
+  const { onMenuClose, isMenuOpen } = useMenuButtonContext();
+  const { isQuickSearchOpen, onQuickSearchClose } = useQuickSearchContext();
+  
+  const showBar = () => {
+    console.log(1);
+    if (isMenuOpen) {
+      console.log(2);
+      onMenuClose();
+    }
+    if (isQuickSearchOpen) {
+      console.log(3);
+      onQuickSearchClose()
+    };
+
+    setBarVisible(true);
+  }
+  
+  const hideBar = () => setBarVisible(false);
 
   useEffect(() => {
-    const showBar = () => setBarVisible(true);
-    const hideBar = () => setBarVisible(false);
-
     Router.events.on("routeChangeStart", showBar);
     Router.events.on("routeChangeComplete", hideBar);
     Router.events.on("routeChangeError", hideBar);

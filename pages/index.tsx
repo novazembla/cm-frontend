@@ -65,10 +65,7 @@ export const Home = () => {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
           >
-            <Box
-              h={isTablet || isDesktopAndUp ? "calc(100vh - 80px)" : undefined}
-              overflowY={isTablet || isDesktopAndUp ? "auto" : undefined}
-            >
+            <Box>
               <Box
                 layerStyle="pageContainerWhite"
                 borderBottom="1px solid"

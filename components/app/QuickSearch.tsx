@@ -243,12 +243,18 @@ export const QuickSearch = () => {
                     : "675px"
                   : "100%",
               left: isDesktopAndUp ? "50px" : "0",
-
               zIndex: 1100,
-              overflowY: "auto",
             }}
           >
-            <Flex layerStyle="page" w="100%" minH="100%">
+            <Flex
+              w="100%"
+              h="100vh"
+              minH="100%"
+              pt={{
+                base: "60px",
+                xl: "80px",
+              }}
+            >
               <Flex
                 sx={{
                   a: {
@@ -263,11 +269,10 @@ export const QuickSearch = () => {
                     borderColor: "cm.accentLight",
                   },
                 }}
-                pt={{
-                  base: "80px",
-                  md: "100px",
-                  lg: "115px",
-                }}
+                layerStyle="page"
+                w="100%"
+                h="100%"
+                overflowY="auto"
                 pb={{
                   base: "100px",
                   md: "45px",

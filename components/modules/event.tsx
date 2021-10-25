@@ -179,7 +179,7 @@ export const ModuleComponentEvent = ({
     <>
       <Box layerStyle="page">
         <Box layerStyle="headingPullOut" mb="3">
-          <Text className="highlight" color="cm.text">
+          <Text className="highlight" color="cm.text" fontWeight="bold">
             {t("event.detail.title", "Event")}
           </Text>
         </Box>

@@ -1,5 +1,5 @@
 import { Footer } from "~/components/app";
-import { Box, Heading } from "@chakra-ui/react";
+import { Box, chakra } from "@chakra-ui/react";
 import { useTranslation } from "next-i18next";
 
 // const eventQuery = gql`
@@ -67,9 +67,9 @@ export const ModuleComponentSuggest = () => {
     <>
       <Box layerStyle="page">
         <Box layerStyle="headingPullOut" mb="3">
-          <Heading as="h1" className="highlight" color="cm.text">
+          <chakra.h1 className="highlight" color="cm.text" fontWeight="bold">
             {t("suggest.title", "Suggest location")}
-          </Heading>
+          </chakra.h1>
         </Box>
 
         <Box color="cm.text">

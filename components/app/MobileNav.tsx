@@ -81,7 +81,6 @@ export const MobileNav = () => {
                   <chakra.span key={`nav-link-${index}`}>
                     <ActiveLink
                       href={getMultilangValue(link.path)}
-                      onClick={() => onMenuToggle()}
                     >
                       <MultiLangValue json={link.title} />
                     </ActiveLink>

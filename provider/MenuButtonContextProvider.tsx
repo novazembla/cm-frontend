@@ -1,14 +1,18 @@
 import React, { createContext, useContext, useState } from "react";
 
-type MenuButton = {
+type MenuButtonContext = {
   isMenuOpen: boolean;
   onMenuToggle: Function;
+  onMenuClose: Function;
+  onMenuOpen: Function;
 };
 
 // create context
-const MenuButtonContext = createContext<MenuButton>({
+const MenuButtonContext = createContext<MenuButtonContext>({
   isMenuOpen: false,
   onMenuToggle: () => {},
+  onMenuClose: () => {},
+  onMenuOpen: () => {},
 });
 
 export const useMenuButtonContext = () => useContext(MenuButtonContext);
@@ -25,6 +29,8 @@ export const MenuButtonContextProvider = ({
       value={{
         isMenuOpen,
         onMenuToggle: () => onMenuToggle(!isMenuOpen),
+        onMenuClose: () => onMenuToggle(false),
+        onMenuOpen: () => onMenuToggle(true),
       }}
     >
       {children}
