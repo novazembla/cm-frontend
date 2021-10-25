@@ -92,6 +92,7 @@ export const ModuleComponentTours = ({ ...props }) => {
               {data?.tours?.tours.map((tour: any) => (
                 <CardTour key={`tour-${tour.id}`} tour={tour} />
               ))}
+              
             </Box>
           )}
 
