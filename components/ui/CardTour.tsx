@@ -29,11 +29,11 @@ export const CardTour = ({ tour }: { tour: any }) => {
     meta = `${tour?.tourStops.length} ${t("tour.card.tourStops", "Stops")}`;
   }
 
-  let type = "veranstaltung";
+  let type = "tour";
   if (i18n.language === "en") type = "tour";
 
   const description = htmlToTrimmedString(
-    getMultilangValue(tour.description) ?? "",
+    getMultilangValue(tour.teaser) ?? "",
     isTablet || isDesktopAndUp ? 150 : 60
   );
 

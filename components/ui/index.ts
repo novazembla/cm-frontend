@@ -9,6 +9,7 @@ export * from "./Card";
 export * from "./CardLocation";
 export * from "./CardEvent";
 export * from "./CardTour";
+export * from "./CardTourStop";
 export * from "./Event";
 export * from "./LoadingIcon";
 export * from "./ErrorMessage";

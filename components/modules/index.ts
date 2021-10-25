@@ -5,3 +5,5 @@ export * from "./search";
 export * from "./location";
 export * from "./page";
 export * from "./map";
+export * from "./tours";
+export * from "./tour";

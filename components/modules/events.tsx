@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { gql, useQuery } from "@apollo/client";
 import {
   MultiLangValue,
@@ -16,7 +16,9 @@ import { useTranslation } from "next-i18next";
 import { GetStaticProps, GetStaticPropsContext } from "next";
 
 // @ts-ignore
-import VirtualScroller from "virtual-scroller/react";
+//import VirtualScroller from "virtual-scroller/react";
+// https://bvaughn.github.io/react-virtualized/#/components/Masonry
+// TODO use react-virtualized 
 
 const eventsQuery = gql`
   query events($where: JSON, $orderBy: JSON, $pageIndex: Int, $pageSize: Int) {
@@ -61,7 +63,7 @@ const initialQueryState = {
 };
 
 export const ModuleComponentEvents = ({ ...props }) => {
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  // const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
 

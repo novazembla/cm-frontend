@@ -19,14 +19,12 @@ import {
   AspectRatio,
   Text,
   chakra,
-  Heading,
   SimpleGrid,
 } from "@chakra-ui/react";
 import { getMultilangValue, isEmptyHtml } from "~/utils";
 import { useIsBreakPoint } from "~/hooks";
 import { useTranslation } from "next-i18next";
 import { GetStaticPaths, GetStaticProps } from "next";
-import Link from "next/link";
 
 const locationQuery = gql`
   query ($slug: String!) {
