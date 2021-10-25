@@ -176,8 +176,6 @@ export const ModuleComponentTour = ({
     }   
   `;
 
-  console.log(tour);
-
   return (
     <Box layerStyle="blurredLightGray">
       <Box px="20px" pt="0.5em">

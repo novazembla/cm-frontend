@@ -88,7 +88,7 @@ export const ModuleComponentTours = ({ ...props }) => {
           {error && <ErrorMessage type="dataLoad" />}
 
           {data?.tours?.tours?.length && (
-            <Box size="md" mt="3">
+            <Box pb="20px">
               {data?.tours?.tours.map((tour: any) => (
                 <CardTour key={`tour-${tour.id}`} tour={tour} />
               ))}
