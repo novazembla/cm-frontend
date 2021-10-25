@@ -37,6 +37,8 @@ export const LoadingBar = ({ color }: { color: string }) => {
       Router.events.off("routeChangeComplete", hideBar);
       Router.events.off("routeChangeError", hideBar);
     };
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

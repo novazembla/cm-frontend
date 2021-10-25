@@ -123,7 +123,9 @@ export const CardTour = ({ tour }: { tour: any }) => {
             }}
           >
             <LinkOverlay
-              href={`/${type}/${getMultilangValue(tour.slug)}/`}
+              href={`${
+                i18n.language === "en" ? "/en" : ""
+              }/${type}/${getMultilangValue(tour.slug)}/`}
               textStyle="headline"
             >
               <MultiLangValue json={tour.title} />
