@@ -66,79 +66,86 @@ export const Home = () => {
             transition={{ duration: 0.3 }}
           >
             <Box
-              layerStyle="pageContainerWhite"
-              borderBottom="1px solid"
-              borderColor="cm.accentDark"
+              h={isTablet || isDesktopAndUp ? "calc(100vh - 80px)" : undefined}
+              overflowY={isTablet || isDesktopAndUp ? "auto" : undefined}
             >
-              {data?.homepage?.missionStatement && (
-                <Box>
-                  <b>
-                    <MultiLangHtml json={data?.homepage?.missionStatement} />
-                  </b>
+              <Box
+                layerStyle="pageContainerWhite"
+                borderBottom="1px solid"
+                borderColor="cm.accentDark"
+              >
+                {data?.homepage?.missionStatement && (
+                  <Box>
+                    <b>
+                      <MultiLangHtml json={data?.homepage?.missionStatement} />
+                    </b>
 
-                  {data?.homepage?.missionStatementPage?.slug && (
-                    <Link
-                      href={`/page/${getMultilangValue(
-                        data?.homepage?.missionStatementPage?.slug
-                      )}/`}
+                    {data?.homepage?.missionStatementPage?.slug && (
+                      <Link
+                        href={`/page/${getMultilangValue(
+                          data?.homepage?.missionStatementPage?.slug
+                        )}/`}
+                      >
+                        Link to page
+                      </Link>
+                    )}
+                  </Box>
+                )}
+              </Box>
+              {data?.homepage?.highlights?.length > 0 && (
+                <Box
+                  layerStyle="blurredLightGray"
+                  overflow="hidden"
+                  position={isMobile ? "fixed" : "static"}
+                  bottom="100px"
+                  px="20px"
+                  sx={{
+                    article: {
+                      mb: !isMobile ? "20px" : "0",
+                      mr: !isMobile ? "0" : "20px",
+                    },
+                  }}
+                  w="100%"
+                >
+                  <chakra.h3 className="highlight" color="cm.text" mt="0.5em">
+                    {t("homepage.title.highlights", "Highlights")}
+                  </chakra.h3>
+
+                  <Box overflowY={isMobile ? "auto" : "hidden"} w="100%">
+                    <Flex
+                      flexDirection={isMobile ? "row" : "column"}
+                      w={isMobile ? "2000px" : "100%"}
+                      sx={{
+                        "@media (max-width: 44.9999em)": {
+                          flexDirection: "row",
+                          w: "2000px",
+                          overflowY: "auto",
+                        },
+                        "@media (min-width: 45em)": {
+                          flexDirection: "column",
+                          w: "auto",
+                          overflowY: "hidden",
+                        },
+                      }}
                     >
-                      Link to page
-                    </Link>
-                  )}
+                      {data?.homepage?.highlights.map((h: any) => {
+                        if (h.type === "location") {
+                          return (
+                            <CardLocation key={`h-${h.id}`} location={h} />
+                          );
+                        } else if (h.type === "event") {
+                          return <CardEvent key={`h-${h.id}`} event={h} />;
+                        } else if (h.type === "tour") {
+                          return <CardTour key={`h-${h.id}`} tour={h} />;
+                        } else {
+                          return <></>;
+                        }
+                      })}
+                    </Flex>
+                  </Box>
                 </Box>
               )}
             </Box>
-            {data?.homepage?.highlights?.length > 0 && (
-              <Box
-                layerStyle="blurredLightGray"
-                overflow="hidden"
-                position={isMobile ? "fixed" : "static"}
-                bottom="100px"
-                px="20px"
-                sx={{
-                  article: {
-                    mb: !isMobile ? "20px" : "0",
-                    mr: !isMobile ? "0" : "20px",
-                  },
-                }}
-                w="100%"
-              >
-                <chakra.h3 className="highlight" color="cm.text" mt="0.5em">
-                  {t("homepage.title.highlights", "Highlights")}
-                </chakra.h3>
-
-                <Box overflowY={isMobile ? "auto" : "hidden"} w="100%">
-                  <Flex
-                    flexDirection={isMobile ? "row" : "column"}
-                    w={isMobile ? "2000px" : "100%"}
-                    sx={{
-                      "@media (max-width: 44.9999em)": {
-                        flexDirection: "row",
-                        w: "2000px",
-                        overflowY: "auto",
-                      },
-                      "@media (min-width: 45em)": {
-                        flexDirection: "column",
-                        w: "auto",
-                        overflowY: "hidden",
-                      },
-                    }}
-                  >
-                    {data?.homepage?.highlights.map((h: any) => {
-                      if (h.type === "location") {
-                        return <CardLocation key={`h-${h.id}`} location={h} />;
-                      } else if (h.type === "event") {
-                        return <CardEvent key={`h-${h.id}`} event={h} />;
-                      } else if (h.type === "tour") {
-                        return <CardTour key={`h-${h.id}`} tour={h} />;
-                      } else {
-                        return <></>;
-                      }
-                    })}
-                  </Flex>
-                </Box>
-              </Box>
-            )}
           </motion.div>
         )}
       </AnimatePresence>
