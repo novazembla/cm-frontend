@@ -68,7 +68,7 @@ export const ModuleComponentMap = () => {
       <Box layerStyle="page">
         <Box layerStyle="headingPullOut" mb="3">
           <Heading as="h1" className="highlight" color="cm.text">
-            {t("suggest.title", "Suggest location")}
+            {t("map.title", "Map")}
           </Heading>
         </Box>
 

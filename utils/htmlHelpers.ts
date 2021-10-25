@@ -41,6 +41,8 @@ export const isEmptyHtml = (html: string) => {
     if (typeof DOMParser !== "undefined") {
       const dom = new DOMParser().parseFromString(html ?? "", "text/html");
       return (dom?.body?.textContent ?? "").trim().length === 0;
+    } else {
+      return html.replace(/(<([^>]+)>)/gi, "").trim().length === 0;
     }
   } catch (err) {}
   return true;

@@ -104,7 +104,7 @@ export const ModuleComponentLocation = ({
   const config = useConfigContext();
   const settings = useSettingsContext();
   const { t, i18n } = useTranslation();
-  
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       if (cultureMap && location?.lng && location?.lat) {
@@ -147,20 +147,21 @@ export const ModuleComponentLocation = ({
     meta = t("card.meta.location", "Location");
   }
 
-  const taxonomies = location?.terms?.reduce((acc: any, term: any) => {
-    if (settings?.terms[term.id]?.taxonomyId) {
-      const tax = Object.keys(settings?.taxMapping).find(
-        (key) => parseInt(settings?.taxMapping[key]) === term.taxonomyId
-      );
-      
-      if (!tax) return acc;
+  const taxonomies =
+    location?.terms?.reduce((acc: any, term: any) => {
+      if (settings?.terms[term.id]?.taxonomyId) {
+        const tax = Object.keys(settings?.taxMapping).find(
+          (key) => parseInt(settings?.taxMapping[key]) === term.taxonomyId
+        );
 
-      if (!(tax in acc)) acc = { ...acc, [tax]: [] };
+        if (!tax) return acc;
 
-      acc[tax].push(term);
-      return acc;
-    }
-  }, {}) ?? {};
+        if (!(tax in acc)) acc = { ...acc, [tax]: [] };
+
+        acc[tax].push(term);
+        return acc;
+      }
+    }, {}) ?? {};
 
   const address = `
     ${location?.address?.co ? `${location?.address?.co}<br/>` : ""}
@@ -199,11 +200,31 @@ export const ModuleComponentLocation = ({
   `.trim();
 
   const links = `
-    ${location?.socialMedia?.website ? `<a href="${location?.socialMedia?.website}" rel="no-referral">${location?.socialMedia?.website}</a><br/>` : ""}   
-    ${location?.socialMedia?.facebook ? `<a href="${location?.socialMedia?.facebook}" rel="no-referral">${location?.socialMedia?.facebook}</a><br/>` : ""}   
-    ${location?.socialMedia?.instagram ? `<a href="${location?.socialMedia?.instagram}" rel="no-referral">${location?.socialMedia?.instagram}</a><br/>` : ""}   
-    ${location?.socialMedia?.twitter ? `<a href="${location?.socialMedia?.twitter}" rel="no-referral">${location?.socialMedia?.twitter}</a><br/>` : ""}   
-    ${location?.socialMedia?.youtube ? `<a href="${location?.socialMedia?.youtube}" rel="no-referral">${location?.socialMedia?.youtube}</a><br/>` : ""}   
+    ${
+      location?.socialMedia?.website
+        ? `<a href="${location?.socialMedia?.website}" rel="no-referral">${location?.socialMedia?.website}</a><br/>`
+        : ""
+    }   
+    ${
+      location?.socialMedia?.facebook
+        ? `<a href="${location?.socialMedia?.facebook}" rel="no-referral">${location?.socialMedia?.facebook}</a><br/>`
+        : ""
+    }   
+    ${
+      location?.socialMedia?.instagram
+        ? `<a href="${location?.socialMedia?.instagram}" rel="no-referral">${location?.socialMedia?.instagram}</a><br/>`
+        : ""
+    }   
+    ${
+      location?.socialMedia?.twitter
+        ? `<a href="${location?.socialMedia?.twitter}" rel="no-referral">${location?.socialMedia?.twitter}</a><br/>`
+        : ""
+    }   
+    ${
+      location?.socialMedia?.youtube
+        ? `<a href="${location?.socialMedia?.youtube}" rel="no-referral">${location?.socialMedia?.youtube}</a><br/>`
+        : ""
+    }   
   `;
 
   return (
@@ -277,9 +298,15 @@ export const ModuleComponentLocation = ({
               }}
               pb="1em"
             >
-              <Box pb="1em" dangerouslySetInnerHTML={{ __html: address }} />
-              <Box pb="1em" dangerouslySetInnerHTML={{ __html: contact }} />
-              <Box pb="1em" dangerouslySetInnerHTML={{ __html: links }} />
+              {!isEmptyHtml(address) && (
+                <Box pb="1em" dangerouslySetInnerHTML={{ __html: address }} />
+              )}
+              {!isEmptyHtml(contact) && (
+                <Box pb="1em" dangerouslySetInnerHTML={{ __html: contact }} />
+              )}
+              {!isEmptyHtml(links) && (
+                <Box pb="1em" dangerouslySetInnerHTML={{ __html: links }} />
+              )}
             </Box>
           )}
 
