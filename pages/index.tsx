@@ -37,8 +37,6 @@ export const Home = () => {
   const [locations, setLocations] = useState([]);
   const { data, loading, error } = useQuery(homepageQuery);
 
-  console.log(data);
-
   // useEffect(() => {
   //   if (typeof window !== "undefined") {
   //     if (cultureMap && locations?.locations) {

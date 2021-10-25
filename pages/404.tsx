@@ -17,7 +17,7 @@ export default function Page404() {
           {t("error.pagenotfound", "Page not found")}
         </Heading>
       </Box>
-      <Text h="400px">{t("error.pleasetryagain", "Please try again")}</Text>
+      <Text h="400px">{t("error.pleaseReloadInAFewMoments", "Please try again")}</Text>
     </Box>
     <Footer />
     </>

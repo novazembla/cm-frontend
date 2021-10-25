@@ -153,8 +153,6 @@ export const QuickSearch = () => {
     return data.quickSearch;
   }, [currentSearchTerm, data, error]);
 
-  console.log("data", data);
-
   useEffect(() => {
     if (!loading) {
       // TODO: can events be shown?

@@ -84,6 +84,7 @@ export const ModulePageGetStaticProps: GetStaticProps = async (context) => {
 
   const accessToken = (context?.previewData as any)?.accessToken;
 
+  
   const { data } = await client.query({
     query: pageQuery,
     variables: {

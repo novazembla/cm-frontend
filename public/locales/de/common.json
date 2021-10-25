@@ -52,7 +52,7 @@
   "translationnotfound": "Trans. not found",
   "error": {
     "pagenotfound": "Seite nicht gefunden",
-    "pleasetryagain": "Die von Ihnen gewünschte URL konnte leider nicht gefunden werden"
+    "pleasetryagain": "Leider konnten wir den von Ihnen angeforderten Inhalt nicht darstellen. Bitte versuchen Sie es erneut."
   },
   "event": {
     "title": {

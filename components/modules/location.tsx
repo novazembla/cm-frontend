@@ -104,7 +104,7 @@ export const ModuleComponentLocation = ({
   const config = useConfigContext();
   const settings = useSettingsContext();
   const { t, i18n } = useTranslation();
-
+  
   useEffect(() => {
     if (typeof window !== "undefined") {
       if (cultureMap && location?.lng && location?.lat) {
@@ -152,8 +152,7 @@ export const ModuleComponentLocation = ({
       const tax = Object.keys(settings?.taxMapping).find(
         (key) => parseInt(settings?.taxMapping[key]) === term.taxonomyId
       );
-      console.log(tax);
-
+      
       if (!tax) return acc;
 
       if (!(tax in acc)) acc = { ...acc, [tax]: [] };
@@ -161,7 +160,7 @@ export const ModuleComponentLocation = ({
       acc[tax].push(term);
       return acc;
     }
-  }, {});
+  }, {}) ?? {};
 
   const address = `
     ${location?.address?.co ? `${location?.address?.co}<br/>` : ""}
@@ -174,7 +173,7 @@ export const ModuleComponentLocation = ({
     }
     ${location?.address?.street2 ? `${location?.address?.street2}<br/>` : ""}
     ${location?.address?.postCode ?? ""} ${location?.address?.city ?? ""}<br/>
-  `;
+  `.trim();
 
   const contact = `
     ${
@@ -197,7 +196,7 @@ export const ModuleComponentLocation = ({
         ? `<a href="mailto:${location?.contactInfo?.email2}">${location?.contactInfo?.email2}</a><br/>`
         : ""
     }
-  `;
+  `.trim();
 
   const links = `
     ${location?.socialMedia?.website ? `<a href="${location?.socialMedia?.website}" rel="no-referral">${location?.socialMedia?.website}</a><br/>` : ""}   
@@ -361,7 +360,7 @@ export const ModuleComponentLocation = ({
               md: "35px",
             }}
           >
-            {taxonomies["typeOfInstitution"]?.length > 0 && (
+            {taxonomies?.["typeOfInstitution"]?.length > 0 && (
               <Box className="item">
                 <Box
                   mb="0.5em"
@@ -382,7 +381,7 @@ export const ModuleComponentLocation = ({
                 </Box>
               </Box>
             )}
-            {taxonomies["targetAudience"]?.length > 0 && (
+            {taxonomies?.["targetAudience"]?.length > 0 && (
               <Box className="item">
                 <Box
                   mb="0.5em"
@@ -403,7 +402,7 @@ export const ModuleComponentLocation = ({
                 </Box>
               </Box>
             )}
-            {taxonomies["typeOfOrganisation"]?.length > 0 && (
+            {taxonomies?.["typeOfOrganisation"]?.length > 0 && (
               <Box className="item">
                 <Box
                   mb="0.5em"

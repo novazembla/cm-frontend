@@ -6,7 +6,7 @@ import { Box, Heading, Text } from "@chakra-ui/react";
 import { useTranslation } from "next-i18next";
 import { Footer } from "~/components/app";
 
-export default function Page404() {
+export default function Page500() {
   const { t } = useTranslation();
 
   return (
