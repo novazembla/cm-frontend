@@ -23,13 +23,18 @@ export const CardLocation = ({ location }: { location: any }) => {
   const config = useConfigContext();
 
   let meta: any;
-  let color = config.colorDark;
+  let color = config.colorLight;
+  let colorDark = config.colorDark;
 
   if (location?.primaryTerms?.length > 0) {
     meta = getMultilangValue(location?.primaryTerms[0]?.name);
 
     if (settings?.terms && location?.primaryTerms[0].id in settings?.terms) {
       color =
+        settings?.terms[location?.primaryTerms[0].id].color ??
+        color;
+
+      colorDark =
         settings?.terms[location?.primaryTerms[0].id].colorDark ??
         settings?.terms[location?.primaryTerms[0].id].color ??
         color;
@@ -38,6 +43,9 @@ export const CardLocation = ({ location }: { location: any }) => {
     meta = getMultilangValue(location?.terms[0]?.name);
     if (settings?.terms && location?.terms[0].id in settings?.terms) {
       color =
+        settings?.terms[location?.terms[0].id].color ??
+        color;
+      colorDark =
         settings?.terms[location?.terms[0].id].colorDark ??
         settings?.terms[location?.terms[0].id].color ??
         color;
@@ -106,7 +114,7 @@ export const CardLocation = ({ location }: { location: any }) => {
           {meta && (
             <Flex
               textStyle="categoriesHighlight"
-              color={color}
+              color={colorDark}
               h="35px"
               alignItems="flex-end"
             >

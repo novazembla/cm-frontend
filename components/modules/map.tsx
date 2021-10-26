@@ -1,6 +1,29 @@
+import { useEffect } from "react";
+import {
+  MultiLangValue,
+  MultiLangHtml,
+  ApiImage,
+  CardEvent,
+} from "~/components/ui";
 import { Footer } from "~/components/app";
-import { Box, chakra } from "@chakra-ui/react";
+import { getApolloClient } from "~/services";
+import {
+  useMapContext,
+  useConfigContext,
+  useSettingsContext,
+} from "~/provider";
+import {
+  Box,
+  Flex,
+  AspectRatio,
+  Text,
+  chakra,
+  SimpleGrid,
+} from "@chakra-ui/react";
+import { getMultilangValue, isEmptyHtml } from "~/utils";
+import { useIsBreakPoint } from "~/hooks";
 import { useTranslation } from "next-i18next";
+import { GetStaticPaths, GetStaticProps } from "next";
 
 // const eventQuery = gql`
 //   query ($slug: String!) {
@@ -62,7 +85,20 @@ import { useTranslation } from "next-i18next";
 // `;
 
 export const ModuleComponentMap = () => {
+  const cultureMap = useMapContext();
+  const { isMobile, isTablet, isDesktopAndUp } = useIsBreakPoint();
+  const config = useConfigContext();
+  const settings = useSettingsContext();
   const { t, i18n } = useTranslation();
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      if (cultureMap) {
+        cultureMap.showCluster();
+      }
+    }
+  }, [cultureMap]);
+
   return (
     <>
       <Box layerStyle="page">

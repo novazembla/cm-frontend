@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { gql } from "@apollo/client";
 import {
   MultiLangValue,
@@ -102,48 +102,74 @@ export const ModuleComponentLocation = ({
   const config = useConfigContext();
   const settings = useSettingsContext();
   const { t, i18n } = useTranslation();
+  const [highlight, setHighlight] = useState<any>(null);
+  const [color, setColor] = useState(config.colorLight);
+  const [colorDark, setColorDark] = useState(config.colorDark);
+  const [meta, setMeta] = useState("");
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      if (cultureMap && location?.lng && location?.lat) {
-        cultureMap.clear();
-        cultureMap.addMarkers([
-          {
-            type: "location",
-            id: location.id,
-            slug: location.slug,
-            lng: location.lng,
-            lat: location.lat,
-          },
-        ]);
-        cultureMap.panTo(location.lng, location.lat);
+    if (typeof window !== "undefined" && highlight && cultureMap) {
+      cultureMap.setHighlight(highlight);
+      cultureMap.panTo(highlight.lng, highlight.lat);
+    }
+
+    return () => {
+      if (cultureMap) cultureMap.clearHighlight();
+    };
+  }, [highlight, cultureMap]);
+
+  useEffect(() => {
+    if (location) {
+      let meta, color, colorDark;
+
+      if (location?.primaryTerms?.length > 0) {
+        meta = getMultilangValue(location?.primaryTerms[0]?.name);
+
+        if (
+          settings?.terms &&
+          location?.primaryTerms[0].id in settings?.terms
+        ) {
+          color =
+            settings?.terms[location?.primaryTerms[0].id].color ??
+            color;
+          
+          colorDark =
+            settings?.terms[location?.primaryTerms[0].id].colorDark ??
+            settings?.terms[location?.primaryTerms[0].id].color ??
+            color;
+        }
+      } else if (location?.terms?.length > 0) {
+        meta = getMultilangValue(location?.terms[0]?.name);
+        if (settings?.terms && location?.terms[0].id in settings?.terms) {
+          color =
+            settings?.terms[location?.terms[0].id].color ??
+            color;
+
+          colorDark =
+            settings?.terms[location?.terms[0].id].colorDark ??
+            settings?.terms[location?.terms[0].id].color ??
+            color;
+        }
+      } else {
+        meta = t("card.meta.location", "Location");
       }
-    }
-  }, [location, cultureMap]);
 
-  let meta: any;
-  let color = config.colorDark;
+      setHighlight({
+        id: location.id,
+        lng: location?.lng,
+        lat: location?.lat,
+        color,
+      });
 
-  if (location?.primaryTerms?.length > 0) {
-    meta = getMultilangValue(location?.primaryTerms[0]?.name);
+      setMeta(meta);
 
-    if (settings?.terms && location?.primaryTerms[0].id in settings?.terms) {
-      color =
-        settings?.terms[location?.primaryTerms[0].id].colorDark ??
-        settings?.terms[location?.primaryTerms[0].id].color ??
-        color;
+      if (color)
+        setColor(color);
+      
+      if (colorDark)
+        setColorDark(colorDark);
     }
-  } else if (location?.terms?.length > 0) {
-    meta = getMultilangValue(location?.terms[0]?.name);
-    if (settings?.terms && location?.terms[0].id in settings?.terms) {
-      color =
-        settings?.terms[location?.terms[0].id].colorDark ??
-        settings?.terms[location?.terms[0].id].color ??
-        color;
-    }
-  } else {
-    meta = t("card.meta.location", "Location");
-  }
+  }, [location, setMeta, setColor, setColorDark, setHighlight, t, settings?.terms]);
 
   const taxonomies =
     location?.terms?.reduce((acc: any, term: any) => {
@@ -235,9 +261,9 @@ export const ModuleComponentLocation = ({
         </Box>
 
         <Box bg="#fff" borderRadius="lg" overflow="hidden">
-          {location?.heroImage && location?.heroImage.id && (
+          {location?.heroImage?.id && (
             <AspectRatio w="100%" ratio={16 / 9}>
-              <Box bg={color} filter="li">
+              <Box bg={color}>
                 {location?.heroImage && location?.heroImage.id && (
                   <Box w="100%" h="100%">
                     <ApiImage
@@ -255,6 +281,12 @@ export const ModuleComponentLocation = ({
             </AspectRatio>
           )}
 
+          {!location?.heroImage?.id && <Flex justifyContent="flex-end"><Box w="40%"><AspectRatio w="100%" ratio={4 / 3}>
+              <Box bg={color} filter="li">
+                
+              </Box>
+            </AspectRatio></Box></Flex>}
+
           <Box
             px={isMobile ? "20px" : "35px"}
             pt={isMobile ? "20px" : "35px"}
@@ -264,7 +296,7 @@ export const ModuleComponentLocation = ({
             {meta && (
               <Flex
                 textStyle="categoriesHighlight"
-                color={color}
+                color={colorDark}
                 alignItems="flex-end"
                 width="66.66%"
               >

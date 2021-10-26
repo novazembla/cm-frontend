@@ -14,7 +14,6 @@ class MapMarkers {
 
   constructor() {
     this.pins = [];
-
     this.leavingMarkers = {};
     this.incomingMarkers = {};
 
@@ -129,54 +128,259 @@ class MapMarkers {
   }
 }
 
+type MapHighlight = {
+  id: number;
+  lng: number;
+  lat: number;
+  color: string;
+};
+
 export class CultureMap {
   markers: MapMarkers;
 
-  router: NextRouter | undefined;
-  mapRef: maplibregl.Map | undefined;
+  highlight: MapHighlight | null;
+
+  router: NextRouter | null;
+  mapRef: maplibregl.Map | null;
+  loaded: boolean;
+
+  locationId: number | null;
 
   constructor() {
-    this.mapRef = undefined;
-    this.router = undefined;
+    this.highlight = null;
+    this.mapRef = null;
+    this.router = null;
+    this.locationId = null;
     this.markers = new MapMarkers();
+    this.loaded = false;
   }
 
-  init(mapRef: maplibregl.Map | undefined, router: NextRouter) {
+  init(mapRef: maplibregl.Map | null, router: NextRouter) {
     this.mapRef = mapRef;
     this.router = router;
+
+    if (this.mapRef) {
+      this.mapRef.once("load", () => {
+        console.log("trigger loaded");
+        this.loaded = true;
+      });
+    }
   }
 
   clear() {
     this.markers.removeAll();
   }
 
-    // https://docs.mapbox.com/help/tutorials/markers-js/
+  setHighlight(highlight: MapHighlight) {
+
+    console.log(highlight)
+    this.highlight = highlight;
+
+    if (this.mapRef) {
+      const run = () => {
+        const data = {
+          features: [
+            {
+              type: "Feature",
+              geometry: {
+                coordinates: [highlight.lng ?? 0.0, highlight.lat ?? 0.0],
+                type: "Point",
+              },
+              properties: {
+                id: `loc-${highlight.id}`,
+                color: "#fff",
+                strokeColor: highlight.color,
+                radius: 20,
+                strokeWidth: 2,
+              },
+            },
+            {
+              type: "Feature",
+              geometry: {
+                coordinates: [highlight.lng ?? 0.0, highlight.lat ?? 0.0],
+                type: "Point",
+              },
+              properties: {
+                id: `loc-${highlight.id}`,
+                color: highlight.color,
+                strokeColor: "transparent",
+                radius: 16,
+                strokeWidth: 0,
+              },
+            }
+          ],
+          type: "FeatureCollection",
+        };
+        if (this?.mapRef?.getLayer("highlight"))
+          this?.mapRef?.removeLayer("highlight");
+        if (!this?.mapRef?.getSource("highlight")) {
+          this?.mapRef?.addSource("highlight", {
+            type: "geojson",
+            data,
+          });
+        } else {
+          (
+            this?.mapRef?.getSource("highlight") as maplibregl.GeoJSONSource
+          )?.setData(data);
+        }
+        this?.mapRef?.addLayer({
+          id: "highlight",
+          type: "circle",
+          source: "highlight",
+          paint: {
+            "circle-color": ["get", "color"],
+            "circle-radius": ["get", "radius"],
+            "circle-stroke-color": ["get", "strokeColor"],
+            "circle-stroke-width": ["get", "strokeWidth"],
+            // [
+            //   "interpolate",
+            //   ["linear"],
+            //   ["zoom"],
+            //   // zoom is 8 (or less) -> circle radius will be 2px
+            //   8,
+            //   2,
+            //   // zoom is 18 (or greater) -> circle radius will be 20px
+            //   16,
+            //   16,
+            // ],
+          },
+        });
+      };
+      if (!this.loaded) {
+        this.mapRef.once("load", run);
+      } else {
+        run();
+      }
+    }
+  }
+
+  clearHighlight() {
+    this.highlight = null;
+
+    if (this.mapRef) {
+      const run = () => {
+        if (this?.mapRef?.getLayer("highlight"))
+          this?.mapRef?.removeLayer("highlight");
+      };
+      if (!this.loaded) {
+        this.mapRef.once("load", run);
+      } else {
+        run();
+      }
+    }
+  }
+
+  // https://docs.mapbox.com/help/tutorials/markers-js/
   addMarkers(pins: MapPin[]) {
     if (this.mapRef) {
-      console.log("painting pins")
+      console.log("painting pins");
       pins.forEach((pin) => {
         const newPin = new maplibregl.Marker({ color: "#caa328" })
           .setLngLat([pin.lng, pin.lat])
-          .addTo(this.mapRef as maplibregl.Map );
-          newPin.getElement().addEventListener('click', () => {
-            if (this.router) 
-              this.router.push(`/${pin.type}/${getMultilangValue(pin.slug)}`)
-            
-          });
+          .addTo(this.mapRef as maplibregl.Map);
+        newPin.getElement().addEventListener("click", () => {
+          if (this.router)
+            this.router.push(`/${pin.type}/${getMultilangValue(pin.slug)}`);
+        });
         this.markers.add(`${pin.type}-${pin.id}`, newPin);
       });
     }
   }
 
+  getCenterOffset(): [number, number] {
+    if (typeof window === "undefined") return [0, 0];
+
+    const isMobile = window.matchMedia("(max-width: 44.9999em)").matches;
+    const isTablet = window.matchMedia(
+      "(min-width: 45em) and (max-width: 74.9999em)"
+    ).matches;
+    const isTabletWide = window.matchMedia(
+      "(min-width: 62em) and (max-width: 74.9999em)"
+    ).matches;
+    const isDesktop = window.matchMedia(
+      "(min-width: 75em) and (max-width: 119.9999em)"
+    ).matches;
+
+    // TODO: adjust to final values
+
+    if (isMobile) {
+      return [0, 30];
+    } else if (isTablet && !isTabletWide) {
+      return [0, 30];
+    } else if (isTabletWide) {
+      return [window.innerWidth / 4, 30];
+    } else if (isDesktop) {
+      return [725 / 2, 40];
+    } else {
+      console.log(5);
+
+      console.log(
+        window.innerWidth,
+
+        (window.innerWidth - 675) / 2
+      ),
+        (window.innerWidth - (window.innerWidth - 675) / 2,
+        (window.innerWidth - (window.innerWidth - 675) / 2) / 2);
+
+      return [(675 + (window.innerWidth * 0.08 - 55)) / 2, 40];
+    }
+  }
+
   panTo(lng: number, lat: number) {
     if (this.mapRef) {
-      this.mapRef.panTo([lng, lat], {
-        animate: true,
-        duration: 1000,
-        essential: true,
-        offset: [0,0]
-      });
+      this.mapRef.panTo(
+        [lng, lat],
+        {
+          animate: true,
+          duration: 1000,
+          essential: true,
+          offset: this.getCenterOffset(),
+        },
+        {
+          cmAnimation: true,
+        }
+      );
     }
-    
+  }
+
+  hideCluster() {
+    if (this.mapRef) {
+      const run = () => {
+        this?.mapRef?.setLayoutProperty("clusters", "visibility", "none");
+        this?.mapRef?.setLayoutProperty("cluster-count", "visibility", "none");
+        this?.mapRef?.setLayoutProperty(
+          "cluster-locations",
+          "visibility",
+          "none"
+        );
+      };
+      if (!this.loaded) {
+        this.mapRef.once("load", run);
+      } else {
+        run();
+      }
+    }
+  }
+  showCluster() {
+    if (this.mapRef) {
+      const run = () => {
+        this?.mapRef?.setLayoutProperty("clusters", "visibility", "visible");
+        this?.mapRef?.setLayoutProperty(
+          "cluster-count",
+          "visibility",
+          "visible"
+        );
+        this?.mapRef?.setLayoutProperty(
+          "cluster-locations",
+          "visibility",
+          "visible"
+        );
+      };
+      if (!this.loaded) {
+        this.mapRef.once("load", run);
+      } else {
+        run();
+      }
+    }
   }
 }

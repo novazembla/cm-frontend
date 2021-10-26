@@ -12,5 +12,5 @@ export const useIsBreakPoint = () => {
     isDesktop,
     isTabletWide,
     isDesktopAndUp,
-  } as const;
+  };
 };

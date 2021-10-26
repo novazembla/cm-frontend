@@ -104,7 +104,7 @@ export const QuickSearch = () => {
   const {
     handleSubmit,
     getValues,
-    register,
+    reset,
     control,
     setValue,
     formState: { isSubmitting, isValid, isDirty, errors },
@@ -140,6 +140,7 @@ export const QuickSearch = () => {
     setCurrentSearchTerm,
     currentSearchTerm,
     i18n.language,
+    loading
   ]);
 
   const searchResult = useMemo(() => {
@@ -153,70 +154,74 @@ export const QuickSearch = () => {
     return data.quickSearch;
   }, [currentSearchTerm, data, error]);
 
-  useEffect(() => {
-    if (!loading) {
-      // TODO: can events be shown?
-      const pins = searchResult.reduce((acc: any, result: any) => {
-        if (result.module !== "location") return acc;
+  // useEffect(() => {
+  //   if (!loading) {
+  //     // TODO: can events be shown?
+  //     const pins = searchResult.reduce((acc: any, result: any) => {
+  //       if (result.module !== "location") return acc;
 
-        return [
-          ...acc,
-          ...result.items.map((item: any) => ({
-            id: item.id,
-            type: "location",
-            lat: item.geopoint.lat,
-            lng: item.geopoint.lng,
-          })),
-        ];
-      }, []);
+  //       return [
+  //         ...acc,
+  //         ...result.items.map((item: any) => ({
+  //           id: item.id,
+  //           type: "location",
+  //           lat: item.geopoint.lat,
+  //           lng: item.geopoint.lng,
+  //         })),
+  //       ];
+  //     }, []);
 
-      if (cultureMap) {
-        cultureMap.clear();
-        cultureMap.addMarkers(pins);
-      }
+  //     if (cultureMap) {
+  //       cultureMap.clear();
+  //       cultureMap.addMarkers(pins);
+  //     }
 
-      console.log(
-        searchResult,
-        searchResult.reduce(
-          (acc: any, result: any) => ({
-            ...acc,
-            [result.module]: {
-              totalCount: result.totalCount,
-              items: result.items,
-            },
-          }),
-          {}
-        )
-      );
+  //     console.log(
+  //       searchResult,
+  //       searchResult.reduce(
+  //         (acc: any, result: any) => ({
+  //           ...acc,
+  //           [result.module]: {
+  //             totalCount: result.totalCount,
+  //             items: result.items,
+  //           },
+  //         }),
+  //         {}
+  //       )
+  //     );
 
-      // setQuickSearchResultInContext(
-      //   searchResult.reduce(
-      //     (acc: any, result: any) => ({
-      //       ...acc,
-      //       [result.module]: {
-      //         totalCount: result.totalCount,
-      //         items: result.items,
-      //       },
-      //     }),
-      //     {}
-      //   )
-      // );
-    }
-  }, [loading, searchResult, cultureMap]);
+  //     // setQuickSearchResultInContext(
+  //     //   searchResult.reduce(
+  //     //     (acc: any, result: any) => ({
+  //     //       ...acc,
+  //     //       [result.module]: {
+  //     //         totalCount: result.totalCount,
+  //     //         items: result.items,
+  //     //       },
+  //     //     }),
+  //     //     {}
+  //     //   )
+  //     // );
+  //   }
+  // }, [loading, searchResult, cultureMap]);
 
   const onSubmit = async (newData: yup.InferType<typeof SearchFormSchema>) => {
     setSearchTerm(newData.search);
-    triggerSearch({
-      variables: {
-        search: newData.search,
-        lang: i18n.language,
-      },
-    });
+    if (!loading)
+      triggerSearch({
+        variables: {
+          search: newData.search,
+          lang: i18n.language,
+        },
+      });
   };
 
   useEffect(() => {
     setSearchTerm("");
-  }, [router.asPath, setSearchTerm]);
+    reset({
+      search: ""
+    })
+  }, [isQuickSearchOpen, reset]);
 
   const isFieldInValid =
     (!isValid && isDirty) ||
