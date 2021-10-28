@@ -1,25 +1,18 @@
-import { gql, useQuery } from "@apollo/client";
-import { MultiLangValue, MultiLangHtml } from "~/components/ui";
-import { Footer } from "~/components/app";
-import { getApolloClient } from "~/services";
+import { MultiLangValue } from "~/components/ui";
+import NextLink from "next/link";
 import {
   Box,
   chakra,
-  Heading,
   LinkBox,
   LinkOverlay,
   Flex,
 } from "@chakra-ui/react";
-import { isEmptyHtml, getMultilangValue } from "~/utils";
-import { useTranslation } from "next-i18next";
-import Link from "next/link";
-import i18n from "i18next";
-import { NextPageContext } from "next";
-import Arrow from "~/assets/svg/Pfeil_quer.svg";
 
-// export const Event = ({ children: event }: { children: any }) => {
-export const Event = ({ event }: { event: any }) => {
-  const { t, i18n } = useTranslation();
+import Arrow from "~/assets/svg/Pfeil_quer.svg";
+import { useAppTranslations } from "~/hooks";
+
+export const ListedEvent = ({ event }: { event: any }) => {
+  const { t, i18n, getMultilangValue } = useAppTranslations();
 
   let dateInfo: any = t("event.missingData.eventDate", "TBD");
   let timeInfo: any = "";
@@ -34,14 +27,18 @@ export const Event = ({ event }: { event: any }) => {
           dateInfo = (
             <>
               {t("event.label.dateFrom", "From")}{" "}
-              {begin.toLocaleDateString(i18n.language === "de" ? "de-DE":"en-GB")}
+              {begin.toLocaleDateString(
+                i18n.language === "de" ? "de-DE" : "en-GB"
+              )}
             </>
           );
         } else {
           dateInfo = (
             <>
               {t("event.label.dateUntil", "Until")}{" "}
-              {end.toLocaleDateString(i18n.language === "de" ? "de-DE":"en-GB")}
+              {end.toLocaleDateString(
+                i18n.language === "de" ? "de-DE" : "en-GB"
+              )}
             </>
           );
         }
@@ -49,15 +46,17 @@ export const Event = ({ event }: { event: any }) => {
     } else {
       try {
         dateInfo = `${new Date(event.firstEventDate).toLocaleDateString(
-          i18n.language === "de" ? "de-DE":"en-GB"
+          i18n.language === "de" ? "de-DE" : "en-GB"
         )}`;
 
         const begin = new Date(event?.dates[0].begin);
-        const end = new Date(event?.dates[0].end);
-        timeInfo = `${begin.toLocaleTimeString(i18n.language === "de" ? "de-DE":"en-GB", {
-          hour: "2-digit",
-          minute: "2-digit",
-        })}${i18n.language === "de" ? " UHR" : ""}`;
+        timeInfo = `${begin.toLocaleTimeString(
+          i18n.language === "de" ? "de-DE" : "en-GB",
+          {
+            hour: "2-digit",
+            minute: "2-digit",
+          }
+        )}${i18n.language === "de" ? " UHR" : ""}`;
       } catch (err) {}
     }
   }
@@ -81,13 +80,16 @@ export const Event = ({ event }: { event: any }) => {
         </Box>
         <Box w="66.66%">
           <chakra.h2 className="headline" color="cm.text">
-            <LinkOverlay
-              href={`/${
+            <NextLink
+              passHref
+              href={`${i18n.language === "en" ? "/en" : ""}/${
                 i18n.language === "de" ? "veranstaltung" : "event"
               }/${getMultilangValue(event?.slug)}`}
             >
-              <MultiLangValue json={event?.title} />
-            </LinkOverlay>
+              <LinkOverlay>
+                <MultiLangValue json={event?.title} />
+              </LinkOverlay>
+            </NextLink>
           </chakra.h2>
         </Box>
       </Flex>

@@ -8,15 +8,21 @@ import {
   LinkBox,
   LinkOverlay,
 } from "@chakra-ui/react";
-import { useTranslation } from "react-i18next";
 import { MultiLangValue, ApiImage } from "~/components/ui";
-import { getMultilangValue, htmlToTrimmedString } from "~/utils";
-import { useIsBreakPoint } from "~/hooks";
+import { htmlToTrimmedString } from "~/utils";
+import { useAppTranslations, useIsBreakPoint } from "~/hooks";
 import { useConfigContext, useSettingsContext } from "~/provider";
 import Arrow from "~/assets/svg/Pfeil_quer.svg";
+import NextLink from "next/link";
 
-export const CardTour = ({ tour }: { tour: any }) => {
-  const { t, i18n } = useTranslation();
+export const CardTour = ({
+  tour,
+  fillContainer,
+}: {
+  tour: any;
+  fillContainer?: boolean;
+}) => {
+  const { t, i18n, getMultilangValue } = useAppTranslations();
   const settings = useSettingsContext();
   const { isMobile, isTablet, isDesktopAndUp } = useIsBreakPoint();
 
@@ -44,8 +50,9 @@ export const CardTour = ({ tour }: { tour: any }) => {
       bg="#fff"
       borderRadius="lg"
       overflow="hidden"
-      w={isMobile ? "80%" : "100%"}
-      maxW={isMobile ? "275px" : "100%"}
+      w={isMobile && !fillContainer ? "80%" : "100%"}
+      maxW={isMobile && !fillContainer ? "275px" : "100%"}
+      h={isMobile && fillContainer ? "100%" : undefined}
     >
       <Flex
         flexDirection={isMobile ? "column" : "row-reverse"}
@@ -74,6 +81,7 @@ export const CardTour = ({ tour }: { tour: any }) => {
                       forceAspectRatioPB={66.66}
                       status={tour?.heroImage.status}
                       sizes="(min-width: 45rem) 400px, 40vw"
+                      objectFit="cover"
                       cropPosition={tour?.heroImage?.cropPosition}
                     />
                   </Box>
@@ -122,14 +130,16 @@ export const CardTour = ({ tour }: { tour: any }) => {
               },
             }}
           >
-            <LinkOverlay
+            <NextLink
               href={`${
                 i18n.language === "en" ? "/en" : ""
               }/${type}/${getMultilangValue(tour.slug)}/`}
-              textStyle="headline"
+              passHref
             >
-              <MultiLangValue json={tour.title} />
-            </LinkOverlay>
+              <LinkOverlay textStyle="headline">
+                <MultiLangValue json={tour.title} />
+              </LinkOverlay>
+            </NextLink>
           </chakra.h2>
         </Box>
       </Flex>

@@ -14,6 +14,7 @@ import {
   QuickSearchContextProvider,
   MenuButtonContextProvider,
   SettingsContextProvider,
+  ScrollStateContextProvider,
 } from "~/provider";
 
 import { chakraTheme } from "~/theme";
@@ -27,15 +28,17 @@ function MyApp({ Component, pageProps }: AppProps) {
       <AppApolloProvider>
         <ChakraProvider theme={chakraTheme}>
           <SettingsContextProvider>
-            <MapContextProvider>
-              <QuickSearchContextProvider>
-                <MenuButtonContextProvider>
-                  <LayoutFull>
-                    <Component {...pageProps} />
-                  </LayoutFull>
-                </MenuButtonContextProvider>
-              </QuickSearchContextProvider>
-            </MapContextProvider>
+            <ScrollStateContextProvider>
+              <MapContextProvider>
+                <QuickSearchContextProvider>
+                  <MenuButtonContextProvider>
+                    <LayoutFull>
+                      <Component {...pageProps} />
+                    </LayoutFull>
+                  </MenuButtonContextProvider>
+                </QuickSearchContextProvider>
+              </MapContextProvider>
+            </ScrollStateContextProvider>
           </SettingsContextProvider>
         </ChakraProvider>
       </AppApolloProvider>

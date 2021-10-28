@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
 import { Box, chakra, Heading, Text } from "@chakra-ui/react";
 
-import { MultiLangValue, QuickSearchItem } from "~/components/ui";
-import { useTranslation } from "next-i18next";
+import { QuickSearchItem } from "~/components/ui";
+import { useAppTranslations } from "~/hooks";
 
 export const QuickSearchResult = ({ result }: { result: any }) => {
-  const { t } = useTranslation();
+  const { t } = useAppTranslations();
 
   return (
     <Box w="100%">

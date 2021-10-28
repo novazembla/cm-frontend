@@ -1,10 +1,4 @@
-
-import {
-  from,
-  ApolloClient,
-  InMemoryCache,
-  HttpLink
-} from "@apollo/client";
+import { from, ApolloClient, InMemoryCache, HttpLink } from "@apollo/client";
 
 import { onError } from "@apollo/client/link/error";
 import { RetryLink } from "@apollo/client/link/retry";
@@ -55,17 +49,45 @@ const createApolloClient = (config: AppConfig) => {
       }),
     ]),
     // TODO: find generic ways to manage the chache ...
-    // HOW TO ENSURE deletion/updates are reflected in the cache ...
-    // how will the cache expire?
-    cache: new InMemoryCache({
-      // typePolicies: {
-      //   Query: {
-      //     fields: {
-      //       allPosts: concatPagination(), // TODO: adjust to useful results ..., not working ... https://github.com/apollographql/apollo-client/issues/6679
-      //     },
-      //   },
-      // },¸
-    }),
+    cache: new InMemoryCache(
+      {
+        typePolicies: {
+          Query: {
+            fields: {
+              events: {
+                keyArgs: ["where", "orderBy"],
+                merge(
+                  existing,
+                  incoming,
+                  { args: { pageIndex = 0, pageSize = 50 } }: { args: any }
+                ) {
+                  const offset = pageIndex * pageSize;
+
+                  if (!incoming)
+                    return {
+                      totalCount: 0,
+                      events: [],
+                    };
+
+                  // Slicing is necessary because the existing data is
+                  // immutable, and frozen in development.
+                  const merged = existing?.events
+                    ? existing?.events.slice(0)
+                    : [];
+                  for (let i = 0; i < incoming?.events.length; i++) {
+                    merged[offset + i] = incoming?.events[i];
+                  }
+                  return {
+                    totalCount: incoming?.totalCount,
+                    events: merged,
+                  };
+                },
+              },
+            },
+          },
+        },
+      }
+    ),
     defaultOptions: {
       watchQuery: {
         fetchPolicy: "cache-and-network",
@@ -93,4 +115,4 @@ export const initializeClient = (settings: AppConfig) => {
   return aClient;
 };
 
-export const getApolloClient = () => initializeClient(appConfig)
+export const getApolloClient = () => initializeClient(appConfig);

@@ -2,15 +2,13 @@ import React from "react";
 import { ActiveLink } from "~/components/ui";
 
 import { Flex, IconButton, Link, Box } from "@chakra-ui/react";
-import { useTranslation } from "next-i18next";
 
 import { useConfigContext } from "~/provider";
 import { MultiLangValue } from "../ui";
 
 import Arrow from "~/assets/svg/Pfeil_hoch.svg";
 
-import { getMultilangValue } from "~/utils";
-import { useIsBreakPoint } from "~/hooks";
+import { useIsBreakPoint, useAppTranslations } from "~/hooks";
 import { Logo } from ".";
 
 export const Footer = ({
@@ -23,7 +21,7 @@ export const Footer = ({
   const config = useConfigContext();
   const { isMobile, isTablet } = useIsBreakPoint();
 
-  const { t } = useTranslation();
+  const { t, getMultilangValue } = useAppTranslations();
 
   return (
     <Box

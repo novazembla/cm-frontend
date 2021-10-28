@@ -1,6 +1,6 @@
 const { i18n } = require('./next-i18next.config');
 
-const domain = (new URL(process.env.NEXT_PUBLIC_API_GRAPHQL_URL));
+const domain = (new URL(process.env.NEXT_PUBLIC_API_URL));
 
 const domains = ["localhost"]
 if (domain.host.split(":")[0] !== "localhost")

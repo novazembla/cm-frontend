@@ -21,10 +21,11 @@ import {
   chakra,
   SimpleGrid,
 } from "@chakra-ui/react";
-import { getMultilangValue, isEmptyHtml } from "~/utils";
-import { useIsBreakPoint } from "~/hooks";
-import { useTranslation } from "next-i18next";
+import { useIsPresent } from "framer-motion";
+import { isEmptyHtml } from "~/utils";
+import { useIsBreakPoint, useAppTranslations } from "~/hooks";
 import { GetStaticPaths, GetStaticProps } from "next";
+import { MainContent } from "~/components/ui";
 
 const locationQuery = gql`
   query ($slug: String!) {
@@ -98,25 +99,29 @@ export const ModuleComponentLocation = ({
   props: any;
 }) => {
   const cultureMap = useMapContext();
-  const { isMobile, isTablet, isDesktopAndUp } = useIsBreakPoint();
+  const { isMobile } = useIsBreakPoint();
   const config = useConfigContext();
   const settings = useSettingsContext();
-  const { t, i18n } = useTranslation();
+  const { t, getMultilangValue } = useAppTranslations();
   const [highlight, setHighlight] = useState<any>(null);
   const [color, setColor] = useState(config.colorLight);
   const [colorDark, setColorDark] = useState(config.colorDark);
   const [meta, setMeta] = useState("");
+  const isPresent = useIsPresent();
 
   useEffect(() => {
+    if (!isPresent) return;
+
     if (typeof window !== "undefined" && highlight && cultureMap) {
+      console.log("move to hightligh", highlight);
       cultureMap.setHighlight(highlight);
       cultureMap.panTo(highlight.lng, highlight.lat);
     }
 
     return () => {
-      if (cultureMap) cultureMap.clearHighlight();
+      if (cultureMap && isPresent) cultureMap.clearHighlight();
     };
-  }, [highlight, cultureMap]);
+  }, [highlight, cultureMap, isPresent]);
 
   useEffect(() => {
     if (location) {
@@ -129,10 +134,8 @@ export const ModuleComponentLocation = ({
           settings?.terms &&
           location?.primaryTerms[0].id in settings?.terms
         ) {
-          color =
-            settings?.terms[location?.primaryTerms[0].id].color ??
-            color;
-          
+          color = settings?.terms[location?.primaryTerms[0].id].color ?? color;
+
           colorDark =
             settings?.terms[location?.primaryTerms[0].id].colorDark ??
             settings?.terms[location?.primaryTerms[0].id].color ??
@@ -141,9 +144,7 @@ export const ModuleComponentLocation = ({
       } else if (location?.terms?.length > 0) {
         meta = getMultilangValue(location?.terms[0]?.name);
         if (settings?.terms && location?.terms[0].id in settings?.terms) {
-          color =
-            settings?.terms[location?.terms[0].id].color ??
-            color;
+          color = settings?.terms[location?.terms[0].id].color ?? color;
 
           colorDark =
             settings?.terms[location?.terms[0].id].colorDark ??
@@ -154,6 +155,7 @@ export const ModuleComponentLocation = ({
         meta = t("card.meta.location", "Location");
       }
 
+      console.log("setHighlight", location?.title?.de);
       setHighlight({
         id: location.id,
         lng: location?.lng,
@@ -163,13 +165,20 @@ export const ModuleComponentLocation = ({
 
       setMeta(meta);
 
-      if (color)
-        setColor(color);
-      
-      if (colorDark)
-        setColorDark(colorDark);
+      if (color) setColor(color);
+
+      if (colorDark) setColorDark(colorDark);
     }
-  }, [location, setMeta, setColor, setColorDark, setHighlight, t, settings?.terms]);
+  }, [
+    location,
+    setMeta,
+    setColor,
+    setColorDark,
+    setHighlight,
+    t,
+    getMultilangValue,
+    settings?.terms,
+  ]);
 
   const taxonomies =
     location?.terms?.reduce((acc: any, term: any) => {
@@ -252,215 +261,146 @@ export const ModuleComponentLocation = ({
   `;
 
   return (
-    <Box layerStyle="blurredLightGray">
-      <Box px="20px" pt="0.5em">
-        <Box mb="3">
-          <Text className="highlight" color="cm.text" fontWeight="bold">
-            {t("location.detail.title", "Location")}
-          </Text>
-        </Box>
-
-        <Box bg="#fff" borderRadius="lg" overflow="hidden">
-          {location?.heroImage?.id && (
-            <AspectRatio w="100%" ratio={16 / 9}>
-              <Box bg={color}>
-                {location?.heroImage && location?.heroImage.id && (
-                  <Box w="100%" h="100%">
-                    <ApiImage
-                      id={location?.heroImage.id}
-                      alt={location?.heroImage.alt}
-                      meta={location?.heroImage.meta}
-                      forceAspectRatioPB={66.66}
-                      status={location?.heroImage.status}
-                      sizes="(min-width: 45rem) 400px, 40vw"
-                      cropPosition={location?.heroImage?.cropPosition}
-                    />
-                  </Box>
-                )}
-              </Box>
-            </AspectRatio>
-          )}
-
-          {!location?.heroImage?.id && <Flex justifyContent="flex-end"><Box w="40%"><AspectRatio w="100%" ratio={4 / 3}>
-              <Box bg={color} filter="li">
-                
-              </Box>
-            </AspectRatio></Box></Flex>}
-
-          <Box
-            px={isMobile ? "20px" : "35px"}
-            pt={isMobile ? "20px" : "35px"}
-            pb={isMobile ? "20px" : "1em"}
-            w={isMobile ? "100%" : "66%"}
-          >
-            {meta && (
-              <Flex
-                textStyle="categoriesHighlight"
-                color={colorDark}
-                alignItems="flex-end"
-                width="66.66%"
-              >
-                {meta}
-              </Flex>
-            )}
-            <chakra.h1
-              mb="0.3em !important"
-              textStyle="headline"
-              sx={{
-                a: {
-                  _hover: {
-                    color: "#333 !important",
-                  },
-                },
-              }}
-            >
-              <MultiLangValue json={location.title} />
-            </chakra.h1>
+    <MainContent>
+      <Box layerStyle="blurredLightGray">
+        <Box px="20px" pt="0.5em">
+          <Box mb="3">
+            <Text className="highlight" color="cm.text" fontWeight="bold">
+              {t("location.detail.title", "Location")}
+            </Text>
           </Box>
 
-          {(!isEmptyHtml(address) ||
-            !isEmptyHtml(contact) ||
-            !isEmptyHtml(links)) && (
-            <Box
-              px={{
-                base: "20px",
-                md: "35px",
-              }}
-              pb="1em"
-            >
-              {!isEmptyHtml(address) && (
-                <Box pb="1em" dangerouslySetInnerHTML={{ __html: address }} />
-              )}
-              {!isEmptyHtml(contact) && (
-                <Box pb="1em" dangerouslySetInnerHTML={{ __html: contact }} />
-              )}
-              {!isEmptyHtml(links) && (
-                <Box pb="1em" dangerouslySetInnerHTML={{ __html: links }} />
-              )}
-            </Box>
-          )}
+          <Box bg="#fff" borderRadius="lg" overflow="hidden">
+            {location?.heroImage?.id && (
+              <AspectRatio w="100%" ratio={16 / 9}>
+                <Box bg={color}>
+                  {location?.heroImage && location?.heroImage.id && (
+                    <Box w="100%" h="100%">
+                      <ApiImage
+                        id={location?.heroImage.id}
+                        alt={location?.heroImage.alt}
+                        meta={location?.heroImage.meta}
+                        forceAspectRatioPB={66.66}
+                        status={location?.heroImage.status}
+                        sizes="(min-width: 45rem) 400px, 40vw"
+                        cropPosition={location?.heroImage?.cropPosition}
+                        objectFit="cover"
+                      />
+                    </Box>
+                  )}
+                </Box>
+              </AspectRatio>
+            )}
 
-          {!isEmptyHtml(getMultilangValue(location.description)) && (
-            <Box
-              px={{
-                base: "20px",
-                md: "35px",
-              }}
-              pb="2em"
-            >
-              <MultiLangHtml json={location.description} />
-            </Box>
-          )}
+            {!location?.heroImage?.id && (
+              <Flex justifyContent="flex-end">
+                <Box w="40%">
+                  <AspectRatio w="100%" ratio={4 / 3}>
+                    <Box bg={color} filter="li"></Box>
+                  </AspectRatio>
+                </Box>
+              </Flex>
+            )}
 
-          {!isEmptyHtml(getMultilangValue(location.offers)) && (
             <Box
-              className="item"
-              px={{
-                base: "20px",
-                md: "35px",
-              }}
-              pb="1em"
+              px={isMobile ? "20px" : "35px"}
+              pt={isMobile ? "20px" : "35px"}
+              pb={isMobile ? "20px" : "1em"}
+              w={isMobile ? "100%" : "66%"}
             >
-              <Box
-                mb="0.5em"
-                color="cm.accentDark"
-                textTransform="uppercase"
-                textStyle="categories"
+              {meta && (
+                <Flex
+                  textStyle="categoriesHighlight"
+                  color={colorDark}
+                  alignItems="flex-end"
+                  width="66.66%"
+                >
+                  {meta}
+                </Flex>
+              )}
+              <chakra.h1
+                mb="0.3em !important"
+                textStyle="headline"
+                sx={{
+                  a: {
+                    _hover: {
+                      color: "#333 !important",
+                    },
+                  },
+                }}
               >
-                {t("location.title.offers", "Offering the following")}:
-              </Box>
-              <Box textStyle="card">
-                <MultiLangHtml json={location.offers} />
-              </Box>
+                <MultiLangValue json={location.title} />
+              </chakra.h1>
             </Box>
-          )}
 
-          {!isEmptyHtml(
-            getMultilangValue(location.accessibilityInformation)
-          ) && (
-            <Box
-              className="item"
-              px={{
-                base: "20px",
-                md: "35px",
-              }}
-              pb="1em"
-            >
+            {(!isEmptyHtml(address) ||
+              !isEmptyHtml(contact) ||
+              !isEmptyHtml(links)) && (
               <Box
-                mb="0.5em"
-                color="cm.accentDark"
-                textTransform="uppercase"
-                textStyle="categories"
+                px={{
+                  base: "20px",
+                  md: "35px",
+                }}
+                pb="1em"
               >
-                {t(
-                  "location.title.accessibilityInformation",
-                  "Accessibility Information"
+                {!isEmptyHtml(address) && (
+                  <Box pb="1em" dangerouslySetInnerHTML={{ __html: address }} />
                 )}
-                :
+                {!isEmptyHtml(contact) && (
+                  <Box pb="1em" dangerouslySetInnerHTML={{ __html: contact }} />
+                )}
+                {!isEmptyHtml(links) && (
+                  <Box pb="1em" dangerouslySetInnerHTML={{ __html: links }} />
+                )}
               </Box>
-              <Box textStyle="card">
-                <MultiLangHtml json={location.accessibilityInformation} />
-              </Box>
-            </Box>
-          )}
+            )}
 
-          <SimpleGrid
-            columns={2}
-            spacingX="0.5em"
-            spacingY="1em"
-            px={{
-              base: "20px",
-              md: "35px",
-            }}
-            pb={{
-              base: "20px",
-              md: "35px",
-            }}
-          >
-            {taxonomies?.["typeOfInstitution"]?.length > 0 && (
-              <Box className="item">
+            {!isEmptyHtml(getMultilangValue(location.description)) && (
+              <Box
+                px={{
+                  base: "20px",
+                  md: "35px",
+                }}
+                pb="2em"
+              >
+                <MultiLangHtml json={location.description} />
+              </Box>
+            )}
+
+            {!isEmptyHtml(getMultilangValue(location.offers)) && (
+              <Box
+                className="item"
+                px={{
+                  base: "20px",
+                  md: "35px",
+                }}
+                pb="1em"
+              >
                 <Box
                   mb="0.5em"
                   color="cm.accentDark"
                   textTransform="uppercase"
                   textStyle="categories"
                 >
-                  {t("taxonomy.label.typeOfInstitution", "Type of Institution")}
+                  {t("location.title.offers", "Offering the following")}:
                 </Box>
                 <Box textStyle="card">
-                  {taxonomies["typeOfInstitution"]
-                    .map((t: any) => {
-                      if (!t) return "";
-
-                      return getMultilangValue(t?.name);
-                    })
-                    .join(", ")}
+                  <MultiLangHtml json={location.offers} />
                 </Box>
               </Box>
             )}
-            {taxonomies?.["targetAudience"]?.length > 0 && (
-              <Box className="item">
-                <Box
-                  mb="0.5em"
-                  color="cm.accentDark"
-                  textTransform="uppercase"
-                  textStyle="categories"
-                >
-                  {t("taxonomy.label.targetAudience", "Target Audience")}
-                </Box>
-                <Box textStyle="card">
-                  {taxonomies["targetAudience"]
-                    .map((t: any) => {
-                      if (!t) return "";
 
-                      return getMultilangValue(t?.name);
-                    })
-                    .join(", ")}
-                </Box>
-              </Box>
-            )}
-            {taxonomies?.["typeOfOrganisation"]?.length > 0 && (
-              <Box className="item">
+            {!isEmptyHtml(
+              getMultilangValue(location.accessibilityInformation)
+            ) && (
+              <Box
+                className="item"
+                px={{
+                  base: "20px",
+                  md: "35px",
+                }}
+                pb="1em"
+              >
                 <Box
                   mb="0.5em"
                   color="cm.accentDark"
@@ -468,59 +408,145 @@ export const ModuleComponentLocation = ({
                   textStyle="categories"
                 >
                   {t(
-                    "taxonomy.label.typeOfOrganisation",
-                    "Type of Organisation"
+                    "location.title.accessibilityInformation",
+                    "Accessibility Information"
                   )}
+                  :
                 </Box>
                 <Box textStyle="card">
-                  {taxonomies["typeOfOrganisation"]
-                    .map((t: any) => {
-                      if (!t) return "";
-
-                      return getMultilangValue(t?.name);
-                    })
-                    .join(", ")}
+                  <MultiLangHtml json={location.accessibilityInformation} />
                 </Box>
               </Box>
             )}
 
-            {!isEmptyHtml(location.agency) && (
-              <Box className="item">
-                <Box
-                  mb="0.5em"
-                  color="cm.accentDark"
-                  textTransform="uppercase"
-                  textStyle="categories"
-                >
-                  {t("location.label.agency", "Agency")}
-                </Box>
-                <Box textStyle="card">{location.agency}</Box>
-              </Box>
-            )}
-          </SimpleGrid>
-        </Box>
+            <SimpleGrid
+              columns={2}
+              spacingX="0.5em"
+              spacingY="1em"
+              px={{
+                base: "20px",
+                md: "35px",
+              }}
+              pb={{
+                base: "20px",
+                md: "35px",
+              }}
+            >
+              {taxonomies?.["typeOfInstitution"]?.length > 0 && (
+                <Box className="item">
+                  <Box
+                    mb="0.5em"
+                    color="cm.accentDark"
+                    textTransform="uppercase"
+                    textStyle="categories"
+                  >
+                    {t(
+                      "taxonomy.label.typeOfInstitution",
+                      "Type of Institution"
+                    )}
+                  </Box>
+                  <Box textStyle="card">
+                    {taxonomies["typeOfInstitution"]
+                      .map((t: any) => {
+                        if (!t) return "";
 
-        {location.events && location.events.length > 0 && (
-          <Box mt="2em">
-            <chakra.h3 className="highlight" color="cm.text" fontWeight="bold">
-              {t("location.title.eventsHeldAt", "Events held at the location")}
-            </chakra.h3>
-            {location.events.map((event: any, i: number) => (
-              <Box
-                key={`evnt-${i}`}
-                mt="4"
-                _first={{
-                  mt: 3,
-                }}
-              >
-                <CardEvent event={event} />
-              </Box>
-            ))}
+                        return getMultilangValue(t?.name);
+                      })
+                      .join(", ")}
+                  </Box>
+                </Box>
+              )}
+              {taxonomies?.["targetAudience"]?.length > 0 && (
+                <Box className="item">
+                  <Box
+                    mb="0.5em"
+                    color="cm.accentDark"
+                    textTransform="uppercase"
+                    textStyle="categories"
+                  >
+                    {t("taxonomy.label.targetAudience", "Target Audience")}
+                  </Box>
+                  <Box textStyle="card">
+                    {taxonomies["targetAudience"]
+                      .map((t: any) => {
+                        if (!t) return "";
+
+                        return getMultilangValue(t?.name);
+                      })
+                      .join(", ")}
+                  </Box>
+                </Box>
+              )}
+              {taxonomies?.["typeOfOrganisation"]?.length > 0 && (
+                <Box className="item">
+                  <Box
+                    mb="0.5em"
+                    color="cm.accentDark"
+                    textTransform="uppercase"
+                    textStyle="categories"
+                  >
+                    {t(
+                      "taxonomy.label.typeOfOrganisation",
+                      "Type of Organisation"
+                    )}
+                  </Box>
+                  <Box textStyle="card">
+                    {taxonomies["typeOfOrganisation"]
+                      .map((t: any) => {
+                        if (!t) return "";
+
+                        return getMultilangValue(t?.name);
+                      })
+                      .join(", ")}
+                  </Box>
+                </Box>
+              )}
+
+              {!isEmptyHtml(location.agency) && (
+                <Box className="item">
+                  <Box
+                    mb="0.5em"
+                    color="cm.accentDark"
+                    textTransform="uppercase"
+                    textStyle="categories"
+                  >
+                    {t("location.label.agency", "Agency")}
+                  </Box>
+                  <Box textStyle="card">{location.agency}</Box>
+                </Box>
+              )}
+            </SimpleGrid>
           </Box>
-        )}
+
+          {location.events && location.events.length > 0 && (
+            <Box mt="2em">
+              <chakra.h3
+                className="highlight"
+                color="cm.text"
+                fontWeight="bold"
+              >
+                {t(
+                  "location.title.eventsHeldAt",
+                  "Events held at the location"
+                )}
+              </chakra.h3>
+              {location.events.map((event: any, i: number) => (
+                <Box
+                  key={`evnt-${i}`}
+                  mt="4"
+                  _first={{
+                    mt: 3,
+                  }}
+                >
+                  <CardEvent event={event} />
+                </Box>
+              ))}
+            </Box>
+          )}
+        </Box>
+        <Footer noBackground />
       </Box>
-      <Footer noBackground />
-    </Box>
+    </MainContent>
   );
 };
 
@@ -534,6 +560,8 @@ export const ModuleLocationGetStaticProps: GetStaticProps = async (context) => {
   const client = getApolloClient();
 
   const accessToken = (context?.previewData as any)?.accessToken;
+
+  console.log(context?.params?.slug);
 
   const { data } = await client.query({
     query: locationQuery,

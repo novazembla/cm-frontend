@@ -8,31 +8,35 @@ import {
   LinkBox,
   LinkOverlay,
 } from "@chakra-ui/react";
-import { useTranslation } from "react-i18next";
 import { MultiLangValue, ApiImage } from "~/components/ui";
-import { getMultilangValue, htmlToTrimmedString } from "~/utils";
-import { useIsBreakPoint } from "~/hooks";
+import { htmlToTrimmedString } from "~/utils";
+import { useAppTranslations, useIsBreakPoint } from "~/hooks";
 import { useConfigContext, useSettingsContext } from "~/provider";
 import Arrow from "~/assets/svg/Pfeil_quer.svg";
+import NextLink from "next/link";
 
-export const CardLocation = ({ location }: { location: any }) => {
-  const { t, i18n } = useTranslation();
+export const CardLocation = ({
+  location,
+  fillContainer,
+}: {
+  location: any;
+  fillContainer?: boolean;
+}) => {
+  const { t, i18n, getMultilangValue } = useAppTranslations();
   const settings = useSettingsContext();
   const { isMobile, isTablet, isDesktopAndUp } = useIsBreakPoint();
 
   const config = useConfigContext();
 
   let meta: any;
-  let color = config.colorLight;
+  let color = "#fff";
   let colorDark = config.colorDark;
 
   if (location?.primaryTerms?.length > 0) {
     meta = getMultilangValue(location?.primaryTerms[0]?.name);
 
     if (settings?.terms && location?.primaryTerms[0].id in settings?.terms) {
-      color =
-        settings?.terms[location?.primaryTerms[0].id].color ??
-        color;
+      color = settings?.terms[location?.primaryTerms[0].id].color ?? color;
 
       colorDark =
         settings?.terms[location?.primaryTerms[0].id].colorDark ??
@@ -42,9 +46,7 @@ export const CardLocation = ({ location }: { location: any }) => {
   } else if (location?.terms?.length > 0) {
     meta = getMultilangValue(location?.terms[0]?.name);
     if (settings?.terms && location?.terms[0].id in settings?.terms) {
-      color =
-        settings?.terms[location?.terms[0].id].color ??
-        color;
+      color = settings?.terms[location?.terms[0].id].color ?? color;
       colorDark =
         settings?.terms[location?.terms[0].id].colorDark ??
         settings?.terms[location?.terms[0].id].color ??
@@ -69,8 +71,9 @@ export const CardLocation = ({ location }: { location: any }) => {
       bg="#fff"
       borderRadius="lg"
       overflow="hidden"
-      w={isMobile ? "80%" : "100%"}
-      maxW={isMobile ? "275px" : "100%"}
+      w={isMobile && !fillContainer ? "80%" : "100%"}
+      maxW={isMobile && !fillContainer ? "275px" : "100%"}
+      h={isMobile && fillContainer ? "100%" : undefined}
     >
       <Flex
         flexDirection={isMobile ? "column" : "row-reverse"}
@@ -98,6 +101,7 @@ export const CardLocation = ({ location }: { location: any }) => {
                     forceAspectRatioPB={66.66}
                     status={location?.heroImage.status}
                     sizes="(min-width: 45rem) 400px, 40vw"
+                    objectFit="cover"
                     cropPosition={location?.heroImage?.cropPosition}
                   />
                 </Box>
@@ -131,12 +135,16 @@ export const CardLocation = ({ location }: { location: any }) => {
               },
             }}
           >
-            <LinkOverlay
-              href={`/${type}/${getMultilangValue(location.slug)}/`}
-              textStyle="headline"
+            <NextLink
+              href={`${
+                i18n.language === "en" ? "/en" : ""
+              }/${type}/${getMultilangValue(location.slug)}/`}
+              passHref
             >
-              <MultiLangValue json={location.title} />
-            </LinkOverlay>
+              <LinkOverlay textStyle="headline">
+                <MultiLangValue json={location.title} />
+              </LinkOverlay>
+            </NextLink>
           </chakra.h2>
         </Box>
       </Flex>

@@ -9,6 +9,7 @@ export interface AppConfig {
   lng: number;
   zoom: number;
   contactEmail: string;
+  apiURL: string;
   apiGraphQLURL: string;
   mapApiKey: string;
   defaultLanguage: string;

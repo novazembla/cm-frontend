@@ -1,6 +1,6 @@
 import { Flex, IconButton, Box, chakra } from "@chakra-ui/react";
-import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
+import { RemoveScroll } from "react-remove-scroll";
 
 import Search from "~/assets/svg/mobil_navigation_leiste_suche.svg";
 import Menu from "~/assets/svg/mobil_navigation_leiste_menu.svg";
@@ -12,13 +12,12 @@ import {
   useConfigContext,
   useQuickSearchContext,
 } from "~/provider";
-import { useIsBreakPoint } from "~/hooks";
-import { getMultilangValue } from "~/utils";
+import { useIsBreakPoint, useAppTranslations } from "~/hooks";
 import { ActiveLink, MultiLangValue } from "~/components/ui";
 import { useRouter } from "next/router";
 
 export const MobileNav = () => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n, getMultilangValue } = useAppTranslations();
   const config = useConfigContext();
   const router = useRouter();
 
@@ -41,53 +40,53 @@ export const MobileNav = () => {
               top: 0,
               left: 0,
               height: "100vh",
-              width: isTabletWide ? "50%" : "100%",
+              width: isTabletWide ? "66.66vw" : "100vw",
               zIndex: 1100,
               overflowY: "auto",
             }}
           >
-            <Flex
-              layerStyle="page"
-              w="100%"
-              minH="100%"
-              alignItems={isTablet ? "flex-start" : "flex-end"}
-            >
+            <RemoveScroll>
               <Flex
-                sx={{
-                  a: {
-                    display: "inline-block",
-                    marginBottom: "0.3em",
-                    _last: {
-                      marginBottom: 0,
-                    },
-                    pb: "3px",
-                    mt: "0.5em",
-                    borderBottom: "1px solid #ff0",
-                    borderColor: "cm.accentLight",
-                  },
-                }}
-                pt="60px"
-                pb={{
-                  base: "100px",
-                  md: "45px",
-                }}
-                direction={{
-                  base: "column",
-                }}
-                textStyle="headline"
-                fontWeight="bold"
+                layerStyle="page"
+                w="100%"
+                minH="100%"
+                alignItems={isTablet ? "flex-start" : "flex-end"}
               >
-                {config.nav.main.map((link: any, index: number) => (
-                  <chakra.span key={`nav-link-${index}`}>
-                    <ActiveLink
-                      href={getMultilangValue(link.path)}
-                    >
-                      <MultiLangValue json={link.title} />
-                    </ActiveLink>
-                  </chakra.span>
-                ))}
+                <Flex
+                  sx={{
+                    a: {
+                      display: "inline-block",
+                      marginBottom: "0.3em",
+                      _last: {
+                        marginBottom: 0,
+                      },
+                      pb: "3px",
+                      mt: "0.5em",
+                      borderBottom: "1px solid #ff0",
+                      borderColor: "cm.accentLight",
+                    },
+                  }}
+                  pt="60px"
+                  pb={{
+                    base: "100px",
+                    md: "45px",
+                  }}
+                  direction={{
+                    base: "column",
+                  }}
+                  textStyle="headline"
+                  fontWeight="bold"
+                >
+                  {config.nav.main.map((link: any, index: number) => (
+                    <chakra.span key={`nav-link-${index}`}>
+                      <ActiveLink href={getMultilangValue(link.path)}>
+                        <MultiLangValue json={link.title} />
+                      </ActiveLink>
+                    </chakra.span>
+                  ))}
+                </Flex>
               </Flex>
-            </Flex>
+            </RemoveScroll>
           </motion.div>
         )}
       </AnimatePresence>
@@ -173,8 +172,8 @@ export const MobileNav = () => {
                   h="70px"
                   onClick={() => {
                     if (!isMenuOpen && isQuickSearchOpen) {
-                      onQuickSearchToggle();  
-                    }                    
+                      onQuickSearchToggle();
+                    }
                     onMenuToggle();
                   }}
                   pointerEvents={isMenuOpen ? "none" : undefined}

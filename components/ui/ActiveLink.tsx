@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import PropTypes from "prop-types";
-import Link from "next/link";
+import NextLink from "next/link";
 import React, { Children } from "react";
 import { chakra } from "@chakra-ui/react";
 
@@ -28,11 +28,11 @@ export const ActiveLink = ({
       : "";
 
   return (
-    <Link href={href}>
+    <NextLink href={href} scroll={false}>
       <a {...{ className }} onClick={(props as any)?.onClick}>
         {children}
       </a>
-    </Link>
+    </NextLink>
   );
 };
 

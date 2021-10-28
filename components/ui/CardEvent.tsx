@@ -8,15 +8,21 @@ import {
   LinkBox,
   LinkOverlay,
 } from "@chakra-ui/react";
-import { useTranslation } from "react-i18next";
 import { MultiLangValue, ApiImage } from "~/components/ui";
-import { getMultilangValue, htmlToTrimmedString } from "~/utils";
-import { useIsBreakPoint } from "~/hooks";
+import { htmlToTrimmedString } from "~/utils";
+import { useAppTranslations, useIsBreakPoint } from "~/hooks";
 import { useConfigContext, useSettingsContext } from "~/provider";
 import Arrow from "~/assets/svg/Pfeil_quer.svg";
+import NextLink from "next/link";
 
-export const CardEvent = ({ event }: { event: any }) => {
-  const { t, i18n } = useTranslation();
+export const CardEvent = ({
+  event,
+  fillContainer,
+}: {
+  event: any;
+  fillContainer?: boolean;
+}) => {
+  const { t, i18n, getMultilangValue } = useAppTranslations();
   const settings = useSettingsContext();
   const { isMobile, isTablet, isDesktopAndUp } = useIsBreakPoint();
 
@@ -71,8 +77,9 @@ export const CardEvent = ({ event }: { event: any }) => {
       bg="#fff"
       borderRadius="lg"
       overflow="hidden"
-      w={isMobile ? "80%" : "100%"}
-      maxW={isMobile ? "275px" : "100%"}
+      w={isMobile && !fillContainer ? "80%" : "100%"}
+      maxW={isMobile && !fillContainer ? "275px" : "100%"}
+      h={isMobile && fillContainer ? "100%" : undefined}
     >
       <Flex
         flexDirection={isMobile ? "column" : "row-reverse"}
@@ -101,6 +108,7 @@ export const CardEvent = ({ event }: { event: any }) => {
                       forceAspectRatioPB={66.66}
                       status={event?.heroImage.status}
                       sizes="(min-width: 45rem) 400px, 40vw"
+                      objectFit="cover"
                       cropPosition={event?.heroImage?.cropPosition}
                     />
                   </Box>
@@ -149,12 +157,17 @@ export const CardEvent = ({ event }: { event: any }) => {
               },
             }}
           >
+            <NextLink passHref 
+              href={`${
+                i18n.language === "en" ? "/en" : ""
+              }/${type}/${getMultilangValue(event.slug)}/`}>
+
             <LinkOverlay
-              href={`/${type}/${getMultilangValue(event.slug)}/`}
               textStyle="headline"
             >
               <MultiLangValue json={event.title} />
             </LinkOverlay>
+            </NextLink>
           </chakra.h2>
         </Box>
       </Flex>

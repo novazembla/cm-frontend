@@ -1,15 +1,14 @@
 import React from "react";
-import Link from "next/link";
-import i18n from "i18next";
-import { getMultilangValue } from "../../utils";
+import NextLink from "next/link";
+
 import { MultiLangValue, MultiLangHtml } from "~/components/ui";
 import { Box, chakra, Heading } from "@chakra-ui/react";
-import { useTranslation } from "react-i18next";
 import {useQuickSearchContext} from "~/provider";
+import { useAppTranslations } from "~/hooks";
 
 
 export const QuickSearchItem = ({ item, module }: { item: any; module: string; }) => {
-  const {t} = useTranslation();
+  const {t, i18n, getMultilangValue} = useAppTranslations();
   const { onQuickSearchToggle } = useQuickSearchContext();
 
   if (!item) return <></>;
@@ -40,7 +39,7 @@ export const QuickSearchItem = ({ item, module }: { item: any; module: string; }
         mt: 3,
       }}
     >
-      <Link
+      <NextLink
         href={`/${path}/${getMultilangValue(item.slug)}`}
         locale={i18n.language}
         passHref
@@ -59,7 +58,7 @@ export const QuickSearchItem = ({ item, module }: { item: any; module: string; }
             </Box>
           </chakra.span>
         </chakra.a>
-      </Link>
+      </NextLink>
     </Box>
   );
 };

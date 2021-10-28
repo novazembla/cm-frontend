@@ -6,9 +6,12 @@ import {
   ModulePageGetStaticPaths,
   ModulePageGetStaticProps,
 } from "~/components/modules";
+import { useRouter } from "next/router";
 
 const Page = ({ page, ...props }: { page: any; props: any }) => {
-  return <ModuleComponentPage page={page} {...props} />;
+
+  const router = useRouter()
+  return <ModuleComponentPage key={`page-${router.asPath}`} page={page} {...props} />;
 };
 
 export const getStaticPaths: GetStaticPaths = async (context) => {

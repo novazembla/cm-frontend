@@ -1,6 +1,7 @@
 import { Footer } from "~/components/app";
 import { Box, chakra } from "@chakra-ui/react";
-import { useTranslation } from "next-i18next";
+import { MainContent } from "~/components/ui";
+import { useAppTranslations } from "~/hooks";
 
 // const eventQuery = gql`
 //   query ($slug: String!) {
@@ -62,9 +63,9 @@ import { useTranslation } from "next-i18next";
 // `;
 
 export const ModuleComponentSearch = () => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useAppTranslations();
   return (
-    <>
+    <MainContent>
       <Box layerStyle="page">
         <Box layerStyle="headingPullOut" mb="3">
           <chakra.h1 className="highlight" color="cm.text" fontWeight="bold">
@@ -87,6 +88,6 @@ export const ModuleComponentSearch = () => {
         </Box>
       </Box>
       <Footer />
-    </>
+      </MainContent>
   );
 };

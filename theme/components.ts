@@ -68,22 +68,22 @@ export const components = {
       outline: {
         field: {
           bg: "#fff",
-          borderRadius: "0px",
-          borderColor: "gray.400",
+          borderRadius: "4px",
+          borderColor: "cm.accentLight",
           _hover: {
-            borderColor: "gray.500",
+            borderColor: "cm.accentLight",
           },
           _autofill: {
             bg: "wine.300",
           },
           _invalid: {
             _focus: {
-              borderColor: "red.500",
-              boxShadow: "0 0 0 1px #F56565",
+              borderColor: "#fff",
+              boxShadow: "0 0 3px 3px #E42B20",
             },
             _hover: {
-              borderColor: "red.500",
-              boxShadow: "0 0 0 1px #F56565",
+              borderColor: "#fff",
+              boxShadow: "0px 0 3px 3px #E42B20",
             },
           },
         },

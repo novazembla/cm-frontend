@@ -14,7 +14,9 @@ export const LoadingBar = ({ color }: { color: string }) => {
     setBarVisible(true);
   };
 
-  const hideBar = () => setBarVisible(false);
+  const hideBar = () => {
+    setBarVisible(false);
+  }
 
   useEffect(() => {
     Router.events.on("routeChangeStart", showBar);

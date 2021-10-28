@@ -1,14 +1,14 @@
 import React from "react";
-import { useTranslation } from "next-i18next";
 import { useConfigContext } from "~/provider";
 import { Box } from "@chakra-ui/react";
+import { useAppTranslations } from "~/hooks";
 
 export const MultiLangHtml = ({
   json,
 }: {
   json?: Record<string, string> | string;
 }) => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useAppTranslations();
   const config = useConfigContext();
 
   if (!json) return <></>;

@@ -8,6 +8,7 @@ import { Footer } from "~/components/app";
 import { getApolloClient } from "~/services";
 import { Box, Text, chakra, Heading } from "@chakra-ui/react";
 import { GetStaticPaths, GetStaticProps } from "next";
+import { MainContent } from "~/components/ui";
 
 const pageQuery = gql`
   query ($slug: String!) {
@@ -31,7 +32,7 @@ const pageQuery = gql`
 
 export const ModuleComponentPage = ({ page }: { page: any }) => {
   return (
-    <>
+    <MainContent isDrawer>
       <Box layerStyle="page">
         <Box layerStyle="headingPullOut" mb="3">
           <chakra.h1 className="highlight" color="cm.text" fontWeight="bold">
@@ -69,7 +70,7 @@ export const ModuleComponentPage = ({ page }: { page: any }) => {
         </Box>
       </Box>
       <Footer />
-    </>
+    </MainContent>
   );
 };
 

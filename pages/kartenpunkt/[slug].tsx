@@ -5,9 +5,11 @@ import {
   ModuleLocationGetStaticPaths,
   ModuleComponentLocation,
 } from "~/components/modules";
+import { useRouter } from "next/router";
 
 const Location = ({ location, ...props }: { location: any; props: any }) => {
-  return <ModuleComponentLocation location={location} {...props} />;
+  const router = useRouter();
+  return <ModuleComponentLocation key={`kp-${router.asPath}`}  location={location} {...props} />;
 };
 
 export const getStaticPaths: GetStaticPaths = async (context) => {

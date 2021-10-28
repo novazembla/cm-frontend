@@ -14,16 +14,10 @@ import {
 } from "~/provider";
 import {
   Box,
-  Flex,
-  AspectRatio,
-  Text,
   chakra,
-  SimpleGrid,
 } from "@chakra-ui/react";
-import { getMultilangValue, isEmptyHtml } from "~/utils";
-import { useIsBreakPoint } from "~/hooks";
-import { useTranslation } from "next-i18next";
-import { GetStaticPaths, GetStaticProps } from "next";
+import { useIsBreakPoint, useAppTranslations } from "~/hooks";
+import { MainContent } from "~/components/ui";
 
 // const eventQuery = gql`
 //   query ($slug: String!) {
@@ -89,7 +83,7 @@ export const ModuleComponentMap = () => {
   const { isMobile, isTablet, isDesktopAndUp } = useIsBreakPoint();
   const config = useConfigContext();
   const settings = useSettingsContext();
-  const { t, i18n } = useTranslation();
+  const { t, getMultilangValue } = useAppTranslations();
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -100,7 +94,7 @@ export const ModuleComponentMap = () => {
   }, [cultureMap]);
 
   return (
-    <>
+    <MainContent>
       <Box layerStyle="page">
         <Box layerStyle="headingPullOut" mb="3">
           <chakra.h1 className="highlight" color="cm.text" fontWeight="bold">
@@ -123,6 +117,6 @@ export const ModuleComponentMap = () => {
         </Box>
       </Box>
       <Footer />
-    </>
+    </MainContent>
   );
 };

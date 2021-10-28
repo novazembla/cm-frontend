@@ -8,9 +8,10 @@ import {
 import { Footer } from "~/components/app";
 import { getApolloClient } from "~/services";
 import { Box, SimpleGrid, Text, chakra, Heading } from "@chakra-ui/react";
-import { getMultilangValue, isEmptyHtml } from "~/utils";
-import { useTranslation } from "next-i18next";
+import { isEmptyHtml } from "~/utils";
 import { GetStaticPaths, GetStaticProps } from "next";
+import { MainContent } from "~/components/ui";
+import { useAppTranslations } from "~/hooks";
 
 const eventQuery = gql`
   query ($slug: String!) {
@@ -112,7 +113,7 @@ export const ModuleComponentEvent = ({
   event: any;
   props: any;
 }) => {
-  const { t, i18n } = useTranslation();
+  const { t, getMultilangValue, i18n } = useAppTranslations();
 
   let dateInfo: any = t("event.missingData.eventDate", "TBD");
   let timeInfo: any = "";
@@ -176,7 +177,7 @@ export const ModuleComponentEvent = ({
   }
 
   return (
-    <>
+    <MainContent>
       <Box layerStyle="page">
         <Box layerStyle="headingPullOut" mb="3">
           <Text className="highlight" color="cm.text" fontWeight="bold">
@@ -195,6 +196,7 @@ export const ModuleComponentEvent = ({
                   status={event.heroImage.status}
                   useImageAspectRatioPB
                   sizes="(min-width: 55rem) 800px, 100vw"
+                  objectFit="cover"
                 />
               </Box>
               {event.heroImage.credits !== "" && (
@@ -317,7 +319,7 @@ export const ModuleComponentEvent = ({
 
         <Footer noBackground />
       </Box>
-    </>
+    </MainContent>
   );
 };
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { Flex, Box, IconButton } from "@chakra-ui/react";
 
-import { useIsBreakPoint } from "~/hooks";
+import { useAppTranslations, useIsBreakPoint } from "~/hooks";
 import Search from "~/assets/svg/mobil_navigation_leiste_suche.svg";
 import Menu from "~/assets/svg/tablet_menu.svg";
 import Cross from "~/assets/svg/Kreuz.svg";
@@ -17,16 +17,16 @@ import {
   useMenuButtonContext,
   useQuickSearchContext,
 } from "~/provider";
-import { getMultilangValue } from "~/utils";
 import { chakraToBreakpointArray } from "~/theme";
 import { Logo } from ".";
-import { useTranslation } from "react-i18next";
 
 export const Header = (/* props */) => {
   const { isDesktopAndUp, isTablet, isTabletWide } = useIsBreakPoint();
 
+  const { t, getMultilangValue } = useAppTranslations();
+
   const config = useConfigContext();
-  const { t } = useTranslation();
+
   const { onMenuToggle, isMenuOpen } = useMenuButtonContext();
   const { isQuickSearchOpen, onQuickSearchToggle } = useQuickSearchContext();
 

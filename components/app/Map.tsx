@@ -1,9 +1,9 @@
 import React, { useRef, useState, useEffect, useContext, useMemo } from "react";
 import { primaryInput } from "detect-it";
-import { useTranslation } from "next-i18next";
 
 import maplibregl from "maplibre-gl";
 import MapCustomSpiderfier from "./MapCustomSpiderify";
+import { useAppTranslations } from "~/hooks";
 
 import {
   useMapContext,
@@ -11,7 +11,6 @@ import {
   useConfigContext,
 } from "~/provider";
 import { useRouter } from "next/router";
-import { getMultilangValue } from "~/utils";
 
 const MAP_MIN_ZOOM = 9;
 const MAP_MAX_ZOOM = 19;
@@ -24,7 +23,7 @@ let isAnimating = false;
 export const Map = () => {
   const router = useRouter();
 
-  const { i18n } = useTranslation();
+  const { i18n, getMultilangValue } = useAppTranslations();
 
   const config = useConfigContext();
   const cultureMap = useMapContext();
@@ -113,7 +112,7 @@ export const Map = () => {
     map.on("load", () => {
       map.addSource("locations", {
         type: "geojson",
-        data: "http://localhost:4002/geojson",
+        data: `${config.apiURL}/geojson`,
         cluster: true,
         clusterMaxZoom: MAP_MAX_ZOOM, // Max zoom to cluster points on
         clusterRadius: 50, // Radius of each cluster when clustering points (defaults to 50)

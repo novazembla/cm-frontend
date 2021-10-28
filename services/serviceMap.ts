@@ -1,7 +1,6 @@
 import maplibregl from "maplibre-gl";
 import { NextRouter } from "next/router";
 
-import { getMultilangValue } from "../utils";
 import type { MapPin } from "~/types";
 
 class MapMarkers {
@@ -267,23 +266,6 @@ export class CultureMap {
       } else {
         run();
       }
-    }
-  }
-
-  // https://docs.mapbox.com/help/tutorials/markers-js/
-  addMarkers(pins: MapPin[]) {
-    if (this.mapRef) {
-      console.log("painting pins");
-      pins.forEach((pin) => {
-        const newPin = new maplibregl.Marker({ color: "#caa328" })
-          .setLngLat([pin.lng, pin.lat])
-          .addTo(this.mapRef as maplibregl.Map);
-        newPin.getElement().addEventListener("click", () => {
-          if (this.router)
-            this.router.push(`/${pin.type}/${getMultilangValue(pin.slug)}`);
-        });
-        this.markers.add(`${pin.type}-${pin.id}`, newPin);
-      });
     }
   }
 

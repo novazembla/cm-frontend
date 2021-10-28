@@ -1,26 +1,25 @@
 import { useState, useEffect, useMemo, ChangeEvent } from "react";
+import { RemoveScroll } from "react-remove-scroll";
 
 import {
   Flex,
-  Heading,
-  Grid,
-  Link,
   Box,
   VisuallyHidden,
   FormControl,
   FormLabel,
   Input,
+  chakra,
   IconButton,
   HStack,
+  useBreakpointValue,
 } from "@chakra-ui/react";
-import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
 
 import Search from "~/assets/svg/mobil_navigation_leiste_suche.svg";
 
 import { useConfigContext, useQuickSearchContext } from "~/provider";
-import { useIsBreakPoint } from "~/hooks";
-import { getMultilangValue } from "~/utils";
+import { useIsBreakPoint, useAppTranslations } from "~/hooks";
+
 import { useRouter } from "next/router";
 import { useLazyQuery, gql } from "@apollo/client";
 import { useForm, Controller } from "react-hook-form";
@@ -86,7 +85,7 @@ export const SearchFormSchema = object().shape({
 });
 
 export const QuickSearch = () => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n, getMultilangValue } = useAppTranslations();
   const config = useConfigContext();
   const router = useRouter();
 
@@ -94,13 +93,17 @@ export const QuickSearch = () => {
   const { isMobile, isTablet, isTabletWide, isDesktopAndUp } =
     useIsBreakPoint();
 
+
+  const [isActiveSearch, setIsActiveSearch] = useState(false)
+
   const [currentSearchTerm, setCurrentSearchTerm] = useState("");
   const [triggerSearch, { data, loading, error }] = useLazyQuery(searchQuery, {
     variables: { search: "", lang: i18n.language },
+    fetchPolicy: "network-only",
   });
 
   const [searchTerm, setSearchTerm] = useState("");
-
+  
   const {
     handleSubmit,
     getValues,
@@ -116,11 +119,8 @@ export const QuickSearch = () => {
   const cultureMap = useMapContext();
 
   useEffect(() => {
-    console.log("sT0", searchTerm);
     if (currentSearchTerm !== searchTerm) {
-      console.log("sT1", searchTerm);
       if (searchTerm.length > 2) {
-        console.log("sT", searchTerm);
         triggerSearch({
           variables: {
             search: searchTerm,
@@ -128,6 +128,7 @@ export const QuickSearch = () => {
           },
         });
       } else {
+        
         if (cultureMap) cultureMap.clear();
         // setQuickSearchResultInContext({});
       }
@@ -140,19 +141,55 @@ export const QuickSearch = () => {
     setCurrentSearchTerm,
     currentSearchTerm,
     i18n.language,
-    loading
+    loading,
   ]);
 
-  const searchResult = useMemo(() => {
-    if (currentSearchTerm.length < 3) return [];
+  const contentLeft = useBreakpointValue({
+    base: 0,
+    xl: "50px",
+    "2xl": "calc(8vw - 55px)",
+  });
 
-    if (error || !data?.quickSearch || data?.quickSearch.length === 0)
-      return [];
+  useEffect(() => {
+    if (loading && !isActiveSearch) {
+      setIsActiveSearch(true);
+    } 
+  }, [
+    loading, 
+    isActiveSearch
+  ]);
 
-    console.log("QS", data.quickSearch);
+  // useEffect(() => {
+  //   console.log(loading, data?.quickSearch, quickSearchResult, searchingForTerm);
 
-    return data.quickSearch;
-  }, [currentSearchTerm, data, error]);
+  //   if (loading && searchingForTerm) {
+      
+      
+      
+      
+  //     setSearchingForTerm(false);
+  //     console.log(1);
+      
+  //   } 
+
+  //   if (!loading && data?.quickSearch && !quickSearchResult) {
+
+  //   } 
+  // }, [
+  //   data?.quickSearch,
+  //   loading, 
+  //   searchingForTerm,
+  //   quickSearchResult,
+  // ]);
+
+  // const searchResult = useMemo(() => {
+  //   if (currentSearchTerm.length < 3) return [];
+
+  //   if (error || !data?.quickSearch || data?.quickSearch.length === 0)
+  //     return [];
+
+  //   return data.quickSearch;
+  // }, [currentSearchTerm, data, error]);
 
   // useEffect(() => {
   //   if (!loading) {
@@ -207,20 +244,22 @@ export const QuickSearch = () => {
 
   const onSubmit = async (newData: yup.InferType<typeof SearchFormSchema>) => {
     setSearchTerm(newData.search);
-    if (!loading)
+    if (!loading) {
       triggerSearch({
         variables: {
           search: newData.search,
           lang: i18n.language,
         },
       });
+    }
   };
 
   useEffect(() => {
     setSearchTerm("");
+    setIsActiveSearch(false);
     reset({
-      search: ""
-    })
+      search: "",
+    });
   }, [isQuickSearchOpen, reset]);
 
   const isFieldInValid =
@@ -229,28 +268,28 @@ export const QuickSearch = () => {
     (searchTerm.length > 3 && (!data || data?.quickSearch?.length === 0));
 
   return (
-    <>
-      <AnimatePresence>
-        {isQuickSearchOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            style={{
-              position: "fixed",
-              top: 0,
-              height: "100vh",
-              width:
-                isTabletWide || isDesktopAndUp
-                  ? isTabletWide
-                    ? "50%"
-                    : "675px"
-                  : "100%",
-              left: isDesktopAndUp ? "50px" : "0",
-              zIndex: 1100,
-            }}
-          >
+    <AnimatePresence>
+      {isQuickSearchOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+          style={{
+            position: "fixed",
+            top: 0,
+            height: "100vh",
+            width:
+              isTabletWide || isDesktopAndUp
+                ? isTabletWide
+                  ? "66.66vw"
+                  : "675px"
+                : "100%",
+            left: contentLeft,
+            zIndex: 1100,
+          }}
+        >
+          <RemoveScroll>
             <Flex
               w="100%"
               h="100vh"
@@ -276,81 +315,116 @@ export const QuickSearch = () => {
                 }}
                 layerStyle="page"
                 w="100%"
-                h="100%"
+                h="100vh"
                 overflowY="auto"
-                pb={{
-                  base: "100px",
-                  md: "45px",
-                }}
                 direction={{
                   base: "column",
                 }}
-                textStyle="headline"
-                fontWeight="bold"
               >
-                <form noValidate onSubmit={handleSubmit(onSubmit)}>
-                  <HStack>
-                    <FormControl isInvalid={isFieldInValid} isRequired>
-                      <VisuallyHidden>
-                        <FormLabel>Search</FormLabel>
-                      </VisuallyHidden>
-                      <Controller
-                        control={control}
-                        name="search"
-                        rules={{
-                          required: true,
-                        }}
-                        render={({
-                          field: { onChange, onBlur, value, name, ref },
-                          fieldState: { invalid, isTouched, isDirty, error },
-                          formState,
-                        }) => (
-                          <Input
-                            pl="2"
-                            onBlur={onBlur}
-                            onChange={(
-                              event: ChangeEvent<HTMLInputElement>
-                            ) => {
-                              onChange(event);
-
-                              console.log(event.target.value);
-
-                              debounce(() => {
-                                setSearchTerm(event.target.value);
-                              }, 300)(); // <<< debounce returns a
+                <Box
+                  position="relative"
+                  pb={{
+                    base: "100px",
+                    md: "20px",
+                  }}
+                >
+                  <Box position="sticky" top="0px">
+                    <Box layerStyle="headingPullOut" mb="3">
+                      <chakra.h1
+                        className="highlight"
+                        color="cm.text"
+                        fontWeight="bold"
+                      >
+                        {t("quicksearch.title", "Search")}
+                      </chakra.h1>
+                    </Box>
+                    <form noValidate onSubmit={handleSubmit(onSubmit)}>
+                      <HStack>
+                        <FormControl isInvalid={isFieldInValid} isRequired>
+                          <VisuallyHidden>
+                            <FormLabel>Search</FormLabel>
+                          </VisuallyHidden>
+                          <Controller
+                            control={control}
+                            name="search"
+                            rules={{
+                              required: true,
                             }}
-                            placeholder={t("search", "Search")}
-                            ref={ref}
-                            sx={{
-                              "[aria-invalid=true]": {
-                                borderTop: "10px",
-                                boxShadow: "0 0 0 1px #F56565 !important",
+                            render={({
+                              field: { onChange, onBlur, value, name, ref },
+                              fieldState: {
+                                invalid,
+                                isTouched,
+                                isDirty,
+                                error,
                               },
-                            }}
+                              formState,
+                            }) => (
+                              <Input
+                                pl="2"
+                                onBlur={onBlur}
+                                onChange={(
+                                  event: ChangeEvent<HTMLInputElement>
+                                ) => {
+                                  onChange(event);
+
+                                  debounce(() => {
+                                    setSearchTerm(event.target.value);
+                                  }, 500)(); // <<< debounce returns a function
+                                }}
+                                placeholder={t(
+                                  "quicksearch.placeholder",
+                                  "Keyword"
+                                )}
+                                ref={ref}
+                                sx={{
+                                  "[aria-invalid=true]": {
+                                    borderTop: "10px",
+                                    boxShadow: "0 0 0 1px #F56565 !important",
+                                  },
+                                }}
+                              />
+                            )}
                           />
-                        )}
-                      />
-                    </FormControl>
-                    <IconButton
-                      icon={<Search />}
-                      type="submit"
-                      aria-label="Search"
-                      value="submit"
-                    />
-                  </HStack>
-                </form>
-                <Box mt="2">
-                  {loading && <LoadingIcon />}
-                  {error && <ErrorMessage type="dataLoad" />}
-                  {data?.quickSearch?.length > 0 && (
-                    <QuickSearchResult result={data?.quickSearch} />
-                  )}
+                        </FormControl>
+                        <IconButton
+                          icon={<Search />}
+                          type="submit"
+                          aria-label="Search"
+                          value="submit"
+                        />
+                      </HStack>
+                    </form>
+                  </Box>
+                  <Box mt="2">
+                    {loading && <LoadingIcon />}
+                    {error && <ErrorMessage type="dataLoad" />}
+                    {!loading &&
+                      searchTerm.length > 2 &&
+                      isActiveSearch && 
+                      data?.quickSearch?.length > 0 && (
+                        <QuickSearchResult result={data?.quickSearch} />
+                      )}
+
+                    {!loading &&
+                      !error &&
+                      !data?.quickSearch?.length &&
+                      isActiveSearch && 
+                      searchTerm.length > 2 && (
+                        <Box>
+                          {t(
+                            "quicksearch.noResult",
+                            "No result for your search"
+                          )}
+                        </Box>
+                      )}
+                  </Box>
                 </Box>
               </Flex>
             </Flex>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </>
+          </RemoveScroll>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };

@@ -3,14 +3,15 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { GetStaticProps } from "next";
 
 import { Box, Heading, Text } from "@chakra-ui/react";
-import { useTranslation } from "next-i18next";
 import {Footer} from "~/components/app";
+import { MainContent } from "~/components/ui";
+import { useAppTranslations } from "~/hooks";
 
 export default function Page404() {
-  const { t } = useTranslation();
+  const { t } = useAppTranslations();
 
   return (
-    <>
+    <MainContent>
     <Box layerStyle="page" w="100%">
       <Box layerStyle="headingPullOut" mb="3">
         <Heading as="h1" className="highlight" color="cm.text">
@@ -20,7 +21,7 @@ export default function Page404() {
       <Text h="400px">{t("error.pleaseReloadInAFewMoments", "Please try again")}</Text>
     </Box>
     <Footer />
-    </>
+    </MainContent>
   );
 }
 

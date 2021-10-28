@@ -1,13 +1,13 @@
 import React from "react";
-import { default as RouterLink } from "next/link";
-import { useTranslation } from "next-i18next";
+import NextLink from "next/link";
 import { Button, HStack, Link } from "@chakra-ui/react";
 import { useConfigContext } from "~/provider";
 import { useRouter } from "next/router";
+import { useAppTranslations } from "~/hooks";
 
 export const InlineLanguageButtons = () => {
   const config = useConfigContext();
-  const { i18n } = useTranslation();
+  const { i18n } = useAppTranslations();
 
   const router = useRouter();
 
@@ -19,7 +19,7 @@ export const InlineLanguageButtons = () => {
             if (lang === i18n.language) return acc;
 
             acc.push(
-              <RouterLink
+              <NextLink
                 key={lang}
                 href={router.asPath}
                 locale={lang}
@@ -34,7 +34,7 @@ export const InlineLanguageButtons = () => {
                 >
                   {lang}
                 </Link>
-              </RouterLink>
+              </NextLink>
             );
             return acc;
           }, [] as any)

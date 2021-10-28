@@ -1,11 +1,9 @@
 import React from "react";
 import Image from "next/image";
 import { Box, Flex, Text, chakra } from "@chakra-ui/react";
-import { useTranslation } from "react-i18next";
 import { BeatLoader } from "react-spinners";
 
-import { useImageStatusPoll } from "~/hooks";
-import { getMultilangValue } from "~/utils";
+import { useAppTranslations, useImageStatusPoll } from "~/hooks";
 
 export type ApiConfigImageFormatType = "square" | "normal";
 
@@ -51,6 +49,7 @@ export enum ImageCropPosition {
 export type ApiImageProps = {
   id: number | undefined;
   alt: string;
+  objectFit?: string;
   meta?: ApiImageMetaInformation;
   status: ImageStatusEnum;
   cropPosition?: ImageCropPosition;
@@ -66,6 +65,7 @@ export const ApiImage = ({
   alt,
   meta,
   status,
+  objectFit,
   useImageAspectRatioPB,
   forceAspectRatioPB,
   placeholder,
@@ -73,30 +73,30 @@ export const ApiImage = ({
   cropPosition,
   sizes = "100vw",
 }: ApiImageProps) => {
-  const { t } = useTranslation();
+  const { t, getMultilangValue } = useAppTranslations();
 
   const [polledStatus, polledMeta] = useImageStatusPoll(id, status);
 
   let content;
   let imageAspectRatioPB;
 
-  let objectFit = "center center";
+  let objectPosition = "center center";
   if (cropPosition) {
     switch (cropPosition) {
       case ImageCropPosition.BOTTOM:
-        objectFit = "center bottom";
+        objectPosition = "center bottom";
         break;
 
       case ImageCropPosition.TOP:
-        objectFit = "center top";
+        objectPosition = "center top";
         break;
 
       case ImageCropPosition.LEFT:
-        objectFit = "left center";
+        objectPosition = "left center";
         break;
 
       case ImageCropPosition.RIGHT:
-        objectFit = "right center";
+        objectPosition = "right center";
         break;
     }
   }
@@ -114,9 +114,7 @@ export const ApiImage = ({
       const originalHeight = aSizes.original?.height ?? 0;
 
       if (useImageAspectRatioPB && originalWidth > 0)
-        imageAspectRatioPB = Math.floor(
-          (originalHeight / originalWidth) * 100
-        );
+        imageAspectRatioPB = Math.floor((originalHeight / originalWidth) * 100);
 
       const sourceWebp = Object.keys(aSizes).reduce((acc: any, key: any) => {
         const size = aSizes[key];
@@ -152,11 +150,17 @@ export const ApiImage = ({
               />
             )}
             <chakra.img
-              objectPosition={objectFit}
+              objectPosition={
+                objectFit && objectFit !== "none" ? objectPosition : "none"
+              }
+              objectFit={
+                objectFit && objectFit !== "none" ? objectFit : ("none" as any)
+              }
               src={originalUrl}
               alt={getMultilangValue(alt)}
               width={originalWidth}
               height={originalHeight}
+              bg="transparent"
             />
           </picture>
         );

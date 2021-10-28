@@ -22,11 +22,10 @@ import {
   Heading,
   SimpleGrid,
 } from "@chakra-ui/react";
-import { getMultilangValue, isEmptyHtml } from "~/utils";
-import { useIsBreakPoint } from "~/hooks";
-import { useTranslation } from "next-i18next";
+import { isEmptyHtml } from "~/utils";
+import { useAppTranslations, useIsBreakPoint } from "~/hooks";
 import { GetStaticPaths, GetStaticProps } from "next";
-import Link from "next/link";
+import { MainContent } from "~/components/ui";
 
 const tourQuery = gql`
   query ($slug: String!) {
@@ -99,21 +98,22 @@ export const ModuleComponentTour = ({
   const { isMobile, isTablet, isDesktopAndUp } = useIsBreakPoint();
   const config = useConfigContext();
   const settings = useSettingsContext();
-  const { t, i18n } = useTranslation();
+  const { t, i18n, getMultilangValue } = useAppTranslations();
 
   useEffect(() => {
+    // TODO implement tour
     if (typeof window !== "undefined") {
       if (cultureMap && tour?.lng && tour?.lat) {
         cultureMap.clear();
-        cultureMap.addMarkers([
-          {
-            type: "tour",
-            id: tour.id,
-            slug: tour.slug,
-            lng: tour.lng,
-            lat: tour.lat,
-          },
-        ]);
+        // cultureMap.addMarkers([
+        //   {
+        //     type: "tour",
+        //     id: tour.id,
+        //     slug: tour.slug,
+        //     lng: tour.lng,
+        //     lat: tour.lat,
+        //   },
+        // ]);
         cultureMap.panTo(tour.lng, tour.lat);
       }
     }
@@ -177,171 +177,56 @@ export const ModuleComponentTour = ({
   `;
 
   return (
-    <Box layerStyle="blurredLightGray">
-      <Box px="20px" pt="0.5em">
-        <Box mb="3">
-          <Text className="highlight" color="cm.text" fontWeight="bold">
-            {t("tour.detail.title", "Tour")}
-          </Text>
-        </Box>
-
-        <Box bg="#fff" borderRadius="lg" overflow="hidden">
-          {tour?.heroImage && tour?.heroImage.id && (
-            <AspectRatio w="100%" ratio={16 / 9}>
-              <Box bg={color} filter="li">
-                {tour?.heroImage && tour?.heroImage.id && (
-                  <Box w="100%" h="100%">
-                    <ApiImage
-                      id={tour?.heroImage.id}
-                      alt={tour?.heroImage.alt}
-                      meta={tour?.heroImage.meta}
-                      forceAspectRatioPB={66.66}
-                      status={tour?.heroImage.status}
-                      sizes="(min-width: 45rem) 400px, 40vw"
-                      cropPosition={tour?.heroImage?.cropPosition}
-                    />
-                  </Box>
-                )}
-              </Box>
-            </AspectRatio>
-          )}
-
-          <Box
-            px={isMobile ? "20px" : "35px"}
-            pt={isMobile ? "20px" : "35px"}
-            pb={isMobile ? "20px" : "1em"}
-            w={isMobile ? "100%" : "66%"}
-          >
-            {meta && (
-              <Flex
-                textStyle="categoriesHighlight"
-                color={color}
-                alignItems="flex-end"
-                width="66.66%"
-              >
-                {meta}
-              </Flex>
-            )}
-            <chakra.h1
-              mb="0.3em !important"
-              textStyle="headline"
-              sx={{
-                a: {
-                  _hover: {
-                    color: "#333 !important",
-                  },
-                },
-              }}
-            >
-              <MultiLangValue json={tour.title} />
-            </chakra.h1>
+    <MainContent>
+      <Box layerStyle="blurredLightGray">
+        <Box px="20px" pt="0.5em">
+          <Box mb="3">
+            <Text className="highlight" color="cm.text" fontWeight="bold">
+              {t("tour.detail.title", "Tour")}
+            </Text>
           </Box>
 
-          {(!isEmptyHtml(address) ||
-            !isEmptyHtml(contact) ||
-            !isEmptyHtml(links)) && (
-            <Box
-              px={{
-                base: "20px",
-                md: "35px",
-              }}
-              pb="1em"
-            >
-              {!isEmptyHtml(address) && (
-                <Box pb="1em" dangerouslySetInnerHTML={{ __html: address }} />
-              )}
-              {!isEmptyHtml(contact) && (
-                <Box pb="1em" dangerouslySetInnerHTML={{ __html: contact }} />
-              )}
-              {!isEmptyHtml(links) && (
-                <Box pb="1em" dangerouslySetInnerHTML={{ __html: links }} />
-              )}
-            </Box>
-          )}
+          <Box bg="#fff" borderRadius="lg" overflow="hidden">
+            {tour?.heroImage && tour?.heroImage.id && (
+              <AspectRatio w="100%" ratio={16 / 9}>
+                <Box bg={color} filter="li">
+                  {tour?.heroImage && tour?.heroImage.id && (
+                    <Box w="100%" h="100%">
+                      <ApiImage
+                        id={tour?.heroImage.id}
+                        alt={tour?.heroImage.alt}
+                        meta={tour?.heroImage.meta}
+                        forceAspectRatioPB={66.66}
+                        status={tour?.heroImage.status}
+                        sizes="(min-width: 45rem) 400px, 40vw"
+                        cropPosition={tour?.heroImage?.cropPosition}
+                        objectFit="cover"
+                      />
+                    </Box>
+                  )}
+                </Box>
+              </AspectRatio>
+            )}
 
-          {!isEmptyHtml(getMultilangValue(tour.teaser)) && (
-            <Box
-              px={{
-                base: "20px",
-                md: "35px",
-              }}
-              pb="2em"
-              textStyle="larger"
-            >
-              <MultiLangHtml json={tour.teaser} />
-            </Box>
-          )}
-
-          {!isEmptyHtml(getMultilangValue(tour.description)) && (
-            <Box
-              px={{
-                base: "20px",
-                md: "35px",
-              }}
-              pb="2em"
-            >
-              <MultiLangHtml json={tour.description} />
-            </Box>
-          )}
-        </Box>
-
-        <Box
-          bg="#fff"
-          borderRadius="lg"
-          overflow="hidden"
-          w={isMobile ? "80%" : "100%"}
-          maxW={isMobile ? "275px" : "100%"}
-          mt="20px"
-        >
-          <Flex
-            flexDirection={isMobile ? "column" : "row-reverse"}
-            alignItems={isMobile ? "flex-end" : "flex-start"}
-          >
-            <Box w={isMobile ? "50%" : "33.33%"} pb={isMobile ? "0px" : "20px"}>
-              <Box position="relative">
-                <AspectRatio w="100%" ratio={3 / 2}>
-                  <Box bg={color}>
-                    {tour?.heroImage && tour?.heroImage.id && (
-                      <Box
-                        w="100%"
-                        h="100%"
-                        sx={{
-                          mixBlendMode: "multiply",
-
-                          "img, picture": {
-                            filter: "grayscale()",
-                          },
-                        }}
-                      >
-                        <ApiImage
-                          id={tour?.heroImage.id}
-                          alt={tour?.heroImage.alt}
-                          meta={tour?.heroImage.meta}
-                          forceAspectRatioPB={66.66}
-                          status={tour?.heroImage.status}
-                          sizes="(min-width: 45rem) 400px, 40vw"
-                          cropPosition={tour?.heroImage?.cropPosition}
-                        />
-                      </Box>
-                    )}
-                  </Box>
-                </AspectRatio>
-              </Box>
-            </Box>
             <Box
               px={isMobile ? "20px" : "35px"}
-              pt={isMobile ? "0" : "35px"}
-              pb={isMobile ? "0px" : "20px"}
+              pt={isMobile ? "20px" : "35px"}
+              pb={isMobile ? "20px" : "1em"}
               w={isMobile ? "100%" : "66%"}
             >
-              <Flex
-                textStyle="categoriesHighlight"
-                color={color}
-                h="35px"
-                alignItems="flex-end"
-              ></Flex>
-              <chakra.h2
+              {meta && (
+                <Flex
+                  textStyle="categoriesHighlight"
+                  color={color}
+                  alignItems="flex-end"
+                  width="66.66%"
+                >
+                  {meta}
+                </Flex>
+              )}
+              <chakra.h1
                 mb="0.3em !important"
+                textStyle="headline"
                 sx={{
                   a: {
                     _hover: {
@@ -350,81 +235,206 @@ export const ModuleComponentTour = ({
                   },
                 }}
               >
-                {t("tour.detail.facts", "About the tour")}
-              </chakra.h2>
+                <MultiLangValue json={tour.title} />
+              </chakra.h1>
             </Box>
-          </Flex>
 
-          <Box px={isMobile ? "20px" : "35px"} pb={isMobile ? "20px" : "35px"}>
-            {tour?.tourStops?.length > 0 && (
-              <Flex>
-                <Box
-                  mb="0.5em"
-                  color="cm.accentDark"
-                  textTransform="uppercase"
-                  textStyle="categories"
-                  w="100px"
-                  pt="0.2em"
-                  mt="0.3em"
-                >
-                  {t("tour.detail.label.start", "Start")}
-                </Box>
-                <Box textStyle="card">
-                  <MultiLangValue json={tour?.tourStops[0].title} />
-                </Box>
-              </Flex>
+            {(!isEmptyHtml(address) ||
+              !isEmptyHtml(contact) ||
+              !isEmptyHtml(links)) && (
+              <Box
+                px={{
+                  base: "20px",
+                  md: "35px",
+                }}
+                pb="1em"
+              >
+                {!isEmptyHtml(address) && (
+                  <Box pb="1em" dangerouslySetInnerHTML={{ __html: address }} />
+                )}
+                {!isEmptyHtml(contact) && (
+                  <Box pb="1em" dangerouslySetInnerHTML={{ __html: contact }} />
+                )}
+                {!isEmptyHtml(links) && (
+                  <Box pb="1em" dangerouslySetInnerHTML={{ __html: links }} />
+                )}
+              </Box>
             )}
-            {tour?.tourStops?.length > 1 && (
-              <Flex>
-                <Box
-                  mb="0.5em"
-                  color="cm.accentDark"
-                  textTransform="uppercase"
-                  textStyle="categories"
-                  w="100px"
-                  pt="0.2em"
-                  mt="0.3em"
-                >
-                  {t("tour.detail.label.start", "Stop")}
-                </Box>
-                <Box textStyle="card">
-                  <MultiLangValue
-                    json={tour?.tourStops[tour?.tourStops.length - 1].title}
-                  />
-                </Box>
-              </Flex>
+
+            {!isEmptyHtml(getMultilangValue(tour.teaser)) && (
+              <Box
+                px={{
+                  base: "20px",
+                  md: "35px",
+                }}
+                pb="2em"
+                textStyle="larger"
+              >
+                <MultiLangHtml json={tour.teaser} />
+              </Box>
             )}
-            {tour?.distance && tour?.duration && (
-              <Flex>
-                <Box
-                  mb="0.5em"
-                  color="cm.accentDark"
-                  textTransform="uppercase"
-                  textStyle="categories"
-                  w="100px"
-                  pt="0.2em"
-                  mt="0.3em"
-                >
-                  {t("tour.detail.label.distance", "Distance")}
-                </Box>
-                <Box textStyle="card">
-                  <MultiLangValue json={tour?.distance} /> |{" "}
-                  <MultiLangValue json={tour?.duration} />
-                </Box>
-              </Flex>
+
+            {!isEmptyHtml(getMultilangValue(tour.description)) && (
+              <Box
+                px={{
+                  base: "20px",
+                  md: "35px",
+                }}
+                pb="2em"
+              >
+                <MultiLangHtml json={tour.description} />
+              </Box>
             )}
+          </Box>
+
+          <Box
+            bg="#fff"
+            borderRadius="lg"
+            overflow="hidden"
+            w={isMobile ? "80%" : "100%"}
+            maxW={isMobile ? "275px" : "100%"}
+            mt="20px"
+          >
+            <Flex
+              flexDirection={isMobile ? "column" : "row-reverse"}
+              alignItems={isMobile ? "flex-end" : "flex-start"}
+            >
+              <Box
+                w={isMobile ? "50%" : "33.33%"}
+                pb={isMobile ? "0px" : "20px"}
+              >
+                <Box position="relative">
+                  <AspectRatio w="100%" ratio={3 / 2}>
+                    <Box bg={color}>
+                      {tour?.heroImage && tour?.heroImage.id && (
+                        <Box
+                          w="100%"
+                          h="100%"
+                          sx={{
+                            mixBlendMode: "multiply",
+
+                            "img, picture": {
+                              filter: "grayscale()",
+                            },
+                          }}
+                        >
+                          <ApiImage
+                            id={tour?.heroImage.id}
+                            alt={tour?.heroImage.alt}
+                            meta={tour?.heroImage.meta}
+                            forceAspectRatioPB={66.66}
+                            status={tour?.heroImage.status}
+                            sizes="(min-width: 45rem) 400px, 40vw"
+                            objectFit="cover"
+                            cropPosition={tour?.heroImage?.cropPosition}
+                          />
+                        </Box>
+                      )}
+                    </Box>
+                  </AspectRatio>
+                </Box>
+              </Box>
+              <Box
+                px={isMobile ? "20px" : "35px"}
+                pt={isMobile ? "0" : "35px"}
+                pb={isMobile ? "0px" : "20px"}
+                w={isMobile ? "100%" : "66%"}
+              >
+                <Flex
+                  textStyle="categoriesHighlight"
+                  color={color}
+                  h="35px"
+                  alignItems="flex-end"
+                ></Flex>
+                <chakra.h2
+                  mb="0.3em !important"
+                  sx={{
+                    a: {
+                      _hover: {
+                        color: "#333 !important",
+                      },
+                    },
+                  }}
+                >
+                  {t("tour.detail.facts", "About the tour")}
+                </chakra.h2>
+              </Box>
+            </Flex>
+
+            <Box
+              px={isMobile ? "20px" : "35px"}
+              pb={isMobile ? "20px" : "35px"}
+            >
+              {tour?.tourStops?.length > 0 && (
+                <Flex>
+                  <Box
+                    mb="0.5em"
+                    color="cm.accentDark"
+                    textTransform="uppercase"
+                    textStyle="categories"
+                    w="100px"
+                    pt="0.2em"
+                    mt="0.3em"
+                  >
+                    {t("tour.detail.label.start", "Start")}
+                  </Box>
+                  <Box textStyle="card">
+                    <MultiLangValue json={tour?.tourStops[0].title} />
+                  </Box>
+                </Flex>
+              )}
+              {tour?.tourStops?.length > 1 && (
+                <Flex>
+                  <Box
+                    mb="0.5em"
+                    color="cm.accentDark"
+                    textTransform="uppercase"
+                    textStyle="categories"
+                    w="100px"
+                    pt="0.2em"
+                    mt="0.3em"
+                  >
+                    {t("tour.detail.label.start", "Stop")}
+                  </Box>
+                  <Box textStyle="card">
+                    <MultiLangValue
+                      json={tour?.tourStops[tour?.tourStops.length - 1].title}
+                    />
+                  </Box>
+                </Flex>
+              )}
+              {tour?.distance && tour?.duration && (
+                <Flex>
+                  <Box
+                    mb="0.5em"
+                    color="cm.accentDark"
+                    textTransform="uppercase"
+                    textStyle="categories"
+                    w="100px"
+                    pt="0.2em"
+                    mt="0.3em"
+                  >
+                    {t("tour.detail.label.distance", "Distance")}
+                  </Box>
+                  <Box textStyle="card">
+                    <MultiLangValue json={tour?.distance} /> |{" "}
+                    <MultiLangValue json={tour?.duration} />
+                  </Box>
+                </Flex>
+              )}
+            </Box>
           </Box>
         </Box>
-      </Box>
 
-      {tour?.tourStops?.length > 0 &&
-        tour?.tourStops.map((tourStop: any) => (
-          <Box key={`ts-${tourStop.number}`} px="20px" pt="20px">
-            <CardTourStop tourStop={tourStop} />
-          </Box>
-        ))}
-      <Footer noBackground />
-    </Box>
+        {tour?.tourStops?.length > 0 &&
+          tour?.tourStops.map((tourStop: any) => (
+            <Box key={`ts-${tourStop.number}`} px="20px" pt="20px">
+              <CardTourStop tourStop={tourStop} />
+            </Box>
+          ))}
+        <Footer noBackground />
+      </Box>
+    </MainContent>
   );
 };
 

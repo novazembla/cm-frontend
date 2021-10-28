@@ -1,20 +1,16 @@
 import { Link, Box } from "@chakra-ui/react";
 import { ActiveLink } from "~/components/ui";
-import { useTranslation } from "next-i18next";
+import { useAppTranslations } from "~/hooks";
 
 export const Logo = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useAppTranslations();
 
   return (
-    <Box
-      textStyle="logo"
-      textDecoration="none !important"
-      whiteSpace="nowrap"     
-    >
+    <Box textStyle="logo" textDecoration="none !important" whiteSpace="nowrap">
       <Link
         as={ActiveLink}
         activeClassName="activeLogo"
-        href="/"
+        href={`${i18n.language === "en" ? "/en" : ""}/`}
         color="black"
         textDecoration="none !important"
         whiteSpace="nowrap"
