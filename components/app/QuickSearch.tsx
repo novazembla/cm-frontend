@@ -284,7 +284,7 @@ export const QuickSearch = () => {
                 ? isTabletWide
                   ? "66.66vw"
                   : "675px"
-                : "100%",
+                : isTablet ? "80vw" : "100vw",
             left: contentLeft,
             zIndex: 1100,
           }}
@@ -294,12 +294,15 @@ export const QuickSearch = () => {
               w="100%"
               h="100vh"
               minH="100%"
-              pt={{
-                base: "60px",
-                xl: "80px",
-              }}
+             
+              layerStyle="pageBg"
+              overflowY="auto"
             >
               <Flex
+                pt={{
+                  base: "77px",
+                  xl: "97px",
+                }}
                 sx={{
                   a: {
                     display: "inline-block",

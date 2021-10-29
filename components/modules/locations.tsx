@@ -5,7 +5,7 @@ import { Footer } from "~/components/app";
 import {
   Box,
   chakra,
-  Heading,
+  Grid,
   Accordion,
   AccordionItem,
   AccordionButton,
@@ -311,8 +311,8 @@ export const ModuleComponentLocations = ({ ...props }) => {
   }, [watchVariables, watch, refetch, currentQueryState]);
 
   return (
-    <MainContent>
-      <Box layerStyle="blurredLightGray">
+    <MainContent layerStyle="blurredLightGray">
+      <Grid w="100%" templateRows="1fr auto" minH="100%">
         <Box px="20px" pt="0.5em">
           <Box mb="3">
             <chakra.h1 className="highlight" color="cm.text" fontWeight="bold">
@@ -512,8 +512,8 @@ export const ModuleComponentLocations = ({ ...props }) => {
             {loading && <LoadingIcon />}
           </Box>
         </Box>
-        <Footer />
-      </Box>
+        <Footer noBackground/>
+      </Grid>
     </MainContent>
   );
 };

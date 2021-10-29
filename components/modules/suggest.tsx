@@ -1,5 +1,5 @@
 import { Footer } from "~/components/app";
-import { Box, chakra } from "@chakra-ui/react";
+import { Box, chakra, Grid } from "@chakra-ui/react";
 import { MainContent } from "~/components/ui";
 import { useAppTranslations } from "~/hooks";
 
@@ -65,13 +65,16 @@ import { useAppTranslations } from "~/hooks";
 export const ModuleComponentSuggest = () => {
   const { t } = useAppTranslations();
   return (
-    <MainContent>
-      <Box layerStyle="page">
-        <Box layerStyle="headingPullOut" mb="3">
-          <chakra.h1 className="highlight" color="cm.text" fontWeight="bold">
+
+    <MainContent isDrawer layerStyle="pageBg">
+      <Grid w="100%" templateRows="1fr auto" minH="100%">
+        <Box layerStyle="page">
+          <Box layerStyle="headingPullOut" mb="3">
+            <chakra.h1 className="highlight" color="cm.text" fontWeight="bold">
             {t("suggest.title", "Suggest location")}
-          </chakra.h1>
-        </Box>
+            </chakra.h1>
+          </Box>
+
 
         <Box color="cm.text">
           <Box
@@ -88,6 +91,7 @@ export const ModuleComponentSuggest = () => {
         </Box>
       </Box>
       <Footer />
+      </Grid>
     </MainContent>
   );
 };

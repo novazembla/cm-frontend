@@ -34,10 +34,11 @@ export const Footer = ({
       }}
       px={{
         base: !noBackground || isMobile ? "20px" : 0,
-        sm: !noBackground|| isMobile ? "20px" : 0,
+        sm: !noBackground || isMobile ? "20px" : 0,
         md: !noBackground ? "45px" : "25px",
         xl: !noBackground ? "55px" : "35px",
       }}
+      mt={!noBackground ? "60px" : undefined}
     >
       <Box
         mb={{
@@ -52,7 +53,6 @@ export const Footer = ({
           w={{
             base: "auto",
             md: "50%",
-            lg: "33.33%",
           }}
         >
           <IconButton
@@ -88,32 +88,48 @@ export const Footer = ({
             base: "75%",
 
             md: "50%",
-            lg: "66.66%",
           }}
           direction={{
             base: "column",
           }}
         >
-          <Flex direction="column" mb="1em">
-            {config.nav.main.map((link: any, index: number) => (
-              <ActiveLink
-                key={`nav-link-${index}`}
-                href={getMultilangValue(link.path)}
-              >
-                <MultiLangValue json={link.title} />
-              </ActiveLink>
-            ))}
-          </Flex>
-          <Flex direction="column">
-            {config.nav.footer.map((link: any, index: number) => (
-              <ActiveLink
-                key={`nav-footer-${index}`}
-                href={getMultilangValue(link.path)}
-              >
-                <MultiLangValue json={link.title} />
-              </ActiveLink>
-            ))}
-          </Flex>
+          <Box
+            alignSelf={isMobile ? "flex-end" : undefined}
+            pr={isMobile ? "20px" : undefined}
+            minW={isMobile ? "66.66%" : undefined}
+          >
+            <Flex
+              direction="column"
+              mb="1em"
+              sx={{
+                lineHeight: "1.5em",
+              }}
+            >
+              {config.nav.main.map((link: any, index: number) => (
+                <ActiveLink
+                  key={`nav-link-${index}`}
+                  href={getMultilangValue(link.path)}
+                >
+                  <MultiLangValue json={link.title} />
+                </ActiveLink>
+              ))}
+            </Flex>
+            <Flex
+              direction="column"
+              sx={{
+                lineHeight: "1.5em",
+              }}
+            >
+              {config.nav.footer.map((link: any, index: number) => (
+                <ActiveLink
+                  key={`nav-footer-${index}`}
+                  href={getMultilangValue(link.path)}
+                >
+                  <MultiLangValue json={link.title} />
+                </ActiveLink>
+              ))}
+            </Flex>
+          </Box>
         </Flex>
       </Flex>
     </Box>

@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 import { useScrollStateContext } from "~/provider";
 
 const PAN_TRIGGER_OPEN_THRESHOLD = 30;
-const PAN_TRIGGER_CLOSE_THRESHOLD = 120;
+const PAN_TRIGGER_CLOSE_THRESHOLD = 180;
 
 const contentPaddingTop = {
   base: "60px",
@@ -23,8 +23,10 @@ export const MainContent = ({
   isVerticalContent,
   children,
   buttonVisible = true,
+  layerStyle,
 }: {
   isDrawer?: boolean;
+  layerStyle?: string;
   buttonVisible?: boolean;
   isVerticalContent?: boolean;
   children: React.ReactNode;
@@ -32,16 +34,16 @@ export const MainContent = ({
   const panXRef = useRef<number>(0);
   const mainContentRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
-  const { isMobile } = useIsBreakPoint();
+  const { isMobile, isTablet, isTabletWide, isDesktopAndUp } =
+    useIsBreakPoint();
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(true);
   const [isAnimationRunning, setIsAnimationRunning] = useState(false);
 
-  const isPresent = useIsPresent()
+  const isPresent = useIsPresent();
 
-  const [currentRoute, setCurrentRoute] = useState("")
-  
-  
+  const [currentRoute, setCurrentRoute] = useState("");
+
   const [animation, setAnimation] = useState({});
 
   const [isScrollingObserved, setIsScrollingObserved] = useState(false);
@@ -51,8 +53,8 @@ export const MainContent = ({
   const { t } = useAppTranslations();
 
   const closeState = useBreakpointValue({
-    base: "calc((-1 * (100vw - 20px)) + 30px)",
-    sm: "calc((-1 * (90vw)) + 30px)",
+    base: "calc((-1 * (100vw - 20px)) + 40px)",
+    sm: "calc((-1 * (90vw)) + 40px)",
     md: "calc((-1 * (80vw)) + 75px)",
     lg: "calc((-1 * 66.66vw) + 50px)",
     xl: "-625px",
@@ -81,10 +83,9 @@ export const MainContent = ({
 
   // useEffect(() => {
   //   if (isScrollingObserved || typeof window === undefined) return;
-    
+
   //   setIsScrollingObserved(true);
-    
-    
+
   //   console.log("attaching scroll event");
 
   //   const trackBody = (e: Event) => {
@@ -92,7 +93,7 @@ export const MainContent = ({
   //     scrollState.set("body", router.asPath.replace( /[^a-z]/g, '' ), window.scrollY);
   //   };
   //   document.addEventListener('scroll', trackBody);
-    
+
   //   return () => {
   //     if (typeof window === undefined) return;
   //     console.log("removeing scroll event");
@@ -102,18 +103,21 @@ export const MainContent = ({
 
   useEffect(() => {
     if (isScrollingObserved || typeof window === undefined) return;
-    
+
     setIsScrollingObserved(true);
-    
-    
+
     console.log("attaching scroll event");
 
     const trackBody = (e: Event) => {
       console.log("tracking boyd scroll", window.scrollY);
-      scrollState.set("body", router.asPath.replace( /[^a-z]/g, '' ), window.scrollY);
+      scrollState.set(
+        "body",
+        router.asPath.replace(/[^a-z]/g, ""),
+        window.scrollY
+      );
     };
-    document.addEventListener('scroll', trackBody);
-    
+    document.addEventListener("scroll", trackBody);
+
     return () => {
       if (typeof window === undefined) return;
       console.log("removeing scroll event");
@@ -123,48 +127,52 @@ export const MainContent = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-
   useEffect(() => {
-
-    console.log("Binging", router.asPath.replace( /[^a-z]/g, '' ));
-    setCurrentRoute(router.asPath.replace( /[^a-z]/g, '' ));
-    if (scrollState.get("main", router.asPath.replace( /[^a-z]/g, '' )) > 0) {
+    console.log("Binging", router.asPath.replace(/[^a-z]/g, ""));
+    setCurrentRoute(router.asPath.replace(/[^a-z]/g, ""));
+    if (scrollState.get("main", router.asPath.replace(/[^a-z]/g, "")) > 0) {
       mainContentRef.current?.scrollTo({
-        top: scrollState.get("main", router.asPath.replace( /[^a-z]/g, '' )),
+        top: scrollState.get("main", router.asPath.replace(/[^a-z]/g, "")),
         left: 0,
-      })
+      });
     }
 
     return () => {
-      console.log("Unbinding", router.asPath.replace( /[^a-z]/g, '' ));
-    }
+      console.log("Unbinding", router.asPath.replace(/[^a-z]/g, ""));
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isPresent])
+  }, [isPresent]);
 
   useEffect(() => {
     if (typeof document === "undefined") return;
 
-    // reset 
+    // reset
     if (!isPresent) {
       console.log(1, currentRoute);
-      // annoyinigly the clone of the component by framer motion's animate presence 
-      // reset the scoll state of the main content's div. 
-      // we have to reset it 
+      // annoyinigly the clone of the component by framer motion's animate presence
+      // reset the scoll state of the main content's div.
+      // we have to reset it
       if (scrollState.get("main", currentRoute) > 0) {
         console.log(2, currentRoute);
-        const container = document.querySelector(`#p-${currentRoute} .mainContent`);
+        const container = document.querySelector(
+          `#p-${currentRoute} .mainContent`
+        );
 
         if (container) {
-          console.log("set leaving container", currentRoute, scrollState.get("main", currentRoute));
+          console.log(
+            "set leaving container",
+            currentRoute,
+            scrollState.get("main", currentRoute)
+          );
           container.scrollTo({
             top: scrollState.get("main", currentRoute),
             left: 0,
-          })
+          });
         }
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isPresent])
+  }, [isPresent]);
 
   const close = () => {
     if (isAnimationRunning) return;
@@ -206,6 +214,23 @@ export const MainContent = ({
 
   return (
     <>
+      {isDrawer && !isVerticalContent && (
+        <Box
+          onClick={() => {
+            toggle();
+          }}
+          bg="transparent"
+          position="fixed"
+          w="34vw"
+          top="0"
+          h="100vh"
+          right={isDrawerOpen ? "0px" : undefined}
+          cursor="pointer"
+          display={
+            isTabletWide || isDesktopAndUp || !isDrawerOpen ? "none" : undefined
+          }
+        ></Box>
+      )}
       {isDrawer && !isVerticalContent && (
         <motion.div
           style={{
@@ -253,11 +278,11 @@ export const MainContent = ({
                 _hover={{
                   color: "cm.accentLight",
                 }}
-                transition="transform 0.3s"
+                transition="all 0.5s"
                 transform={isDrawerOpen ? "rotate(180deg)" : ""}
                 bg="transparent"
                 _active={{
-                  bg:"transparent"
+                  bg: "transparent",
                 }}
               />
             </Box>
@@ -281,19 +306,17 @@ export const MainContent = ({
               onPanStart: (event, info) => {
                 panXRef.current = 0;
               },
+              onTap: !isDrawerOpen
+                ? (event, info) => {
+                    event.preventDefault();
+                    toggle();
+                  }
+                : undefined,
               onPan: (event, info) => {
                 panXRef.current += info.delta.x;
 
                 if (
-                  panXRef.current > PAN_TRIGGER_OPEN_THRESHOLD &&
-                  !isDrawerOpen &&
-                  !isAnimationRunning
-                ) {
-                  open();
-                  panXRef.current = 0;
-                }
-
-                if (
+                  panXRef.current < 0 &&
                   Math.abs(panXRef.current) > PAN_TRIGGER_CLOSE_THRESHOLD &&
                   isDrawerOpen &&
                   !isAnimationRunning
@@ -330,11 +353,12 @@ export const MainContent = ({
               overflowY={{
                 md: "auto",
               }}
+              layerStyle={layerStyle}
               onScroll={(e: React.UIEvent<HTMLDivElement>) => {
                 if (isPresent) {
                   scrollState.set(
                     "main",
-                    router.asPath.replace( /[^a-z]/g, '' ),
+                    router.asPath.replace(/[^a-z]/g, ""),
                     (e.target as any).scrollTop
                   );
                 }

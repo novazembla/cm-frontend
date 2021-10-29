@@ -7,7 +7,7 @@ import {
 } from "~/components/ui";
 import { Footer } from "~/components/app";
 import { getApolloClient } from "~/services";
-import { Box, SimpleGrid, Text, chakra, Heading } from "@chakra-ui/react";
+import { Box, SimpleGrid, Text, chakra, Grid } from "@chakra-ui/react";
 import { isEmptyHtml } from "~/utils";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { MainContent } from "~/components/ui";
@@ -177,148 +177,154 @@ export const ModuleComponentEvent = ({
   }
 
   return (
-    <MainContent>
-      <Box layerStyle="page">
-        <Box layerStyle="headingPullOut" mb="3">
-          <Text className="highlight" color="cm.text" fontWeight="bold">
-            {t("event.detail.title", "Event")}
-          </Text>
-        </Box>
-
-        <Box color="cm.text">
-          {event?.heroImage && event?.heroImage.id && (
-            <Box w="100%" mb="3">
-              <Box bg="#333">
-                <ApiImage
-                  id={event.heroImage.id}
-                  alt={event.heroImage.alt}
-                  meta={event.heroImage.meta}
-                  status={event.heroImage.status}
-                  useImageAspectRatioPB
-                  sizes="(min-width: 55rem) 800px, 100vw"
-                  objectFit="cover"
-                />
-              </Box>
-              {event.heroImage.credits !== "" && (
-                <Text textStyle="finePrint" mt="0.5">
-                  <MultiLangValue json={event.heroImage.credits} />
-                </Text>
-              )}
-            </Box>
-          )}
-
-          <Box mb="2em">
-            <chakra.h1 mb="3" textStyle="headline">
-              <MultiLangValue json={event.title} />
-            </chakra.h1>
-            <Box
-              textStyle="larger"
-              my="1em"
-              py="3"
-              borderColor="cm.accentDark"
-              borderTop="1px solid"
-              borderBottom="1px solid"
-            >
-              <Box
-                dangerouslySetInnerHTML={{ __html: `${dateInfo} ${timeInfo}` }}
-              />
-            </Box>
-            {!isEmptyHtml(getMultilangValue(event?.description ?? "")) && (
-              <MultiLangHtml json={event.description} />
-            )}
+    <MainContent layerStyle="pageBg">
+      <Grid w="100%" templateRows="1fr auto" minH="100%">
+        <Box layerStyle="page">
+          <Box layerStyle="headingPullOut" mb="3">
+            <Text className="highlight" color="cm.text" fontWeight="bold">
+              {t("event.detail.title", "Event")}
+            </Text>
           </Box>
-          <SimpleGrid columns={2} spacingX="0.5em" spacingY="1em">
-            {!isEmptyHtml(event?.address ?? "") && (
-              <Box className="item">
-                <Box
-                  mb="0.5em"
-                  color="cm.accentDark"
-                  textTransform="uppercase"
-                  textStyle="categories"
-                >
-                  {t("event.label.eventLocation", "Event Location")}
+
+          <Box color="cm.text">
+            {event?.heroImage && event?.heroImage.id && (
+              <Box w="100%" mb="3">
+                <Box bg="#333">
+                  <ApiImage
+                    id={event.heroImage.id}
+                    alt={event.heroImage.alt}
+                    meta={event.heroImage.meta}
+                    status={event.heroImage.status}
+                    useImageAspectRatioPB
+                    sizes="(min-width: 55rem) 800px, 100vw"
+                    objectFit="cover"
+                  />
                 </Box>
-                <Box textStyle="card">
-                  <Box dangerouslySetInnerHTML={{ __html: event?.address }} />
-                </Box>
-              </Box>
-            )}
-            {!isEmptyHtml(event?.organiser ?? "") && (
-              <Box className="item">
-                <Box
-                  mb="0.5em"
-                  color="cm.accentDark"
-                  textTransform="uppercase"
-                  textStyle="categories"
-                >
-                  {t("event.label.eventOrganiser", "Event Organiser")}
-                </Box>
-                <Box textStyle="card">
-                  <Box dangerouslySetInnerHTML={{ __html: event?.organiser }} />
-                </Box>
+                {event.heroImage.credits !== "" && (
+                  <Text textStyle="finePrint" mt="0.5">
+                    <MultiLangValue json={event.heroImage.credits} />
+                  </Text>
+                )}
               </Box>
             )}
 
-            {event?.terms?.length > 0 && (
-              <Box className="item">
-                <Box
-                  mb="0.5em"
-                  color="cm.accentDark"
-                  textTransform="uppercase"
-                  textStyle="categories"
-                >
-                  {t("event.label.category", "Category")}
-                </Box>
-                <Box textStyle="card">
-                  {event.terms
-                    .map((t: any) => {
-                      if (!t) return "";
-
-                      return getMultilangValue(t?.name);
-                    })
-                    .join(", ")}
-                </Box>
-              </Box>
-            )}
-          </SimpleGrid>
-
-          {multipleUpcommingDates?.length > 0 && (
-            <Box className="item" mt="1em">
+            <Box mb="2em">
+              <chakra.h1 mb="3" textStyle="headline">
+                <MultiLangValue json={event.title} />
+              </chakra.h1>
               <Box
-                mb="0.5em"
-                color="cm.accentDark"
-                textTransform="uppercase"
-                textStyle="categories"
+                textStyle="larger"
+                my="1em"
+                py="3"
+                borderColor="cm.accentDark"
+                borderTop="1px solid"
+                borderBottom="1px solid"
               >
-                {t("event.label.eventDatesMultiple", "Upcoming dates")}
-              </Box>
-              <Box textStyle="card">
                 <Box
                   dangerouslySetInnerHTML={{
-                    __html: multipleUpcommingDates.join(""),
+                    __html: `${dateInfo} ${timeInfo}`,
                   }}
                 />
               </Box>
+              {!isEmptyHtml(getMultilangValue(event?.description ?? "")) && (
+                <MultiLangHtml json={event.description} />
+              )}
+            </Box>
+            <SimpleGrid columns={2} spacingX="0.5em" spacingY="1em">
+              {!isEmptyHtml(event?.address ?? "") && (
+                <Box className="item">
+                  <Box
+                    mb="0.5em"
+                    color="cm.accentDark"
+                    textTransform="uppercase"
+                    textStyle="categories"
+                  >
+                    {t("event.label.eventLocation", "Event Location")}
+                  </Box>
+                  <Box textStyle="card">
+                    <Box dangerouslySetInnerHTML={{ __html: event?.address }} />
+                  </Box>
+                </Box>
+              )}
+              {!isEmptyHtml(event?.organiser ?? "") && (
+                <Box className="item">
+                  <Box
+                    mb="0.5em"
+                    color="cm.accentDark"
+                    textTransform="uppercase"
+                    textStyle="categories"
+                  >
+                    {t("event.label.eventOrganiser", "Event Organiser")}
+                  </Box>
+                  <Box textStyle="card">
+                    <Box
+                      dangerouslySetInnerHTML={{ __html: event?.organiser }}
+                    />
+                  </Box>
+                </Box>
+              )}
+
+              {event?.terms?.length > 0 && (
+                <Box className="item">
+                  <Box
+                    mb="0.5em"
+                    color="cm.accentDark"
+                    textTransform="uppercase"
+                    textStyle="categories"
+                  >
+                    {t("event.label.category", "Category")}
+                  </Box>
+                  <Box textStyle="card">
+                    {event.terms
+                      .map((t: any) => {
+                        if (!t) return "";
+
+                        return getMultilangValue(t?.name);
+                      })
+                      .join(", ")}
+                  </Box>
+                </Box>
+              )}
+            </SimpleGrid>
+
+            {multipleUpcommingDates?.length > 0 && (
+              <Box className="item" mt="1em">
+                <Box
+                  mb="0.5em"
+                  color="cm.accentDark"
+                  textTransform="uppercase"
+                  textStyle="categories"
+                >
+                  {t("event.label.eventDatesMultiple", "Upcoming dates")}
+                </Box>
+                <Box textStyle="card">
+                  <Box
+                    dangerouslySetInnerHTML={{
+                      __html: multipleUpcommingDates.join(""),
+                    }}
+                  />
+                </Box>
+              </Box>
+            )}
+          </Box>
+        </Box>
+
+        <Box layerStyle="blurredLightGray">
+          {event.locations && event.locations.length > 0 && (
+            <Box p="20px">
+              <chakra.h3 className="highlight" color="cm.text" pb="1em">
+                {t("event.title.location", "Location")}
+              </chakra.h3>
+
+              {event.locations.map((location: any, i: number) => (
+                <CardLocation key={`loc-${location.id}`} location={location} />
+              ))}
             </Box>
           )}
+
+          <Footer noBackground />
         </Box>
-      </Box>
-
-      <Box layerStyle="blurredLightGray">
-        {event.locations && event.locations.length > 0 && (
-          <Box p="20px">
-            <chakra.h3 className="highlight" color="cm.text" pb="1em">
-              {t("event.title.location", "Location")}
-            </chakra.h3>
-
-            {event.locations.map((location: any, i: number) => (
-              <CardLocation key={`loc-${location.id}`} location={location} />
-            ))}
-          </Box>
-        )}
-
-        <Footer noBackground />
-      </Box>
+      </Grid>
     </MainContent>
   );
 };

@@ -26,6 +26,8 @@ export const MobileNav = () => {
   const { isMobile, isTablet, isTabletWide, isDesktopAndUp } =
     useIsBreakPoint();
 
+  console.log(isMobile, isTablet, isTabletWide, isTablet ? (isTabletWide ? "50vw" : "66.66vw") : "100vw");
+
   return (
     <>
       <AnimatePresence>
@@ -40,52 +42,59 @@ export const MobileNav = () => {
               top: 0,
               left: 0,
               height: "100vh",
-              width: isTabletWide ? "66.66vw" : "100vw",
+              width: isTablet ? (isTabletWide ? "66.66vw" : "80vw") : "100vw",
               zIndex: 1100,
               overflowY: "auto",
             }}
           >
             <RemoveScroll>
-              <Flex
-                layerStyle="page"
-                w="100%"
-                minH="100%"
-                alignItems={isTablet ? "flex-start" : "flex-end"}
+              <Box
+                h="100vh"
+                layerStyle="pageBg"
+                w="100%"                
               >
                 <Flex
-                  sx={{
-                    a: {
-                      display: "inline-block",
-                      marginBottom: "0.3em",
-                      _last: {
-                        marginBottom: 0,
-                      },
-                      pb: "3px",
-                      mt: "0.5em",
-                      borderBottom: "1px solid #ff0",
-                      borderColor: "cm.accentLight",
-                    },
-                  }}
-                  pt="60px"
-                  pb={{
-                    base: "100px",
-                    md: "45px",
-                  }}
-                  direction={{
-                    base: "column",
-                  }}
-                  textStyle="headline"
-                  fontWeight="bold"
+                  layerStyle="page"
+                  w="100%"
+                  minH="100%"
+                  h="100%"
+                  alignItems={isTablet ? "flex-start" : "flex-end"}
                 >
-                  {config.nav.main.map((link: any, index: number) => (
-                    <chakra.span key={`nav-link-${index}`}>
-                      <ActiveLink href={getMultilangValue(link.path)}>
-                        <MultiLangValue json={link.title} />
-                      </ActiveLink>
-                    </chakra.span>
-                  ))}
+                  <Flex
+                    sx={{
+                      a: {
+                        display: "inline-block",
+                        marginBottom: "0.3em",
+                        _last: {
+                          marginBottom: 0,
+                        },
+                        pb: "3px",
+                        mt: "0.5em",
+                        borderBottom: "1px solid #ff0",
+                        borderColor: "cm.accentLight",
+                      },
+                    }}
+                    pt="60px"
+                    pb={{
+                      base: "100px",
+                      md: "45px",
+                    }}
+                    direction={{
+                      base: "column",
+                    }}
+                    textStyle="headline"
+                    fontWeight="bold"
+                  >
+                    {config.nav.main.map((link: any, index: number) => (
+                      <chakra.span key={`nav-link-${index}`}>
+                        <ActiveLink href={getMultilangValue(link.path)}>
+                          <MultiLangValue json={link.title} />
+                        </ActiveLink>
+                      </chakra.span>
+                    ))}
+                  </Flex>
                 </Flex>
-              </Flex>
+              </Box>
             </RemoveScroll>
           </motion.div>
         )}

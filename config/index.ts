@@ -61,16 +61,6 @@ export const appConfigMainNav = [
       en: "Events",
     },
   },
-  {
-    path: {
-      de: "/suche",
-      en: "/search",
-    },
-    title: {
-      de: "Detailsuche",
-      en: "Advanced Search",
-    },
-  },
 ];
 
 export const appConfigFooterNav = [

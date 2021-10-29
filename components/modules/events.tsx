@@ -5,7 +5,7 @@ import { Footer } from "~/components/app";
 import {
   Box,
   chakra,
-  Heading,
+  Grid,
   Accordion,
   AccordionItem,
   AccordionButton,
@@ -227,8 +227,8 @@ export const ModuleComponentEvents = ({ ...props }) => {
   }, [watchVariables, watch, refetch, currentQueryState]);
 
   return (
-    <MainContent>
-      <Box w="100%">
+    <MainContent layerStyle="pageBg">
+      <Grid w="100%" templateRows="1fr auto" minH="100%">
         <Box layerStyle="page">
           <Box layerStyle="headingPullOut" mb="3">
             <chakra.h1 className="highlight" color="cm.text" fontWeight="bold">
@@ -379,7 +379,7 @@ export const ModuleComponentEvents = ({ ...props }) => {
           </Box>
         </Box>
         <Footer />
-      </Box>
+      </Grid>
     </MainContent>
   );
 };

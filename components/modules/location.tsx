@@ -19,6 +19,7 @@ import {
   AspectRatio,
   Text,
   chakra,
+  Grid,
   SimpleGrid,
 } from "@chakra-ui/react";
 import { useIsPresent } from "framer-motion";
@@ -261,8 +262,8 @@ export const ModuleComponentLocation = ({
   `;
 
   return (
-    <MainContent>
-      <Box layerStyle="blurredLightGray">
+    <MainContent layerStyle="blurredLightGray">
+      <Grid w="100%" templateRows="1fr auto" minH="100%">
         <Box px="20px" pt="0.5em">
           <Box mb="3">
             <Text className="highlight" color="cm.text" fontWeight="bold">
@@ -545,7 +546,7 @@ export const ModuleComponentLocation = ({
           )}
         </Box>
         <Footer noBackground />
-      </Box>
+      </Grid>
     </MainContent>
   );
 };

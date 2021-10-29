@@ -67,6 +67,7 @@ export const components = {
     variants: {
       outline: {
         bg: "white",
+        border: "none",
       },
     },
   },
@@ -77,21 +78,22 @@ export const components = {
       },
       control: {
         borderColor: "cm.accentLight",
-        borderRadius: "2px",
+        borderRadius: "10px",
         _disabled: {
           bg: "gray.100",
           borderColor: "gray.300",
         },
         _checked: {
           bg: "#fff",
+
           position: "relative",
           "&::after": {
             position: "absolute",
+            borderRadius: "10px",
             top: "1px",
             left: "1px",
             width: "10px",
             height: "10px",
-            borderRadius: "2px",
             content: '""',
             bg:"cm.accentLight",
           }
@@ -174,6 +176,7 @@ export const components = {
       },
     },
   },
+  
   Input: {
     variants: {
       outline: {

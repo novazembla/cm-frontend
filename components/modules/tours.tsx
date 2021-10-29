@@ -9,7 +9,7 @@ import {
 } from "~/components/ui";
 import { Footer } from "~/components/app";
 import { getApolloClient } from "~/services";
-import { Box, chakra, Heading, Text, Button } from "@chakra-ui/react";
+import { Box, chakra, Grid, Text, Button } from "@chakra-ui/react";
 import { isEmptyHtml } from "~/utils";
 
 import { GetStaticProps, GetStaticPropsContext } from "next";
@@ -77,8 +77,8 @@ export const ModuleComponentTours = ({ ...props }) => {
       initialQueryState?.pageSize * currentPageIndex;
 
   return (
-    <MainContent>
-      <Box layerStyle="blurredLightGray">
+    <MainContent layerStyle="blurredLightGray">
+      <Grid w="100%" templateRows="1fr auto" minH="100%">
         <Box px="20px" pt="0.5em">
           <Box mb="3">
             <Text className="highlight" color="cm.text" fontWeight="bold">
@@ -130,9 +130,9 @@ export const ModuleComponentTours = ({ ...props }) => {
             )}
             {loading && <LoadingIcon />}
           </Box>
-          <Footer noBackground />
         </Box>
-      </Box>
+        <Footer noBackground />
+      </Grid>
     </MainContent>
   );
 };

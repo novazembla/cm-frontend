@@ -4,8 +4,12 @@ import { getApolloClient } from "~/services";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { Box, Flex, chakra } from "@chakra-ui/react";
-import { gql, useQuery } from "@apollo/client";
+import { Box, Flex, IconButton, Link, chakra, Collapse } from "@chakra-ui/react";
+import { gql } from "@apollo/client";
+
+import Arrow from "~/assets/svg/Pfeil_quer.svg";
+import Cross from "~/assets/svg/Kreuz.svg";
+
 import {
   MultiLangHtml,
   CardTour,
@@ -33,9 +37,15 @@ export const Home = ({ homepage }: { homepage: any }) => {
 
   const { isMobile, isTablet, isDesktopAndUp } = useIsBreakPoint();
 
+  const [isMSOpen, setIsMSOpen] = useState(true);
+
   const mobileCardWrapper = isMobile
     ? { flexBasis: "295px", minW: "295px", maxW: "295px" }
     : {};
+
+  useEffect(() => {
+    setIsMSOpen(true);
+  }, []);
 
   if (!homepage) return <></>;
 
@@ -45,32 +55,52 @@ export const Home = ({ homepage }: { homepage: any }) => {
       isVerticalContent={!isTablet && !isDesktopAndUp}
     >
       <Box>
-        <Box
-          layerStyle="pageContainerWhite"
-          borderBottom="1px solid"
-          borderColor="cm.accentDark"
-          position={isMobile ? "fixed" : "static"}
-          top="60px"
-        >
-       {homepage?.missionStatement && (
-            <Box>
-              <b>
-                <MultiLangHtml json={homepage?.missionStatement} />
-              </b>
+        {homepage?.missionStatement && (
+          <Collapse in={isMSOpen}>
+            <Box
+              layerStyle="pageContainerWhite"
+              borderBottom="1px solid"
+              borderColor="cm.accentDark"
+              position={isMobile ? "fixed" : "static"}
+              top="60px"
+            >
+              <Box>
+                <b>
+                  <MultiLangHtml json={homepage?.missionStatement} />
+                </b>
 
-              {homepage?.missionStatementPage?.slug && (
-                <NextLink
-                  href={`/page/${getMultilangValue(
-                    homepage?.missionStatementPage?.slug
-                  )}/`}
-      
+                <Flex
+                  w="100%"
+                  alignItems="center"
+                  justifyContent={isMobile ? "space-between" : "flex-end"}
                 >
-                  Link to page
-                </NextLink>
-              )}
+                  {homepage?.missionStatementPage?.slug && (
+                    <NextLink
+                      href={`/page/${getMultilangValue(
+                        homepage?.missionStatementPage?.slug
+                      )}/`}
+                    > 
+                      <IconButton
+                        as={Link}
+                        variant="outline"
+                        icon={<Arrow />}
+                        aria-label={t("mission.statement.read", "read mission statement")}
+                      />
+                    </NextLink>
+                  )}
+                  {isMobile && (
+                    <IconButton
+                      variant="outline"
+                      icon={<Cross />}
+                      aria-label={t("mission.statement.close", "close")}
+                      onClick={() => setIsMSOpen(!isMSOpen)}
+                    />
+                  )}
+                </Flex>
+              </Box>
             </Box>
-          )}
-        </Box>
+          </Collapse>
+        )}
         {homepage?.highlights?.length > 0 && (
           <Box
             layerStyle="blurredLightGray"
@@ -88,11 +118,19 @@ export const Home = ({ homepage }: { homepage: any }) => {
               color="cm.text"
               mt="0.5em"
               px="20px"
+              textTransform="uppercase"
+              textAlign={isMobile ? "center" : undefined}
+              fontWeight="bold"
             >
               {t("homepage.title.highlights", "Highlights")}
             </chakra.h3>
 
-            <Box overflowY={isMobile ? "auto" : "hidden"} w="100%" pl="20px">
+            <Box
+              overflowY={isMobile ? "auto" : "hidden"}
+              w="100%"
+              pl="20px"
+              pb={isMobile ? "60px" : "20px"}
+            >
               <Flex
                 flexDirection={isMobile ? "row" : "column"}
                 // w={isMobile ? "2000px" : "100%"}

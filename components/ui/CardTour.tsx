@@ -67,10 +67,10 @@ export const CardTour = ({
                     w="100%"
                     h="100%"
                     sx={{
-                      mixBlendMode: "multiply",
+                      mixBlendMode: "screen",
 
                       "img, picture": {
-                        filter: "grayscale()",
+                        filter: " grayscale(1)",
                       },
                     }}
                   >
