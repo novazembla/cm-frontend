@@ -6,8 +6,6 @@ import { motion, useIsPresent } from "framer-motion";
 import { useRouter } from "next/router";
 import { useScrollStateContext } from "~/provider";
 
-const PAN_TRIGGER_OPEN_THRESHOLD = 30;
-const PAN_TRIGGER_CLOSE_THRESHOLD = 180;
 
 const contentPaddingTop = {
   base: "60px",
@@ -80,6 +78,8 @@ export const MainContent = ({
     xl: "50px",
     "2xl": "calc(8vw - 55px)",
   });
+
+  const PAN_TRIGGER_CLOSE_THRESHOLD = isMobile ? 120: 180;
 
   // useEffect(() => {
   //   if (isScrollingObserved || typeof window === undefined) return;

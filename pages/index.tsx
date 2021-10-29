@@ -129,7 +129,8 @@ export const Home = ({ homepage }: { homepage: any }) => {
               overflowY={isMobile ? "auto" : "hidden"}
               w="100%"
               pl="20px"
-              pb={isMobile ? "60px" : "20px"}
+              pb="20px"
+              mb={isMobile ? "40px" : "0px"}
             >
               <Flex
                 flexDirection={isMobile ? "row" : "column"}
