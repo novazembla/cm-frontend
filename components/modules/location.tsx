@@ -561,8 +561,6 @@ export const ModuleLocationGetStaticProps: GetStaticProps = async (context) => {
 
   const accessToken = (context?.previewData as any)?.accessToken;
 
-  console.log(context?.params?.slug);
-
   const { data } = await client.query({
     query: locationQuery,
     variables: {

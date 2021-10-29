@@ -32,6 +32,7 @@ const settingsQuery = gql`
           color
           taxonomyId
           colorDark
+          _count
         }
       }
     }
@@ -42,6 +43,22 @@ const parseSettings = (settings: any) => {
   if (settings && isObject(settings)) {
     return {
       ...settings,
+      taxonomies:
+        settings?.taxonomies?.length > 0 && settings?.taxMapping
+          ? Object.keys(settings?.taxMapping).reduce((acc, key) => {
+              const taxonomy = settings?.taxonomies.find(
+                (t: any) =>
+                  parseInt(t.id) === parseInt(settings?.taxMapping[key])
+              );
+              if (taxonomy) {
+                return {
+                  ...acc,
+                  [key]: taxonomy,
+                };
+              }
+              return acc;
+            }, settings?.taxMapping)
+          : {},
       terms:
         settings?.taxonomies?.length > 0
           ? settings?.taxonomies.reduce((acc: any, tax: any) => {

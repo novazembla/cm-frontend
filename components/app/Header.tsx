@@ -162,6 +162,7 @@ export const Header = (/* props */) => {
                         _hover={{
                           filter: "brightness(70%)",
                         }}
+                        bg="#fff"
                       />
                     </Box>
                   </motion.div>
@@ -196,6 +197,7 @@ export const Header = (/* props */) => {
                         _hover={{
                           filter: "brightness(70%)",
                         }}
+                        bg="#fff"
                         pointerEvents={isQuickSearchOpen ? "none" : undefined}
                       />
                     </Box>
@@ -227,6 +229,7 @@ export const Header = (/* props */) => {
                       onClick={() => {
                         onMenuToggle();
                       }}
+                      bg="#fff"
                       pointerEvents={isMenuOpen ? undefined : "none"}
                       transition="all 0.3s"
                       _hover={{
@@ -256,6 +259,7 @@ export const Header = (/* props */) => {
                       paddingInlineEnd="0"
                       w="40px"
                       h="40px"
+                      bg="#fff"
                       onClick={() => {
                         if (!isMenuOpen && isQuickSearchOpen) {
                           onQuickSearchToggle();

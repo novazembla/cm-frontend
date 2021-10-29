@@ -168,61 +168,6 @@ export const ApiImage = ({
     }
   }
 
-  if (
-    !content &&
-    (status === ImageStatusEnum.ERROR || polledStatus === ImageStatusEnum.ERROR)
-  )
-    content = (
-      <Flex
-        justifyContent="center"
-        alignItems="center"
-        fontSize="lg"
-        color="gray.800"
-        border="2px solid"
-        bg="red.100"
-        borderColor="red.100"
-        minH="200px"
-        p="4"
-        textAlign="center"
-      >
-        {t(
-          "apiimage.errormsg",
-          "The image could unfortunately not be processed. Please try uploading again."
-        )}
-      </Flex>
-    );
-
-  if (
-    !content &&
-    (status === ImageStatusEnum.UPLOADED ||
-      status === ImageStatusEnum.PROCESSING ||
-      status === ImageStatusEnum.FAILEDRETRY)
-  )
-    content = (
-      <Flex
-        justifyContent="center"
-        alignItems="center"
-        direction="column"
-        fontSize="md"
-        color="gray.800"
-        border="2px solid"
-        bg="green.200"
-        borderColor="green.200"
-        minH="100%"
-        p="4"
-        textAlign="center"
-      >
-        <Text pb="4">
-          {t(
-            "apiimage.processsing",
-            "Image successfuly uploaded. We are processing it now"
-          )}
-        </Text>
-
-        <BeatLoader />
-      </Flex>
-    );
-
   if ((!content || !id) && showPlaceholder)
     content = (
       <Flex

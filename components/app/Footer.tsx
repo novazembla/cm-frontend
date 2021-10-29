@@ -64,6 +64,7 @@ export const Footer = ({
             paddingInlineStart="0"
             paddingInlineEnd="0"
             h="50px"
+            bg="transparent"
             onClick={() => {
               if (window) {
                 window.scrollTo({

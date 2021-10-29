@@ -1,10 +1,53 @@
 // Defaults are defined here:
 // https://github.com/chakra-ui/chakra-ui/tree/main/packages/theme/src/components
 
+import { isNonEmptyArray } from "@apollo/client/utilities";
 import { chakraToBreakpointArray } from "./helpers";
 
-
 export const components = {
+  Accordion: {
+    baseStyle: {
+      container: {
+        border: "none",
+        pt: 1,
+        _first: {
+          pt: 0,
+        }
+      },
+      button: {
+        transitionProperty: "common",
+        transitionDuration: "normal",
+        fontSize: "1rem",
+        borderBottom: "1px solid",
+        borderColor: "cm.accentDark",
+
+        _focus: {
+          boxShadow: "none",
+        },
+        _hover: {
+          bg: "none",
+          borderColor: "cm.accentLight",
+        },
+        _disabled: {
+          opacity: 0.4,
+          cursor: "not-allowed",
+        },
+        pr: 2,
+        pl: 0,
+        pt: 2,
+
+        
+      },
+      panel: {
+        pt: 0,
+        px: 0,
+        pb: 0,  
+      },
+      icon: {
+        fontSize: "1.25em",
+      },
+    },
+  },
   Button: {
     baseStyle: {
       borderRadius: "0",
@@ -29,15 +72,83 @@ export const components = {
   },
   Checkbox: {
     baseStyle: {
+      icon: {
+        diplay: "none"
+      },
       control: {
-        borderColor: "gray.500",
-
+        borderColor: "cm.accentLight",
+        borderRadius: "2px",
         _disabled: {
           bg: "gray.100",
           borderColor: "gray.300",
         },
+        _checked: {
+          bg: "#fff",
+          position: "relative",
+          "&::after": {
+            position: "absolute",
+            top: "1px",
+            left: "1px",
+            width: "10px",
+            height: "10px",
+            borderRadius: "2px",
+            content: '""',
+            bg:"cm.accentLight",
+          }
+        }
       },
     },
+
+    
+      // "parts": [
+      //     "control",
+      //     "icon",
+      //     "container",
+      //     "label"
+      // ],
+      // "sizes": {
+      //     "sm": {
+      //         "control": {
+      //             "h": 3,
+      //             "w": 3
+      //         },
+      //         "label": {
+      //             "fontSize": "sm"
+      //         },
+      //         "icon": {
+      //             "fontSize": "0.45rem"
+      //         }
+      //     },
+      //     "md": {
+      //         "control": {
+      //             "w": 4,
+      //             "h": 4
+      //         },
+      //         "label": {
+      //             "fontSize": "md"
+      //         },
+      //         "icon": {
+      //             "fontSize": "0.625rem"
+      //         }
+      //     },
+      //     "lg": {
+      //         "control": {
+      //             "w": 5,
+      //             "h": 5
+      //         },
+      //         "label": {
+      //             "fontSize": "lg"
+      //         },
+      //         "icon": {
+      //             "fontSize": "0.625rem"
+      //         }
+      //     }
+      // },
+      // "defaultProps": {
+      //     "size": "md",
+      //     "colorScheme": "wine"
+      // }
+  
   },
   Divider: {
     baseStyle: {
@@ -49,16 +160,16 @@ export const components = {
   },
   Heading: {
     sizes: {
-      "2xl":  {
+      "2xl": {
         lineHeight: chakraToBreakpointArray({
           base: "25px",
           md: "31px",
-          xl:  "31px",
+          xl: "31px",
         }),
         fontSize: chakraToBreakpointArray({
           base: "22px",
           md: "28px",
-          xl:  "28px",
+          xl: "28px",
         }),
       },
     },
@@ -124,5 +235,4 @@ export const components = {
       },
     },
   },
-  
 };

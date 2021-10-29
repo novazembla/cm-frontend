@@ -255,6 +255,10 @@ export const MainContent = ({
                 }}
                 transition="transform 0.3s"
                 transform={isDrawerOpen ? "rotate(180deg)" : ""}
+                bg="transparent"
+                _active={{
+                  bg:"transparent"
+                }}
               />
             </Box>
           </Box>

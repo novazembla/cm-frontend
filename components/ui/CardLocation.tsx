@@ -33,23 +33,23 @@ export const CardLocation = ({
   let colorDark = config.colorDark;
 
   if (location?.primaryTerms?.length > 0) {
-    meta = getMultilangValue(location?.primaryTerms[0]?.name);
+    meta = getMultilangValue(location?.primaryTerms?.[0]?.name);
 
-    if (settings?.terms && location?.primaryTerms[0].id in settings?.terms) {
-      color = settings?.terms[location?.primaryTerms[0].id].color ?? color;
+    if (settings?.terms && location?.primaryTerms?.[0]?.id in settings?.terms) {
+      color = settings?.terms[location?.primaryTerms?.[0]?.id].color ?? color;
 
       colorDark =
-        settings?.terms[location?.primaryTerms[0].id].colorDark ??
-        settings?.terms[location?.primaryTerms[0].id].color ??
+        settings?.terms[location?.primaryTerms?.[0]?.id].colorDark ??
+        settings?.terms[location?.primaryTerms?.[0]?.id].color ??
         color;
     }
   } else if (location?.terms?.length > 0) {
-    meta = getMultilangValue(location?.terms[0]?.name);
-    if (settings?.terms && location?.terms[0].id in settings?.terms) {
-      color = settings?.terms[location?.terms[0].id].color ?? color;
+    meta = getMultilangValue(location?.terms?.[0]?.name);
+    if (settings?.terms && location?.terms?.[0]?.id in settings?.terms) {
+      color = settings?.terms[location?.terms?.[0]?.id].color ?? color;
       colorDark =
-        settings?.terms[location?.terms[0].id].colorDark ??
-        settings?.terms[location?.terms[0].id].color ??
+        settings?.terms[location?.terms?.[0]?.id].colorDark ??
+        settings?.terms[location?.terms?.[0]?.id].color ??
         color;
     }
   } else {

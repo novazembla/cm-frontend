@@ -115,7 +115,7 @@ const themeConfig = {
         "&.active": {
           fontWeight: "bold",
           color: "cm.accentDark",
-        }
+        },
       },
       "a:not(.chakra-button)": {
         color: "wine.600",
@@ -146,6 +146,17 @@ const themeConfig = {
       text: "#333",
       accentDark: "#660D36",
       accentLight: "#E42B20",
+
+      50: "#ffe5e4",
+      100: "#fcbcb9",
+      200: "#f3928c",
+      300: "#ed675f",
+      400: "#e63c32",
+      500: "#cd2319",
+      600: "#a01a12",
+      700: "#73100c",
+      800: "#470805",
+      900: "#1f0000",
     },
   },
   shadows: {
@@ -363,7 +374,7 @@ export const chakraTheme = extendTheme(
   ]),
 
   withDefaultColorScheme({
-    colorScheme: "wine",
+    colorScheme: "cm",
     components: ["Button", "Badge", "Checkbox", "Switch"],
   }),
   withDefaultVariant({
