@@ -166,7 +166,7 @@ export const CardEvent = ({
                 i18n.language === "en" ? "/en" : ""
               }/${type}/${getMultilangValue(event.slug)}/`}
             >
-              <LinkOverlay textStyle="headline">
+              <LinkOverlay textStyle="headline" textDecoration="none">
                 <MultiLangValue json={event.title} />
               </LinkOverlay>
             </NextLink>

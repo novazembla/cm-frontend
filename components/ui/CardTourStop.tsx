@@ -143,7 +143,7 @@ export const CardTourStop = ({
                 i18n.language === "en" ? "/en" : ""
               }/${type}/${getMultilangValue(tourStop?.location.slug)}/`}
             >
-              <LinkOverlay textStyle="headline">
+              <LinkOverlay textStyle="headline" textDecoration="none">
                 <MultiLangValue json={tourStop.title} />
               </LinkOverlay>
             </NextLink>

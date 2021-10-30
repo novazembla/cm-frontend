@@ -111,7 +111,7 @@ export const MobileNav = () => {
           layerStyle="blurredLightGray"
           position="fixed"
           left="0"
-          bottom="0"
+          top="calc(100vh - 100px)"
           zIndex="modal"
           justifyContent="space-evenly"
           alignItems="center"

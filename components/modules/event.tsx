@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { gql } from "@apollo/client";
 import {
   MultiLangValue,
@@ -7,7 +8,15 @@ import {
 } from "~/components/ui";
 import { Footer } from "~/components/app";
 import { getApolloClient } from "~/services";
-import { Box, SimpleGrid, Text, chakra, Grid } from "@chakra-ui/react";
+import {
+  Box,
+  SimpleGrid,
+  Text,
+  chakra,
+  Grid,
+  Collapse,
+  Link,
+} from "@chakra-ui/react";
 import { isEmptyHtml } from "~/utils";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { MainContent } from "~/components/ui";
@@ -77,6 +86,14 @@ const eventQuery = gql`
 const getTime = (date: any, locale: string, includeEnd: boolean) => {
   try {
     const begin = new Date(date.begin);
+    const end = new Date(date.end);
+    if (
+      begin.getHours() === end.getHours() &&
+      begin.getMinutes() === end.getMinutes() &&
+      begin.getHours() < 6
+    ) {
+      return "";
+    }
 
     if (begin && !includeEnd) {
       return `${begin.toLocaleTimeString(locale, {
@@ -84,8 +101,6 @@ const getTime = (date: any, locale: string, includeEnd: boolean) => {
         minute: "2-digit",
       })}${locale === "de" ? " UHR" : ""}`;
     } else if (begin && includeEnd) {
-      const end = new Date(date.end);
-
       if (end && begin < end) {
         return `${begin.toLocaleTimeString(locale, {
           hour: "2-digit",
@@ -114,10 +129,10 @@ export const ModuleComponentEvent = ({
   props: any;
 }) => {
   const { t, getMultilangValue, i18n } = useAppTranslations();
-  const { isMobile } =
-    useIsBreakPoint();
+  const { isMobile } = useIsBreakPoint();
 
-    
+  const [showDates, setShowDates] = useState(false);
+
   let dateInfo: any = t("event.missingData.eventDate", "TBD");
   let timeInfo: any = "";
 
@@ -233,6 +248,38 @@ export const ModuleComponentEvent = ({
                 <MultiLangHtml json={event.description} />
               )}
             </Box>
+
+            {event?.meta?.event?.event_homepage && (
+              <Box className="item" mb="1em">
+                <Box
+                  mb="0.5em"
+                  color="cm.accentDark"
+                  textTransform="uppercase"
+                  textStyle="categories"
+                >
+                  {t("event.label.website", "Website")}
+                </Box>
+                <Box textStyle="card">
+                  <Link
+                    target="_blank"
+                    rel="no-referral no-follow"
+                    href={event?.meta?.event?.event_homepage}
+                    display="inline-block"
+                    textDecoration="underline"
+                    textDecorationColor="cm.accentLight"
+                    maxW="100%"
+                    overflow="hidden"
+                    whiteSpace="nowrap"
+                    textOverflow="ellipsis"
+                  >
+                    {event?.meta?.event?.event_homepagename
+                      ? event?.meta?.event?.event_homepagename
+                      : event?.meta?.event?.event_homepage}
+                  </Link>
+                </Box>
+              </Box>
+            )}
+
             <SimpleGrid columns={2} spacingX="0.5em" spacingY="1em">
               {!isEmptyHtml(event?.address ?? "") && (
                 <Box className="item">
@@ -300,13 +347,41 @@ export const ModuleComponentEvent = ({
                 >
                   {t("event.label.eventDatesMultiple", "Upcoming dates")}
                 </Box>
-                <Box textStyle="card">
-                  <Box
-                    dangerouslySetInnerHTML={{
-                      __html: multipleUpcommingDates.join(""),
-                    }}
-                  />
-                </Box>
+
+                {multipleUpcommingDates?.length > 5 ? (
+                  <Box textStyle="card">
+                    <Collapse
+                      startingHeight={isMobile ? 100 : 130}
+                      in={showDates}
+                    >
+                      <Box
+                        dangerouslySetInnerHTML={{
+                          __html: multipleUpcommingDates.join(""),
+                        }}
+                      />
+                    </Collapse>
+                    <Link
+                      size="sm"
+                      onClick={() => setShowDates(!showDates)}
+                      pt="1rem"
+                      display="inline-block"
+                      textDecoration="underline"
+                      textDecorationColor="cm.accentLight"
+                    >
+                      {showDates
+                        ? t("button.showLess", "Show less")
+                        : t("button.showMore", "Show all")}
+                    </Link>
+                  </Box>
+                ) : (
+                  <Box textStyle="card">
+                    <Box
+                      dangerouslySetInnerHTML={{
+                        __html: multipleUpcommingDates.join(""),
+                      }}
+                    />
+                  </Box>
+                )}
               </Box>
             )}
           </Box>

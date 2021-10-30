@@ -139,7 +139,7 @@ export const CardTour = ({
               }/${type}/${getMultilangValue(tour.slug)}/`}
               passHref
             >
-              <LinkOverlay textStyle="headline">
+              <LinkOverlay textStyle="headline" textDecoration="none">
                 <MultiLangValue json={tour.title} />
               </LinkOverlay>
             </NextLink>

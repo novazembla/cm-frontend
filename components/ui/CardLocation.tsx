@@ -144,7 +144,7 @@ export const CardLocation = ({
               }/${type}/${getMultilangValue(location.slug)}/`}
               passHref
             >
-              <LinkOverlay textStyle="headline">
+              <LinkOverlay textStyle="headline" textDecoration="none">
                 <MultiLangValue json={location.title} />
               </LinkOverlay>
             </NextLink>

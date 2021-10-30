@@ -102,31 +102,22 @@ const themeConfig = {
         },
       },
       a: {
-        // display: "inline-block",
-        // borderBottom: "1px solid",
-        // borderColor: "cm.accentLight",
         transitionProperty: "common",
         transitionDuration: "fast",
         cursor: "pointer",
-        textDecoration: "none",
+        textDecoration: "underline",
+        textDecorationColor: "cm.accentLight",
         outline: "none",
         _hover: {
-          textDecoration: "none",
+          color: "cm.accentDark",
+          textDecorationColor: "cm.accentDark",
         },
         transition: "all 0.3s !important",
         "&.active": {
           fontWeight: "bold",
           color: "cm.accentDark",
+          textDecorationColor: "cm.accentDark",
         },
-      },
-      "a:not(.chakra-button)": {
-        color: "wine.600",
-        _hover: {
-          color: "cm.accentDark",
-        },
-        // _focus: {
-        //   "boxShadow": "outline"
-        // }
       },
       "p a": {
         textDecoration: "underline",
@@ -143,6 +134,9 @@ const themeConfig = {
     },
   },
   colors: {
+    blur: {
+      gray: "rgba(180,180,180,0.65)",
+    },
     cm: {
       bgFooter: "#ddd",
       text: "#333",
@@ -196,7 +190,7 @@ const themeConfig = {
       },
     },
     blurredLightGray: {
-      bg: "rgba(180,180,180,0.65)",
+      bg: "var(--chakra-colors-blur-gray)",
       backdropFilter: "blur(20px)",
       backgroundBlendMode: "lighten",
     },

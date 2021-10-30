@@ -8,6 +8,9 @@ export const ActiveLink = ({
   children,
   activeClassName = "active",
   href,
+  style = {
+    textDecoration:"none"
+  },
   ...props
 }: {
   children: React.ReactNode;
@@ -15,6 +18,7 @@ export const ActiveLink = ({
   href: string;
   onClick?: (event: MouseEvent) => void,
   props?: any;
+  style?: any;
 }) => {
   const { asPath } = useRouter();
 
@@ -29,7 +33,7 @@ export const ActiveLink = ({
 
   return (
     <NextLink href={href} scroll={false}>
-      <a {...{ className }} onClick={(props as any)?.onClick}>
+      <a {...{ className }} onClick={(props as any)?.onClick} style={style}>
         {children}
       </a>
     </NextLink>

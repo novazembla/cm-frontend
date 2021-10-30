@@ -1,4 +1,4 @@
-import React from "react";
+import {useEffect} from "react";
 import Search from "~/assets/svg/mobil_navigation_leiste_suche.svg";
 import Cross from "~/assets/svg/Kreuz.svg";
 import { motion, AnimatePresence } from "framer-motion";
@@ -21,6 +21,14 @@ export const LayoutFull = ({ children }: AppProps) => {
     useIsBreakPoint();
   const { onMenuToggle, isMenuOpen } = useMenuButtonContext();
   const { isQuickSearchOpen, onQuickSearchToggle } = useQuickSearchContext();
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1){
+        document.documentElement.style.setProperty('--chakra-colors-blur-gray', 'rgba(180,180,180,0.95)');
+      }
+    }
+  }, [])
 
   return (
     <>
