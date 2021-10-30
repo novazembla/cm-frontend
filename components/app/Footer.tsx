@@ -26,7 +26,7 @@ export const Footer = ({
   return (
     <Box
       layerStyle={!noBackground ? "blurredLightGray" : undefined}
-      py={{
+      pt={{
         base: "20px",
         sm: "20px",
         md: "45px",
@@ -35,8 +35,14 @@ export const Footer = ({
       px={{
         base: !noBackground || isMobile ? "20px" : 0,
         sm: !noBackground || isMobile ? "20px" : 0,
-        md: !noBackground ? "45px" : "25px",
-        xl: !noBackground ? "55px" : "35px",
+        md: "45px",
+        xl: "45px",
+      }}
+      pb={{
+        base: isMobile ? "120px" : !noBackground ? "20px" : 0,
+        sm: isMobile ? "120px" : !noBackground ? "20px" : 0,
+        md: "45px",
+        xl: "55px",
       }}
       mt={!noBackground ? "60px" : undefined}
     >

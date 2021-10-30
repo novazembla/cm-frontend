@@ -11,7 +11,7 @@ import { Box, SimpleGrid, Text, chakra, Grid } from "@chakra-ui/react";
 import { isEmptyHtml } from "~/utils";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { MainContent } from "~/components/ui";
-import { useAppTranslations } from "~/hooks";
+import { useAppTranslations, useIsBreakPoint } from "~/hooks";
 
 const eventQuery = gql`
   query ($slug: String!) {
@@ -114,7 +114,10 @@ export const ModuleComponentEvent = ({
   props: any;
 }) => {
   const { t, getMultilangValue, i18n } = useAppTranslations();
+  const { isMobile } =
+    useIsBreakPoint();
 
+    
   let dateInfo: any = t("event.missingData.eventDate", "TBD");
   let timeInfo: any = "";
 
@@ -177,8 +180,8 @@ export const ModuleComponentEvent = ({
   }
 
   return (
-    <MainContent layerStyle="pageBg">
-      <Grid w="100%" templateRows="1fr auto" minH="100%">
+    <MainContent layerStyle="pageBg" noMobileBottomPadding>
+      <Grid w="100%" templateRows="1fr auto" templateColumns="100%" minH="100%">
         <Box layerStyle="page">
           <Box layerStyle="headingPullOut" mb="3">
             <Text className="highlight" color="cm.text" fontWeight="bold">

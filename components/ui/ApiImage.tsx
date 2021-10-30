@@ -58,6 +58,7 @@ export type ApiImageProps = {
   showPlaceholder?: boolean;
   placeholder?: string;
   sizes?: string;
+  imgCssProps?: any;
 };
 
 export const ApiImage = ({
@@ -72,6 +73,7 @@ export const ApiImage = ({
   showPlaceholder,
   cropPosition,
   sizes = "100vw",
+  imgCssProps,
 }: ApiImageProps) => {
   const { t, getMultilangValue } = useAppTranslations();
 
@@ -161,6 +163,7 @@ export const ApiImage = ({
               width={originalWidth}
               height={originalHeight}
               bg="transparent"
+              {...(imgCssProps ? imgCssProps : {})}              
             />
           </picture>
         );

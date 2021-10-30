@@ -212,7 +212,6 @@ const themeConfig = {
       p: { base: 4, md: 5 },
     },
     page: {
-      minH: "60vh",
       pt: chakraToBreakpointArray({
         base: "7px",
         md: "17px",

@@ -83,6 +83,9 @@ export const CardTour = ({
                       sizes="(min-width: 45rem) 400px, 40vw"
                       objectFit="cover"
                       cropPosition={tour?.heroImage?.cropPosition}
+                      imgCssProps={{
+                        borderTopRightRadius: "var(--chakra-radii-lg)"
+                      }}
                     />
                   </Box>
                 )}

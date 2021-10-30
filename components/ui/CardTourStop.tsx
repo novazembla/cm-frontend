@@ -102,6 +102,9 @@ export const CardTourStop = ({
                     sizes="(min-width: 45rem) 400px, 40vw"
                     objectFit="cover"
                     cropPosition={tourStop?.heroImage?.cropPosition}
+                    imgCssProps={{
+                      borderTopRightRadius: "var(--chakra-radii-lg)"
+                    }}
                   />
                 </Box>
               )}

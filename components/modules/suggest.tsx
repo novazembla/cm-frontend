@@ -66,8 +66,8 @@ export const ModuleComponentSuggest = () => {
   const { t } = useAppTranslations();
   return (
 
-    <MainContent isDrawer layerStyle="pageBg">
-      <Grid w="100%" templateRows="1fr auto" minH="100%">
+    <MainContent isDrawer layerStyle="pageBg" noMobileBottomPadding>
+      <Grid w="100%" templateRows="1fr auto" templateColumns="100%" minH="100%">
         <Box layerStyle="page">
           <Box layerStyle="headingPullOut" mb="3">
             <chakra.h1 className="highlight" color="cm.text" fontWeight="bold">

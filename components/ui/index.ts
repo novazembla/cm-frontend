@@ -11,4 +11,4 @@ export * from "./CardTourStop";
 export * from "./ListedEvent";
 export * from "./LoadingIcon";
 export * from "./ErrorMessage";
-export * from "./MainContent";
+export * from "../app/MainContent";

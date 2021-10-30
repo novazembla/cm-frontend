@@ -1,4 +1,4 @@
-import { Flex, IconButton, Box, chakra } from "@chakra-ui/react";
+import { Flex, IconButton, Box, Grid, chakra } from "@chakra-ui/react";
 import { motion, AnimatePresence } from "framer-motion";
 import { RemoveScroll } from "react-remove-scroll";
 
@@ -26,7 +26,12 @@ export const MobileNav = () => {
   const { isMobile, isTablet, isTabletWide, isDesktopAndUp } =
     useIsBreakPoint();
 
-  console.log(isMobile, isTablet, isTabletWide, isTablet ? (isTabletWide ? "50vw" : "66.66vw") : "100vw");
+  console.log(
+    isMobile,
+    isTablet,
+    isTabletWide,
+    isTablet ? (isTabletWide ? "50vw" : "66.66vw") : "100vw"
+  );
 
   return (
     <>
@@ -44,54 +49,54 @@ export const MobileNav = () => {
               height: "100vh",
               width: isTablet ? (isTabletWide ? "66.66vw" : "80vw") : "100vw",
               zIndex: 1100,
-              overflowY: "auto",
             }}
           >
             <RemoveScroll>
               <Box
                 h="100vh"
                 layerStyle="pageBg"
-                w="100%"                
+                w="100%"
+                overflowY="auto"
+                pt="60px"
+                pb={{
+                  base: "100px",
+                  md: "45px",
+                }}
               >
                 <Flex
-                  layerStyle="page"
-                  w="100%"
+                  overflow="hidden"
                   minH="100%"
-                  h="100%"
                   alignItems={isTablet ? "flex-start" : "flex-end"}
                 >
-                  <Flex
-                    sx={{
-                      a: {
-                        display: "inline-block",
-                        marginBottom: "0.3em",
-                        _last: {
-                          marginBottom: 0,
+                  <Flex layerStyle="page" w="100%" minH="100%" h="100%">
+                    <Flex
+                      sx={{
+                        a: {
+                          display: "inline-block",
+                          marginBottom: "0.3em",
+                          _last: {
+                            marginBottom: 0,
+                          },
+                          pb: "3px",
+                          mt: "0.5em",
+                          borderBottom: "1px solid #ff0",
+                          borderColor: "cm.accentLight",
                         },
-                        pb: "3px",
-                        mt: "0.5em",
-                        borderBottom: "1px solid #ff0",
-                        borderColor: "cm.accentLight",
-                      },
-                    }}
-                    pt="60px"
-                    pb={{
-                      base: "100px",
-                      md: "45px",
-                    }}
-                    direction={{
-                      base: "column",
-                    }}
-                    textStyle="headline"
-                    fontWeight="bold"
-                  >
-                    {config.nav.main.map((link: any, index: number) => (
-                      <chakra.span key={`nav-link-${index}`}>
-                        <ActiveLink href={getMultilangValue(link.path)}>
-                          <MultiLangValue json={link.title} />
-                        </ActiveLink>
-                      </chakra.span>
-                    ))}
+                      }}
+                      direction={{
+                        base: "column",
+                      }}
+                      textStyle="headline"
+                      fontWeight="bold"
+                    >
+                      {config.nav.main.map((link: any, index: number) => (
+                        <chakra.span key={`nav-link-${index}`}>
+                          <ActiveLink href={getMultilangValue(link.path)}>
+                            <MultiLangValue json={link.title} />
+                          </ActiveLink>
+                        </chakra.span>
+                      ))}
+                    </Flex>
                   </Flex>
                 </Flex>
               </Box>

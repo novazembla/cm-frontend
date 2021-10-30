@@ -6,6 +6,7 @@ import {
   Box,
   chakra,
   Grid,
+  Flex,
   Accordion,
   AccordionItem,
   AccordionButton,
@@ -227,9 +228,9 @@ export const ModuleComponentEvents = ({ ...props }) => {
   }, [watchVariables, watch, refetch, currentQueryState]);
 
   return (
-    <MainContent layerStyle="pageBg">
-      <Grid w="100%" templateRows="1fr auto" minH="100%">
-        <Box layerStyle="page">
+    <MainContent layerStyle="pageBg" noMobileBottomPadding>
+      <Grid w="100%" templateRows="1fr auto" templateColumns="100%" minH="100%" className="aaa">
+        <Box layerStyle="page" className="bbb">
           <Box layerStyle="headingPullOut" mb="3">
             <chakra.h1 className="highlight" color="cm.text" fontWeight="bold">
               {t("page.title", "Events")}
@@ -328,22 +329,29 @@ export const ModuleComponentEvents = ({ ...props }) => {
               </Accordion>
             </form>
           </FormProvider>
-          <Box
-            textStyle="larger"
-            my="1em"
-            py="3"
-            borderColor="cm.accentDark"
-            borderTop="1px solid"
-            borderBottom="1px solid"
-          >
-            {data?.events?.totalCount} {t("page.eventcount", "Events")}
-          </Box>
-
-          <Box>
-            {error && <ErrorMessage type="dataLoad" />}
-
+          <Flex
+              textStyle="larger"
+              mt="1em"
+              borderColor="cm.accentDark"
+              borderTop="1px solid"
+              borderBottom="1px solid"
+              justifyContent={loading ? "center" : "flex-start"}
+              h="50px"
+              alignItems="center"
+            >
+              {loading && <LoadingIcon my="0" />}
+              {!loading && !error && (
+                <Box>
+                  {t("events.totalCount", "{{count}} locations found", {
+                    count: data?.events?.totalCount
+                  })}                  
+                </Box>
+              )}
+              {error && <ErrorMessage type="dataLoad" />}
+            </Flex>
+          <Box w="100%">
             {data?.events?.events?.length && (
-              <Box size="md" mt="3">
+              <Box size="md" mt="3" w="100%">
                 {data?.events?.events.map((event: any) => (
                   <ListedEvent key={`event-${event.id}`} event={event} />
                 ))}
@@ -374,8 +382,10 @@ export const ModuleComponentEvents = ({ ...props }) => {
                   Load more (DESIGN)
                 </Button>
               </Box>
-            )}
-            {loading && <LoadingIcon />}
+            )}      
+
+            {loading && currentPageIndex > 0 && <LoadingIcon />}
+
           </Box>
         </Box>
         <Footer />

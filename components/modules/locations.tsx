@@ -4,6 +4,7 @@ import { LoadingIcon, ErrorMessage, CardLocation } from "~/components/ui";
 import { Footer } from "~/components/app";
 import {
   Box,
+  Flex,
   chakra,
   Grid,
   Accordion,
@@ -164,7 +165,7 @@ export const ModuleComponentLocations = ({ ...props }) => {
               : {}),
             ...(keysToO?.length > 0
               ? {
-                typeOfOrganisation: mixed().when(keysToO, {
+                  typeOfOrganisation: mixed().when(keysToO, {
                     is: (...args: any[]) => {
                       return !!args.find((a) => a);
                     },
@@ -234,14 +235,15 @@ export const ModuleComponentLocations = ({ ...props }) => {
     },
     []
   );
-  const activeTermsToO = settings?.taxonomies?.typeOfOrganisation?.terms?.reduce(
-    (acc: any, t: any) => {
-      if (t._count?.locations > 0) return [...acc, t];
+  const activeTermsToO =
+    settings?.taxonomies?.typeOfOrganisation?.terms?.reduce(
+      (acc: any, t: any) => {
+        if (t._count?.locations > 0) return [...acc, t];
 
-      return acc;
-    },
-    []
-  );
+        return acc;
+      },
+      []
+    );
 
   const activeTermsTA = settings?.taxonomies?.targetAudience?.terms?.reduce(
     (acc: any, t: any) => {
@@ -256,10 +258,14 @@ export const ModuleComponentLocations = ({ ...props }) => {
   useEffect(() => {
     const allVars = watch();
 
-    console.log(allVars)
+    console.log(allVars);
     // TODO: observe and/or filter
     const terms = Object.keys(allVars).reduce((acc: any, key: any) => {
-      if (key.indexOf("typeOfInstitution_") > -1 || key.indexOf("typeOfOrganisation_") > -1 || key.indexOf("typeTargetAudience_") > -1) {
+      if (
+        key.indexOf("typeOfInstitution_") > -1 ||
+        key.indexOf("typeOfOrganisation_") > -1 ||
+        key.indexOf("typeTargetAudience_") > -1
+      ) {
         if (allVars[key]) {
           return [...acc, parseInt(key.split("_")[1])];
         }
@@ -311,22 +317,25 @@ export const ModuleComponentLocations = ({ ...props }) => {
   }, [watchVariables, watch, refetch, currentQueryState]);
 
   return (
-    <MainContent layerStyle="blurredLightGray">
-      <Grid w="100%" templateRows="1fr auto" minH="100%">
+    <MainContent layerStyle="blurredLightGray" noMobileBottomPadding>
+      <Grid w="100%" templateRows="1fr auto" templateColumns="100%" minH="100%">
         <Box px="20px" pt="0.5em">
           <Box mb="3">
             <chakra.h1 className="highlight" color="cm.text" fontWeight="bold">
               {t("locations.title", "Map")}
             </chakra.h1>
           </Box>
-          <Box bg="#fff" borderRadius="lg" overflow="hidden" p="20px">
+          <Box bg="#fff" borderRadius="lg" overflow="hidden" p={{
+            base: "20px",
+            md: "35px"
+          }}>
             <FormProvider {...formMethods}>
               <form noValidate onSubmit={handleSubmit(onSubmit)}>
-                <Accordion allowToggle allowMultiple my="10">
+                <Accordion allowToggle allowMultiple mb="10">
                   {activeTermsToI?.length > 0 && (
                     <AccordionItem>
                       <h2>
-                        <AccordionButton>
+                        <AccordionButton pt="0">
                           <Box
                             flex="1"
                             textAlign="left"
@@ -369,7 +378,7 @@ export const ModuleComponentLocations = ({ ...props }) => {
                   {activeTermsTA?.length > 0 && (
                     <AccordionItem>
                       <h2>
-                        <AccordionButton>
+                        <AccordionButton pt="0">
                           <Box
                             flex="1"
                             textAlign="left"
@@ -378,7 +387,7 @@ export const ModuleComponentLocations = ({ ...props }) => {
                           >
                             {t(
                               "locations.filter.title.targetAudience",
-                              "Type of institution"
+                              "Target audience"
                             )}
                           </Box>
                           <AccordionIcon
@@ -412,7 +421,7 @@ export const ModuleComponentLocations = ({ ...props }) => {
                   {activeTermsToO?.length > 0 && (
                     <AccordionItem>
                       <h2>
-                        <AccordionButton>
+                        <AccordionButton pt="0">
                           <Box
                             flex="1"
                             textAlign="left"
@@ -456,26 +465,33 @@ export const ModuleComponentLocations = ({ ...props }) => {
               </form>
             </FormProvider>
 
-            {!loading && !error && (
-              <Box
-                textStyle="larger"
-                my="1em"
-                py="3"
-                borderColor="cm.accentDark"
-                borderTop="1px solid"
-                borderBottom="1px solid"
-              >
-                {data?.locations?.totalCount}{" "}
-                {t("page.locationcount", "Locations")}
-              </Box>
-            )}
+            <Flex
+              textStyle="larger"
+              mt="1em"
+              borderColor="cm.accentDark"
+              borderTop="1px solid"
+              borderBottom="1px solid"
+              justifyContent={loading ? "center" : "flex-start"}
+              h="50px"
+              alignItems="center"
+            >
+              {loading && <LoadingIcon my="0" />}
+              {!loading && !error && (
+                <Box>
+                  {t("locations.totalCount", "{{count}} locations found", {
+                    count: data?.locations?.totalCount
+                  })}                  
+                </Box>
+              )}
+              {error && <ErrorMessage type="dataLoad" />}
+            </Flex>
           </Box>
 
           <Box>
-            {error && <ErrorMessage type="dataLoad" />}
+            
 
             {data?.locations?.locations?.length && (
-              <Box size="md" mt="3">
+              <Box size="md" mt="20px">
                 {data?.locations?.locations.map((location: any) => (
                   <Box key={`location-${location.id}`} pb="20px">
                     <CardLocation location={location} />
@@ -509,10 +525,9 @@ export const ModuleComponentLocations = ({ ...props }) => {
                 </Button>
               </Box>
             )}
-            {loading && <LoadingIcon />}
           </Box>
         </Box>
-        <Footer noBackground/>
+        <Footer noBackground />
       </Grid>
     </MainContent>
   );

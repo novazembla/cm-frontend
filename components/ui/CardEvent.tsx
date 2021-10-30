@@ -110,6 +110,9 @@ export const CardEvent = ({
                       sizes="(min-width: 45rem) 400px, 40vw"
                       objectFit="cover"
                       cropPosition={event?.heroImage?.cropPosition}
+                      imgCssProps={{
+                        borderTopRightRadius: "var(--chakra-radii-lg)",
+                      }}
                     />
                   </Box>
                 )}
@@ -157,16 +160,15 @@ export const CardEvent = ({
               },
             }}
           >
-            <NextLink passHref 
+            <NextLink
+              passHref
               href={`${
                 i18n.language === "en" ? "/en" : ""
-              }/${type}/${getMultilangValue(event.slug)}/`}>
-
-            <LinkOverlay
-              textStyle="headline"
+              }/${type}/${getMultilangValue(event.slug)}/`}
             >
-              <MultiLangValue json={event.title} />
-            </LinkOverlay>
+              <LinkOverlay textStyle="headline">
+                <MultiLangValue json={event.title} />
+              </LinkOverlay>
             </NextLink>
           </chakra.h2>
         </Box>

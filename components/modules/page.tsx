@@ -28,8 +28,8 @@ const pageQuery = gql`
 
 export const ModuleComponentPage = ({ page }: { page: any }) => {
   return (
-    <MainContent isDrawer layerStyle="pageBg">
-      <Grid w="100%" templateRows="1fr auto" minH="100%">
+    <MainContent isDrawer layerStyle="pageBg" noMobileBottomPadding>
+      <Grid w="100%" templateRows="1fr auto" templateColumns="100%" minH="100%">
         <Box layerStyle="page">
           <Box layerStyle="headingPullOut" mb="3">
             <chakra.h1 className="highlight" color="cm.text" fontWeight="bold">
@@ -37,7 +37,7 @@ export const ModuleComponentPage = ({ page }: { page: any }) => {
             </chakra.h1>
           </Box>
 
-          <Box color="cm.text">
+          <Box color="cm.text" w="100%">
             {page.heroImage && page.heroImage.id && (
               <Box w="100%" mt="1em" mb="3em" position="relative">
                 <Box bg="#333">

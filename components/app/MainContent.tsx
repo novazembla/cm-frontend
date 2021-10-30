@@ -22,8 +22,10 @@ export const MainContent = ({
   children,
   buttonVisible = true,
   layerStyle,
+  noMobileBottomPadding,
 }: {
   isDrawer?: boolean;
+  noMobileBottomPadding?: boolean;
   layerStyle?: string;
   buttonVisible?: boolean;
   isVerticalContent?: boolean;
@@ -279,7 +281,7 @@ export const MainContent = ({
                   color: "cm.accentLight",
                 }}
                 transition="all 0.5s"
-                transform={isDrawerOpen ? "rotate(180deg)" : ""}
+                transform={isDrawerOpen ? "rotate(180deg)" : "rotate(0deg)"}
                 bg="transparent"
                 _active={{
                   bg: "transparent",
@@ -341,7 +343,6 @@ export const MainContent = ({
           <Box
             className="content"
             pt={isVerticalContent ? 0 : contentPaddingTop}
-            pb={isMobile ? "100px" : undefined}
           >
             <Box
               ref={mainContentRef}
@@ -353,6 +354,7 @@ export const MainContent = ({
               overflowY={{
                 md: "auto",
               }}
+              pb={isMobile && !noMobileBottomPadding ? "100px" : undefined}
               layerStyle={layerStyle}
               onScroll={(e: React.UIEvent<HTMLDivElement>) => {
                 if (isPresent) {

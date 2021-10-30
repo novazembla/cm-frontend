@@ -29,7 +29,7 @@ export const CardLocation = ({
   const config = useConfigContext();
 
   let meta: any;
-  let color = "#fff";
+  let color = location ? config.colorDark : "#fff";
   let colorDark = config.colorDark;
 
   if (location?.primaryTerms?.length > 0) {
@@ -103,6 +103,9 @@ export const CardLocation = ({
                     sizes="(min-width: 45rem) 400px, 40vw"
                     objectFit="cover"
                     cropPosition={location?.heroImage?.cropPosition}
+                    imgCssProps={{
+                      borderTopRightRadius: "var(--chakra-radii-lg)"
+                    }}
                   />
                 </Box>
               )}
