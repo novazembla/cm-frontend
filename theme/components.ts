@@ -12,7 +12,7 @@ export const components = {
         pt: 1,
         _first: {
           pt: 0,
-        }
+        },
       },
       button: {
         transitionProperty: "common",
@@ -35,13 +35,11 @@ export const components = {
         pr: 2,
         pl: 0,
         pt: 2,
-
-        
       },
       panel: {
         pt: 0,
         px: 0,
-        pb: 0,  
+        pb: 0,
       },
       icon: {
         fontSize: "1.25em",
@@ -67,14 +65,52 @@ export const components = {
     variants: {
       outline: {
         bg: "white",
+        border: "1px solid",
+        borderColor: "cm.accentLight",
+
+        _hover: {
+          shadow: "0 0px 3px 1px #E42B20",
+          bg: "white",
+        },
+        _focus: {
+          shadow: "0 0px 3px 1px #E42B20",
+          bg: "white",
+        },
+        _active: {
+          shadow: "0 0px 3px 1px #E42B20",
+          bg: "cm.accentLight",
+
+          ".svg": {
+            filter: "invert(100%)"
+          }
+        },
+      },
+      solid: {
+        bg: "white",
         border: "none",
+
+        _hover: {
+          bg: "white",
+          ".svg": {
+            filter: "filter: invert(13%) sepia(17%) saturate(7488%) hue-rotate(306deg) brightness(99%) contrast(106%);"
+          }
+        },
+        _focus: {
+          bg: "white",
+          shadow: "0 0px 3px 1px #E42B20",
+        },
+        _active: {
+          ".svg": {
+            filter: "filter: invert(13%) sepia(17%) saturate(7488%) hue-rotate(306deg) brightness(99%) contrast(106%);"
+          }
+        },
       },
     },
   },
   Checkbox: {
     baseStyle: {
       icon: {
-        diplay: "none"
+        diplay: "none",
       },
       control: {
         borderColor: "cm.accentLight",
@@ -95,62 +131,60 @@ export const components = {
             width: "10px",
             height: "10px",
             content: '""',
-            bg:"cm.accentLight",
-          }
-        }
+            bg: "cm.accentLight",
+          },
+        },
       },
     },
 
-    
-      // "parts": [
-      //     "control",
-      //     "icon",
-      //     "container",
-      //     "label"
-      // ],
-      // "sizes": {
-      //     "sm": {
-      //         "control": {
-      //             "h": 3,
-      //             "w": 3
-      //         },
-      //         "label": {
-      //             "fontSize": "sm"
-      //         },
-      //         "icon": {
-      //             "fontSize": "0.45rem"
-      //         }
-      //     },
-      //     "md": {
-      //         "control": {
-      //             "w": 4,
-      //             "h": 4
-      //         },
-      //         "label": {
-      //             "fontSize": "md"
-      //         },
-      //         "icon": {
-      //             "fontSize": "0.625rem"
-      //         }
-      //     },
-      //     "lg": {
-      //         "control": {
-      //             "w": 5,
-      //             "h": 5
-      //         },
-      //         "label": {
-      //             "fontSize": "lg"
-      //         },
-      //         "icon": {
-      //             "fontSize": "0.625rem"
-      //         }
-      //     }
-      // },
-      // "defaultProps": {
-      //     "size": "md",
-      //     "colorScheme": "wine"
-      // }
-  
+    // "parts": [
+    //     "control",
+    //     "icon",
+    //     "container",
+    //     "label"
+    // ],
+    // "sizes": {
+    //     "sm": {
+    //         "control": {
+    //             "h": 3,
+    //             "w": 3
+    //         },
+    //         "label": {
+    //             "fontSize": "sm"
+    //         },
+    //         "icon": {
+    //             "fontSize": "0.45rem"
+    //         }
+    //     },
+    //     "md": {
+    //         "control": {
+    //             "w": 4,
+    //             "h": 4
+    //         },
+    //         "label": {
+    //             "fontSize": "md"
+    //         },
+    //         "icon": {
+    //             "fontSize": "0.625rem"
+    //         }
+    //     },
+    //     "lg": {
+    //         "control": {
+    //             "w": 5,
+    //             "h": 5
+    //         },
+    //         "label": {
+    //             "fontSize": "lg"
+    //         },
+    //         "icon": {
+    //             "fontSize": "0.625rem"
+    //         }
+    //     }
+    // },
+    // "defaultProps": {
+    //     "size": "md",
+    //     "colorScheme": "wine"
+    // }
   },
   Divider: {
     baseStyle: {
@@ -176,7 +210,7 @@ export const components = {
       },
     },
   },
-  
+
   Input: {
     variants: {
       outline: {

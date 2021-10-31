@@ -8,11 +8,10 @@ import {
   LinkBox,
   LinkOverlay,
 } from "@chakra-ui/react";
-import { MultiLangValue, ApiImage, TrimmedTextWithBottomEdge } from "~/components/ui";
+import { MultiLangValue, ApiImage, TrimmedTextWithBottomEdge, SVG } from "~/components/ui";
 import { htmlToTrimmedString } from "~/utils";
 import { useAppTranslations, useIsBreakPoint } from "~/hooks";
 import { useConfigContext, useSettingsContext } from "~/provider";
-import Arrow from "~/assets/svg/Pfeil_quer.svg";
 import NextLink from "next/link";
 
 export const CardEvent = ({
@@ -80,6 +79,7 @@ export const CardEvent = ({
       w="100%"
       maxW={isMobile && !fillContainer ? "275px" : "100%"}
       h={isMobile && fillContainer ? "100%" : undefined}
+      className="svgHover"
     >
       <Flex
         flexDirection={isMobile ? "column" : "row-reverse"}
@@ -208,9 +208,10 @@ export const CardEvent = ({
                 : {}),
             }}
           >
-            <Arrow
+            <SVG
+              type="arrow-right"
               width={isMobile ? "30px" : "45px"}
-              height={isMobile ? "20px" : "30px"}
+              height={isMobile ? "20px" : "30px"}          
             />
           </Box>
         </Flex>

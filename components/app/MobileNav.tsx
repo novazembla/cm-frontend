@@ -2,18 +2,13 @@ import { Flex, IconButton, Box, Grid, chakra } from "@chakra-ui/react";
 import { motion, AnimatePresence } from "framer-motion";
 import { RemoveScroll } from "react-remove-scroll";
 
-import Search from "~/assets/svg/mobil_navigation_leiste_suche.svg";
-import Menu from "~/assets/svg/mobil_navigation_leiste_menu.svg";
-import Cross from "~/assets/svg/Kreuz.svg";
-import Suggest from "~/assets/svg/mobil_navigation_leiste_vorschlag.svg";
-
 import {
   useMenuButtonContext,
   useConfigContext,
   useQuickSearchContext,
 } from "~/provider";
 import { useIsBreakPoint, useAppTranslations } from "~/hooks";
-import { ActiveLink, MultiLangValue } from "~/components/ui";
+import { ActiveLink, MultiLangValue, SVG } from "~/components/ui";
 import { useRouter } from "next/router";
 
 export const MobileNav = () => {
@@ -59,7 +54,7 @@ export const MobileNav = () => {
                 overflowY="auto"
                 pt="60px"
                 pb={{
-                  base: "100px",
+                  base: "60px",
                   md: "45px",
                 }}
               >
@@ -68,7 +63,7 @@ export const MobileNav = () => {
                   minH="100%"
                   alignItems={isTablet ? "flex-start" : "flex-end"}
                 >
-                  <Flex layerStyle="page" w="100%" minH="100%" h="100%">
+                  <Flex w="100%" minH="100%" h="100%">
                     <Flex
                       sx={{
                         a: {
@@ -88,7 +83,19 @@ export const MobileNav = () => {
                       }}
                       textStyle="headline"
                       fontWeight="bold"
+                      layerStyle="page"
                     >
+                      {isTablet && (
+                        <Box layerStyle="headingPullOut" mb="3">
+                          <chakra.h1
+                            className="highlight"
+                            color="cm.text"
+                            fontWeight="bold"
+                          >
+                            {t("menu.title", "Menu")}
+                          </chakra.h1>
+                        </Box>
+                      )}
                       {config.nav.main.map((link: any, index: number) => (
                         <chakra.span key={`nav-link-${index}`}>
                           <ActiveLink href={getMultilangValue(link.path)}>
@@ -107,7 +114,7 @@ export const MobileNav = () => {
       {isMobile && (
         <Flex
           w="100%"
-          h="100px"
+          h="60px"
           layerStyle="blurredLightGray"
           position="fixed"
           left="0"
@@ -120,19 +127,20 @@ export const MobileNav = () => {
             animate={{ opacity: isMenuOpen ? 0 : 1 }}
             transition={{ duration: 0.3 }}
           >
-            <IconButton
+            <IconButton variant="outline"
               aria-label={t("menu.button.togggleSearch", "Search")}
-              borderRadius="55px"
-              icon={<Search />}
-              w="55px"
-              h="55px"
+              borderRadius="38px"
+              icon={<SVG type="search" width="38px" height="38px" />}
+              w="38px"
+              h="38px"
+              border="none"
               pointerEvents={isMenuOpen ? "none" : undefined}
               onClick={() => {
                 onQuickSearchToggle();
               }}
             />
           </motion.div>
-          <Box position="relative" w="70px" h="70px">
+          <Box position="relative" w="42px" h="42px">
             <motion.div
               animate={{ opacity: isMenuOpen ? 1 : 0 }}
               transition={{ duration: 0.3 }}
@@ -141,21 +149,22 @@ export const MobileNav = () => {
                 position="absolute"
                 top="0"
                 left="0"
-                w="70px"
-                h="70px"
+                w="42px"
+                h="42px"
                 zIndex={isMenuOpen ? 2 : 1}
                 bg="#fff"
                 borderRadius="70"
               >
-                <IconButton
+                <IconButton variant="outline"
                   aria-label={t("menu.button.toggleMenu", "Menu")}
-                  icon={<Cross />}
+                  icon={<SVG type="cross" width="42px" height="42px" />}
                   borderRadius="100"
                   p="0"
                   paddingInlineStart="0"
                   paddingInlineEnd="0"
-                  w="70px"
-                  h="70px"
+                  w="42px"
+                  h="42px"
+                  border="none"
                   onClick={() => {
                     onMenuToggle();
                   }}
@@ -171,19 +180,20 @@ export const MobileNav = () => {
                 position="absolute"
                 top="0"
                 left="0"
-                w="70px"
-                h="70px"
+                w="42px"
+                h="42px"
                 zIndex={isMenuOpen ? 1 : 2}
               >
-                <IconButton
+                <IconButton variant="outline"
                   aria-label={t("menu.button.toggleMenu", "Menu")}
-                  icon={<Menu />}
+                  icon={<SVG type="menu-mobile" width="42px" height="42px" />}
                   borderRadius="100"
                   p="0"
                   paddingInlineStart="0"
                   paddingInlineEnd="0"
-                  w="70px"
-                  h="70px"
+                  w="42px"
+                  h="42px"
+                  border="none"
                   onClick={() => {
                     if (!isMenuOpen && isQuickSearchOpen) {
                       onQuickSearchToggle();
@@ -200,15 +210,16 @@ export const MobileNav = () => {
             animate={{ opacity: isMenuOpen ? 0 : 1 }}
             transition={{ duration: 0.3 }}
           >
-            <IconButton
+            <IconButton variant="outline"
               aria-label={t(
                 "menu.button.suggestLocation",
                 "Suggest a new location"
               )}
               borderRadius="100"
-              icon={<Suggest />}
-              w="55px"
-              h="55px"
+              icon={<SVG type="suggestion" width="38px" height="38px" />}
+              w="38px"
+              h="38px"
+              border="none"
               onClick={() => {
                 if (i18n.language === "de") {
                   router.push(`/kartenpunktvorschlag`);

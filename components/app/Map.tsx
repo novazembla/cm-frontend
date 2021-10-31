@@ -3,14 +3,19 @@ import { primaryInput } from "detect-it";
 
 import maplibregl from "maplibre-gl";
 import MapCustomSpiderfier from "./MapCustomSpiderify";
-import { useAppTranslations } from "~/hooks";
+import { useAppTranslations, useIsBreakPoint } from "~/hooks";
+import { motion } from "framer-motion";
 
 import {
   useMapContext,
-  useSettingsContext,
   useConfigContext,
+  useMenuButtonContext,
+  useQuickSearchContext,
 } from "~/provider";
 import { useRouter } from "next/router";
+
+import { Box, IconButton, Flex } from "@chakra-ui/react";
+import { SVG } from "~/components/ui";
 
 const MAP_MIN_ZOOM = 9;
 const MAP_MAX_ZOOM = 19;
@@ -23,13 +28,22 @@ let isAnimating = false;
 export const Map = () => {
   const router = useRouter();
 
-  const { i18n, getMultilangValue } = useAppTranslations();
+  const { t, i18n, getMultilangValue } = useAppTranslations();
 
   const config = useConfigContext();
   const cultureMap = useMapContext();
 
   const mapContainer = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map>();
+
+  const { onMenuToggle, isMenuOpen } = useMenuButtonContext();
+  const { isQuickSearchOpen, onQuickSearchToggle } = useQuickSearchContext();
+
+  const { isMobile, isTablet, isTabletWide, isDesktopAndUp } =
+    useIsBreakPoint();
+
+  const buttonDiameter = isMobile ? "38px" : "55px";
+  const buttonSpacing = isMobile ? "10px" : "14px";
 
   useEffect(() => {
     if (mapRef.current) return; //stops map from intializing more than once
@@ -42,7 +56,7 @@ export const Map = () => {
       minZoom: MAP_MIN_ZOOM,
       maxZoom: MAP_MAX_ZOOM,
     });
-    map.addControl(new maplibregl.NavigationControl(), "bottom-right"); //added
+    //map.addControl(new maplibregl.NavigationControl(), "bottom-right"); //added
 
     if (cultureMap) cultureMap.init(map, router);
 
@@ -141,7 +155,7 @@ export const Map = () => {
           //   750,
           //   "#f28cb1",
           // ],
-          "circle-radius": 24
+          "circle-radius": 24,
           // [
           //   "step",
           //   ["get", "point_count"],
@@ -190,8 +204,6 @@ export const Map = () => {
           // ],
         },
       });
-
-      
 
       map.on("click", (e) => {
         var features = map.queryRenderedFeatures(e.point, {
@@ -375,9 +387,184 @@ export const Map = () => {
   });
 
   return (
-    <div className="map-wrap">
-      <div ref={mapContainer} className="map" />
-    </div>
+    <>
+      <Box className="map-wrap">
+        <Box ref={mapContainer} className="map" />
+      </Box>
+
+      <Box
+        position="fixed"
+        right={isTabletWide || isDesktopAndUp ? "20px" : undefined}
+        left={!(isTabletWide || isDesktopAndUp) ? "10px" : undefined}
+        top={isDesktopAndUp ? "100px" : "70px"}
+        zIndex="3"
+      >
+        <Flex
+          direction="column"
+          sx={{
+            div: {
+              _last: {
+                mb: 0,
+              },
+            },
+          }}
+        >
+          {(isTabletWide || isDesktopAndUp) && (
+            <Box
+              position="relative"
+              w={buttonDiameter}
+              h={buttonDiameter}
+              bg="#fff"
+              borderRadius={buttonDiameter}
+              mb={buttonSpacing}
+            >
+              <motion.div
+                animate={{ opacity: isQuickSearchOpen ? 1 : 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Box
+                  position="absolute"
+                  top="0"
+                  left="0"
+                  w={buttonDiameter}
+                  h={buttonDiameter}
+                  zIndex={isQuickSearchOpen ? 2 : 1}
+                >
+                  <IconButton
+                    variant="outline"
+                    aria-label={t("menu.button.togggleSearch", "Search")}
+                    icon={
+                      <SVG
+                        type="cross"
+                        width={buttonDiameter}
+                        height={buttonDiameter}
+                      />
+                    }
+                    borderRadius="100"
+                    p="0"
+                    paddingInlineStart="0"
+                    paddingInlineEnd="0"
+                    w={buttonDiameter}
+                    h={buttonDiameter}
+                    onClick={() => {
+                      onQuickSearchToggle();
+                    }}
+                    pointerEvents={isQuickSearchOpen ? undefined : "none"}
+                  />
+                </Box>
+              </motion.div>
+              <motion.div
+                animate={{ opacity: isQuickSearchOpen ? 0 : 1 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Box
+                  position="absolute"
+                  top="0"
+                  left="0"
+                  w={buttonDiameter}
+                  h={buttonDiameter}
+                  zIndex={isQuickSearchOpen ? 1 : 2}
+                >
+                  <IconButton
+                    variant="outline"
+                    aria-label={t("menu.button.togggleSearch", "Search")}
+                    icon={
+                      <SVG
+                        type="search"
+                        width={buttonDiameter}
+                        height={buttonDiameter}
+                      />
+                    }
+                    borderRadius="100"
+                    p="0"
+                    paddingInlineStart="0"
+                    paddingInlineEnd="0"
+                    w={buttonDiameter}
+                    h={buttonDiameter}
+                    onClick={() => {
+                      if (isMenuOpen && !isQuickSearchOpen) {
+                        onMenuToggle();
+                      }
+                      onQuickSearchToggle();
+                    }}
+                    pointerEvents={isQuickSearchOpen ? "none" : undefined}
+                  />
+                </Box>
+              </motion.div>
+            </Box>
+          )}
+
+          <Box mb={buttonSpacing}>
+            <IconButton
+              variant="outline"
+              aria-label={t("menu.button.zoomIntoMap", "Zoom in")}
+              icon={
+                <SVG
+                  type="plus"
+                  width={buttonDiameter}
+                  height={buttonDiameter}
+                />
+              }
+              borderRadius="100"
+              p="0"
+              paddingInlineStart="0"
+              paddingInlineEnd="0"
+              w={buttonDiameter}
+              h={buttonDiameter}
+              onClick={() => {
+                if (mapRef.current) mapRef.current.zoomIn({ duration: 1000 });
+              }}
+            />
+          </Box>
+          <Box mb={buttonSpacing}>
+            <IconButton
+              variant="outline"
+              aria-label={t("menu.button.zoomOutOfMap", "Zoom out")}
+              icon={
+                <SVG
+                  type="minus"
+                  width={buttonDiameter}
+                  height={buttonDiameter}
+                />
+              }
+              borderRadius="100"
+              p="0"
+              paddingInlineStart="0"
+              paddingInlineEnd="0"
+              w={buttonDiameter}
+              h={buttonDiameter}
+              onClick={() => {
+                if (mapRef.current) mapRef.current.zoomOut({ duration: 1000 });
+              }}
+            />
+          </Box>
+          {isMobile && primaryInput === "touch" && (
+            <Box mb={buttonSpacing}>
+              <IconButton
+                variant="outline"
+                aria-label={t("menu.button.findMyLocation", "Find my location")}
+                icon={
+                  <SVG
+                    type="location"
+                    width={buttonDiameter}
+                    height={buttonDiameter}
+                  />
+                }
+                borderRadius="100"
+                p="0"
+                paddingInlineStart="0"
+                paddingInlineEnd="0"
+                w={buttonDiameter}
+                h={buttonDiameter}
+                onClick={() => {
+                  alert("Fehlt! TODO:");
+                }}
+              />
+            </Box>
+          )}
+        </Flex>
+      </Box>
+    </>
   );
 };
 

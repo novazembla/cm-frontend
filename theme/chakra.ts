@@ -10,6 +10,7 @@ import { components } from "./components";
 import { chakraToBreakpointArray } from "./helpers";
 
 // https://smart-swatch.netlify.app/#b248bb
+// https://codepen.io/sosuke/pen/Pjoqqp
 
 const themeConfig = {
   fonts: {
@@ -141,7 +142,9 @@ const themeConfig = {
       bgFooter: "#ddd",
       text: "#333",
       accentDark: "#660D36",
+      // from black to accentDark: filter: invert(13%) sepia(17%) saturate(7488%) hue-rotate(306deg) brightness(99%) contrast(106%);
       accentLight: "#E42B20",
+      // from black to accentLight: filter: invert(18%) sepia(82%) saturate(4434%) hue-rotate(355deg) brightness(96%) contrast(85%);
 
       50: "#ffe5e4",
       100: "#fcbcb9",

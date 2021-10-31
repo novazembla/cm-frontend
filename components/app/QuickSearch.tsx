@@ -15,7 +15,6 @@ import {
 } from "@chakra-ui/react";
 import { motion, AnimatePresence } from "framer-motion";
 
-import Search from "~/assets/svg/mobil_navigation_leiste_suche.svg";
 
 import { useConfigContext, useQuickSearchContext } from "~/provider";
 import { useIsBreakPoint, useAppTranslations } from "~/hooks";
@@ -29,7 +28,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { object, string } from "yup";
 import type * as yup from "yup";
 
-import { LoadingIcon, ErrorMessage } from "~/components/ui";
+import { LoadingIcon, ErrorMessage, SVG } from "~/components/ui";
 
 import { QuickSearchResult } from ".";
 
@@ -331,7 +330,7 @@ export const QuickSearch = () => {
                 <Box
                   position="relative"
                   pb={{
-                    base: "100px",
+                    base: "60px",
                     md: "20px",
                   }}
                 >
@@ -395,7 +394,7 @@ export const QuickSearch = () => {
                           />
                         </FormControl>
                         <IconButton
-                          icon={<Search />}
+                          icon={<SVG type="search" width="55px" height="55px" />}
                           type="submit"
                           aria-label="Search"
                           value="submit"

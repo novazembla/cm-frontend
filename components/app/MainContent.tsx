@@ -354,7 +354,7 @@ export const MainContent = ({
               overflowY={{
                 md: "auto",
               }}
-              pb={isMobile && !noMobileBottomPadding ? "100px" : undefined}
+              pb={isMobile && !noMobileBottomPadding ? "60px" : undefined}
               layerStyle={layerStyle}
               onScroll={(e: React.UIEvent<HTMLDivElement>) => {
                 if (isPresent) {

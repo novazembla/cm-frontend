@@ -14,14 +14,12 @@ import {
 } from "@chakra-ui/react";
 import { gql } from "@apollo/client";
 
-import Arrow from "~/assets/svg/Pfeil_quer.svg";
-import Cross from "~/assets/svg/Kreuz.svg";
-
 import {
   MultiLangHtml,
   CardTour,
   CardLocation,
   CardEvent,
+  SVG,
 } from "~/components/ui";
 
 import { useAppTranslations, useIsBreakPoint } from "~/hooks";
@@ -80,6 +78,7 @@ export const Home = ({ homepage }: { homepage: any }) => {
                   w="100%"
                   alignItems="center"
                   justifyContent={isMobile ? "space-between" : "flex-end"}
+                  mt="0.5em"
                 >
                   {homepage?.missionStatementPage?.slug && (
                     <NextLink
@@ -89,8 +88,20 @@ export const Home = ({ homepage }: { homepage: any }) => {
                     >
                       <IconButton
                         as={Link}
-                        variant="outline"
-                        icon={<Arrow />}
+                        variant="solid"
+                        icon={
+                          <SVG
+                            type="arrow-right"
+                            width={isMobile ? "30px" : "45px"}
+                            height={isMobile ? "20px" : "30px"}
+                          />
+                        }
+                        w="30px"
+                        h="30px"
+                        p="0"
+                        paddingInlineStart="0"
+                        paddingInlineEnd="0"
+                        className="svgHover"
                         aria-label={t(
                           "mission.statement.read",
                           "read mission statement"
@@ -100,8 +111,20 @@ export const Home = ({ homepage }: { homepage: any }) => {
                   )}
                   {isMobile && (
                     <IconButton
-                      variant="outline"
-                      icon={<Cross />}
+                      variant="solid"
+                      icon={
+                        <SVG
+                          type="cross"
+                          width={isMobile ? "20px" : "30px"}
+                          height={isMobile ? "20px" : "30px"}
+                        />
+                      }
+                      w="30px"
+                      h="30px"
+                      p="0"
+                      className="svgHover"
+                      paddingInlineStart="0"
+                      paddingInlineEnd="0"
                       aria-label={t("mission.statement.close", "close")}
                       onClick={() => setIsMSOpen(!isMSOpen)}
                     />

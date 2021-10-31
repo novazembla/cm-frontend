@@ -1,18 +1,13 @@
 import { MultiLangValue } from "~/components/ui";
 import NextLink from "next/link";
-import {
-  Box,
-  chakra,
-  LinkBox,
-  LinkOverlay,
-  Flex,
-} from "@chakra-ui/react";
+import { Box, chakra, LinkBox, LinkOverlay, Flex } from "@chakra-ui/react";
 
-import Arrow from "~/assets/svg/Pfeil_quer.svg";
-import { useAppTranslations } from "~/hooks";
+import { useAppTranslations, useIsBreakPoint } from "~/hooks";
+import { SVG } from "~/components/ui";
 
 export const ListedEvent = ({ event }: { event: any }) => {
   const { t, i18n, getMultilangValue } = useAppTranslations();
+  const { isMobile } = useIsBreakPoint();
 
   let dateInfo: any = t("event.missingData.eventDate", "TBD");
   let timeInfo: any = "";
@@ -129,7 +124,11 @@ export const ListedEvent = ({ event }: { event: any }) => {
             )}
           </Box>
           <Box alignSelf="flex-end">
-            <Arrow width="30px" height="20px" />
+            <SVG
+              type="arrow-right"
+              width={isMobile ? "30px" : "45px"}
+              height={isMobile ? "20px" : "30px"}
+            />
           </Box>
         </Flex>
       </Flex>

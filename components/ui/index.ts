@@ -12,3 +12,4 @@ export * from "./ListedEvent";
 export * from "./LoadingIcon";
 export * from "./ErrorMessage";
 export * from "./TrimmedTextWithBottomEdge";
+export * from "./SVG";

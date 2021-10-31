@@ -65,12 +65,12 @@ export class MapCustomSpiderfier {
         feature,
         elements,
         maplibreMarker,
-        param: spiderLegParam
+        param: spiderLegParam,
       };
 
       spiderLeg = {
         ...spiderLeg,
-        popupOffset: this.popupOffsetForSpiderLeg(spiderLeg)
+        popupOffset: this.popupOffsetForSpiderLeg(spiderLeg),
       };
 
       this.options.initializeLeg(spiderLeg);
@@ -153,7 +153,13 @@ export class MapCustomSpiderfier {
   }
 
   generateCircleParams(count: any) {
-    const circumference = (this.options.clusterRadius + this.options.dotRadius + 12 + (count > 6 ? this.options.dotRadius:0)) * 2 * (this.twoPi / 2),
+    const circumference =
+        (this.options.clusterRadius +
+          this.options.dotRadius +
+          12 +
+          (count > 6 ? this.options.dotRadius : 0)) *
+        2 *
+        (this.twoPi / 2),
       legLength = circumference / this.twoPi, // = radius from circumference
       angleStep = this.twoPi / count;
 
@@ -171,18 +177,17 @@ export class MapCustomSpiderfier {
 
   createMarkerElements(spiderLegParam: any, feature: any) {
     const containerElem: any = document.createElement("div"),
-      pinElem: any = document.createElement("div"),
-      lineElem: any = document.createElement("div");
-
-      containerElem.setAttribute("data-id", feature?.id)
+      pinElem: any = document.createElement("div");
+    // , lineElem: any = document.createElement("div")
+    containerElem.setAttribute("data-id", feature?.id);
     containerElem.className =
       "spider-leg-container" +
       (this.options.animate ? " animate initial " : " ");
-    lineElem.className = "spider-leg-line";
+    // lineElem.className = "spider-leg-line";
     pinElem.className =
       "spider-leg-pin" + (this.options.customPin ? "" : " default-spider-pin");
 
-    containerElem.appendChild(lineElem);
+    // containerElem.appendChild(lineElem);
     containerElem.appendChild(pinElem);
 
     pinElem.style["background-color"] = feature?.color ?? this.options.color;
@@ -190,12 +195,16 @@ export class MapCustomSpiderfier {
     containerElem.style["margin-left"] = spiderLegParam.x + "px";
     containerElem.style["margin-top"] = spiderLegParam.y + "px";
 
-    lineElem.style.height = spiderLegParam.legLength + "px";
-    // lineElem.style.transform = 'rotate(' + (2*Math.PI - spiderLegParam.angle) +'rad)';
-    lineElem.style.transform =
-      "rotate(" + (spiderLegParam.angle - Math.PI / 2) + "rad)";
+    // lineElem.style.height = spiderLegParam.legLength + "px";
+    // // lineElem.style.transform = 'rotate(' + (2*Math.PI - spiderLegParam.angle) +'rad)';
+    // lineElem.style.transform =
+    //   "rotate(" + (spiderLegParam.angle - Math.PI / 2) + "rad)";
 
-    return { container: containerElem, line: lineElem, pin: pinElem };
+    return {
+      container: containerElem,
+      // line: lineElem,
+      pin: pinElem,
+    };
   }
 
   // Utility

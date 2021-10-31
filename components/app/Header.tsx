@@ -2,15 +2,14 @@ import React from "react";
 import { Flex, Box, IconButton } from "@chakra-ui/react";
 
 import { useAppTranslations, useIsBreakPoint } from "~/hooks";
-import Search from "~/assets/svg/mobil_navigation_leiste_suche.svg";
-import Menu from "~/assets/svg/tablet_menu.svg";
-import Cross from "~/assets/svg/Kreuz.svg";
+
 import { motion } from "framer-motion";
 
 import {
   InlineLanguageButtons,
   ActiveLink,
   MultiLangValue,
+  SVG,
 } from "~/components/ui";
 import {
   useConfigContext,
@@ -147,7 +146,7 @@ export const Header = (/* props */) => {
                     >
                       <IconButton
                         aria-label={t("menu.button.togggleSearch", "Search")}
-                        icon={<Cross />}
+                        icon={<SVG type="cross" width="40px" height="40px" />}
                         borderRadius="100"
                         p="0"
                         paddingInlineStart="0"
@@ -180,7 +179,7 @@ export const Header = (/* props */) => {
                     >
                       <IconButton
                         aria-label={t("menu.button.togggleSearch", "Search")}
-                        icon={<Search />}
+                        icon={<SVG type="search" width="40px" height="40px" />}
                         borderRadius="100"
                         p="0"
                         paddingInlineStart="0"
@@ -219,7 +218,7 @@ export const Header = (/* props */) => {
                   >
                     <IconButton
                       aria-label={t("menu.button.toggleMenu", "Menu")}
-                      icon={<Cross />}
+                      icon={<SVG type="cross" width="40px" height="40px" />}
                       borderRadius="100"
                       p="0"
                       paddingInlineStart="0"
@@ -252,7 +251,7 @@ export const Header = (/* props */) => {
                   >
                     <IconButton
                       aria-label={t("menu.button.toggleMenu", "Menu")}
-                      icon={<Menu />}
+                      icon={<SVG type="menu-tablet" width="40px" height="40px" />}
                       borderRadius="100"
                       p="0"
                       paddingInlineStart="0"

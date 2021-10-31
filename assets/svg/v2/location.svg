@@ -1,0 +1,16 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+	 viewBox="0 0 55 55">
+<style type="text/css">
+	.st0{fill:none;stroke:#000000;}
+	.st1{fill:none;stroke:#000000;stroke-width:1.5;stroke-miterlimit:10;}
+	.st2{fill:none;stroke:#000000;stroke-width:1.5;stroke-linecap:round;}
+</style>
+<g>
+	<circle class="st1" cx="27.5" cy="27.5" r="11.1"/>
+	<circle cx="27.5" cy="27.5" r="6.5"/>
+	<line id="Linie_55_00000103233436748096198050000012244594268670073256_" class="st2" x1="27.5" y1="39.3" x2="27.5" y2="43"/>
+	<line id="Linie_55_00000179645275080889463140000007653272653166970508_" class="st2" x1="27.5" y1="12" x2="27.5" y2="15.7"/>
+	<line id="Linie_55_00000079464320714234758390000001750076556958233218_" class="st2" x1="39.3" y1="27.5" x2="43" y2="27.5"/>
+	<line id="Linie_55_00000047747858632746906830000008990486274206741916_" class="st2" x1="12" y1="27.5" x2="15.7" y2="27.5"/>
+</g>
+</svg>

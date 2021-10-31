@@ -4,9 +4,7 @@ import { ActiveLink } from "~/components/ui";
 import { Flex, IconButton, Link, Box } from "@chakra-ui/react";
 
 import { useConfigContext } from "~/provider";
-import { MultiLangValue } from "../ui";
-
-import Arrow from "~/assets/svg/Pfeil_hoch.svg";
+import { MultiLangValue, SVG } from "../ui";
 
 import { useIsBreakPoint, useAppTranslations } from "~/hooks";
 import { Logo } from ".";
@@ -39,8 +37,7 @@ export const Footer = ({
         xl: "45px",
       }}
       pb={{
-        base: isMobile ? "120px" : !noBackground ? "20px" : 0,
-        sm: isMobile ? "120px" : !noBackground ? "20px" : 0,
+        base: isMobile ? "80px" : !noBackground ? "20px" : 0,
         md: "45px",
         xl: "55px",
       }}
@@ -64,7 +61,7 @@ export const Footer = ({
           <IconButton
             mb="1.5"
             aria-label={t("menu.button.backToTop", "Back to top")}
-            icon={<Arrow />}
+            icon={<SVG type="arrow-up" width="30px" height="50px" />}
             borderRadius="100"
             p="0"
             paddingInlineStart="0"
