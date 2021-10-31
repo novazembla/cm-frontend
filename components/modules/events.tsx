@@ -368,7 +368,7 @@ export const ModuleComponentEvents = ({ ...props }) => {
             )}
 
             {showLoadMore && !loading && !error && (
-              <Box>
+              <Box textAlign="center" mt="2em">
                 <Button
                   onClick={() => {
                     const nextPageIndex = currentPageIndex + 1;
@@ -379,11 +379,9 @@ export const ModuleComponentEvents = ({ ...props }) => {
                     });
                     setCurrentPageIndex(nextPageIndex);
                   }}
-                  color="white"
-                  variant="solid"
-                  colorScheme="red"
+                  variant="ghost"
                 >
-                  Load more (DESIGN)
+                  {t("events.loadMore", "Load more events")}
                 </Button>
               </Box>
             )}

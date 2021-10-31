@@ -63,14 +63,17 @@ export const components = {
       },
     },
     variants: {
-      outline: {
+      ghost: {
         bg: "white",
         border: "1px solid",
         borderColor: "cm.accentLight",
-
+        borderRadius: "20px",
+        color: "cm.accentLight",
+        transition: "all 0.3s",
         _hover: {
           shadow: "0 0px 3px 1px #E42B20",
           bg: "white",
+          color: "cm.accentLight",
         },
         _focus: {
           shadow: "0 0px 3px 1px #E42B20",
@@ -78,6 +81,32 @@ export const components = {
         },
         _active: {
           shadow: "0 0px 3px 1px #E42B20",
+          bg: "cm.accentLight",
+          color: "#fff",
+          ".svg": {
+            filter: "invert(100%)"
+          }
+        },
+      },
+      outline: {
+        bg: "white",
+        border: "1px solid",
+        borderColor: "cm.accentLight",
+        color: "cm.accentLight",
+        fontWeight: "bold",
+        _hover: {
+          shadow: "0 0px 3px 1px #E42B20",
+          bg: "white",
+          color: "cm.accentLight",
+        },
+        _focus: {
+          shadow: "0 0px 3px 1px #E42B20",
+          color: "white",
+          bg: "cm.accentLight",
+        },
+        _active: {
+          shadow: "0 0px 3px 1px #E42B20",
+          color: "white",
           bg: "cm.accentLight",
 
           ".svg": {

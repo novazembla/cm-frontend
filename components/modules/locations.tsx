@@ -786,7 +786,7 @@ export const ModuleComponentLocations = ({ ...props }) => {
             )}
 
             {showLoadMore && !loading && !error && (
-              <Box>
+              <Box textAlign="center" mt="2em">
                 <Button
                   onClick={() => {
                     const nextPageIndex = currentPageIndex + 1;
@@ -797,11 +797,9 @@ export const ModuleComponentLocations = ({ ...props }) => {
                     });
                     setCurrentPageIndex(nextPageIndex);
                   }}
-                  color="white"
-                  variant="solid"
-                  colorScheme="red"
+                  variant="ghost"
                 >
-                  Load more (DESIGN)
+                  {t("locations.loadMore", "Load more locations")}
                 </Button>
               </Box>
             )}

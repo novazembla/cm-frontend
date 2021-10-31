@@ -3,13 +3,21 @@ import NextLink from "next/link";
 
 import { MultiLangValue, MultiLangHtml } from "~/components/ui";
 import { Box, chakra, Heading } from "@chakra-ui/react";
-import {useQuickSearchContext} from "~/provider";
-import { useAppTranslations } from "~/hooks";
+import { useQuickSearchContext } from "~/provider";
+import { useAppTranslations, useIsBreakPoint } from "~/hooks";
+import { SVG } from "~/components/ui";
 
-
-export const QuickSearchItem = ({ item, module }: { item: any; module: string; }) => {
-  const {t, i18n, getMultilangValue} = useAppTranslations();
+export const QuickSearchItem = ({
+  item,
+  module,
+}: {
+  item: any;
+  module: string;
+}) => {
+  const { t, i18n, getMultilangValue } = useAppTranslations();
   const { onQuickSearchToggle } = useQuickSearchContext();
+  const { isMobile } =
+    useIsBreakPoint();
 
   if (!item) return <></>;
 
@@ -22,7 +30,7 @@ export const QuickSearchItem = ({ item, module }: { item: any; module: string; }
     case "event":
       path = i18n.language === "de" ? "veranstaltung" : "event";
       break;
-    
+
     case "tour":
       path = i18n.language === "de" ? "tour" : "tour";
       break;
@@ -33,29 +41,30 @@ export const QuickSearchItem = ({ item, module }: { item: any; module: string; }
   }
 
   return (
-    <Box
-      mt="4"
-      _first={{
-        mt: 3,
-      }}
-    >
+    <Box mt="2">
       <NextLink
         href={`/${path}/${getMultilangValue(item.slug)}`}
         locale={i18n.language}
         passHref
-        
       >
-        <chakra.a textDecoration="none !important" onClick={() => {onQuickSearchToggle()}}>
-          <chakra.span
-            display="block"
-            pl="2"            
-          >
-            <Heading as="h3" fontSize="md">
-              <MultiLangValue json={item.title} />
-            </Heading>
-            <Box fontSize="sm">
-              <MultiLangHtml json={item.description} />
-            </Box>
+        <chakra.a
+          textDecoration="none !important"
+          onClick={() => {
+            onQuickSearchToggle();
+          }}
+          display="flex !important"
+          justifyContent="space-between"
+          alignItems="center"
+          border="none !important"
+          textDecorationColor="none"
+          padding="0 !important"
+          pl={isMobile ? "0": "8% !important"}
+        >
+          <chakra.span display="block" pr="2">
+            <chakra.span  className="clampTwoLines" fontWeight="bold"><MultiLangValue json={item.title} /></chakra.span>
+          </chakra.span>
+          <chakra.span display="block">
+            <SVG type="chevron_right" width="20px" height="20px" />
           </chakra.span>
         </chakra.a>
       </NextLink>

@@ -15,7 +15,6 @@ import {
 } from "@chakra-ui/react";
 import { motion, AnimatePresence } from "framer-motion";
 
-
 import { useConfigContext, useQuickSearchContext } from "~/provider";
 import { useIsBreakPoint, useAppTranslations } from "~/hooks";
 
@@ -86,7 +85,6 @@ export const SearchFormSchema = object().shape({
 // TODO: You can now use inputmode=“none” on up to date browsers. See:
 // https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/inputmode
 
-
 export const QuickSearch = () => {
   const { t, i18n, getMultilangValue } = useAppTranslations();
   const config = useConfigContext();
@@ -96,8 +94,7 @@ export const QuickSearch = () => {
   const { isMobile, isTablet, isTabletWide, isDesktopAndUp } =
     useIsBreakPoint();
 
-
-  const [isActiveSearch, setIsActiveSearch] = useState(false)
+  const [isActiveSearch, setIsActiveSearch] = useState(false);
 
   const [currentSearchTerm, setCurrentSearchTerm] = useState("");
   const [triggerSearch, { data, loading, error }] = useLazyQuery(searchQuery, {
@@ -106,7 +103,7 @@ export const QuickSearch = () => {
   });
 
   const [searchTerm, setSearchTerm] = useState("");
-  
+
   const {
     handleSubmit,
     getValues,
@@ -131,7 +128,6 @@ export const QuickSearch = () => {
           },
         });
       } else {
-        
         if (cultureMap) cultureMap.clear();
         // setQuickSearchResultInContext({});
       }
@@ -156,31 +152,25 @@ export const QuickSearch = () => {
   useEffect(() => {
     if (loading && !isActiveSearch) {
       setIsActiveSearch(true);
-    } 
-  }, [
-    loading, 
-    isActiveSearch
-  ]);
+    }
+  }, [loading, isActiveSearch]);
 
   // useEffect(() => {
   //   console.log(loading, data?.quickSearch, quickSearchResult, searchingForTerm);
 
   //   if (loading && searchingForTerm) {
-      
-      
-      
-      
+
   //     setSearchingForTerm(false);
   //     console.log(1);
-      
-  //   } 
+
+  //   }
 
   //   if (!loading && data?.quickSearch && !quickSearchResult) {
 
-  //   } 
+  //   }
   // }, [
   //   data?.quickSearch,
-  //   loading, 
+  //   loading,
   //   searchingForTerm,
   //   quickSearchResult,
   // ]);
@@ -287,7 +277,9 @@ export const QuickSearch = () => {
                 ? isTabletWide
                   ? "66.66vw"
                   : "675px"
-                : isTablet ? "80vw" : "100vw",
+                : isTablet
+                ? "80vw"
+                : "100vw",
             left: contentLeft,
             zIndex: 1100,
           }}
@@ -297,7 +289,6 @@ export const QuickSearch = () => {
               w="100%"
               h="100vh"
               minH="100%"
-             
               layerStyle="pageBg"
               overflowY="auto"
             >
@@ -334,7 +325,7 @@ export const QuickSearch = () => {
                     md: "20px",
                   }}
                 >
-                  <Box position="sticky" top="0px">
+                  <Box top="0px">
                     <Box layerStyle="headingPullOut" mb="3">
                       <chakra.h1
                         className="highlight"
@@ -394,7 +385,14 @@ export const QuickSearch = () => {
                           />
                         </FormControl>
                         <IconButton
-                          icon={<SVG type="search" width="55px" height="55px" />}
+                          variant="unstyled"
+                          icon={
+                            <SVG
+                              type="arrow-right"
+                              width="45px"
+                              height="45px"
+                            />
+                          }
                           type="submit"
                           aria-label="Search"
                           value="submit"
@@ -405,19 +403,37 @@ export const QuickSearch = () => {
                   <Box mt="2">
                     {loading && <LoadingIcon />}
                     {error && <ErrorMessage type="dataLoad" />}
-                    {!loading &&
-                      searchTerm.length > 2 &&
-                      isActiveSearch && 
-                      data?.quickSearch?.length > 0 && (
-                        <QuickSearchResult result={data?.quickSearch} />
-                      )}
+                    {!loading && searchTerm.length > 2 && isActiveSearch && (
+                      <Box>
+                        {data?.quickSearch?.length > 0 && (
+                          <Box
+                            my="1em"
+                            textStyle="categoriesHighlight"
+                            textTransform="uppercase"
+                            color="cm.text"
+                            fontWeight="bold"
+                          >
+                            {t("quicksearch.found", "found ...")}
+                          </Box>
+                        )}
+                        {data?.quickSearch?.length > 0 && (
+                          <QuickSearchResult result={data?.quickSearch} />
+                        )}
+                      </Box>
+                    )}
 
                     {!loading &&
                       !error &&
-                      !data?.quickSearch?.length &&
-                      isActiveSearch && 
+                      data?.quickSearch?.length === 0&&
+                      isActiveSearch &&
                       searchTerm.length > 2 && (
-                        <Box>
+                        <Box
+                          my="1em"
+                          textStyle="categoriesHighlight"
+                          textTransform="uppercase"
+                          color="cm.text"
+                          fontWeight="bold"
+                        >
                           {t(
                             "quicksearch.noResult",
                             "No result for your search"
