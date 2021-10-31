@@ -3,8 +3,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { GetStaticProps } from "next";
 
 import { Box, Heading, Text } from "@chakra-ui/react";
-import { Footer } from "~/components/app";
-import { MainContent } from "~/components/ui";
+import { Footer, MainContent } from "~/components/app";
 import { useAppTranslations } from "~/hooks";
 
 export default function Page500() {

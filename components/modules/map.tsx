@@ -5,7 +5,7 @@ import {
   ApiImage,
   CardEvent,
 } from "~/components/ui";
-import { Footer } from "~/components/app";
+import { Footer, MainContent } from "~/components/app";
 import { getApolloClient } from "~/services";
 import {
   useMapContext,
@@ -17,7 +17,6 @@ import {
   chakra,
 } from "@chakra-ui/react";
 import { useIsBreakPoint, useAppTranslations } from "~/hooks";
-import { MainContent } from "~/components/ui";
 
 // const eventQuery = gql`
 //   query ($slug: String!) {

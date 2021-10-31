@@ -16,6 +16,7 @@
     "@svgr/webpack": "^5.5.0",
     "detect-it": "^4.0.1",
     "framer-motion": "^4.1.17",
+    "lodash": "^4.17.21",
     "maplibre-gl": "^1.15.2",
     "maplibregl-spiderfier": "^1.0.11",
     "next": "11.1.2",
@@ -32,6 +33,7 @@
   },
   "devDependencies": {
     "@types/detect-it": "^4.0.1",
+    "@types/lodash": "^4.14.176",
     "@types/react": "17.0.31",
     "autoprefixer": "^10.3.1",
     "eslint": "7.32.0",

@@ -1,6 +1,6 @@
 import { Footer } from "~/components/app";
 import { Box, chakra, Grid } from "@chakra-ui/react";
-import { MainContent } from "~/components/ui";
+import { MainContent } from "~/components/app";
 import { useAppTranslations } from "~/hooks";
 
 // const eventQuery = gql`

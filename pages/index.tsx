@@ -4,7 +4,14 @@ import { getApolloClient } from "~/services";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { Box, Flex, IconButton, Link, chakra, Collapse } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  IconButton,
+  Link,
+  chakra,
+  Collapse,
+} from "@chakra-ui/react";
 import { gql } from "@apollo/client";
 
 import Arrow from "~/assets/svg/Pfeil_quer.svg";
@@ -15,12 +22,11 @@ import {
   CardTour,
   CardLocation,
   CardEvent,
-  MainContent,
 } from "~/components/ui";
 
 import { useAppTranslations, useIsBreakPoint } from "~/hooks";
 
-import { Footer } from "~/components/app";
+import { Footer, MainContent } from "~/components/app";
 
 const homepageQuery = gql`
   query {
@@ -53,6 +59,7 @@ export const Home = ({ homepage }: { homepage: any }) => {
     <MainContent
       isDrawer={isTablet || isDesktopAndUp}
       isVerticalContent={!isTablet && !isDesktopAndUp}
+      noMobileBottomPadding
     >
       <Box>
         {homepage?.missionStatement && (
@@ -79,12 +86,15 @@ export const Home = ({ homepage }: { homepage: any }) => {
                       href={`/page/${getMultilangValue(
                         homepage?.missionStatementPage?.slug
                       )}/`}
-                    > 
+                    >
                       <IconButton
                         as={Link}
                         variant="outline"
                         icon={<Arrow />}
-                        aria-label={t("mission.statement.read", "read mission statement")}
+                        aria-label={t(
+                          "mission.statement.read",
+                          "read mission statement"
+                        )}
                       />
                     </NextLink>
                   )}
@@ -152,7 +162,7 @@ export const Home = ({ homepage }: { homepage: any }) => {
                     return (
                       <Box key={`hb-${h.id}`} {...mobileCardWrapper} pr="20px">
                         <CardLocation
-                          fillContainer={isMobile}
+                          fillContainer={!isMobile}
                           key={`h-${h.id}`}
                           location={h}
                         />
@@ -162,7 +172,7 @@ export const Home = ({ homepage }: { homepage: any }) => {
                     return (
                       <Box key={`hb-${h.id}`} {...mobileCardWrapper} pr="20px">
                         <CardEvent
-                          fillContainer={isMobile}
+                          fillContainer={!isMobile}
                           key={`h-${h.id}`}
                           event={h}
                         />
@@ -172,7 +182,7 @@ export const Home = ({ homepage }: { homepage: any }) => {
                     return (
                       <Box key={`hb-${h.id}`} {...mobileCardWrapper} pr="20px">
                         <CardTour
-                          fillContainer={isMobile}
+                          fillContainer={!isMobile}
                           key={`h-${h.id}`}
                           tour={h}
                         />

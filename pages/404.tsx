@@ -3,8 +3,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { GetStaticProps } from "next";
 
 import { Box, Heading, Text } from "@chakra-ui/react";
-import {Footer} from "~/components/app";
-import { MainContent } from "~/components/ui";
+import { Footer, MainContent } from "~/components/app";
 import { useAppTranslations } from "~/hooks";
 
 export default function Page404() {
@@ -12,15 +11,17 @@ export default function Page404() {
 
   return (
     <MainContent>
-    <Box layerStyle="page" w="100%">
-      <Box layerStyle="headingPullOut" mb="3">
-        <Heading as="h1" className="highlight" color="cm.text">
-          {t("error.pagenotfound", "Page not found")}
-        </Heading>
+      <Box layerStyle="page" w="100%">
+        <Box layerStyle="headingPullOut" mb="3">
+          <Heading as="h1" className="highlight" color="cm.text">
+            {t("error.pagenotfound", "Page not found")}
+          </Heading>
+        </Box>
+        <Text h="400px">
+          {t("error.pleaseReloadInAFewMoments", "Please try again")}
+        </Text>
       </Box>
-      <Text h="400px">{t("error.pleaseReloadInAFewMoments", "Please try again")}</Text>
-    </Box>
-    <Footer />
+      <Footer />
     </MainContent>
   );
 }

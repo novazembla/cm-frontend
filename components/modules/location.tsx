@@ -26,7 +26,7 @@ import { useIsPresent } from "framer-motion";
 import { isEmptyHtml } from "~/utils";
 import { useIsBreakPoint, useAppTranslations } from "~/hooks";
 import { GetStaticPaths, GetStaticProps } from "next";
-import { MainContent } from "~/components/ui";
+import { MainContent } from "~/components/app";
 
 const locationQuery = gql`
   query ($slug: String!) {

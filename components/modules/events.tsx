@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { gql, useQuery } from "@apollo/client";
 import { ListedEvent, LoadingIcon, ErrorMessage } from "~/components/ui";
-import { Footer } from "~/components/app";
+import { Footer, MainContent } from "~/components/app";
 import {
   Box,
   chakra,
@@ -21,7 +21,6 @@ import { useForm, FormProvider } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { boolean, object, mixed, number } from "yup";
 
-import { MainContent } from "~/components/ui";
 import { useSettingsContext } from "~/provider";
 import { getMultilangSortedList } from "~/utils";
 
@@ -75,7 +74,6 @@ const initialQueryState = {
 export const EventsFilterSchema = object().shape({});
 
 export const ModuleComponentEvents = ({ ...props }) => {
-  
   const [currentQueryState, setCurrentQueryState] = useState<any>({
     where: initialQueryState.where,
     orderBy: initialQueryState.orderBy,
@@ -193,7 +191,7 @@ export const ModuleComponentEvents = ({ ...props }) => {
             id: {
               in: terms,
             },
-          }
+          },
         },
       });
     }
@@ -206,14 +204,14 @@ export const ModuleComponentEvents = ({ ...props }) => {
       newQueryState = {
         ...newQueryState,
         where: {
-          AND: where
-        }
-      }
+          AND: where,
+        },
+      };
     } else {
       newQueryState = {
         ...newQueryState,
-        where: {}
-      }
+        where: {},
+      };
     }
 
     if (JSON.stringify(currentQueryState) !== JSON.stringify(newQueryState)) {
@@ -229,7 +227,13 @@ export const ModuleComponentEvents = ({ ...props }) => {
 
   return (
     <MainContent layerStyle="pageBg" noMobileBottomPadding>
-      <Grid w="100%" templateRows="1fr auto" templateColumns="100%" minH="100%" className="aaa">
+      <Grid
+        w="100%"
+        templateRows="1fr auto"
+        templateColumns="100%"
+        minH="100%"
+        className="aaa"
+      >
         <Box layerStyle="page" className="bbb">
           <Box layerStyle="headingPullOut" mb="3">
             <chakra.h1 className="highlight" color="cm.text" fontWeight="bold">
@@ -330,25 +334,25 @@ export const ModuleComponentEvents = ({ ...props }) => {
             </form>
           </FormProvider>
           <Flex
-              textStyle="larger"
-              mt="1em"
-              borderColor="cm.accentDark"
-              borderTop="1px solid"
-              borderBottom="1px solid"
-              justifyContent={loading ? "center" : "flex-start"}
-              h="50px"
-              alignItems="center"
-            >
-              {loading && <LoadingIcon my="0" />}
-              {!loading && !error && (
-                <Box>
-                  {t("events.totalCount", "{{count}} locations found", {
-                    count: data?.events?.totalCount
-                  })}                  
-                </Box>
-              )}
-              {error && <ErrorMessage type="dataLoad" />}
-            </Flex>
+            textStyle="larger"
+            mt="1em"
+            borderColor="cm.accentDark"
+            borderTop="1px solid"
+            borderBottom="1px solid"
+            justifyContent={loading ? "center" : "flex-start"}
+            h="50px"
+            alignItems="center"
+          >
+            {loading && <LoadingIcon my="0" />}
+            {!loading && !error && (
+              <Box>
+                {t("events.totalCount", "{{count}} locations found", {
+                  count: data?.events?.totalCount,
+                })}
+              </Box>
+            )}
+            {error && <ErrorMessage type="dataLoad" />}
+          </Flex>
           <Box w="100%">
             {data?.events?.events?.length && (
               <Box size="md" mt="3" w="100%">
@@ -382,10 +386,9 @@ export const ModuleComponentEvents = ({ ...props }) => {
                   Load more (DESIGN)
                 </Button>
               </Box>
-            )}      
+            )}
 
             {loading && currentPageIndex > 0 && <LoadingIcon />}
-
           </Box>
         </Box>
         <Footer />

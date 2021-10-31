@@ -6,7 +6,7 @@ import {
   ApiImage,
   CardTourStop,
 } from "~/components/ui";
-import { Footer } from "~/components/app";
+import { Footer, MainContent } from "~/components/app";
 import { getApolloClient } from "~/services";
 import {
   useMapContext,
@@ -17,7 +17,6 @@ import { Box, Flex, AspectRatio, Text, chakra, Grid } from "@chakra-ui/react";
 import { isEmptyHtml } from "~/utils";
 import { useAppTranslations, useIsBreakPoint } from "~/hooks";
 import { GetStaticPaths, GetStaticProps } from "next";
-import { MainContent } from "~/components/ui";
 
 const tourQuery = gql`
   query ($slug: String!) {

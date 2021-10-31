@@ -7,3 +7,4 @@ export * from "./QuickSearchResult";
 export * from "./MobileNav";
 export * from "./QuickSearch";
 export * from "./Logo";
+export * from "./MainContent";

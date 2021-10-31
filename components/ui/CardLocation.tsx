@@ -8,7 +8,7 @@ import {
   LinkBox,
   LinkOverlay,
 } from "@chakra-ui/react";
-import { MultiLangValue, ApiImage } from "~/components/ui";
+import { MultiLangValue, ApiImage, TrimmedTextWithBottomEdge } from "~/components/ui";
 import { htmlToTrimmedString } from "~/utils";
 import { useAppTranslations, useIsBreakPoint } from "~/hooks";
 import { useConfigContext, useSettingsContext } from "~/provider";
@@ -17,7 +17,7 @@ import NextLink from "next/link";
 
 export const CardLocation = ({
   location,
-  fillContainer,
+  fillContainer = true,
 }: {
   location: any;
   fillContainer?: boolean;
@@ -61,7 +61,7 @@ export const CardLocation = ({
 
   const description = htmlToTrimmedString(
     getMultilangValue(location.description) ?? "",
-    isTablet || isDesktopAndUp ? 150 : 60
+    200
   );
 
   return (
@@ -71,7 +71,7 @@ export const CardLocation = ({
       bg="#fff"
       borderRadius="lg"
       overflow="hidden"
-      w={isMobile && !fillContainer ? "80%" : "100%"}
+      w="100%"
       maxW={isMobile && !fillContainer ? "275px" : "100%"}
       h={isMobile && fillContainer ? "100%" : undefined}
     >
@@ -104,7 +104,7 @@ export const CardLocation = ({
                     objectFit="cover"
                     cropPosition={location?.heroImage?.cropPosition}
                     imgCssProps={{
-                      borderTopRightRadius: "var(--chakra-radii-lg)"
+                      borderTopRightRadius: "var(--chakra-radii-lg)",
                     }}
                   />
                 </Box>
@@ -144,7 +144,12 @@ export const CardLocation = ({
               }/${type}/${getMultilangValue(location.slug)}/`}
               passHref
             >
-              <LinkOverlay textStyle="headline" textDecoration="none">
+              <LinkOverlay
+                textStyle="headline"
+                textDecoration="none"
+                minH={isMobile ? "50px" : undefined}
+                className={isMobile ? "clampTwoLines" : "clampThreeLines"}
+              >
                 <MultiLangValue json={location.title} />
               </LinkOverlay>
             </NextLink>
@@ -153,11 +158,34 @@ export const CardLocation = ({
       </Flex>
 
       <Box px={isMobile ? "20px" : "35px"} pb={isMobile ? "20px" : "35px"}>
-        <Flex justifyContent="space-between">
-          <Box w={isMobile ? "calc(100% - 30px)" : "66%"} textStyle="card">
-            <Box>{description}</Box>
+        <Flex justifyContent="space-between" position="relative">
+          <Box
+            w={isMobile ? "100%" : "66%"}
+            minH={isMobile ? "60px" : undefined}
+            textStyle="card"
+          >
+            {isMobile ? (
+              <TrimmedTextWithBottomEdge
+                text={description}
+                edgeWidth={60}
+                numLines={3}
+              />
+            ) : (
+              <Box className="clampFourLines">{description}</Box>
+            )}
           </Box>
-          <Box alignSelf="flex-end">
+          <Box
+            alignSelf="flex-end"
+            sx={{
+              ...(isMobile
+                ? {
+                    position: "absolute",
+                    bottom: "-6px",
+                    right: 0,
+                  }
+                : {}),
+            }}
+          >
             <Arrow
               width={isMobile ? "30px" : "45px"}
               height={isMobile ? "20px" : "30px"}

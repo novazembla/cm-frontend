@@ -7,13 +7,12 @@ import {
   LoadingIcon,
   ErrorMessage,
 } from "~/components/ui";
-import { Footer } from "~/components/app";
+import { Footer, MainContent } from "~/components/app";
 import { getApolloClient } from "~/services";
 import { Box, chakra, Grid, Text, Button } from "@chakra-ui/react";
 import { isEmptyHtml } from "~/utils";
 
 import { GetStaticProps, GetStaticPropsContext } from "next";
-import { MainContent } from "~/components/ui";
 import { useAppTranslations } from "~/hooks";
 
 const toursQuery = gql`

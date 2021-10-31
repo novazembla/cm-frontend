@@ -1,10 +1,9 @@
 import { gql } from "@apollo/client";
 import { MultiLangValue, MultiLangHtml, ApiImage } from "~/components/ui";
-import { Footer } from "~/components/app";
+import { Footer, MainContent } from "~/components/app";
 import { getApolloClient } from "~/services";
 import { Box, Text, chakra, Grid } from "@chakra-ui/react";
 import { GetStaticPaths, GetStaticProps } from "next";
-import { MainContent } from "~/components/ui";
 
 const pageQuery = gql`
   query ($slug: String!) {

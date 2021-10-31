@@ -6,7 +6,7 @@ import {
   ApiImage,
   CardLocation,
 } from "~/components/ui";
-import { Footer } from "~/components/app";
+import { Footer, MainContent } from "~/components/app";
 import { getApolloClient } from "~/services";
 import {
   Box,
@@ -19,7 +19,6 @@ import {
 } from "@chakra-ui/react";
 import { isEmptyHtml } from "~/utils";
 import { GetStaticPaths, GetStaticProps } from "next";
-import { MainContent } from "~/components/ui";
 import { useAppTranslations, useIsBreakPoint } from "~/hooks";
 
 const eventQuery = gql`

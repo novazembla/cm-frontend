@@ -54,7 +54,7 @@ export const htmlToTrimmedString = (val: any, length: number) => {
   let str = htmlToString(val) ?? "";
 
   if (str.length > length)
-    return `${str.replace(new RegExp("^(.{" + length + "}[^\\s]*).*"), "$1")} ...`;
+    return `${str.replace(new RegExp("^(.{" + length + "}[^\\s]*).*"), "$1")}`;
 
   return str;
 };

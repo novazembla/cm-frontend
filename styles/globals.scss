@@ -38,6 +38,34 @@ body {
   height: 100%;
   -ms-overflow-style: -ms-autohiding-scrollbar;
 }
+.clampTwoLines {
+  overflow: hidden;
+  hyphens: auto;
+  text-overflow: ellipsis;
+  -moz-box-orient: vertical;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.clampThreeLines {
+  overflow: hidden;
+  hyphens: auto;
+  text-overflow: ellipsis;
+  -moz-box-orient: vertical;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.clampFourLines {
+  overflow: hidden;
+  hyphens: auto;
+  text-overflow: ellipsis;
+  -moz-box-orient: vertical;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+}
 
 #__next {
   height: 100%;
