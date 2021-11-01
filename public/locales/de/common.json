@@ -4,38 +4,73 @@
       "backToTop": "Nach oben",
       "togggleSearch": "Suche",
       "toggleMenu": "Menü",
+      "zoomIntoMap": "Karte vergrößern",
+      "zoomOutOfMap": "Karte verkleinern",
+      "findMyLocation": "Mein Standort anzeigen",
       "suggestLocation": "Kartenpunktvorschlag"
     },
-    "close": "Menü schließen",
-    "open": "Menü öffnen"
+    "title": "Menü"
   },
-  "header": {
-    "logo": "Kulturkarte Lichtenberg"
+  "logo": {
+    "culturemap1": "KULTURKARTE",
+    "culturemap2": "Lichtenberg"
   },
-  "search": "Suche",
+  "mainContent": {
+    "slideToLeft": "Hauptinhalt ausblenden",
+    "slideToRight": "Hauptinhalt einblenden"
+  },
   "quicksearch": {
+    "title": "Suche",
+    "placeholder": "Stichwort",
+    "found": "Suchergebnis ...",
+    "noResult": "Für Ihr Stichwort konnten keine Einträge gefunden werden",
     "module": {
       "title": {
         "location": "Kartenpunkte",
+        "singLocation": "Kartenpunkt",
         "event": "Veranstaltungen",
+        "singEvent": "Veranstaltung",
         "tour": "Touren",
-        "pgae": "Seiten"
+        "singTour": "Tour",
+        "page": "Seiten",
+        "singPage": "Seite"
       }
     }
   },
-  "found": "gefunden",
-  "mainnav": {
-    "home": {
-      "title": "Startseite"
+  "ui": {
+    "button": {
+      "label": {
+        "show": "Anzeigen",
+        "hide": "Ausblenden"
+      }
+    }
+  },
+  "form": {
+    "datepicker": {
+      "close": "Schließ´n"
     },
-    "locations": {
-      "title": "Kartenpunkte"
-    },
-    "events": {
-      "title": "Veranstaltungen"
-    },
-    "page": {
-      "title": "Über uns"
+    "unsavedchanges": "Offenbar haben Sie Änderungen nicht gespeichert. Verlassen ohne zu speichern?"
+  },
+  "settings": {
+    "taxMapping": {
+      "options": {
+        "label": {
+          "typeOfInstitution": "Einrichtungsart",
+          "typeOfOrganisation": "Trägerart",
+          "targetAudience": "Zielgruppe",
+          "eventType": "Veranstaltungsart"
+        }
+      }
+    }
+  },
+  "editor": {
+    "button": {
+      "save": "Speichern",
+      "cancel": "Abbrechen",
+      "unitalic": "Kursivgedrucktes Textformat entfernen",
+      "italic": "Text kursiv formatieren",
+      "unbold": "Fettgedrucktes Textformat entfernen",
+      "bold": "Text fett formatieren",
     }
   },
   "event": {
@@ -46,6 +81,7 @@
     "label": {
       "dateFrom": "Ab",
       "dateUntil": "Bis",
+      "website": "Website",
       "eventLocation": "Veranstaltungsort",
       "eventOrganiser": "Veranstalter",
       "category": "Veranstaltungsart",
@@ -58,15 +94,31 @@
       "location": "Kartenpunkt"
     }
   },
+  "button": {
+    "showLess": "Weniger anzeigen",
+    "showMore": "Alle anzeigen"
+  },
   "page": {
-    "title": "Veranstaltungen",
-    "eventcount": "Veranstaltungen"
+    "title": "Veranstaltungen"
+  },
+  "events": {
+    "filter": {
+      "title": {
+        "dateRange": "Zeitraum",
+        "selectDay": "Datum auswählen",
+        "eventCategory": "Veranstaltungsart"
+      }
+    },
+    "totalCount": "{{count}} Veranstaltung gefunden",
+    "totalCount_plural": "{{count}} Veranstaltungen gefunden",
+    "loadMore": "Weitere Veranstaltungen anzeigen"
   },
   "card": {
     "meta": {
       "location": "Kartenpunkt",
+      "tour": "Tour",
       "event": "Veranstaltung",
-      "tour": "Tour"
+      "tourStop": "Tourstop"
     }
   },
   "location": {
@@ -89,18 +141,44 @@
       "typeOfOrganisation": "Trägerart"
     }
   },
+  "locations": {
+    "title": "Kulturkarte",
+    "filter": {
+      "title": {
+        "keyword": "Nach Stichwort suchen",
+        "typeOfInstitution": "Einrichtungsart",
+        "targetAudience": "Targe audience",
+        "typeOfOrganisation": "Type of location"
+      }
+    },
+    "totalCount": "{{count}} Kartenpunkt gefunden",
+    "totalCount_plural": "{{count}} Kartenpunkte gefunden",
+    "loadMore": "Load more locations"
+  },
+  "map": {
+    "title": "Map"
+  },
   "suggest": {
     "title": "Suggest location"
   },
-  "apiimage": {
-    "errormsg": "The image could unfortunately not be processed. Please try uploading again.",
-    "processsing": "Image successfuly uploaded. We are processing it now",
-    "placeholder": "Image"
-  },
   "tour": {
+    "detail": {
+      "title": "Tour",
+      "facts": "Fakten",
+      "label": {
+        "start": "Start",
+        "distance": "Distanz"
+      }
+    },
+    "listings": {
+      "title": "Touren"
+    },
     "card": {
       "tourStops": "Stops"
     }
+  },
+  "apiimage": {
+    "placeholder": "Bild"
   },
   "error": {
     "dataLoad": "Leider konnten wir die benötigten Daten nicht laden. Bitte versuchen Sie es zu einem späteren Zeitpunkt wieder.",
@@ -110,6 +188,12 @@
     "pleasetryagain": "Leider konnten wir den von Ihnen angeforderten Inhalt nicht darstellen. Bitte versuchen Sie es erneut."
   },
   "translationnotfound": "Übersetzung nicht gefunden",
+  "mission": {
+    "statement": {
+      "read": "Mehr lesen",
+      "close": "Schließen"
+    }
+  },
   "homepage": {
     "title": {
       "highlights": "Highlights"

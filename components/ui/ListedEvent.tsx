@@ -126,8 +126,8 @@ export const ListedEvent = ({ event }: { event: any }) => {
           <Box alignSelf="flex-end">
             <SVG
               type="arrow-right"
-              width={isMobile ? "30px" : "45px"}
-              height={isMobile ? "20px" : "30px"}
+              width={isMobile ? "30px" : "40px"}
+              height={isMobile ? "17px" : "22px"}
             />
           </Box>
         </Flex>

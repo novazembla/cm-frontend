@@ -625,7 +625,7 @@ export const ModuleComponentLocations = ({ ...props }) => {
                             >
                               {t(
                                 "locations.filter.title.typeOfInstitution",
-                                "Type of location"
+                                "Type of institution"
                               )}
                             </Box>
                             <AccordionIcon
@@ -641,7 +641,7 @@ export const ModuleComponentLocations = ({ ...props }) => {
                             isRequired={false}
                             label={t(
                               "locations.filter.title.typeOfInstitution",
-                              "Type of location"
+                              "Type of institution"
                             )}
                             type="checkbox"
                             options={getMultilangSortedList(
@@ -684,7 +684,7 @@ export const ModuleComponentLocations = ({ ...props }) => {
                             isRequired={false}
                             label={t(
                               "locations.filter.title.targetAudience",
-                              "Targe audience"
+                              "Target audience"
                             )}
                             type="checkbox"
                             options={getMultilangSortedList(
@@ -727,7 +727,7 @@ export const ModuleComponentLocations = ({ ...props }) => {
                             isRequired={false}
                             label={t(
                               "locations.filter.title.typeOfOrganisation",
-                              "Type of location"
+                              "Type of organisation"
                             )}
                             type="checkbox"
                             options={getMultilangSortedList(
@@ -758,13 +758,22 @@ export const ModuleComponentLocations = ({ ...props }) => {
               alignItems="center"
             >
               {loading && <LoadingIcon my="0" />}
-              {!loading && !error && (
-                <Box>
-                  {t("locations.totalCount", "{{count}} locations found", {
-                    count: data?.locations?.totalCount,
-                  })}
-                </Box>
-              )}
+              {!loading &&
+                !error(
+                  <Box>
+                    {data?.locations?.totalCount == 1
+                      ? t("locations.totalCount", "{{count}} location found", {
+                          count: data?.locations?.totalCount,
+                        })
+                      : t(
+                          "locations.totalCount_plural",
+                          "{{count}} locations found",
+                          {
+                            count: data?.locations?.totalCount,
+                          }
+                        )}
+                  </Box>
+                )}
               {error && <ErrorMessage type="dataLoad" />}
             </Flex>
           </Box>

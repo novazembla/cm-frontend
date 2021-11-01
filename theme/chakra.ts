@@ -189,7 +189,8 @@ const themeConfig = {
       transform: {
         base: "translateX(-10px)",
         sm: "translateX(-10px)",
-        md: "translateX(-35px)",
+        md: "translateX(-25px)",
+        "2xl": "translateX(-35px)",
       },
     },
     blurredLightGray: {
@@ -206,7 +207,7 @@ const themeConfig = {
       bg: "white",
       // borderRadius: "lg",
       shadow: "xl",
-      p: { base: 4, md: 5 },
+      p: { base: "20px", md: "45px", "2xl": "55px" },
     },
     page: {
       pt: chakraToBreakpointArray({
@@ -216,12 +217,12 @@ const themeConfig = {
       px: chakraToBreakpointArray({
         base: "20px",
         md: "45px",
-        xl: "55px",
+        "2xl": "55px",
       }),
       pb: chakraToBreakpointArray({
         base: "20px",
         md: "45px",
-        xl: "55px",
+        "2xl": "55px",
       }),      
     },
     pageBg: {
@@ -334,13 +335,15 @@ const themeConfig = {
       fontWeight: "bold",
       fontSize: chakraToBreakpointArray({
         base: "22px",
-        md: "22px",
-        xl: "24px",
+        md: "28px",
+        xl: "30px",
+        "2xl": "32px",
       }),
       lineHeight: chakraToBreakpointArray({
         base: "22px",
-        md: "22px",
-        xl: "24px",
+        md: "28px",
+        xl: "30px",
+        "2xl": "32px",
       }),
     },
   },

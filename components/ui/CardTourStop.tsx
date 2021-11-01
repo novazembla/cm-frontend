@@ -56,7 +56,7 @@ export const CardTourStop = ({
         color;
     }
   } else {
-    meta = t("card.meta.tourStop", "Location");
+    meta = t("card.meta.tourStop", "Tour stop");
   }
 
   let type = "kartenpunkt";
@@ -192,8 +192,8 @@ export const CardTourStop = ({
           >
             <SVG
               type="arrow-right"
-              width={isMobile ? "30px" : "45px"}
-              height={isMobile ? "20px" : "30px"}
+              width={isMobile ? "30px" : "40px"}
+              height={isMobile ? "17px" : "22px"}
             />
           </Box>
         </Flex>

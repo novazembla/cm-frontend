@@ -10,7 +10,7 @@ export default function Page500() {
   const { t } = useAppTranslations();
   
   return (
-    <MainContent>
+    <MainContent isDrawer layerStyle="pageBg" noMobileBottomPadding>
       <Box layerStyle="page" w="100%">
         <Box layerStyle="headingPullOut" mb="3">
           <Heading as="h1" className="highlight" color="cm.text">

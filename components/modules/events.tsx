@@ -346,9 +346,13 @@ export const ModuleComponentEvents = ({ ...props }) => {
             {loading && <LoadingIcon my="0" />}
             {!loading && !error && (
               <Box>
-                {t("events.totalCount", "{{count}} locations found", {
-                  count: data?.events?.totalCount,
-                })}
+                {data?.events?.totalCount == 1
+                  ? t("events.totalCount", "{{count}} event found", {
+                      count: data?.events?.totalCount,
+                    })
+                  : t("events.totalCount_plural", "{{count}} events found", {
+                      count: data?.events?.totalCount,
+                    })}
               </Box>
             )}
             {error && <ErrorMessage type="dataLoad" />}

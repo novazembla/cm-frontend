@@ -1,4 +1,4 @@
-import { Link, Box } from "@chakra-ui/react";
+import { Link, Box, chakra } from "@chakra-ui/react";
 import { ActiveLink } from "~/components/ui";
 import { useAppTranslations } from "~/hooks";
 
@@ -11,11 +11,13 @@ export const Logo = () => {
         as={ActiveLink}
         activeClassName="activeLogo"
         href={`${i18n.language === "en" ? "/en" : ""}/`}
-        color="black"
+        color="#333"
         textDecoration="none !important"
         whiteSpace="nowrap"
-      >
-        {t("header.logo", "CultureMap")}
+      > 
+        <chakra.span>{t("logo.culturemap1", "CULTUREMAP")}</chakra.span>{" "}
+        <chakra.span fontWeight="normal">{t("logo.culturemap2", "Lichtenberg")}</chakra.span>
+        
       </Link>
     </Box>
   );

@@ -67,6 +67,7 @@ export const MainContent = ({
     md: "calc(80vw)",
     lg: "66.66vw",
     xl: "675px",
+    "2xl": "695px",
   });
 
   // also update quicksearch
@@ -233,7 +234,7 @@ export const MainContent = ({
           }
         ></Box>
       )}
-      {isDrawer && !isVerticalContent && (
+      {isDrawer && !isVerticalContent && (isTabletWide || isDesktopAndUp) && (
         <motion.div
           style={{
             position: "fixed",

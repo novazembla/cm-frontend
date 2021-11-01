@@ -101,8 +101,8 @@ export const components = {
         },
         _focus: {
           shadow: "0 0px 3px 1px #E42B20",
-          color: "white",
-          bg: "cm.accentLight",
+          bg: "white",
+          color: "cm.accentLight",
         },
         _active: {
           shadow: "0 0px 3px 1px #E42B20",

@@ -16,25 +16,15 @@ export const TrimmedTextWithBottomEdge = ({
   const [eventListenerAdded, setEventListenerAdded] = useState(false);
 
   const onResize = debounce(() => {
-
     if (!span.current) return;
     span.current.innerText = text;
 
     const rects = span.current.getClientRects();
-    console.log(
-      rects.length,
-      span.current.offsetWidth - edgeWidth,
-      "rrr",
-      numLines,
-      edgeWidth
-    );
     if (rects.length < numLines - 1) return;
-    console.log("d");
     let shortEnough = false;
     let newOut = span.current.innerText;
 
     while (!shortEnough) {
-      console.log("in");
       span.current.innerText = span.current.innerText.slice(
         0,
         span.current.innerText.length - 1
@@ -44,7 +34,6 @@ export const TrimmedTextWithBottomEdge = ({
         test.length == numLines &&
         test[test.length - 1].width < span.current.offsetWidth - edgeWidth
       ) {
-        console.log("setting trimmed text", test, test[test.length - 1].width);
         shortEnough = true;
         newOut = span.current.innerText;
       }

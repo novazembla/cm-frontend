@@ -186,7 +186,7 @@ export const MobileNav = () => {
               >
                 <IconButton variant="outline"
                   aria-label={t("menu.button.toggleMenu", "Menu")}
-                  icon={<SVG type="menu-mobile" width="42px" height="42px" />}
+                  icon={<SVG type="menu-mobile" width="48px" height="48px" />}
                   borderRadius="100"
                   p="0"
                   paddingInlineStart="0"

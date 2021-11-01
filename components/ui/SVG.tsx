@@ -94,6 +94,7 @@ export const SVG = ({
       className={className}
       w={width}
       h={height}
+      flexShrink={0} 
       backgroundPosition={position}
       backgroundRepeat="no-repeat"
       backgroundSize={size}

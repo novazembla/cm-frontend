@@ -35,7 +35,6 @@ export const Header = (/* props */) => {
       px={chakraToBreakpointArray({
         base: "20px",
         md: "45px",
-        xl: "55px",
         "2xl": "0px",
       })}
       position="fixed"

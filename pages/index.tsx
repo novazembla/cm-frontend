@@ -70,15 +70,16 @@ export const Home = ({ homepage }: { homepage: any }) => {
               top="60px"
             >
               <Box>
-                <b>
+                <Box className={isMobile ? "clampThreeLines" : undefined}>
+                  <b>
                   <MultiLangHtml json={homepage?.missionStatement} />
                 </b>
-
+                </Box>
                 <Flex
                   w="100%"
                   alignItems="center"
                   justifyContent={isMobile ? "space-between" : "flex-end"}
-                  mt="0.5em"
+                  mt={isMobile ? "0.5em" : "1em"}
                 >
                   {homepage?.missionStatementPage?.slug && (
                     <NextLink
@@ -92,8 +93,8 @@ export const Home = ({ homepage }: { homepage: any }) => {
                         icon={
                           <SVG
                             type="arrow-right"
-                            width={isMobile ? "30px" : "45px"}
-                            height={isMobile ? "20px" : "30px"}
+                            width={isMobile ? "30px" : "40px"}
+                            height={isMobile ? "17px" : "22px"}
                           />
                         }
                         w="30px"

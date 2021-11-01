@@ -8,7 +8,12 @@ import {
   LinkBox,
   LinkOverlay,
 } from "@chakra-ui/react";
-import { MultiLangValue, ApiImage, TrimmedTextWithBottomEdge, SVG } from "~/components/ui";
+import {
+  MultiLangValue,
+  ApiImage,
+  TrimmedTextWithBottomEdge,
+  SVG,
+} from "~/components/ui";
 import { htmlToTrimmedString } from "~/utils";
 import { useAppTranslations, useIsBreakPoint } from "~/hooks";
 import { useConfigContext, useSettingsContext } from "~/provider";
@@ -181,7 +186,7 @@ export const CardEvent = ({
 
       <Box px={isMobile ? "20px" : "35px"} pb={isMobile ? "20px" : "35px"}>
         <Flex justifyContent="space-between" position="relative">
-        <Box
+          <Box
             w={isMobile ? "100%" : "66%"}
             minH={isMobile ? "60px" : undefined}
             textStyle="card"
@@ -210,8 +215,8 @@ export const CardEvent = ({
           >
             <SVG
               type="arrow-right"
-              width={isMobile ? "30px" : "45px"}
-              height={isMobile ? "20px" : "30px"}          
+              width={isMobile ? "30px" : "40px"}
+              height={isMobile ? "17px" : "22px"}
             />
           </Box>
         </Flex>

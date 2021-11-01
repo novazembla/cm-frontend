@@ -28,7 +28,7 @@ export const Footer = ({
         base: "20px",
         sm: "20px",
         md: "45px",
-        xl: "55px",
+        "2xl": "55px",
       }}
       px={{
         base: !noBackground || isMobile ? "20px" : 0,
@@ -39,7 +39,7 @@ export const Footer = ({
       pb={{
         base: isMobile ? "80px" : !noBackground ? "20px" : 0,
         md: "45px",
-        xl: "55px",
+        "2xl": "55px",
       }}
       mt={!noBackground ? "60px" : undefined}
     >
@@ -60,13 +60,16 @@ export const Footer = ({
         >
           <IconButton
             mb="1.5"
+            variant="unstyled"
             aria-label={t("menu.button.backToTop", "Back to top")}
-            icon={<SVG type="arrow-up" width="30px" height="50px" />}
+            icon={<SVG type="arrow-up" width={isMobile ? "17px": "22px"} height={isMobile ? "30px": "40px"} />}
             borderRadius="100"
             p="0"
+            className="svgHover"
             paddingInlineStart="0"
             paddingInlineEnd="0"
-            h="50px"
+            h="30px"
+            padding="0"
             bg="transparent"
             onClick={() => {
               if (window) {
