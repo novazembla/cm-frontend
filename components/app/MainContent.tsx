@@ -6,7 +6,6 @@ import { motion, useIsPresent } from "framer-motion";
 import { useRouter } from "next/router";
 import { useScrollStateContext } from "~/provider";
 
-
 const contentPaddingTop = {
   base: "60px",
   // sm: "60px",
@@ -82,7 +81,7 @@ export const MainContent = ({
     "2xl": "calc(8vw - 55px)",
   });
 
-  const PAN_TRIGGER_CLOSE_THRESHOLD = isMobile ? 120: 180;
+  const PAN_TRIGGER_CLOSE_THRESHOLD = isMobile ? 120 : 180;
 
   // useEffect(() => {
   //   if (isScrollingObserved || typeof window === undefined) return;
@@ -220,7 +219,10 @@ export const MainContent = ({
       {isDrawer && !isVerticalContent && (
         <Box
           onClick={() => {
-            toggle();
+            close();
+          }}
+          onTouchStart={() => {
+            close();
           }}
           bg="transparent"
           position="fixed"

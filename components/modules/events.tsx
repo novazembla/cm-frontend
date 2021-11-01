@@ -226,7 +226,7 @@ export const ModuleComponentEvents = ({ ...props }) => {
   }, [watchVariables, watch, refetch, currentQueryState]);
 
   let resultText = t("events.totalCount", "{{count}} event found", {
-    count: data?.locations?.totalCount ?? 0,
+    count: data?.events?.totalCount ?? 0,
   });
   if (data?.events?.totalCount == 1)
     resultText = t("events.totalCountPlural", "{{count}} events found", {

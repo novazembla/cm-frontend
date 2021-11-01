@@ -116,7 +116,7 @@ export const ModuleComponentLocation = ({
     if (typeof window !== "undefined" && highlight && cultureMap) {
       console.log("move to hightligh", highlight);
       cultureMap.setHighlight(highlight);
-      cultureMap.panTo(highlight.lng, highlight.lat);
+      cultureMap.panTo(highlight.lng, highlight.lat, true);
     }
 
     return () => {

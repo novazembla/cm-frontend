@@ -269,7 +269,7 @@ export class CultureMap {
     }
   }
 
-  getCenterOffset(): [number, number] {
+  getCenterOffset(withDrawer: boolean): [number, number] {
     if (typeof window === "undefined") return [0, 0];
 
     const isMobile = window.matchMedia("(max-width: 44.9999em)").matches;
@@ -283,32 +283,20 @@ export class CultureMap {
       "(min-width: 75em) and (max-width: 119.9999em)"
     ).matches;
 
-    // TODO: adjust to final values
-
     if (isMobile) {
-      return [0, 30];
+      return withDrawer? [window.innerWidth * 0.4, 30] : [0, 30];
     } else if (isTablet && !isTabletWide) {
-      return [0, 30];
+      return withDrawer? [window.innerWidth * 0.4, 30] : [0, 30];
     } else if (isTabletWide) {
-      return [window.innerWidth / 4, 30];
+      return [window.innerWidth * 0.3333, 30];
     } else if (isDesktop) {
       return [725 / 2, 40];
     } else {
-      console.log(5);
-
-      console.log(
-        window.innerWidth,
-
-        (window.innerWidth - 675) / 2
-      ),
-        (window.innerWidth - (window.innerWidth - 675) / 2,
-        (window.innerWidth - (window.innerWidth - 675) / 2) / 2);
-
-      return [(675 + (window.innerWidth * 0.08 - 55)) / 2, 40];
+      return [(695 + (window.innerWidth * 0.08 - 55)) / 2, 40];
     }
   }
 
-  panTo(lng: number, lat: number) {
+  panTo(lng: number, lat: number, withDrawer: boolean) {
     if (this.mapRef) {
       this.mapRef.panTo(
         [lng, lat],
@@ -316,7 +304,7 @@ export class CultureMap {
           animate: true,
           duration: 1000,
           essential: true,
-          offset: this.getCenterOffset(),
+          offset: this.getCenterOffset(withDrawer),
         },
         {
           cmAnimation: true,

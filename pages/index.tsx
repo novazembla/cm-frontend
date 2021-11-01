@@ -79,7 +79,7 @@ export const Home = ({ homepage }: { homepage: any }) => {
                   w="100%"
                   alignItems="center"
                   justifyContent={isMobile ? "space-between" : "flex-end"}
-                  mt={isMobile ? "0.5em" : "1em"}
+                  mt="1em"
                 >
                   {homepage?.missionStatementPage?.slug && (
                     <NextLink
@@ -97,12 +97,14 @@ export const Home = ({ homepage }: { homepage: any }) => {
                             height={isMobile ? "17px" : "22px"}
                           />
                         }
-                        w="30px"
-                        h="30px"
+                        w={isMobile ? "30px" : "40px"}
+                        h={isMobile ? "17px" : "22px"}
                         p="0"
                         paddingInlineStart="0"
                         paddingInlineEnd="0"
                         className="svgHover"
+                        minW="0"
+                        display="inline-block"
                         aria-label={t(
                           "mission.statement.read",
                           "read mission statement"
@@ -120,9 +122,11 @@ export const Home = ({ homepage }: { homepage: any }) => {
                           height={isMobile ? "20px" : "30px"}
                         />
                       }
-                      w="30px"
-                      h="30px"
+                      w={isMobile ? "20px" : "30px"}
+                      h={isMobile ? "20px" : "30px"}
+                      minW="0"
                       p="0"
+                      display="inline-block"
                       className="svgHover"
                       paddingInlineStart="0"
                       paddingInlineEnd="0"
