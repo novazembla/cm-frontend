@@ -31,9 +31,11 @@ export const TrimmedTextWithBottomEdge = ({
       );
       const test = span.current.getClientRects();
       if (
-        test.length == numLines &&
-        test[test.length - 1].width < span.current.offsetWidth - edgeWidth
+        (test.length == numLines &&
+          test[test.length - 1].width < span.current.offsetWidth - edgeWidth) ||
+        span.current.innerText.length === 60
       ) {
+        console.log("stop")
         shortEnough = true;
         newOut = span.current.innerText;
       }
@@ -43,6 +45,7 @@ export const TrimmedTextWithBottomEdge = ({
 
   useEffect(() => {
     if (typeof window === "undefined" || eventListenerAdded) return;
+    if (!text.trim() || text.trim().length <= 60) return;
 
     setEventListenerAdded(true);
 

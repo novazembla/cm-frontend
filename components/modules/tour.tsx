@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { gql } from "@apollo/client";
 import {
   MultiLangValue,
@@ -90,6 +90,7 @@ export const ModuleComponentTour = ({
   const config = useConfigContext();
   const settings = useSettingsContext();
   const { t, i18n, getMultilangValue } = useAppTranslations();
+  const [fillContainer, setFillContainer] = useState(true);
 
   useEffect(() => {
     // TODO implement tour
@@ -286,12 +287,16 @@ export const ModuleComponentTour = ({
             </Box>
 
             <Box
+              as="article"
+              data-id={tour.id}
               bg="#fff"
               borderRadius="lg"
               overflow="hidden"
-              w={isMobile ? "80%" : "100%"}
-              maxW={isMobile ? "275px" : "100%"}
+              w="100%"
               mt="20px"
+              maxW={isMobile && !fillContainer ? "275px" : "100%"}
+              h={isMobile && fillContainer ? "100%" : undefined}
+              className="svgHover"
             >
               <Flex
                 flexDirection={isMobile ? "column" : "row-reverse"}

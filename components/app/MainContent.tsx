@@ -5,6 +5,7 @@ import { HiChevronRight } from "react-icons/hi";
 import { motion, useIsPresent } from "framer-motion";
 import { useRouter } from "next/router";
 import { useScrollStateContext } from "~/provider";
+import { primaryInput } from "detect-it";
 
 const contentPaddingTop = {
   base: "60px",
@@ -299,7 +300,9 @@ export const MainContent = ({
         key={`drawer-${router.asPath}`}
         style={{
           position: "absolute",
-          top: isVerticalContent ? "calc(100vh - 290px)" : 0,
+          top: isVerticalContent
+            ? "calc(100vh - var(--locationBarHeight) - 290px)"
+            : 0,
           left: contentLeft,
           height: isVerticalContent ? "auto" : "100vh",
           width: isVerticalContent ? "100vw" : contentWidth,
@@ -346,6 +349,7 @@ export const MainContent = ({
           <Box
             className="content"
             pt={isVerticalContent ? 0 : contentPaddingTop}
+            h="100%"
           >
             <Box
               ref={mainContentRef}
@@ -354,10 +358,17 @@ export const MainContent = ({
                 md: "calc(100vh - 60px)",
                 xl: "calc(100vh - 80px)",
               }}
+              minH={isMobile ? "calc(100vh - 60px)" : undefined}
               overflowY={{
                 md: "auto",
               }}
-              pb={isMobile && !noMobileBottomPadding ? "60px" : undefined}
+              pb={
+                isMobile && !noMobileBottomPadding
+                  ? "60px"
+                  : primaryInput === "touch"
+                  ? "var(--locationBarHeight)"
+                  : undefined
+              }
               layerStyle={layerStyle}
               onScroll={(e: React.UIEvent<HTMLDivElement>) => {
                 if (isPresent) {

@@ -38,13 +38,13 @@ export const Map = () => {
 
   const { onMenuToggle, isMenuOpen } = useMenuButtonContext();
   const { isQuickSearchOpen, onQuickSearchToggle } = useQuickSearchContext();
-
+  
   const { isMobile, isTablet, isTabletWide, isDesktopAndUp } =
     useIsBreakPoint();
 
   const buttonDiameter = isMobile ? "38px" : "55px";
   const buttonSpacing = isMobile ? "10px" : "14px";
-
+  const [mapLoaded, setMapLoaded] = useState(false);
   useEffect(() => {
     if (mapRef.current) return; //stops map from intializing more than once
 
@@ -124,6 +124,7 @@ export const Map = () => {
     });
 
     map.on("load", () => {
+      setMapLoaded(true);
       map.addSource("locations", {
         type: "geojson",
         data: `${config.apiURL}/geojson`,
@@ -394,10 +395,12 @@ export const Map = () => {
 
       <Box
         position="fixed"
-        right={isTabletWide || isDesktopAndUp ? "20px" : undefined}
-        left={!(isTabletWide || isDesktopAndUp) ? "10px" : undefined}
-        top={isDesktopAndUp ? "100px" : "70px"}
+        right={isTabletWide || isDesktopAndUp ? "20px" : "10px"}
+        // left={!(isTabletWide || isDesktopAndUp) ? "10px" : undefined}
+        top={isDesktopAndUp ? "100px" : isTabletWide ? "80px" : "70px"}
         zIndex="3"
+        transition="opacity 0.3s"
+        opacity={!mapLoaded ? 0 : 1}
       >
         <Flex
           direction="column"

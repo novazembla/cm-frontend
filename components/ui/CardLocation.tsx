@@ -149,7 +149,7 @@ export const CardLocation = ({
                 textStyle="headline"
                 textDecoration="none"
                 minH={isMobile ? "50px" : undefined}
-                className={isMobile ? "clampTwoLines" : "clampThreeLines"}
+                className={isMobile ? "clampTwoLines" : "clampThreeLines"}                
               >
                 <MultiLangValue json={location.title} />
               </LinkOverlay>

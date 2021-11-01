@@ -269,7 +269,7 @@ export class CultureMap {
     }
   }
 
-  getCenterOffset(withDrawer: boolean): [number, number] {
+  getCenterOffset(withDrawer?: boolean): [number, number] {
     if (typeof window === "undefined") return [0, 0];
 
     const isMobile = window.matchMedia("(max-width: 44.9999em)").matches;

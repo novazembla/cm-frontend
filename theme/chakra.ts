@@ -132,6 +132,9 @@ const themeConfig = {
       "p + p > button": {
         mt: 2,
       },
+      ".chakra-linkbox__overlay::before": {
+        zIndex: "1 !important",
+      }
     },
   },
   colors: {
