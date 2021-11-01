@@ -98,10 +98,11 @@
     "showLess": "Weniger anzeigen",
     "showMore": "Alle anzeigen"
   },
-  "page": {
-    "title": "Veranstaltungen"
-  },
   "events": {
+    "totalCount": "{{count}} Veranstaltung gefunden",
+    "totalCount_plural": "{{count}} Veranstaltungen gefunden",
+    "totalCountPlural": "{{count}} Veranstaltungen gefunden",
+    "totalCountPlural_plural": "{{count}} Veranstaltungen gefunden",
     "filter": {
       "title": {
         "dateRange": "Zeitraum",
@@ -109,9 +110,10 @@
         "eventCategory": "Veranstaltungsart"
       }
     },
-    "totalCount": "{{count}} Veranstaltung gefunden",
-    "totalCount_plural": "{{count}} Veranstaltungen gefunden",
     "loadMore": "Weitere Veranstaltungen anzeigen"
+  },
+  "page": {
+    "title": "Veranstaltungen"
   },
   "card": {
     "meta": {
@@ -142,6 +144,10 @@
     }
   },
   "locations": {
+    "totalCount": "{{count}} Kartenpunkt gefunden",
+    "totalCount_plural": "{{count}} Kartenpunkte gefunden",
+    "totalCountPlural": "{{count}} Kartenpunkte gefunden",
+    "totalCountPlural_plural": "{{count}} Kartenpunkte gefunden",
     "title": "Kulturkarte",
     "filter": {
       "title": {
@@ -151,9 +157,8 @@
         "typeOfOrganisation": "Type of location"
       }
     },
-    "totalCount": "{{count}} Kartenpunkt gefunden",
-    "totalCount_plural": "{{count}} Kartenpunkte gefunden",
-    "loadMore": "Load more locations"
+    "loadMore": "Weitere Kartenpunkte laden",
+    "totalCount_plural_plural": "{{count}} Kartenpunkte gefunden"
   },
   "map": {
     "title": "Map"
@@ -167,6 +172,7 @@
       "facts": "Fakten",
       "label": {
         "start": "Start",
+        "stop": "Ende",
         "distance": "Distanz"
       }
     },

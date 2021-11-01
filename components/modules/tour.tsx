@@ -392,7 +392,7 @@ export const ModuleComponentTour = ({
                       pt="0.2em"
                       mt="0.3em"
                     >
-                      {t("tour.detail.label.start", "Stop")}
+                      {t("tour.detail.label.stop", "Stop")}
                     </Box>
                     <Box textStyle="card">
                       <MultiLangValue

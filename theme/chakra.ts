@@ -87,7 +87,7 @@ const themeConfig = {
           xl: "1.8px !important",
         }),
         textTransform: "uppercase",
-        fontWeight: "bold"
+        fontWeight: "bold",
       },
       "ul, ol": {
         margin: "0 0 0.6em 1.25em",
@@ -223,12 +223,12 @@ const themeConfig = {
         base: "20px",
         md: "45px",
         "2xl": "55px",
-      }),      
+      }),
     },
     pageBg: {
       bg: "linear-gradient(180deg, rgba(252,210,207,1) 0%, rgba(255,255,255,1) 300px, rgba(255,255,255,1) 100%) fixed",
       backgroundAttachment: "fixed",
-    }
+    },
   },
   textStyles: {
     navigation: {

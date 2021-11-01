@@ -98,10 +98,11 @@
     "showLess": "Show less",
     "showMore": "Show all"
   },
-  "page": {
-    "title": "Events"
-  },
   "events": {
+    "totalCount": "{{count}} event found",
+    "totalCount_plural": "{{count}} event found",
+    "totalCountPlural": "{{count}} events found",
+    "totalCountPlural_plural": "{{count}} events found",
     "filter": {
       "title": {
         "dateRange": "Date (range)",
@@ -109,9 +110,10 @@
         "eventCategory": "Type of event"
       }
     },
-    "totalCount": "{{count}} event found",
-    "totalCount_plural": "{{count}} events found",
     "loadMore": "Load more events"
+  },
+  "page": {
+    "title": "Events"
   },
   "card": {
     "meta": {
@@ -142,6 +144,10 @@
     }
   },
   "locations": {
+    "totalCount": "{{count}} Kartenpunkt gefunden",
+    "totalCount_plural": "{{count}} Kartenpunkte gefunden",
+    "totalCountPlural": "{{count}} Kartenpunkte gefunden",
+    "totalCountPlural_plural": "{{count}} Kartenpunkte gefunden",
     "title": "Map",
     "filter": {
       "title": {
@@ -151,9 +157,8 @@
         "typeOfOrganisation": "Type of organisation"
       }
     },
-    "totalCount": "{{count}} locations found",
-    "totalCount_plural": "{{count}} locations found",
-    "loadMore": "Load more locations"
+    "loadMore": "Load more locations",
+    "totalCount_plural_plural": "{{count}} locations found"
   },
   "map": {
     "title": "Map"
@@ -167,6 +172,7 @@
       "facts": "About the tour",
       "label": {
         "start": "Stop",
+        "stop": "Stop",
         "distance": "Distance"
       }
     },

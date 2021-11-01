@@ -225,6 +225,14 @@ export const ModuleComponentEvents = ({ ...props }) => {
     }
   }, [watchVariables, watch, refetch, currentQueryState]);
 
+  let resultText = t("events.totalCount", "{{count}} event found", {
+    count: data?.locations?.totalCount ?? 0,
+  });
+  if (data?.events?.totalCount == 1)
+    resultText = t("events.totalCountPlural", "{{count}} events found", {
+      count: data?.events?.totalCount,
+    });
+
   return (
     <MainContent layerStyle="pageBg" noMobileBottomPadding>
       <Grid
@@ -346,13 +354,7 @@ export const ModuleComponentEvents = ({ ...props }) => {
             {loading && <LoadingIcon my="0" />}
             {!loading && !error && (
               <Box>
-                {data?.events?.totalCount == 1
-                  ? t("events.totalCount", "{{count}} event found", {
-                      count: data?.events?.totalCount,
-                    })
-                  : t("events.totalCount_plural", "{{count}} events found", {
-                      count: data?.events?.totalCount,
-                    })}
+                {resultText}
               </Box>
             )}
             {error && <ErrorMessage type="dataLoad" />}

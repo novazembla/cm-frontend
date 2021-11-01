@@ -562,7 +562,13 @@ export const ModuleComponentLocations = ({ ...props }) => {
     isPresent,
   ]);
 
-  console.log(accordionDefaultIndex);
+  let resultText = t("locations.totalCount", "{{count}} location found", {
+    count: data?.locations?.totalCount ?? 0,
+  });
+  if (data?.locations?.totalCount == 1)
+    resultText = t("locations.totalCountPlural", "{{count}} locations found", {
+      count: data?.locations?.totalCount,
+    });
 
   return (
     <MainContent layerStyle="blurredLightGray" noMobileBottomPadding>
@@ -758,22 +764,7 @@ export const ModuleComponentLocations = ({ ...props }) => {
               alignItems="center"
             >
               {loading && <LoadingIcon my="0" />}
-              {!loading &&
-                !error(
-                  <Box>
-                    {data?.locations?.totalCount == 1
-                      ? t("locations.totalCount", "{{count}} location found", {
-                          count: data?.locations?.totalCount,
-                        })
-                      : t(
-                          "locations.totalCount_plural",
-                          "{{count}} locations found",
-                          {
-                            count: data?.locations?.totalCount,
-                          }
-                        )}
-                  </Box>
-                )}
+              {!loading && !error && (<Box>{resultText}</Box>)}
               {error && <ErrorMessage type="dataLoad" />}
             </Flex>
           </Box>
