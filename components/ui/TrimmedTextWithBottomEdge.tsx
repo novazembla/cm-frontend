@@ -35,7 +35,6 @@ export const TrimmedTextWithBottomEdge = ({
           test[test.length - 1].width < span.current.offsetWidth - edgeWidth) ||
         span.current.innerText.length === 60
       ) {
-        console.log("stop")
         shortEnough = true;
         newOut = span.current.innerText;
       }

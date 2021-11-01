@@ -296,7 +296,7 @@ export class CultureMap {
     }
   }
 
-  panTo(lng: number, lat: number, withDrawer: boolean) {
+  panTo(lng: number, lat: number, withDrawer?: boolean) {
     if (this.mapRef) {
       this.mapRef.panTo(
         [lng, lat],

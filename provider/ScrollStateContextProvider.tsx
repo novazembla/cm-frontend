@@ -5,7 +5,11 @@ type ScrollContextScopes = "body" | "main" | "vertical";
 export type ScrollContext = {
   get: (scope: ScrollContextScopes, key: string) => number;
   set: (scope: ScrollContextScopes, key: string, x: number) => void;
+  isBack: () => boolean;
+  setIsBack: (state: boolean) => void;
 };
+
+let isBack = false;
 
 const scrollPositions: Record<ScrollContextScopes, Record<string, number>> = {
   body: {},
@@ -19,6 +23,8 @@ const scrollContext = {
   set: (scope: ScrollContextScopes, key: string, x: number) => {
     scrollPositions[scope][key] = x;
   },
+  isBack: () => isBack,
+  setIsBack: (state: boolean) => {isBack = state},
 };
 
 // create context
@@ -32,6 +38,8 @@ export const ScrollStateContextProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
+
+  
   return (
     <ScrollStateContext.Provider value={scrollContext}>
       {children}

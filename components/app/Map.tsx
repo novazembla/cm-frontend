@@ -400,7 +400,7 @@ export const Map = () => {
         top={isDesktopAndUp ? "100px" : isTabletWide ? "80px" : "70px"}
         zIndex="3"
         transition="opacity 0.3s"
-        opacity={!mapLoaded ? 0 : 1}
+        opacity={mapLoaded ? 1 : 0}
       >
         <Flex
           direction="column"

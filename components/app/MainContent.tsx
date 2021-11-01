@@ -6,6 +6,7 @@ import { motion, useIsPresent } from "framer-motion";
 import { useRouter } from "next/router";
 import { useScrollStateContext } from "~/provider";
 import { primaryInput } from "detect-it";
+import { route } from "next/dist/server/router";
 
 const contentPaddingTop = {
   base: "60px",
@@ -131,37 +132,37 @@ export const MainContent = ({
   }, []);
 
   useEffect(() => {
-    console.log("Binging", router.asPath.replace(/[^a-z]/g, ""));
-    setCurrentRoute(router.asPath.replace(/[^a-z]/g, ""));
-    if (scrollState.get("main", router.asPath.replace(/[^a-z]/g, "")) > 0) {
-      mainContentRef.current?.scrollTo({
-        top: scrollState.get("main", router.asPath.replace(/[^a-z]/g, "")),
-        left: 0,
-      });
+    if (isPresent) {
+      setCurrentRoute(router.asPath.replace(/[^a-z]/g, ""));
+      
+      if (scrollState.get("main", router.asPath.replace(/[^a-z]/g, "")) > 0 && scrollState.isBack()) {
+        mainContentRef.current?.scrollTo({
+          top: scrollState.get("main", router.asPath.replace(/[^a-z]/g, "")),
+          left: 0,
+        });
+      } else {
+        mainContentRef.current?.scrollTo({
+          top: 0,
+          left: 0,
+        });
+      }
+      scrollState.setIsBack(false);
     }
-
-    return () => {
-      console.log("Unbinding", router.asPath.replace(/[^a-z]/g, ""));
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isPresent]);
+  }, [isPresent, router.asPath, scrollState]);
 
   useEffect(() => {
     if (typeof document === "undefined") return;
 
     // reset
     if (!isPresent) {
-      console.log(1, currentRoute);
-      // annoyinigly the clone of the component by framer motion's animate presence
-      // reset the scoll state of the main content's div.
-      // we have to reset it
-      if (scrollState.get("main", currentRoute) > 0) {
-        console.log(2, currentRoute);
-        const container = document.querySelector(
-          `#p-${currentRoute} .mainContent`
-        );
-
-        if (container) {
+      const container = document.querySelector(
+        `#p-${currentRoute} .mainContent`
+      );
+      if (container) {
+        // annoyinigly the clone of the component by framer motion's animate presence
+        // reset the scoll state of the main content's div.
+        // we have to reset it
+        if (scrollState.get("main", currentRoute) > 0 && scrollState.isBack()) {
           console.log(
             "set leaving container",
             currentRoute,
@@ -174,8 +175,8 @@ export const MainContent = ({
         }
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isPresent]);
+    // es lint-disable-next-line react-hooks/exhaustive-deps
+  }, [isPresent, currentRoute, scrollState]);
 
   const close = () => {
     if (isAnimationRunning) return;

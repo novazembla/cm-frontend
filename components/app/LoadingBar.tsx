@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react";
-import Router from "next/router";
+import Router, {useRouter} from "next/router";
 import { Box } from "@chakra-ui/react";
-import { useMenuButtonContext, useQuickSearchContext } from "~/provider";
+import { useMenuButtonContext, useQuickSearchContext, useScrollStateContext } from "~/provider";
 
 export const LoadingBar = ({ color }: { color: string }) => {
   const [barVisible, setBarVisible] = useState(false);
   const { onMenuClose } = useMenuButtonContext();
   const { onQuickSearchClose } = useQuickSearchContext();
 
+  const router = useRouter()
+
+  const scrollState = useScrollStateContext();
+  
   const showBar = () => {
     onMenuClose();
     onQuickSearchClose();
@@ -19,14 +23,19 @@ export const LoadingBar = ({ color }: { color: string }) => {
   }
 
   useEffect(() => {
-    Router.events.on("routeChangeStart", showBar);
-    Router.events.on("routeChangeComplete", hideBar);
-    Router.events.on("routeChangeError", hideBar);
+    router.events.on("routeChangeStart", showBar);
+    router.events.on("routeChangeComplete", hideBar);
+    router.events.on("routeChangeError", hideBar);
+    router.beforePopState(() => {
+      console.log("123")
+      scrollState.setIsBack(true);
+      return true;
+    });
 
     return () => {
-      Router.events.off("routeChangeStart", showBar);
-      Router.events.off("routeChangeComplete", hideBar);
-      Router.events.off("routeChangeError", hideBar);
+      router.events.off("routeChangeStart", showBar);
+      router.events.off("routeChangeComplete", hideBar);
+      router.events.off("routeChangeError", hideBar);
     };
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
