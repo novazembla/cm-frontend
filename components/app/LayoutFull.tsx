@@ -54,7 +54,9 @@ export const LayoutFull = ({ children }: AppProps) => {
       <Map />
       <Header />
 
-      <AnimatePresence exitBeforeEnter>
+      {children}
+
+      {/* <AnimatePresence exitBeforeEnter>
         <motion.div
           key={`ccc-${router.asPath}`}
           id={`p-${router.asPath.replace(/[^a-z]/g, "")}`}
@@ -73,7 +75,7 @@ export const LayoutFull = ({ children }: AppProps) => {
         >
           {children}
         </motion.div>
-      </AnimatePresence>
+      </AnimatePresence> */}
 
       {(isMobile || isTablet) && <MobileNav />}
       <QuickSearch />
