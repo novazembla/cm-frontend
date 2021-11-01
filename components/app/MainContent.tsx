@@ -43,8 +43,6 @@ export const MainContent = ({
 
   const isPresent = useIsPresent();
 
-  const [currentRoute, setCurrentRoute] = useState("");
-
   const [animation, setAnimation] = useState({});
 
   const [isScrollingObserved, setIsScrollingObserved] = useState(false);
@@ -132,51 +130,106 @@ export const MainContent = ({
   }, []);
 
   useEffect(() => {
-    if (isPresent) {
-      setCurrentRoute(router.asPath.replace(/[^a-z]/g, ""));
-      
-      if (scrollState.get("main", router.asPath.replace(/[^a-z]/g, "")) > 0 && scrollState.isBack()) {
-        mainContentRef.current?.scrollTo({
-          top: scrollState.get("main", router.asPath.replace(/[^a-z]/g, "")),
-          left: 0,
-        });
-      } else {
-        mainContentRef.current?.scrollTo({
-          top: 0,
-          left: 0,
-        });
-      }
-      scrollState.setIsBack(false);
-    }
-  }, [isPresent, router.asPath, scrollState]);
-
-  useEffect(() => {
-    if (typeof document === "undefined") return;
+    if (typeof window === "undefined") return;
 
     // reset
     if (!isPresent) {
-      const container = document.querySelector(
-        `#p-${currentRoute} .mainContent`
+      const container: HTMLDivElement | null = document.querySelector(
+        `.animatedMainContent:not(#p-${router.asPath.replace(/[^a-z]/g, "")})`
       );
+
       if (container) {
-        // annoyinigly the clone of the component by framer motion's animate presence
-        // reset the scoll state of the main content's div.
-        // we have to reset it
-        if (scrollState.get("main", currentRoute) > 0 && scrollState.isBack()) {
-          console.log(
-            "set leaving container",
-            currentRoute,
-            scrollState.get("main", currentRoute)
-          );
-          container.scrollTo({
-            top: scrollState.get("main", currentRoute),
-            left: 0,
-          });
+        const slug = container.getAttribute("id")?.replace("p-", "") ?? "-";
+        if (isMobile) {
+          console.log(2);
+        } else {
+          console.log(3, container, slug);
+          // annoyinigly the clone of the component by framer motion's animate presence
+          // reset the scoll state of the main content's div.
+          // we have to reset it
+          if (scrollState.get("main", slug) > 0) {
+            console.log(4, container);
+
+            const mc: HTMLDivElement | null =
+              container.querySelector(".mainContent");
+
+            if (mc) {
+              console.log(slug, scrollState.get("main", slug));
+              setTimeout(() => {
+                mc.scrollTo({
+                  top: scrollState.get("main", slug),
+                  left: 0,
+                });
+              }, 20);
+              setTimeout(() => {
+                mc.scrollTo({
+                  top: scrollState.get("main", slug),
+                  left: 0,
+                });
+              }, 20);
+            }
+          }
         }
       }
     }
-    // es lint-disable-next-line react-hooks/exhaustive-deps
-  }, [isPresent, currentRoute, scrollState]);
+  }, [isPresent, router.asPath, isMobile, scrollState]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    if (isPresent) {
+      console.log(
+        "setting current router",
+        router.asPath.replace(/[^a-z]/g, "")
+      );
+
+      if (isMobile) {
+        if (
+          scrollState.get("body", router.asPath.replace(/[^a-z]/g, "")) > 0 &&
+          scrollState.isBack()
+        ) {
+          setTimeout(() => {
+            window.scrollTo({
+              top: scrollState.get(
+                "main",
+                router.asPath.replace(/[^a-z]/g, "")
+              ),
+              left: 0,
+            });
+          }, 20);
+        } else {
+          window.scrollTo({
+            top: 0,
+            left: 0,
+          });
+          scrollState.set("main", router.asPath.replace(/[^a-z]/g, ""), 0);
+        }
+      } else {
+        if (
+          scrollState.get("main", router.asPath.replace(/[^a-z]/g, "")) > 0 &&
+          scrollState.isBack()
+        ) {
+          setTimeout(() => {
+            mainContentRef.current?.scrollTo({
+              top: scrollState.get(
+                "main",
+                router.asPath.replace(/[^a-z]/g, "")
+              ),
+              left: 0,
+            });
+          }, 20);
+        } else {
+          mainContentRef.current?.scrollTo({
+            top: 0,
+            left: 0,
+          });
+          scrollState.set("main", router.asPath.replace(/[^a-z]/g, ""), 0);
+        }
+      }
+
+      scrollState.setIsBack(false);
+    }
+  }, [isPresent, router.asPath, isMobile, scrollState]);
 
   const close = () => {
     if (isAnimationRunning) return;
@@ -373,6 +426,10 @@ export const MainContent = ({
               layerStyle={layerStyle}
               onScroll={(e: React.UIEvent<HTMLDivElement>) => {
                 if (isPresent) {
+                  console.log(
+                    router.asPath.replace(/[^a-z]/g, ""),
+                    (e.target as any).scrollTop
+                  );
                   scrollState.set(
                     "main",
                     router.asPath.replace(/[^a-z]/g, ""),

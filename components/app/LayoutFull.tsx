@@ -24,14 +24,14 @@ export const LayoutFull = ({ children }: AppProps) => {
         );
       }
 
-      const div = document.createElement('div')
+      const div = document.createElement("div");
       div.style.height = "100vh";
       div.style.width = "1px";
-      div.style.position="absolute";
-      div.style.top="0px";
-      div.style.left="-1px";
+      div.style.position = "absolute";
+      div.style.top = "0px";
+      div.style.left = "-1px";
 
-      document.body.appendChild(div)
+      document.body.appendChild(div);
 
       document.documentElement.style.setProperty(
         "--locationBarHeight",
@@ -54,14 +54,17 @@ export const LayoutFull = ({ children }: AppProps) => {
       <Map />
       <Header />
 
-      <AnimatePresence>
+      <AnimatePresence exitBeforeEnter>
         <motion.div
           key={`ccc-${router.asPath}`}
           id={`p-${router.asPath.replace(/[^a-z]/g, "")}`}
+          className="animatedMainContent"
           exit={{ opacity: 0 }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
+          transition={{
+            duration: .5,
+          }}
           style={{
             position: !isMobile ? "fixed" : "absolute",
             zIndex: 3,
