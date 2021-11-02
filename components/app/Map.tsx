@@ -398,7 +398,7 @@ export const Map = () => {
         right={isTabletWide || isDesktopAndUp ? "20px" : "10px"}
         // left={!(isTabletWide || isDesktopAndUp) ? "10px" : undefined}
         top={isDesktopAndUp ? "100px" : isTabletWide ? "80px" : "70px"}
-        zIndex="3"
+        zIndex="1"
         transition="opacity 0.3s"
         opacity={mapLoaded ? 1 : 0}
       >

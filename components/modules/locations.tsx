@@ -15,7 +15,11 @@ import {
   AccordionIcon,
   Button,
 } from "@chakra-ui/react";
-import { FieldCheckboxGroup } from "~/components/forms";
+import {
+  FieldCheckboxGroup,
+  FieldInput,
+  FieldSwitch,
+} from "~/components/forms";
 import { useAppTranslations } from "~/hooks";
 import type * as yup from "yup";
 import { useForm, FormProvider } from "react-hook-form";
@@ -267,29 +271,59 @@ export const ModuleComponentLocations = ({ ...props }) => {
         }
         setActiveTermsToI(terms);
       }
-      if (settings?.taxonomies?.typeOfOrganisation?.terms)
-        setActiveTermsToO(
-          settings?.taxonomies?.typeOfOrganisation?.terms?.reduce(
-            (acc: any, t: any) => {
-              if (t._count?.locations > 0) return [...acc, t];
+      if (settings?.taxonomies?.typeOfOrganisation?.terms) {
+        const terms = settings?.taxonomies?.typeOfOrganisation?.terms?.reduce(
+          (acc: any, t: any) => {
+            if (t._count?.locations > 0) return [...acc, t];
 
-              return acc;
-            },
-            []
-          )
+            return acc;
+          },
+          []
         );
 
-      if (settings?.taxonomies?.targetAudience?.terms)
-        setActiveTermsTA(
-          settings?.taxonomies?.targetAudience?.terms?.reduce(
-            (acc: any, t: any) => {
-              if (t._count?.locations > 0) return [...acc, t];
+        setActiveTermsToO(terms);
 
-              return acc;
-            },
-            []
-          )
+        if (terms?.length) {
+          resetVars = {
+            ...resetVars,
+            ...terms.reduce(
+              (acc: any, t: any) => ({
+                ...acc,
+                [`typeOfOrganisation_${t.id}`]: false,
+              }),
+              {}
+            ),
+          };
+        }
+      }
+      if (settings?.taxonomies?.targetAudience?.terms) {
+        const terms = settings?.taxonomies?.targetAudience?.terms?.reduce(
+          (acc: any, t: any) => {
+            if (t._count?.locations > 0) return [...acc, t];
+
+            return acc;
+          },
+          []
         );
+
+        setActiveTermsTA(terms);
+
+        if (terms?.length) {
+          resetVars = {
+            ...resetVars,
+            s: "",
+            cluster: true,
+            and: false,
+            ...terms.reduce(
+              (acc: any, t: any) => ({
+                ...acc,
+                [`targetAudience_${t.id}`]: false,
+              }),
+              {}
+            ),
+          };
+        }
+      }
 
       reset(resetVars);
     }
@@ -318,6 +352,9 @@ export const ModuleComponentLocations = ({ ...props }) => {
         : [];
 
       reset({
+        s: router?.query?.s ?? "",
+        cluster: router?.query?.cluster === "1",
+        and: router?.query?.and === "1",
         ...activeTermsToI.reduce(
           (acc: any, t: any) => ({
             ...acc,
@@ -377,28 +414,104 @@ export const ModuleComponentLocations = ({ ...props }) => {
     const allVars = watch();
 
     // TODO: observe and/or filter
-    const terms = Object.keys(allVars).reduce((acc: any, key: any) => {
-      if (
-        key.indexOf("typeOfInstitution_") > -1 ||
-        key.indexOf("typeOfOrganisation_") > -1 ||
-        key.indexOf("targetAudience_") > -1
-      ) {
+
+    let where: any = [];
+    let allTerms: any[] = [];
+    const termsToI = Object.keys(allVars).reduce((acc: any, key: any) => {
+      if (key.indexOf("typeOfInstitution_") > -1) {
         if (allVars[key]) {
           return [...acc, parseInt(key.split("_")[1])];
         }
       }
       return acc;
     }, []);
+    if (termsToI?.length) {
+      allTerms = [...allTerms, ...termsToI];
+      if (allVars?.and === "1" || allVars?.and === true) {
+        where = [
+          ...where,
+          ...termsToI.map((t: number) => ({
+            terms: {
+              some: {
+                id: {
+                  in: [t],
+                },
+              },
+            },
+          })),
+        ];
+      }
+    }
 
-    const where: any = [];
-    if (terms?.length) {
+    const termsToO = Object.keys(allVars).reduce((acc: any, key: any) => {
+      if (key.indexOf("typeOfOrganisation_") > -1) {
+        if (allVars[key]) {
+          return [...acc, parseInt(key.split("_")[1])];
+        }
+      }
+      return acc;
+    }, []);
+    if (termsToO?.length) {
+      allTerms = [...allTerms, ...termsToO];
+      if (allVars?.and === "1" || allVars?.and === true) {
+        where = [
+          ...where,
+          ...termsToO.map((t: number) => ({
+            terms: {
+              some: {
+                id: {
+                  in: [t],
+                },
+              },
+            },
+          })),
+        ];
+      }
+    }
+
+    const termsTA = Object.keys(allVars).reduce((acc: any, key: any) => {
+      if (key.indexOf("targetAudience_") > -1) {
+        if (allVars[key]) {
+          return [...acc, parseInt(key.split("_")[1])];
+        }
+      }
+      return acc;
+    }, []);
+    if (termsTA?.length) {
+      allTerms = [...allTerms, ...termsTA];
+      if (allVars?.and === "1" || allVars?.and === true) {
+        where = [
+          ...where,
+          ...termsTA.map((t: number) => ({
+            terms: {
+              some: {
+                id: {
+                  in: [t],
+                },
+              },
+            },
+          })),
+        ];
+      }
+    }
+
+    if ((allTerms?.length && (allVars?.and === "0") || allVars?.and === false)) {
       where.push({
         terms: {
           some: {
             id: {
-              in: terms,
+              in: allTerms,
             },
           },
+        },
+      });
+    }
+
+    if (allVars?.s?.trim() && allVars.s.trim().length > 2) {
+      where.push({
+        fullText: {
+          contains: allVars.s,
+          mode: "insensitive",
         },
       });
     }
@@ -408,12 +521,21 @@ export const ModuleComponentLocations = ({ ...props }) => {
     };
 
     if (where?.length) {
-      newQueryState = {
-        ...newQueryState,
-        where: {
-          AND: where,
-        },
-      };
+      if (allVars?.and === "1" || allVars?.and === true) {
+        newQueryState = {
+          ...newQueryState,
+          where: {
+            AND: where,
+          },
+        };
+      } else {
+        newQueryState = {
+          ...newQueryState,
+          where: {
+            OR: where,
+          },
+        };
+      }
     } else {
       newQueryState = {
         ...newQueryState,
@@ -455,9 +577,9 @@ export const ModuleComponentLocations = ({ ...props }) => {
           return acc;
         },
         {
-          s: "",
-          and: false,
-          cluster: true,
+          s: allVars?.s?.trim() ?? "",
+          and: allVars?.and === "1" || allVars?.and === true,
+          cluster: allVars?.cluster === "1" || allVars?.cluster === true,
           toi: [],
           ta: [],
           too: [],
@@ -515,43 +637,9 @@ export const ModuleComponentLocations = ({ ...props }) => {
         `${baseUrl}?${queryString}`
       );
 
-      // router.replace(
-      //   {
-      //     pathname: router.pathname,
-      //     query: {
-      //       toi: Object.keys(allVars).reduce((acc: any, key: any) => {
-      //         if (key.indexOf("typeOfInstitution_") > -1) {
-      //           if (allVars[key]) {
-      //             return [...acc, parseInt(key.split("_")[1])];
-      //           }
-      //         }
-      //         return acc;
-      //       }, []),
-      //       ta: Object.keys(allVars).reduce((acc: any, key: any) => {
-      //         if (key.indexOf("targetAudience_") > -1) {
-      //           if (allVars[key]) {
-      //             return [...acc, parseInt(key.split("_")[1])];
-      //           }
-      //         }
-      //         return acc;
-      //       }, []),
-      //       too: Object.keys(allVars).reduce((acc: any, key: any) => {
-      //         if (key.indexOf("typeOfOrganisation_") > -1) {
-      //           if (allVars[key]) {
-      //             return [...acc, parseInt(key.split("_")[1])];
-      //           }
-      //         }
-      //         return acc;
-      //       }, []),
-      //     },
-      //   },
-      //   undefined,
-      //   { shallow: true, scroll: false }
-      // );
       setCurrentQueryState(newQueryState);
       setCurrentPageIndex(0);
     }
-    // const terms = al
   }, [
     watchVariables,
     watch,
@@ -617,7 +705,21 @@ export const ModuleComponentLocations = ({ ...props }) => {
                           />
                         </AccordionButton>
                       </h2>
-                      <AccordionPanel pb={4}>Keyword search</AccordionPanel>
+                      <AccordionPanel pb="1em">
+                        <FieldInput
+                          type="text"
+                          name="s"
+                          id="s"
+                          label={t("quicksearch.placeholder", "Keyword")}
+                          settings={{
+                            hideLabel: true,
+                            placeholder: t(
+                              "quicksearch.placeholder",
+                              "Keyword"
+                            ),
+                          }}
+                        />
+                      </AccordionPanel>
                     </AccordionItem>
                     {activeTermsToI?.length > 0 && (
                       <AccordionItem>
@@ -748,6 +850,69 @@ export const ModuleComponentLocations = ({ ...props }) => {
                         </AccordionPanel>
                       </AccordionItem>
                     )}
+
+                    <AccordionItem>
+                      <h2>
+                        <AccordionButton pt="0">
+                          <Box
+                            flex="1"
+                            textAlign="left"
+                            textStyle="headline"
+                            fontWeight="bold"
+                          >
+                            {t(
+                              "locations.filter.title.settings",
+                              "Other settings"
+                            )}
+                          </Box>
+                          <AccordionIcon
+                            color="cm.accentLight"
+                            fontSize="2xl"
+                          />
+                        </AccordionButton>
+                      </h2>
+                      <AccordionPanel pb={4}>
+                        <Flex flexWrap="wrap">
+                          <Flex
+                            w={{ base: "100%", md: "50%" }}
+                            justifyItems="center"
+                            pr={{ md: "10px" }}
+                            pb={{ base: "10px", md: "0" }}
+                          >
+                            <FieldSwitch
+                              name="and"
+                              label={
+                                <span>
+                                  {t(
+                                    "locations.filter.andRelationship",
+                                    "Locations must match all the given criteria"
+                                  )}
+                                </span>
+                              }
+                              defaultChecked={false}
+                            />
+                          </Flex>
+                          <Flex
+                            w={{ base: "100%", md: "50%" }}
+                            justifyItems="center"
+                            pl={{ md: "10px" }}
+                          >
+                            <FieldSwitch
+                              name="cluster"
+                              label={
+                                <span>
+                                  {t(
+                                    "locations.filter.clusterResult",
+                                    "Cluster result on map"
+                                  )}
+                                </span>
+                              }
+                              defaultChecked={true}
+                            />
+                          </Flex>
+                        </Flex>
+                      </AccordionPanel>
+                    </AccordionItem>
                   </Accordion>
                 )}
               </form>
@@ -764,13 +929,13 @@ export const ModuleComponentLocations = ({ ...props }) => {
               alignItems="center"
             >
               {loading && <LoadingIcon my="0" />}
-              {!loading && !error && (<Box>{resultText}</Box>)}
+              {!loading && !error && <Box>{resultText}</Box>}
               {error && <ErrorMessage type="dataLoad" />}
             </Flex>
           </Box>
 
           <Box>
-            {data?.locations?.locations?.length && (
+            {data?.locations?.locations?.length > 0 && (
               <Box size="md" mt="20px">
                 {data?.locations?.locations.map((location: any) => (
                   <Box key={`location-${location.id}`} pb="20px">

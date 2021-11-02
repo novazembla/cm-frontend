@@ -20,10 +20,10 @@ const themeConfig = {
   components,
   breakpoints: createBreakpoints({
     // 16px default font size * ...em
-    sm: "21rem", // ~360px
-    md: "45rem", // ~720px
-    lg: "62rem", // ~992px
-    xl: "75rem", // 1200px - aka "Desktop"
+    sm: "21em", // ~360px
+    md: "45em", // ~720px
+    lg: "62em", // ~992px
+    xl: "75em", // 1200px - aka "Desktop"
     "2xl": "120em", // ~1920px - aka "Screen"
   }),
   styles: {

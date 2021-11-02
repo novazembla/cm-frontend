@@ -2,11 +2,11 @@ import { useState, useRef, useEffect } from "react";
 import { Box, IconButton, useBreakpointValue } from "@chakra-ui/react";
 import { useAppTranslations, useIsBreakPoint } from "~/hooks";
 import { HiChevronRight } from "react-icons/hi";
-import { motion, useIsPresent } from "framer-motion";
+import { motion, useIsPresent, useAnimation } from "framer-motion";
 import { useRouter } from "next/router";
 import { useScrollStateContext } from "~/provider";
 import { primaryInput } from "detect-it";
-import { route } from "next/dist/server/router";
+import { debounce } from "lodash";
 
 const contentPaddingTop = {
   base: "60px",
@@ -38,8 +38,13 @@ export const MainContent = ({
   const { isMobile, isTablet, isTabletWide, isDesktopAndUp } =
     useIsBreakPoint();
 
+  const [dragLeft, setDragLeft] = useState(0);
+
   const [isDrawerOpen, setIsDrawerOpen] = useState(true);
   const [isAnimationRunning, setIsAnimationRunning] = useState(false);
+  const [eventListenerAdded, setEventListenerAdded] = useState(false);
+
+  const controls = useAnimation();
 
   const isPresent = useIsPresent();
 
@@ -54,12 +59,13 @@ export const MainContent = ({
   const closeState = useBreakpointValue({
     base: "calc((-1 * (100vw - 20px)) + 40px)",
     sm: "calc((-1 * (90vw)) + 40px)",
-    md: "calc((-1 * (80vw)) + 75px)",
+    md: "calc((-1 * (80vw)) + 50px)",
     lg: "calc((-1 * 66.66vw) + 50px)",
     xl: "-625px",
   });
 
   // also update quicksearch
+  // also update dragLeft on resize handler below ...
   const contentWidth = useBreakpointValue({
     base: "calc(100vw - 20px)",
     sm: "calc(90vw)",
@@ -235,9 +241,12 @@ export const MainContent = ({
     if (isAnimationRunning) return;
     setIsDrawerOpen(false);
     setIsAnimationRunning(true);
-    setAnimation({
-      x: closeState,
+
+    panXRef.current = dragLeft * -1;
+    controls.start({
+      translateX: dragLeft * -1,
     });
+
     setTimeout(() => {
       setIsAnimationRunning(false);
     }, 250);
@@ -247,13 +256,69 @@ export const MainContent = ({
     if (isAnimationRunning) return;
     setIsDrawerOpen(true);
     setIsAnimationRunning(true);
-    setAnimation({
-      x: 0,
+
+    controls.start({
+      translateX: 0,
     });
+
     setTimeout(() => {
       setIsAnimationRunning(false);
     }, 250);
   };
+
+  const onResize = debounce(() => {
+    let dL = window.innerWidth - 20 - 40;
+
+    const isMobile = window.matchMedia(
+      "(min-width: 21em) and (max-width: 44.999em)"
+    ).matches;
+    const isTablet = window.matchMedia(
+      "(min-width: 45em) and (max-width: 61.9999em)"
+    ).matches;
+    const isTabletWide = window.matchMedia(
+      "(min-width: 62em) and (max-width: 74.9999em)"
+    ).matches;
+    const isDesktop = window.matchMedia(
+      "(min-width: 75em) and (max-width: 119.9999em)"
+    ).matches;
+
+    if (isMobile) {
+      dL = window.innerWidth * 0.9 - 50;
+    } else if (isTablet && !isTabletWide) {
+      dL = window.innerWidth * 0.8 - 50;
+    } else if (isTabletWide) {
+      dL = window.innerWidth * 0.666 - window.innerWidth * 0.1;
+    } else if (isDesktop) {
+      dL = 655;
+    } else {
+      dL = 695 + (window.innerWidth * 0.08 - 55) - 100;
+    }
+
+    console.log(isMobile, isTablet, isTabletWide, isDesktop, dL);
+
+    setDragLeft(dL);
+
+    setIsDrawerOpen(true);
+    panXRef.current = 0;
+    controls.start({
+      translateX: panXRef.current,
+    });
+  }, 350);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || eventListenerAdded) return;
+
+    setEventListenerAdded(true);
+
+    window.addEventListener("resize", onResize);
+    onResize();
+
+    return () => {
+      if (typeof window === "undefined") return;
+      window.removeEventListener("resize", onResize);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const toggle = () => {
     if (isAnimationRunning) return;
@@ -269,6 +334,7 @@ export const MainContent = ({
     ? t("mainContent.slideToLeft", "Hide content")
     : t("mainContent.slideToRight", "Show content");
 
+    console.log("isDrawerOpne", isDrawerOpen);
   return (
     <>
       {isDrawer && !isVerticalContent && (
@@ -279,11 +345,12 @@ export const MainContent = ({
           onTouchStart={() => {
             close();
           }}
-          bg="transparent"
+          bg="#ff0"
           position="fixed"
           w="34vw"
           top="0"
           h="100vh"
+          zIndex="2"
           right={isDrawerOpen ? "0px" : undefined}
           cursor="pointer"
           display={
@@ -304,12 +371,13 @@ export const MainContent = ({
           initial={{
             ...animation,
           }}
-          animate={{
-            ...animation,
-          }}
+          animate={controls}
           transition={{
             duration: 0.3,
             bounce: false,
+          }}
+          transformTemplate={({ translateX }) => {
+            return `translateX(${translateX})`;
           }}
         >
           <Box
@@ -349,49 +417,97 @@ export const MainContent = ({
           </Box>
         </motion.div>
       )}
-
+      {/* TODO: "&:active": {
+            cursor: "grab",
+          }, */}
       <motion.div
         key={`drawer-${router.asPath}`}
         style={{
           position: "absolute",
           top: isVerticalContent
-            ? "calc(100vh - var(--locationBarHeight) - 290px)"
+            ? "calc(100vh - var(--locationBarHeight) - 235px)"
             : 0,
           left: contentLeft,
           height: isVerticalContent ? "auto" : "100vh",
           width: isVerticalContent ? "100vw" : contentWidth,
           zIndex: 2,
           touchAction: "pan-y",
+          cursor: !isDrawerOpen ? "pointer" : undefined,
+        }}
+        transformTemplate={({ translateX }) => {
+          return `translateX(${translateX})`;
         }}
         {...(isDrawer
           ? {
-              onPanStart: (event, info) => {
-                panXRef.current = 0;
-              },
               onTap: !isDrawerOpen
                 ? (event, info) => {
                     event.preventDefault();
                     toggle();
                   }
                 : undefined,
-              onPan: (event, info) => {
-                panXRef.current += info.delta.x;
 
-                if (
-                  panXRef.current < 0 &&
-                  Math.abs(panXRef.current) > PAN_TRIGGER_CLOSE_THRESHOLD &&
-                  isDrawerOpen &&
-                  !isAnimationRunning
-                ) {
-                  close();
+              onPanStart: (event, info) => {
+                if (!panXRef.current) {
                   panXRef.current = 0;
                 }
               },
-              initial: animation,
-              animate: {
-                opacity: 1,
-                ...animation,
+
+              onPan: (event, info) => {
+                if (isAnimationRunning) return;
+                // panXRef.current = Math.min(
+                //   0,
+                //   Math.max(dragLeft * -1, panXRef.current + info.offset.x)
+                // );
+                
+                // console.log("p1", dragLeft * -1, panXRef.current, info.offset.x, panXRef.current + info.offset.x);
+
+                if (!isDrawerOpen) {
+                  console.log(2);
+                  if (info.offset.x > 30) {
+                    console.log(3);
+                    open();
+                  } else {
+                    
+                    console.log(4)
+                    controls.start({
+                      translateX: info.offset.x,
+                    });
+                  }
+                  
+                } else {
+                  console.log(5)
+                  controls.start({
+                    translateX: info.offset.x,
+                  });
+                }
+                
               },
+              onPanEnd: (event, info) => {
+                if (isAnimationRunning) return;
+                
+                console.log("panend", info.offset.x)
+                if (Math.abs(info.offset.x) > dragLeft * 0.25) {
+                  if (info.offset.x < 0) {
+                    console.log("trigger close");
+                    close();
+                  } else {
+                    console.log("trigger open");
+                    open();
+                  }
+                } else {
+                  if (info.offset.x < 0) {
+                    console.log("trigger reopen");
+                    open();
+                  } else {
+                    console.log("trigger reclose");
+                    close();
+                  }
+                }
+                
+              },
+              //initial: animation,
+              animate: controls,
+
               transition: {
                 duration: 0.3,
                 bounce: false,

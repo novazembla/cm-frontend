@@ -27,7 +27,6 @@ export const LoadingBar = ({ color }: { color: string }) => {
     router.events.on("routeChangeComplete", hideBar);
     router.events.on("routeChangeError", hideBar);
     router.beforePopState(() => {
-      console.log("123")
       scrollState.setIsBack(true);
       return true;
     });

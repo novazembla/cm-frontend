@@ -7,7 +7,7 @@ export * from "./FieldCheckboxGroup";
 // export * from "./TextErrorMessage";
 // export * from "./LocationPicker";
 // export * from "./TextEditor";
-// export * from "./FieldInput";
+export * from "./FieldInput";
 // export * from "./FieldSelect";
 // export * from "./FieldRow";
 // export * from "./FieldMultiLangInput";

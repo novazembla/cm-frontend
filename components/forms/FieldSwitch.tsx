@@ -57,7 +57,7 @@ export const FieldSwitch = ({
               isRequired={isRequired}
               isReadOnly={isReadOnly}
             >
-              <chakra.span fontSize="sm">{label}</chakra.span>
+              <chakra.span fontSize="categories" display="inline-block" transform="translateY(-4px)">{label}</chakra.span>
             </Switch>
           )}}
         />
