@@ -108,11 +108,8 @@ export const ModuleComponentLocation = ({
   const [color, setColor] = useState(config.colorLight);
   const [colorDark, setColorDark] = useState(config.colorDark);
   const [meta, setMeta] = useState("");
-  const isPresent = useIsPresent();
 
   useEffect(() => {
-    if (!isPresent) return;
-
     if (typeof window !== "undefined" && highlight && cultureMap) {
       console.log("move to hightligh", highlight);
       cultureMap.setHighlight(highlight);
@@ -120,9 +117,9 @@ export const ModuleComponentLocation = ({
     }
 
     return () => {
-      if (cultureMap && isPresent) cultureMap.clearHighlight();
+      if (cultureMap) cultureMap.clearHighlight();
     };
-  }, [highlight, cultureMap, isPresent]);
+  }, [highlight, cultureMap]);
 
   useEffect(() => {
     if (location) {
@@ -262,7 +259,7 @@ export const ModuleComponentLocation = ({
   `;
 
   return (
-    <MainContent layerStyle="blurredLightGray" noMobileBottomPadding>
+    <MainContent layerStyle="blurredLightGray">
       <Grid w="100%" templateRows="1fr auto" templateColumns="100%" minH="100%">
         <Box px="20px" pt="0.5em">
           <Box mb="3">
@@ -525,6 +522,8 @@ export const ModuleComponentLocation = ({
                 className="highlight"
                 color="cm.text"
                 fontWeight="bold"
+                pb="0"
+                mb="20px"
               >
                 {t(
                   "location.title.eventsHeldAt",

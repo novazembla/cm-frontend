@@ -194,7 +194,7 @@ export const ModuleComponentEvent = ({
   }
 
   return (
-    <MainContent layerStyle="pageBg" noMobileBottomPadding>
+    <MainContent layerStyle="pageBg">
       <Grid w="100%" templateRows="1fr auto" templateColumns="100%" minH="100%">
         <Box layerStyle="page">
           <Box layerStyle="headingPullOut" mb="3">
@@ -347,7 +347,7 @@ export const ModuleComponentEvent = ({
                   {t("event.label.eventDatesMultiple", "Upcoming dates")}
                 </Box>
 
-                {multipleUpcommingDates?.length > 5 ? (
+                {multipleUpcommingDates?.length > 10 ? (
                   <Box textStyle="card">
                     <Collapse
                       startingHeight={isMobile ? 100 : 130}
@@ -389,7 +389,7 @@ export const ModuleComponentEvent = ({
         <Box layerStyle="blurredLightGray">
           {event.locations && event.locations.length > 0 && (
             <Box p="20px">
-              <chakra.h3 className="highlight" color="cm.text" pb="1em">
+              <chakra.h3 className="highlight" color="cm.text" pb="0" mb="20px" >
                 {t("event.title.location", "Location")}
               </chakra.h3>
 

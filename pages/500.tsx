@@ -10,7 +10,7 @@ export default function Page500() {
   const { t } = useAppTranslations();
 
   return (
-    <MainContent isDrawer layerStyle="pageBg" noMobileBottomPadding>
+    <MainContent isDrawer layerStyle="pageBg">
       <Grid w="100%" templateRows="1fr auto" templateColumns="100%" minH="100%">
         <Box layerStyle="page" w="100%">
           <Box layerStyle="headingPullOut" mb="3">

@@ -76,7 +76,7 @@ export const ModuleComponentTours = ({ ...props }) => {
       initialQueryState?.pageSize * currentPageIndex;
 
   return (
-    <MainContent layerStyle="blurredLightGray" noMobileBottomPadding>
+    <MainContent layerStyle="blurredLightGray">
       <Grid w="100%" templateRows="1fr auto" templateColumns="100%" minH="100%">
         <Box px="20px" pt="0.5em">
           <Box mb="3">

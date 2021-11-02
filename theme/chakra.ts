@@ -39,6 +39,11 @@ const themeConfig = {
       "#root": {
         height: "100%",
       },
+      ".motionDragContainer": {
+        _active: {
+          cursor: "grabbing !important",
+        }
+      },
       body: {
         minHeight: "100%",
         bg: "#fff",
@@ -381,7 +386,7 @@ export const chakraTheme = extendTheme(
 
   withDefaultColorScheme({
     colorScheme: "cm",
-    components: ["Button", "Badge", "Checkbox", "Switch"],
+    components: ["Button", "Badge", "Checkbox", "Switch", "Radio"],
   }),
   withDefaultVariant({
     variant: "solid",

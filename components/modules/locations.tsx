@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { gql, useQuery } from "@apollo/client";
 import { LoadingIcon, ErrorMessage, CardLocation } from "~/components/ui";
-import { useIsPresent } from "framer-motion";
 import { Footer } from "~/components/app";
 import {
   Box,
@@ -21,7 +20,6 @@ import {
   FieldSwitch,
 } from "~/components/forms";
 import { useAppTranslations } from "~/hooks";
-import type * as yup from "yup";
 import { useForm, FormProvider } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { boolean, object, mixed, number } from "yup";
@@ -92,8 +90,7 @@ export const LocationsFilterSchema = object().shape({});
 
 export const ModuleComponentLocations = ({ ...props }) => {
   const { t, i18n, getMultilangValue } = useAppTranslations();
-  const isPresent = useIsPresent();
-
+  
   const router = useRouter();
 
   const [currentQueryState, setCurrentQueryState] = useState<any>({
@@ -106,8 +103,6 @@ export const ModuleComponentLocations = ({ ...props }) => {
   });
 
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
-  const [hasFormError, setHasFormError] = useState(false);
-  const [isSchemaSet, setIsSchemaSet] = useState(false);
   const [extendedValidationSchema, setExtendedValidationSchema] = useState(
     LocationsFilterSchema
   );
@@ -115,7 +110,7 @@ export const ModuleComponentLocations = ({ ...props }) => {
   const settings = useSettingsContext();
 
   useEffect(() => {
-    if (settings?.taxonomies?.typeOfInstitutions?.terms && !isSchemaSet) {
+    if (settings?.taxonomies?.typeOfInstitutions?.terms) {
       const keysToI = settings?.taxonomies?.typeOfInstitutions?.terms?.reduce(
         (acc: any, t: any) => {
           if (t._count?.locations > 0)
@@ -189,7 +184,7 @@ export const ModuleComponentLocations = ({ ...props }) => {
         )
       );
     }
-  }, [settings, isSchemaSet]);
+  }, [settings]);
 
   const { data, loading, error, fetchMore, refetch } = useQuery(
     locationsQuery,
@@ -225,16 +220,7 @@ export const ModuleComponentLocations = ({ ...props }) => {
         initialQueryState?.pageSize * currentPageIndex &&
     data?.locations?.locations?.length !== data?.locations?.totalCount;
 
-  const onSubmit = async (
-    newData: yup.InferType<typeof extendedValidationSchema>
-  ) => {
-    setHasFormError(false);
-
-    try {
-    } catch (err) {
-      setHasFormError(true);
-    }
-  };
+  const onSubmit = async () => {};
 
   const [activeTermsToI, setActiveTermsToI] = useState([]);
   const [activeTermsToO, setActiveTermsToO] = useState([]);
@@ -244,8 +230,6 @@ export const ModuleComponentLocations = ({ ...props }) => {
   >(null);
 
   useEffect(() => {
-    if (!isPresent) return;
-
     let resetVars = {};
     if (settings?.taxonomies) {
       if (settings?.taxonomies?.typeOfInstitution?.terms) {
@@ -327,11 +311,9 @@ export const ModuleComponentLocations = ({ ...props }) => {
 
       reset(resetVars);
     }
-  }, [settings?.taxonomies, reset, isPresent]);
+  }, [settings?.taxonomies, reset]);
 
   useEffect(() => {
-    if (!isPresent) return;
-
     if (router.query) {
       const tois: string[] = router?.query?.toi
         ? Array.isArray(router.query.toi)
@@ -384,7 +366,6 @@ export const ModuleComponentLocations = ({ ...props }) => {
     activeTermsToI,
     activeTermsToO,
     activeTermsTA,
-    isPresent,
   ]);
 
   useEffect(() => {
@@ -398,7 +379,6 @@ export const ModuleComponentLocations = ({ ...props }) => {
     if (urlParams.get("too")) aDI.push(3);
     if (
       urlParams.get("and") === "1" ||
-      !urlParams.get("cluster") ||
       urlParams.get("cluster") === "0"
     )
       aDI.push(4);
@@ -409,11 +389,7 @@ export const ModuleComponentLocations = ({ ...props }) => {
   const watchVariables = JSON.stringify(watch());
 
   useEffect(() => {
-    if (!isPresent) return;
-
     const allVars = watch();
-
-    // TODO: observe and/or filter
 
     let where: any = [];
     let allTerms: any[] = [];
@@ -495,7 +471,7 @@ export const ModuleComponentLocations = ({ ...props }) => {
       }
     }
 
-    if ((allTerms?.length && (allVars?.and === "0") || allVars?.and === false)) {
+    if (allTerms?.length && (allVars?.and === "0" || allVars?.and === false)) {
       where.push({
         terms: {
           some: {
@@ -647,7 +623,6 @@ export const ModuleComponentLocations = ({ ...props }) => {
     currentQueryState,
     i18n?.language,
     router,
-    isPresent,
   ]);
 
   let resultText = t("locations.totalCount", "{{count}} location found", {
@@ -659,7 +634,7 @@ export const ModuleComponentLocations = ({ ...props }) => {
     });
 
   return (
-    <MainContent layerStyle="blurredLightGray" noMobileBottomPadding>
+    <MainContent layerStyle="blurredLightGray">
       <Grid w="100%" templateRows="1fr auto" templateColumns="100%" minH="100%">
         <Box px="20px" pt="0.5em">
           <Box mb="3">
@@ -928,7 +903,7 @@ export const ModuleComponentLocations = ({ ...props }) => {
               h="50px"
               alignItems="center"
             >
-              {loading && <LoadingIcon my="0" />}
+              {(!data || loading) && <LoadingIcon my="0" />}
               {!loading && !error && <Box>{resultText}</Box>}
               {error && <ErrorMessage type="dataLoad" />}
             </Flex>

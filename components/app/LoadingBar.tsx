@@ -1,26 +1,36 @@
-import React, { useEffect, useState } from "react";
-import Router, {useRouter} from "next/router";
+import React, { useEffect, useState, useCallback } from "react";
+import Router, { useRouter } from "next/router";
 import { Box } from "@chakra-ui/react";
-import { useMenuButtonContext, useQuickSearchContext, useScrollStateContext } from "~/provider";
+import {
+  useMenuButtonContext,
+  useQuickSearchContext,
+  useScrollStateContext,
+} from "~/provider";
 
-export const LoadingBar = ({ color }: { color: string }) => {
+export const LoadingBar = ({
+  color,
+  loading,
+}: {
+  color: string;
+  loading?: boolean;
+}) => {
   const [barVisible, setBarVisible] = useState(false);
   const { onMenuClose } = useMenuButtonContext();
   const { onQuickSearchClose } = useQuickSearchContext();
 
-  const router = useRouter()
+  const router = useRouter();
 
   const scrollState = useScrollStateContext();
-  
-  const showBar = () => {
+
+  const showBar = useCallback(() => {
     onMenuClose();
     onQuickSearchClose();
     setBarVisible(true);
-  };
+  }, [onMenuClose, onQuickSearchClose]);
 
-  const hideBar = () => {
+  const hideBar = useCallback(() => {
     setBarVisible(false);
-  }
+  }, []);
 
   useEffect(() => {
     router.events.on("routeChangeStart", showBar);
@@ -40,6 +50,14 @@ export const LoadingBar = ({ color }: { color: string }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    if (loading) {
+      showBar();
+    } else {
+      hideBar();
+    }
+  }, [loading, showBar, hideBar]);
+  
   return (
     <>
       {barVisible && (

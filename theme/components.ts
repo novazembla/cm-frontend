@@ -84,8 +84,8 @@ export const components = {
           bg: "cm.accentLight",
           color: "#fff",
           ".svg": {
-            filter: "invert(100%)"
-          }
+            filter: "invert(100%)",
+          },
         },
       },
       outline: {
@@ -110,8 +110,8 @@ export const components = {
           bg: "cm.accentLight",
 
           ".svg": {
-            filter: "invert(100%)"
-          }
+            filter: "invert(100%)",
+          },
         },
       },
       solid: {
@@ -121,8 +121,9 @@ export const components = {
         _hover: {
           bg: "white",
           ".svg": {
-            filter: "filter: invert(13%) sepia(17%) saturate(7488%) hue-rotate(306deg) brightness(99%) contrast(106%);"
-          }
+            filter:
+              "filter: invert(13%) sepia(17%) saturate(7488%) hue-rotate(306deg) brightness(99%) contrast(106%);",
+          },
         },
         _focus: {
           bg: "white",
@@ -130,8 +131,9 @@ export const components = {
         },
         _active: {
           ".svg": {
-            filter: "filter: invert(13%) sepia(17%) saturate(7488%) hue-rotate(306deg) brightness(99%) contrast(106%);"
-          }
+            filter:
+              "filter: invert(13%) sepia(17%) saturate(7488%) hue-rotate(306deg) brightness(99%) contrast(106%);",
+          },
         },
       },
     },
@@ -288,6 +290,70 @@ export const components = {
       color: "wine.600",
       _hover: {
         color: "wine.800",
+      },
+    },
+  },
+  Radio: {
+    // parts: ["container", "control", "label"],
+    // sizes: {
+    //   md: {
+    //     control: {
+    //       w: 4,
+    //       h: 4,
+    //     },
+    //     label: {
+    //       fontSize: "md",
+    //     },
+    //   },
+    //   lg: {
+    //     control: {
+    //       w: 5,
+    //       h: 5,
+    //     },
+    //     label: {
+    //       fontSize: "lg",
+    //     },
+    //   },
+    //   sm: {
+    //     control: {
+    //       width: 3,
+    //       height: 3,
+    //     },
+    //     label: {
+    //       fontSize: "sm",
+    //     },
+    //   },
+    // },
+    // defaultProps: {
+    //   size: "md",
+    //   colorScheme: "blue",
+    // },
+    baseStyle: {
+      icon: {
+        diplay: "none",
+      },
+      control: {
+        borderColor: "cm.accentLight",
+        borderRadius: "10px",
+        _disabled: {
+          bg: "gray.100",
+          borderColor: "gray.300",
+        },
+        _checked: {
+          bg: "#fff",
+
+          position: "relative",
+          "&::after": {
+            position: "absolute",
+            borderRadius: "10px",
+            top: "1px",
+            left: "1px",
+            width: "10px",
+            height: "10px",
+            content: '""',
+            bg: "cm.accentLight",
+          },
+        },
       },
     },
   },

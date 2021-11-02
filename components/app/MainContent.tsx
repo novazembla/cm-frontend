@@ -1,8 +1,8 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { Box, IconButton, useBreakpointValue } from "@chakra-ui/react";
 import { useAppTranslations, useIsBreakPoint } from "~/hooks";
 import { HiChevronRight } from "react-icons/hi";
-import { motion, useIsPresent, useAnimation } from "framer-motion";
+import { motion, useAnimation } from "framer-motion";
 import { useRouter } from "next/router";
 import { useScrollStateContext } from "~/provider";
 import { primaryInput } from "detect-it";
@@ -17,23 +17,25 @@ const contentPaddingTop = {
   // xxl: "80px",
 };
 
+const MIN_MOVE_X = 20;
+const MAX_MOVE_Y = 10;
+
 export const MainContent = ({
   isDrawer = true,
   isVerticalContent,
   children,
   buttonVisible = true,
   layerStyle,
-  noMobileBottomPadding,
 }: {
   isDrawer?: boolean;
-  noMobileBottomPadding?: boolean;
   layerStyle?: string;
   buttonVisible?: boolean;
   isVerticalContent?: boolean;
   children: React.ReactNode;
 }) => {
-  const panXRef = useRef<number>(0);
   const mainContentRef = useRef<HTMLDivElement>(null);
+  const isAnimationRunningRef = useRef<boolean>(false);
+
   const router = useRouter();
   const { isMobile, isTablet, isTabletWide, isDesktopAndUp } =
     useIsBreakPoint();
@@ -41,28 +43,16 @@ export const MainContent = ({
   const [dragLeft, setDragLeft] = useState(0);
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(true);
-  const [isAnimationRunning, setIsAnimationRunning] = useState(false);
+  
   const [eventListenerAdded, setEventListenerAdded] = useState(false);
 
   const controls = useAnimation();
-
-  const isPresent = useIsPresent();
-
-  const [animation, setAnimation] = useState({});
 
   const [isScrollingObserved, setIsScrollingObserved] = useState(false);
 
   const scrollState = useScrollStateContext();
 
   const { t } = useAppTranslations();
-
-  const closeState = useBreakpointValue({
-    base: "calc((-1 * (100vw - 20px)) + 40px)",
-    sm: "calc((-1 * (90vw)) + 40px)",
-    md: "calc((-1 * (80vw)) + 50px)",
-    lg: "calc((-1 * 66.66vw) + 50px)",
-    xl: "-625px",
-  });
 
   // also update quicksearch
   // also update dragLeft on resize handler below ...
@@ -86,8 +76,6 @@ export const MainContent = ({
     xl: "50px",
     "2xl": "calc(8vw - 55px)",
   });
-
-  const PAN_TRIGGER_CLOSE_THRESHOLD = isMobile ? 120 : 180;
 
   // useEffect(() => {
   //   if (isScrollingObserved || typeof window === undefined) return;
@@ -139,134 +127,121 @@ export const MainContent = ({
     if (typeof window === "undefined") return;
 
     // reset
-    if (!isPresent) {
-      const container: HTMLDivElement | null = document.querySelector(
-        `.animatedMainContent:not(#p-${router.asPath.replace(/[^a-z]/g, "")})`
-      );
+    const container: HTMLDivElement | null = document.querySelector(
+      `.animatedMainContent:not(#p-${router.asPath.replace(/[^a-z]/g, "")})`
+    );
 
-      if (container) {
-        const slug = container.getAttribute("id")?.replace("p-", "") ?? "-";
-        if (isMobile) {
-          console.log(2);
-        } else {
-          console.log(3, container, slug);
-          // annoyinigly the clone of the component by framer motion's animate presence
-          // reset the scoll state of the main content's div.
-          // we have to reset it
-          if (scrollState.get("main", slug) > 0) {
-            console.log(4, container);
+    if (container) {
+      const slug = container.getAttribute("id")?.replace("p-", "") ?? "-";
+      if (isMobile) {
+        console.log(2);
+      } else {
+        console.log(3, container, slug);
+        // annoyinigly the clone of the component by framer motion's animate presence
+        // reset the scoll state of the main content's div.
+        // we have to reset it
+        if (scrollState.get("main", slug) > 0) {
+          console.log(4, container);
 
-            const mc: HTMLDivElement | null =
-              container.querySelector(".mainContent");
+          const mc: HTMLDivElement | null =
+            container.querySelector(".mainContent");
 
-            if (mc) {
-              console.log(slug, scrollState.get("main", slug));
-              setTimeout(() => {
-                mc.scrollTo({
-                  top: scrollState.get("main", slug),
-                  left: 0,
-                });
-              }, 20);
-              setTimeout(() => {
-                mc.scrollTo({
-                  top: scrollState.get("main", slug),
-                  left: 0,
-                });
-              }, 20);
-            }
+          if (mc) {
+            console.log(slug, scrollState.get("main", slug));
+            setTimeout(() => {
+              mc.scrollTo({
+                top: scrollState.get("main", slug),
+                left: 0,
+              });
+            }, 20);
+            setTimeout(() => {
+              mc.scrollTo({
+                top: scrollState.get("main", slug),
+                left: 0,
+              });
+            }, 20);
           }
         }
       }
     }
-  }, [isPresent, router.asPath, isMobile, scrollState]);
+  }, [router.asPath, isMobile, scrollState]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    if (isPresent) {
-      console.log(
-        "setting current router",
-        router.asPath.replace(/[^a-z]/g, "")
-      );
+    console.log("setting current router", router.asPath.replace(/[^a-z]/g, ""));
 
-      if (isMobile) {
-        if (
-          scrollState.get("body", router.asPath.replace(/[^a-z]/g, "")) > 0 &&
-          scrollState.isBack()
-        ) {
-          setTimeout(() => {
-            window.scrollTo({
-              top: scrollState.get(
-                "main",
-                router.asPath.replace(/[^a-z]/g, "")
-              ),
-              left: 0,
-            });
-          }, 20);
-        } else {
+    if (isMobile) {
+      if (
+        scrollState.get("body", router.asPath.replace(/[^a-z]/g, "")) > 0 &&
+        scrollState.isBack()
+      ) {
+        setTimeout(() => {
           window.scrollTo({
-            top: 0,
+            top: scrollState.get("main", router.asPath.replace(/[^a-z]/g, "")),
             left: 0,
           });
-          scrollState.set("main", router.asPath.replace(/[^a-z]/g, ""), 0);
-        }
+        }, 20);
       } else {
-        if (
-          scrollState.get("main", router.asPath.replace(/[^a-z]/g, "")) > 0 &&
-          scrollState.isBack()
-        ) {
-          setTimeout(() => {
-            mainContentRef.current?.scrollTo({
-              top: scrollState.get(
-                "main",
-                router.asPath.replace(/[^a-z]/g, "")
-              ),
-              left: 0,
-            });
-          }, 20);
-        } else {
+        window.scrollTo({
+          top: 0,
+          left: 0,
+        });
+        scrollState.set("main", router.asPath.replace(/[^a-z]/g, ""), 0);
+      }
+    } else {
+      if (
+        scrollState.get("main", router.asPath.replace(/[^a-z]/g, "")) > 0 &&
+        scrollState.isBack()
+      ) {
+        setTimeout(() => {
           mainContentRef.current?.scrollTo({
-            top: 0,
+            top: scrollState.get("main", router.asPath.replace(/[^a-z]/g, "")),
             left: 0,
           });
-          scrollState.set("main", router.asPath.replace(/[^a-z]/g, ""), 0);
-        }
+        }, 20);
+      } else {
+        mainContentRef.current?.scrollTo({
+          top: 0,
+          left: 0,
+        });
+        scrollState.set("main", router.asPath.replace(/[^a-z]/g, ""), 0);
       }
-
-      scrollState.setIsBack(false);
     }
-  }, [isPresent, router.asPath, isMobile, scrollState]);
+
+    scrollState.setIsBack(false);
+  }, [router.asPath, isMobile, scrollState]);
 
   const close = () => {
-    if (isAnimationRunning) return;
+    if (isAnimationRunningRef.current) return;
     setIsDrawerOpen(false);
-    setIsAnimationRunning(true);
+    isAnimationRunningRef.current = true;
 
-    panXRef.current = dragLeft * -1;
+    controls.stop();
     controls.start({
       translateX: dragLeft * -1,
     });
 
     setTimeout(() => {
-      setIsAnimationRunning(false);
-    }, 250);
+      isAnimationRunningRef.current = false;
+    }, 350);
   };
 
   const open = () => {
-    if (isAnimationRunning) return;
+    if (isAnimationRunningRef.current) return;
     setIsDrawerOpen(true);
-    setIsAnimationRunning(true);
-
+    isAnimationRunningRef.current = true;
+    controls.stop();
     controls.start({
       translateX: 0,
     });
 
     setTimeout(() => {
-      setIsAnimationRunning(false);
-    }, 250);
+      isAnimationRunningRef.current = false;
+    }, 350);
   };
 
-  const onResize = debounce(() => {
+  const onResize = useCallback(() => {
     let dL = window.innerWidth - 20 - 40;
 
     const isMobile = window.matchMedia(
@@ -283,9 +258,9 @@ export const MainContent = ({
     ).matches;
 
     if (isMobile) {
-      dL = window.innerWidth * 0.9 - 50;
+      dL = window.innerWidth * 0.9 - 60;
     } else if (isTablet && !isTabletWide) {
-      dL = window.innerWidth * 0.8 - 50;
+      dL = window.innerWidth * 0.8 - 80;
     } else if (isTabletWide) {
       dL = window.innerWidth * 0.666 - window.innerWidth * 0.1;
     } else if (isDesktop) {
@@ -294,34 +269,39 @@ export const MainContent = ({
       dL = 695 + (window.innerWidth * 0.08 - 55) - 100;
     }
 
-    console.log(isMobile, isTablet, isTabletWide, isDesktop, dL);
-
     setDragLeft(dL);
 
     setIsDrawerOpen(true);
-    panXRef.current = 0;
     controls.start({
-      translateX: panXRef.current,
+      translateX: 0,
     });
-  }, 350);
+  }, [controls]);
+
+  const onResizeDebounced = debounce(onResize, 350);
 
   useEffect(() => {
-    if (typeof window === "undefined" || eventListenerAdded) return;
+    if (typeof window === "undefined") return;
 
-    setEventListenerAdded(true);
+    if (!eventListenerAdded) {
+      setEventListenerAdded(true);
+      window.addEventListener("resize", onResizeDebounced);
+    }
 
-    window.addEventListener("resize", onResize);
     onResize();
 
     return () => {
       if (typeof window === "undefined") return;
-      window.removeEventListener("resize", onResize);
+      window.removeEventListener("resize", onResizeDebounced);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    onResize();
+  }, [router.asPath, onResize]);
+
   const toggle = () => {
-    if (isAnimationRunning) return;
+    if (isAnimationRunningRef.current) return;
 
     if (isDrawerOpen) {
       close();
@@ -334,7 +314,6 @@ export const MainContent = ({
     ? t("mainContent.slideToLeft", "Hide content")
     : t("mainContent.slideToRight", "Show content");
 
-    console.log("isDrawerOpne", isDrawerOpen);
   return (
     <>
       {isDrawer && !isVerticalContent && (
@@ -345,7 +324,7 @@ export const MainContent = ({
           onTouchStart={() => {
             close();
           }}
-          bg="#ff0"
+          bg="transparent"
           position="fixed"
           w="34vw"
           top="0"
@@ -367,9 +346,6 @@ export const MainContent = ({
             height: 40,
             width: 40,
             zIndex: 2,
-          }}
-          initial={{
-            ...animation,
           }}
           animate={controls}
           transition={{
@@ -422,6 +398,7 @@ export const MainContent = ({
           }, */}
       <motion.div
         key={`drawer-${router.asPath}`}
+        className="motionDragContainer"
         style={{
           position: "absolute",
           top: isVerticalContent
@@ -440,77 +417,54 @@ export const MainContent = ({
         {...(isDrawer
           ? {
               onTap: !isDrawerOpen
-                ? (event, info) => {
+                ? (event) => {
                     event.preventDefault();
                     toggle();
                   }
                 : undefined,
 
-              onPanStart: (event, info) => {
-                if (!panXRef.current) {
-                  panXRef.current = 0;
-                }
-              },
-
               onPan: (event, info) => {
-                if (isAnimationRunning) return;
-                // panXRef.current = Math.min(
-                //   0,
-                //   Math.max(dragLeft * -1, panXRef.current + info.offset.x)
-                // );
-                
-                // console.log("p1", dragLeft * -1, panXRef.current, info.offset.x, panXRef.current + info.offset.x);
+                if (isAnimationRunningRef.current) return;
 
-                if (!isDrawerOpen) {
-                  console.log(2);
-                  if (info.offset.x > 30) {
-                    console.log(3);
-                    open();
-                  } else {
-                    
-                    console.log(4)
-                    controls.start({
-                      translateX: info.offset.x,
-                    });
-                  }
-                  
+                if (Math.abs(info.offset.y) > Math.abs(info.offset.x)) return;
+
+                if (!isDrawerOpen && info.offset.x > 30) {
+                  console.log("open 3");
+                  open();
                 } else {
-                  console.log(5)
+                  console.log("cs 2", {
+                    translateX: info.offset.x,
+                  });
                   controls.start({
                     translateX: info.offset.x,
                   });
                 }
-                
               },
-              onPanEnd: (event, info) => {
-                if (isAnimationRunning) return;
-                
-                console.log("panend", info.offset.x)
+              onPanEnd: (_event, info) => {
+                if (isAnimationRunningRef.current) return;
+                if (Math.abs(info.offset.y) > Math.abs(info.offset.x)) return;
+
                 if (Math.abs(info.offset.x) > dragLeft * 0.25) {
                   if (info.offset.x < 0) {
-                    console.log("trigger close");
                     close();
                   } else {
-                    console.log("trigger open");
+                    console.log("open 1");
                     open();
                   }
                 } else {
                   if (info.offset.x < 0) {
-                    console.log("trigger reopen");
+                    console.log("open 2");
                     open();
                   } else {
-                    console.log("trigger reclose");
                     close();
                   }
                 }
-                
               },
-              //initial: animation,
               animate: controls,
 
               transition: {
                 duration: 0.3,
-                bounce: false,
+                bounce: true,
               },
             }
           : {})}
@@ -533,25 +487,17 @@ export const MainContent = ({
                 md: "auto",
               }}
               pb={
-                isMobile && !noMobileBottomPadding
-                  ? "60px"
-                  : primaryInput === "touch"
+                !isMobile && primaryInput === "touch"
                   ? "var(--locationBarHeight)"
                   : undefined
               }
               layerStyle={layerStyle}
               onScroll={(e: React.UIEvent<HTMLDivElement>) => {
-                if (isPresent) {
-                  console.log(
-                    router.asPath.replace(/[^a-z]/g, ""),
-                    (e.target as any).scrollTop
-                  );
-                  scrollState.set(
-                    "main",
-                    router.asPath.replace(/[^a-z]/g, ""),
-                    (e.target as any).scrollTop
-                  );
-                }
+                scrollState.set(
+                  "main",
+                  router.asPath.replace(/[^a-z]/g, ""),
+                  (e.target as any).scrollTop
+                );
               }}
             >
               {children}

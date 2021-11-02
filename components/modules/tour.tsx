@@ -169,7 +169,11 @@ export const ModuleComponentTour = ({
   `;
 
   return (
-    <MainContent layerStyle="blurredLightGray">
+    <MainContent
+      isDrawer={isTablet || isDesktopAndUp}
+      isVerticalContent={!isTablet && !isDesktopAndUp}
+      layerStyle="blurredLightGray"
+    >
       <Grid w="100%" templateRows="1fr auto" templateColumns="100%" minH="100%">
         <Box>
           <Box px="20px" pt="0.5em">

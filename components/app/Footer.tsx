@@ -25,9 +25,9 @@ export const Footer = ({
     <Box
       layerStyle={!noBackground ? "blurredLightGray" : undefined}
       pt={{
-        base: "20px",
-        sm: "20px",
-        md: "45px",
+        base: noBackground ? "40px" : "20px",
+        sm: noBackground ? "40px" : "20px",
+        md: noBackground ? "65px" : "45px",
         "2xl": "55px",
       }}
       px={{

@@ -57,7 +57,7 @@ export const Home = ({ homepage }: { homepage: any }) => {
     <MainContent
       isDrawer={isTablet || isDesktopAndUp}
       isVerticalContent={!isTablet && !isDesktopAndUp}
-      noMobileBottomPadding
+    
     >
       <Box>
         {homepage?.missionStatement && (

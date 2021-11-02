@@ -1,6 +1,7 @@
 export * from "./helpers";
 export * from "./FieldErrorMessage";
 export * from "./FieldCheckboxGroup";
+export * from "./FieldRadioGroup";
 
 // export * from "./FormNavigationBlock";
 // export * from "./TimeField";
