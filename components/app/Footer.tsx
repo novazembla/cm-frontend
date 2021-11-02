@@ -9,6 +9,8 @@ import { MultiLangValue, SVG } from "../ui";
 import { useIsBreakPoint, useAppTranslations } from "~/hooks";
 import { Logo } from ".";
 
+// https://mmazzarolo.com/blog/2021-04-10-nextjs-scroll-restoration/
+
 export const Footer = ({
   type = "full",
   noBackground,
@@ -73,6 +75,7 @@ export const Footer = ({
             bg="transparent"
             onClick={() => {
               if (window) {
+                // TODO: this should also work for the maincontent!
                 window.scrollTo({
                   top: 0,
                   behavior: "smooth",

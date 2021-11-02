@@ -77,7 +77,7 @@ export const ModuleComponentTours = ({ ...props }) => {
 
   return (
     <MainContent layerStyle="blurredLightGray">
-      <Grid w="100%" templateRows="1fr auto" templateColumns="100%" minH="100%">
+      <Grid w="100%" minH="calc(100vh - 80px)" templateRows="1fr auto" templateColumns="100%">
         <Box px="20px" pt="0.5em">
           <Box mb="3">
             <Text className="highlight" color="cm.text" fontWeight="bold">

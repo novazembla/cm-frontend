@@ -17,7 +17,7 @@ const contentPaddingTop = {
   // xxl: "80px",
 };
 
-const MIN_MOVE_X = 20;
+const MIN_MOVE_X = 15;
 const MAX_MOVE_Y = 10;
 
 export const MainContent = ({
@@ -48,7 +48,7 @@ export const MainContent = ({
 
   const controls = useAnimation();
 
-  const [isScrollingObserved, setIsScrollingObserved] = useState(false);
+  // const [isScrollingObserved, setIsScrollingObserved] = useState(false);
 
   const scrollState = useScrollStateContext();
 
@@ -77,7 +77,6 @@ export const MainContent = ({
     "2xl": "calc(8vw - 55px)",
   });
 
-  // useEffect(() => {
   //   if (isScrollingObserved || typeof window === undefined) return;
 
   //   setIsScrollingObserved(true);
@@ -86,131 +85,111 @@ export const MainContent = ({
 
   //   const trackBody = (e: Event) => {
   //     console.log("tracking boyd scroll", window.scrollY);
-  //     scrollState.set("body", router.asPath.replace( /[^a-z]/g, '' ), window.scrollY);
+  //     scrollState.set(
+  //       "body",
+  //       router.asPath.replace(/[^a-z]/g, ""),
+  //       window.scrollY
+  //     );
   //   };
-  //   document.addEventListener('scroll', trackBody);
+  //   document.addEventListener("scroll", trackBody);
 
   //   return () => {
   //     if (typeof window === undefined) return;
   //     console.log("removeing scroll event");
   //     document.removeEventListener("scroll", trackBody);
   //   };
-  // }, [isScrollingObserved, setIsScrollingObserved, router, scrollState]);
 
-  useEffect(() => {
-    if (isScrollingObserved || typeof window === undefined) return;
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
-    setIsScrollingObserved(true);
+  // useEffect(() => {
+  //   if (typeof window === "undefined") return;
 
-    console.log("attaching scroll event");
+  //   // reset
+  //   const container: HTMLDivElement | null = document.querySelector(
+  //     `.animatedMainContent:not(#p-${router.asPath.replace(/[^a-z]/g, "")})`
+  //   );
 
-    const trackBody = (e: Event) => {
-      console.log("tracking boyd scroll", window.scrollY);
-      scrollState.set(
-        "body",
-        router.asPath.replace(/[^a-z]/g, ""),
-        window.scrollY
-      );
-    };
-    document.addEventListener("scroll", trackBody);
+  //   if (container) {
+  //     const slug = container.getAttribute("id")?.replace("p-", "") ?? "-";
+  //     if (isMobile) {
+  //       console.log(2);
+  //     } else {
+  //       console.log(3, container, slug);
+  //       // annoyinigly the clone of the component by framer motion's animate presence
+  //       // reset the scoll state of the main content's div.
+  //       // we have to reset it
+  //       if (scrollState.get("main", slug) > 0) {
+  //         console.log(4, container);
 
-    return () => {
-      if (typeof window === undefined) return;
-      console.log("removeing scroll event");
-      document.removeEventListener("scroll", trackBody);
-    };
+  //         const mc: HTMLDivElement | null =
+  //           container.querySelector(".mainContent");
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  //         if (mc) {
+  //           console.log(slug, scrollState.get("main", slug));
+  //           setTimeout(() => {
+  //             mc.scrollTo({
+  //               top: scrollState.get("main", slug),
+  //               left: 0,
+  //             });
+  //           }, 20);
+  //           setTimeout(() => {
+  //             mc.scrollTo({
+  //               top: scrollState.get("main", slug),
+  //               left: 0,
+  //             });
+  //           }, 20);
+  //         }
+  //       }
+  //     }
+  //   }
+  // }, [router.asPath, isMobile, scrollState]);
 
-  useEffect(() => {
-    if (typeof window === "undefined") return;
+  // useEffect(() => {
+  //   if (typeof window === "undefined") return;
 
-    // reset
-    const container: HTMLDivElement | null = document.querySelector(
-      `.animatedMainContent:not(#p-${router.asPath.replace(/[^a-z]/g, "")})`
-    );
+  //   console.log("setting current router", router.asPath.replace(/[^a-z]/g, ""));
 
-    if (container) {
-      const slug = container.getAttribute("id")?.replace("p-", "") ?? "-";
-      if (isMobile) {
-        console.log(2);
-      } else {
-        console.log(3, container, slug);
-        // annoyinigly the clone of the component by framer motion's animate presence
-        // reset the scoll state of the main content's div.
-        // we have to reset it
-        if (scrollState.get("main", slug) > 0) {
-          console.log(4, container);
+  //   if (isMobile) {
+  //     if (
+  //       scrollState.get("body", router.asPath.replace(/[^a-z]/g, "")) > 0 &&
+  //       scrollState.isBack()
+  //     ) {
+  //       setTimeout(() => {
+  //         window.scrollTo({
+  //           top: scrollState.get("main", router.asPath.replace(/[^a-z]/g, "")),
+  //           left: 0,
+  //         });
+  //       }, 20);
+  //     } else {
+  //       window.scrollTo({
+  //         top: 0,
+  //         left: 0,
+  //       });
+  //       scrollState.set("main", router.asPath.replace(/[^a-z]/g, ""), 0);
+  //     }
+  //   } else {
+  //     if (
+  //       scrollState.get("main", router.asPath.replace(/[^a-z]/g, "")) > 0 &&
+  //       scrollState.isBack()
+  //     ) {
+  //       setTimeout(() => {
+  //         mainContentRef.current?.scrollTo({
+  //           top: scrollState.get("main", router.asPath.replace(/[^a-z]/g, "")),
+  //           left: 0,
+  //         });
+  //       }, 20);
+  //     } else {
+  //       mainContentRef.current?.scrollTo({
+  //         top: 0,
+  //         left: 0,
+  //       });
+  //       scrollState.set("main", router.asPath.replace(/[^a-z]/g, ""), 0);
+  //     }
+  //   }
 
-          const mc: HTMLDivElement | null =
-            container.querySelector(".mainContent");
-
-          if (mc) {
-            console.log(slug, scrollState.get("main", slug));
-            setTimeout(() => {
-              mc.scrollTo({
-                top: scrollState.get("main", slug),
-                left: 0,
-              });
-            }, 20);
-            setTimeout(() => {
-              mc.scrollTo({
-                top: scrollState.get("main", slug),
-                left: 0,
-              });
-            }, 20);
-          }
-        }
-      }
-    }
-  }, [router.asPath, isMobile, scrollState]);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    console.log("setting current router", router.asPath.replace(/[^a-z]/g, ""));
-
-    if (isMobile) {
-      if (
-        scrollState.get("body", router.asPath.replace(/[^a-z]/g, "")) > 0 &&
-        scrollState.isBack()
-      ) {
-        setTimeout(() => {
-          window.scrollTo({
-            top: scrollState.get("main", router.asPath.replace(/[^a-z]/g, "")),
-            left: 0,
-          });
-        }, 20);
-      } else {
-        window.scrollTo({
-          top: 0,
-          left: 0,
-        });
-        scrollState.set("main", router.asPath.replace(/[^a-z]/g, ""), 0);
-      }
-    } else {
-      if (
-        scrollState.get("main", router.asPath.replace(/[^a-z]/g, "")) > 0 &&
-        scrollState.isBack()
-      ) {
-        setTimeout(() => {
-          mainContentRef.current?.scrollTo({
-            top: scrollState.get("main", router.asPath.replace(/[^a-z]/g, "")),
-            left: 0,
-          });
-        }, 20);
-      } else {
-        mainContentRef.current?.scrollTo({
-          top: 0,
-          left: 0,
-        });
-        scrollState.set("main", router.asPath.replace(/[^a-z]/g, ""), 0);
-      }
-    }
-
-    scrollState.setIsBack(false);
-  }, [router.asPath, isMobile, scrollState]);
+  //   scrollState.setIsBack(false);
+  // }, [router.asPath, isMobile, scrollState]);
 
   const close = () => {
     if (isAnimationRunningRef.current) return;
@@ -479,26 +458,26 @@ export const MainContent = ({
               ref={mainContentRef}
               className="mainContent"
               h={{
-                md: "calc(100vh - 60px)",
-                xl: "calc(100vh - 80px)",
+                // md: "calc(100vh - 60px)",
+                // xl: "calc(100vh - 80px)",
               }}
-              minH={isMobile ? "calc(100vh - 60px)" : undefined}
-              overflowY={{
-                md: "auto",
-              }}
+              minH={isMobile ? "calc(100vh - 60px)" : "100vh"}
+              // overflowY={{
+              //   xl: "auto",
+              // }}
               pb={
                 !isMobile && primaryInput === "touch"
                   ? "var(--locationBarHeight)"
                   : undefined
               }
               layerStyle={layerStyle}
-              onScroll={(e: React.UIEvent<HTMLDivElement>) => {
-                scrollState.set(
-                  "main",
-                  router.asPath.replace(/[^a-z]/g, ""),
-                  (e.target as any).scrollTop
-                );
-              }}
+              // onScroll={(e: React.UIEvent<HTMLDivElement>) => {
+              //   scrollState.set(
+              //     "main",
+              //     router.asPath.replace(/[^a-z]/g, ""),
+              //     (e.target as any).scrollTop
+              //   );
+              // }}
             >
               {children}
             </Box>

@@ -14,6 +14,9 @@ module.exports = withImages({
   images: {
     domains,
   },
+  experimental: {
+    scrollRestoration: true,
+  },
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     // config.module.rules.push(
     //   {

@@ -10,6 +10,8 @@ import { AppProps } from "~/types";
 import { LoadingBar } from ".";
 import { useSettingsContext } from "~/provider";
 
+// TODO: SEO Tags, inclusive featured image/cards ... 
+
 export const LayoutFull = ({ children }: AppProps) => {
   const router = useRouter();
   const settings = useSettingsContext();
