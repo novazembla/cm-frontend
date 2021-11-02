@@ -38,7 +38,7 @@ export const Map = () => {
 
   const { onMenuToggle, isMenuOpen } = useMenuButtonContext();
   const { isQuickSearchOpen, onQuickSearchToggle } = useQuickSearchContext();
-  
+
   const { isMobile, isTablet, isTabletWide, isDesktopAndUp } =
     useIsBreakPoint();
 
@@ -67,6 +67,26 @@ export const Map = () => {
       closeButton: false,
       closeOnClick: false,
     });
+
+    const showPopup = (coordinates: any, title: any, offset?: any) => {
+      // var description = e.features[0].properties.title;
+
+      try {
+        // [x offset, y offest]
+        popup.setOffset(offset ?? POPUP_OFFSET);
+
+        // Populate the popup and set its coordinates
+        // based on the feature found.
+        popup
+          .setLngLat(coordinates)
+          .setHTML(
+            `<div style="height: 100px; width: 100px;background-color:#fff;">xxx${title}</div>`
+          )
+          .addTo(map);
+
+        overlayZoomLevel = map.getZoom();
+      } catch (err) {}
+    };
 
     const onMapPointNavigate = (properties: any) => {
       if (!properties?.slug) return null;
@@ -98,23 +118,30 @@ export const Map = () => {
 
           overlayZoomLevel = map.getZoom();
 
-          popup.setOffset([
+
+          showPopup(spiderLeg.latLng, getMultilangValue(
+            spiderLeg?.feature?.title
+          ), [
             spiderLeg.popupOffset.bottom[0] + POPUP_OFFSET[0],
             spiderLeg.popupOffset.bottom[1] + POPUP_OFFSET[1],
-          ]);
+          ])
+          // popup.setOffset([
+          //   spiderLeg.popupOffset.bottom[0] + POPUP_OFFSET[0],
+          //   spiderLeg.popupOffset.bottom[1] + POPUP_OFFSET[1],
+          // ]);
 
-          // Populate the popup and set its coordinates
-          // based on the feature found.
-          popup
-            .setLngLat(spiderLeg.latLng)
-            // TODO: make more general
-            .setHTML(
-              `<div style="height: 100px; width: 100px;background-color:#fff;">${getMultilangValue(
-                spiderLeg?.feature?.title
-              )}</div>`
-            )
-            .addTo(map);
-          popup.addTo(map);
+          // // Populate the popup and set its coordinates
+          // // based on the feature found.
+          // popup
+          //   .setLngLat(spiderLeg.latLng)
+          //   // TODO: make more general
+          //   .setHTML(
+          //     `<div style="height: 100px; width: 100px;background-color:#fff;">${getMultilangValue(
+          //       spiderLeg?.feature?.title
+          //     )}</div>`
+          //   )
+          //   .addTo(map);
+          // popup.addTo(map);
         });
 
         spiderLeg.elements.pin.addEventListener("mouseleave", () => {
@@ -317,6 +344,28 @@ export const Map = () => {
         map.getCanvas().style.cursor = "";
       });
 
+      const showMapPop = (e: any) => {
+        const feature = e?.features?.[0];
+        if (!feature) return;
+
+        const coordinates = feature.geometry.coordinates.slice();
+
+        // Ensure that if the map is zoomed out such that multiple
+        // copies of the feature are visible, the popup appears
+        // over the copy being pointed to.
+        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+          coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+        }
+
+        try {
+          e.lngLat, e?.features?.[0];
+
+          const titles = JSON.parse(feature?.properties?.title);
+
+          showPopup(coordinates, getMultilangValue(titles));
+        } catch (err) {}
+      };
+
       map.on("zoom", () => {
         if (isAnimating) return;
 
@@ -337,38 +386,10 @@ export const Map = () => {
           // Change the cursor style as a UI indicator.
           map.getCanvas().style.cursor = "pointer";
 
-          const coordinates = e.features[0].geometry.coordinates.slice();
-          // var description = e.features[0].properties.title;
-
-          try {
-            const titles = JSON.parse(e.features[0].properties.title);
-
-            // Ensure that if the map is zoomed out such that multiple
-            // copies of the feature are visible, the popup appears
-            // over the copy being pointed to.
-            while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-              coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-            }
-
-            // TODO:, skip if zoom level too low ..
-
-            // [x offset, y offest]
-            popup.setOffset(POPUP_OFFSET);
-
-            // Populate the popup and set its coordinates
-            // based on the feature found.
-            popup
-              .setLngLat(coordinates)
-              .setHTML(
-                `<div style="height: 100px; width: 100px;background-color:#fff;">${getMultilangValue(
-                  titles
-                )}</div>`
-              )
-              .addTo(map);
-
-            overlayZoomLevel = map.getZoom();
-          } catch (err) {}
+          if (e?.features?.[0]) showMapPop(e);
         });
+
+        // TODO:, skip if zoom level too low ..
 
         map.on("mouseleave", "cluster-locations", () => {
           map.getCanvas().style.cursor = "";
@@ -382,6 +403,9 @@ export const Map = () => {
           if (e?.features?.[0]?.properties?.slug) {
             onMapPointNavigate(e?.features?.[0]?.properties);
           }
+        } else {
+          if (e?.features?.[0]?.properties)
+            showMapPop(e);
         }
       });
     });

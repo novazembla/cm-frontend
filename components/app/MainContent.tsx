@@ -412,10 +412,10 @@ export const MainContent = ({
                   open();
                 } else {
                   console.log("cs 2", {
-                    translateX: info.offset.x,
+                    translateX: Math.min(info.offset.x, 0)
                   });
                   controls.start({
-                    translateX: info.offset.x,
+                    translateX: Math.min(info.offset.x, 0)
                   });
                 }
               },
