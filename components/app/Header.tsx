@@ -145,11 +145,14 @@ export const Header = (/* props */) => {
                     >
                       <IconButton
                         aria-label={t("menu.button.togggleSearch", "Search")}
-                        icon={<SVG type="cross" width="40px" height="40px" />}
-                        borderRadius="100"
+                        icon={<SVG type="cross" width="80px" height="80px" />}
+                        borderRadius="0"
                         p="0"
+                        className="svgHover"
                         paddingInlineStart="0"
                         paddingInlineEnd="0"
+                        padding="0"
+                        bg="transparent"
                         w="40px"
                         h="40px"
                         onClick={() => {
@@ -158,9 +161,11 @@ export const Header = (/* props */) => {
                         pointerEvents={isQuickSearchOpen ? undefined : "none"}
                         transition="all 0.3s"
                         _hover={{
-                          filter: "brightness(70%)",
+                          bg: "transparent",
                         }}
-                        bg="#fff"
+                        _active={{
+                          bg: "transparent",
+                        }}
                       />
                     </Box>
                   </motion.div>
@@ -178,11 +183,14 @@ export const Header = (/* props */) => {
                     >
                       <IconButton
                         aria-label={t("menu.button.togggleSearch", "Search")}
-                        icon={<SVG type="search" width="40px" height="40px" />}
-                        borderRadius="100"
+                        icon={<SVG type="search" width="64px" height="62px" />}
+                        borderRadius="0"
                         p="0"
+                        className="svgHover"
                         paddingInlineStart="0"
                         paddingInlineEnd="0"
+                        padding="0"
+                        bg="transparent"
                         w="40px"
                         h="40px"
                         onClick={() => {
@@ -191,12 +199,14 @@ export const Header = (/* props */) => {
                           }
                           onQuickSearchToggle();
                         }}
+                        pointerEvents={isQuickSearchOpen ? "none" : undefined}
                         transition="all 0.3s"
                         _hover={{
-                          filter: "brightness(70%)",
+                          bg: "transparent",
                         }}
-                        bg="#fff"
-                        pointerEvents={isQuickSearchOpen ? "none" : undefined}
+                        _active={{
+                          bg: "transparent",
+                        }}
                       />
                     </Box>
                   </motion.div>
@@ -216,24 +226,30 @@ export const Header = (/* props */) => {
                     zIndex={isMenuOpen ? 2 : 1}
                   >
                     <IconButton
-                      aria-label={t("menu.button.toggleMenu", "Menu")}
-                      icon={<SVG type="cross" width="40px" height="40px" />}
-                      borderRadius="100"
-                      p="0"
-                      paddingInlineStart="0"
-                      paddingInlineEnd="0"
-                      w="40px"
-                      h="40px"
-                      onClick={() => {
-                        onMenuToggle();
-                      }}
-                      bg="#fff"
-                      pointerEvents={isMenuOpen ? undefined : "none"}
-                      transition="all 0.3s"
-                      _hover={{
-                        filter: "brightness(70%)",
-                      }}
-                    />
+                        aria-label={t("menu.button.toggleMenu", "Search")}
+                        icon={<SVG type="cross" width="80px" height="80px" />}
+                        borderRadius="0"
+                        p="0"
+                        className="svgHover"
+                        paddingInlineStart="0"
+                        paddingInlineEnd="0"
+                        padding="0"
+                        bg="transparent"
+                        w="40px"
+                        h="40px"
+                        onClick={() => {
+                          onMenuToggle();
+                        }}
+                        pointerEvents={isMenuOpen ? undefined : "none"}
+                        transition="all 0.3s"
+                        _hover={{
+                          bg: "transparent",
+                        }}
+                        _active={{
+                          bg: "transparent",
+                        }}
+                      />
+
                   </Box>
                 </motion.div>
                 <motion.div
@@ -249,27 +265,33 @@ export const Header = (/* props */) => {
                     zIndex={isMenuOpen ? 1 : 2}
                   >
                     <IconButton
-                      aria-label={t("menu.button.toggleMenu", "Menu")}
-                      icon={<SVG type="menu-tablet" width="40px" height="40px" />}
-                      borderRadius="100"
-                      p="0"
-                      paddingInlineStart="0"
-                      paddingInlineEnd="0"
-                      w="40px"
-                      h="40px"
-                      bg="#fff"
-                      onClick={() => {
-                        if (!isMenuOpen && isQuickSearchOpen) {
-                          onQuickSearchToggle();
-                        }
-                        onMenuToggle();
-                      }}
-                      transition="all 0.3s"
-                      _hover={{
-                        filter: "brightness(70%)",
-                      }}
-                      pointerEvents={isMenuOpen ? "none" : undefined}
-                    />
+                        aria-label={t("menu.button.toggleMenu", "Search")}
+                        icon={<SVG type="menu-tablet" width="30px" height="30px" />}
+                        borderRadius="0"
+                        p="0"
+                        className="svgHover"
+                        paddingInlineStart="0"
+                        paddingInlineEnd="0"
+                        padding="0"
+                        bg="transparent"
+                        w="40px"
+                        h="40px"
+                        onClick={() => {
+                          if (!isMenuOpen && isQuickSearchOpen) {
+                            onQuickSearchToggle();
+                          }
+                          onMenuToggle();
+                        }}
+                        pointerEvents={isMenuOpen ? "none" : undefined}
+                        transition="all 0.3s"
+                        _hover={{
+                          bg: "transparent",
+                        }}
+                        _active={{
+                          bg: "transparent",
+                        }}
+                      />
+
                   </Box>
                 </motion.div>
               </Box>

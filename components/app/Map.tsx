@@ -20,7 +20,7 @@ import { SVG } from "~/components/ui";
 const MAP_MIN_ZOOM = 9;
 const MAP_MAX_ZOOM = 19;
 const ZOOM_LEVEL_HIDE_ADJUSTOR = 0.5;
-const POPUP_OFFSET = [0, 25] as [number, number];
+const POPUP_OFFSET = [53, 27] as [number, number];
 
 let overlayZoomLevel = 0;
 let isAnimating = false;
@@ -68,6 +68,16 @@ export const Map = () => {
       closeOnClick: false,
     });
 
+    const onMapPointNavigate = (properties: any) => {
+      if (!properties?.slug) return null;
+
+      if (i18n?.language === "en") {
+        router.push(`/location/${properties?.slug}`);
+      } else {
+        router.push(`/kartenpunkt/${properties?.slug}`);
+      }
+    };
+
     const showPopup = (
       coordinates: any,
       title: any,
@@ -81,32 +91,58 @@ export const Map = () => {
         // [x offset, y offest]
         popup.setOffset(offset ?? POPUP_OFFSET);
 
+        const containerElem: any = document.createElement("div");
+        const titleElem: any = document.createElement("div");
+        titleElem.className = "title clampThreeLines";
+        titleElem.innerText = title;
+
+        const arrowElem: any = document.createElement("a");
+        arrowElem.className = "arrow";
+        arrowElem.setAttribute("href", "#");
+        arrowElem.innerText = t("map.popup.viewLocation", "View location");
+        arrowElem.addEventListener("click", (e: any) => {
+          e.preventDefault();
+          onMapPointNavigate({ slug });
+        });
+        containerElem.className = "popup";
+        containerElem.style.borderColor = color;
+
+        const flexElem: any = document.createElement("div");
+
+        
+
+        containerElem.appendChild(titleElem);
+        containerElem.appendChild(flexElem);
+
+        if (primaryInput === "mouse") {
+          flexElem.className = "row";
+
+          containerElem.addEventListener("mouseleave", () => {
+            popup.remove();
+          });
+          containerElem.addEventListener("click", () => {
+            onMapPointNavigate({ slug });
+          });
+        } else {
+          flexElem.className = "row-space-between";
+          const closeElem: any = document.createElement("a");
+          closeElem.className = "close";
+          closeElem.setAttribute("href", "#");
+          closeElem.innerText = t("map.popup.close", "Close popup");
+          closeElem.addEventListener("click", (e: any) => {
+            e.preventDefault();
+            popup.remove();
+          });
+          flexElem.appendChild(closeElem);
+        }
+
+        flexElem.appendChild(arrowElem);
+
         // Populate the popup and set its coordinates
         // based on the feature found.
-        popup
-          .setLngLat(coordinates)
-          .setHTML(
-            `<div class="popup" style="border-color:${color}">${title}</div>`
-          )
-          .addTo(map);
+        popup.setLngLat(coordinates).setDOMContent(containerElem).addTo(map);
 
         overlayZoomLevel = map.getZoom();
-      } catch (err) {}
-    };
-
-    const onMapPointNavigate = (properties: any) => {
-      if (!properties?.slug) return null;
-
-      try {
-        const slug =
-          typeof properties?.slug === "string"
-            ? JSON.parse(properties.slug)
-            : properties.slug;
-        if (i18n?.language === "en") {
-          router.push(`/location/${slug.en}`);
-        } else {
-          router.push(`/kartenpunkt/${slug.de}`);
-        }
       } catch (err) {}
     };
 
@@ -115,14 +151,24 @@ export const Map = () => {
       dotRadius: 16,
       clusterRadius: 24,
       onClick: (e: any, spiderLeg: any) => {
-        onMapPointNavigate(spiderLeg.feature);
-        popup.remove();
+        onMapPointNavigate(spiderLeg.feature?.slug);
       },
       initializeLeg: (spiderLeg: any) => {
         spiderLeg.elements.pin.addEventListener("mouseenter", () => {
           if (isAnimating) return;
 
           overlayZoomLevel = map.getZoom();
+
+          console.log(
+            spiderLeg.latLng,
+            getMultilangValue(spiderLeg?.feature?.title),
+            spiderLeg?.feature?.color,
+            getMultilangValue(spiderLeg?.feature?.slug),
+            [
+              spiderLeg.popupOffset.bottom[0] + POPUP_OFFSET[0],
+              spiderLeg.popupOffset.bottom[1] + POPUP_OFFSET[1],
+            ]
+          );
 
           showPopup(
             spiderLeg.latLng,
@@ -136,9 +182,9 @@ export const Map = () => {
           );
         });
 
-        spiderLeg.elements.pin.addEventListener("mouseleave", () => {
-          popup.remove();
-        });
+        // spiderLeg.elements.pin.addEventListener("mouseleave", () => {
+        //   popup.remove();
+        // });
       },
     });
 
@@ -351,8 +397,13 @@ export const Map = () => {
 
         try {
           const titles = JSON.parse(feature?.properties?.title);
-          const slugs =  JSON.parse(feature?.properties?.slug);
-          showPopup(coordinates, getMultilangValue(titles), feature?.properties?.color,  getMultilangValue(slugs));
+          const slugs = JSON.parse(feature?.properties?.slug);
+          showPopup(
+            coordinates,
+            getMultilangValue(titles),
+            feature?.properties?.color,
+            getMultilangValue(slugs)
+          );
         } catch (err) {}
       };
 
@@ -391,7 +442,7 @@ export const Map = () => {
         if (primaryInput !== "touch") {
           spiderfier.unspiderfy();
           if (e?.features?.[0]?.properties?.slug) {
-            onMapPointNavigate(e?.features?.[0]?.properties);
+            onMapPointNavigate(e?.features?.[0]?.properties?.slug);
           }
         } else {
           if (e?.features?.[0]?.properties) showMapPop(e);
@@ -436,6 +487,7 @@ export const Map = () => {
             >
               <motion.div
                 animate={{ opacity: isQuickSearchOpen ? 1 : 0 }}
+                initial={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
               >
                 <Box
@@ -471,6 +523,7 @@ export const Map = () => {
               </motion.div>
               <motion.div
                 animate={{ opacity: isQuickSearchOpen ? 0 : 1 }}
+                initial={{ opacity: 1 }}
                 transition={{ duration: 0.3 }}
               >
                 <Box

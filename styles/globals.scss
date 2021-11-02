@@ -93,16 +93,104 @@ a {
   box-sizing: border-box;
 }
 
+
+.maplibregl-popup {
+  .maplibregl-popup-tip {
+    display: none;
+  }
+
+  .maplibregl-popup-content {
+    background: transparent;
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+  }
+}
+
 .popup {
-  height: 100px;
-  width: 120px;
-  border: 2px solid;
+  height: 112px;
+  width: 160px;
+  border: 3px solid;
   border-radius: 10px;
-  
+  padding: 6px 8px;
   background: var(--chakra-colors-blur-white);
   backdrop-filter: blur(20px);
   background-blend-mode: lighten;
-  pointer-events: none;
+  
+  font-family: Berlin Type, Helvetica, Arial, sans-serif;
+  font-size: 13px;
+  line-height: 17px;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  cursor: pointer;
+
+  .title {
+    height: 54px;
+  }
+  .row, .row-space-between {
+    display: flex;
+    justify-content: flex-end;    
+    height: 37px;
+    padding-right: 5px;
+    align-items: flex-end;
+    flex-direction: row;
+    width: 100%;
+    &.row-space-between {
+      justify-content: space-between;
+
+      .arrow {
+        margin-bottom: 5px;
+      }
+    }
+  }
+
+  .arrow {
+    display: inline-block;
+    overflow: hidden;
+    text-indent: 100px;
+    font-size: 0;
+    white-space: nowrap;
+    width: 30px;
+    height: 17px;
+    -webkit-flex-shrink: 0;
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+    -webkit-background-position: center center;
+    background-position: center center;
+    background-repeat: no-repeat;
+    -webkit-background-size: contain;
+    background-size: contain;
+    filter: invert(18%) sepia(82%) saturate(4434%) hue-rotate(355deg) brightness(96%) contrast(85%);
+    background-image: url(data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeD0iMHB4IiB5PSIwcHgiCgkgdmlld0JveD0iMCAwIDI3IDE0Ij4KPHN0eWxlIHR5cGU9InRleHQvY3NzIj4KCS5zdDB7ZmlsbDpub25lO3N0cm9rZTojMDAwMDAwO3N0cm9rZS13aWR0aDoxLjU7c3Ryb2tlLWxpbmVjYXA6cm91bmQ7c3Ryb2tlLWxpbmVqb2luOnJvdW5kO30KCS5zdDF7ZmlsbDpub25lO3N0cm9rZTojMDAwMDAwO3N0cm9rZS13aWR0aDoxLjU7c3Ryb2tlLWxpbmVjYXA6cm91bmQ7fQo8L3N0eWxlPgo8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLjc1IDEuMDU2KSI+Cgk8cGF0aCBjbGFzcz0ic3QwIiBkPSJNMC4xLDUuOWgyNS40Ii8+Cgk8bGluZSBjbGFzcz0ic3QxIiB4MT0iMjAuNSIgeTE9Ii0wLjEiIHgyPSIyNS41IiB5Mj0iNS45Ii8+Cgk8cGF0aCBjbGFzcz0ic3QxIiBkPSJNMjAuNSwxMS45bDUtNiIvPgo8L2c+Cjwvc3ZnPgo=);
+
+    &:hover {
+      filter: invert(13%) sepia(17%) saturate(7488%) hue-rotate(306deg) brightness(99%) contrast(106%);
+    }
+  }
+  .close {
+    overflow: hidden;
+    text-indent: 100px;
+    font-size: 0;
+    white-space: nowrap;
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    -webkit-flex-shrink: 0;
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+    -webkit-background-position: center center;
+    background-position: center center;
+    background-repeat: no-repeat;
+    -webkit-background-size: contain;
+    background-size: contain;
+    border-radius: 100px;
+    border: 1px solid #000;
+    background-image: url(data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeD0iMHB4IiB5PSIwcHgiCgkgdmlld0JveD0iMCAwIDU1IDU1IiB4bWw6c3BhY2U9InByZXNlcnZlIj4KPHN0eWxlIHR5cGU9InRleHQvY3NzIj4KCS5zdDB7ZmlsbDpub25lO3N0cm9rZTojMDAwMDAwO30KCS5zdDF7ZmlsbDpub25lO3N0cm9rZTojMDAwMDAwO3N0cm9rZS13aWR0aDoxLjU7c3Ryb2tlLWxpbmVjYXA6cm91bmQ7fQo8L3N0eWxlPgo8ZyBpZD0iWCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMS4wNjEgMS4wNjEpIj4KCTxsaW5lIGNsYXNzPSJzdDEiIHgxPSIzNS4yIiB5MT0iMTcuOSIgeDI9IjE3LjUiIHkyPSIzNS42Ii8+Cgk8bGluZSBjbGFzcz0ic3QxIiB4MT0iMzUuMiIgeTE9IjM1LjYiIHgyPSIxNy41IiB5Mj0iMTcuOSIvPgo8L2c+Cjwvc3ZnPgo=);
+    filter: invert(18%) sepia(82%) saturate(4434%) hue-rotate(355deg) brightness(96%) contrast(85%);
+    &:hover {
+      filter: invert(13%) sepia(17%) saturate(7488%) hue-rotate(306deg) brightness(99%) contrast(106%);
+    }
+  }
 }
 
 .aspect {
@@ -179,22 +267,6 @@ a {
   }
 }
 
-.maplibregl-popup {
-  .maplibregl-popup-tip {
-    width: 1px;
-    height: 10px;
-    border: none !important;
-    z-index: 1;
-    background-color: #333;
-  }
-
-  .maplibregl-popup-content {
-    border-radius: 5px;
-    overflow: hidden;
-    padding: 0;
-    margin: 0;
-  }
-}
 // .mapboxgl-popup-tip,
 // <div class="maplibregl-popup mapboxgl-popup maplibregl-popup-anchor-bottom mapboxgl-popup-anchor-bottom" style="max-width: 240px; transform: translate(-50%, -100%) translate(400px, 175px);"><div class="maplibregl-popup-tip mapboxgl-popup-tip"></div><div class="maplibregl-popup-content mapboxgl-popup-content">Construction on the Washington Monument began in 1848.<button class="maplibregl-popup-close-button mapboxgl-popup-close-button" type="button" aria-label="Close popup">×</button></div></div>
 
