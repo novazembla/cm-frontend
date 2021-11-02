@@ -8,6 +8,8 @@ import { useScrollStateContext } from "~/provider";
 import { primaryInput } from "detect-it";
 import { debounce } from "lodash";
 
+const MotionBox = motion(Box);
+
 const contentPaddingTop = {
   base: "60px",
   // sm: "60px",
@@ -35,6 +37,7 @@ export const MainContent = ({
 }) => {
   const mainContentRef = useRef<HTMLDivElement>(null);
   const isAnimationRunningRef = useRef<boolean>(false);
+  const panPositionXRef = useRef<number>(0);
 
   const router = useRouter();
   const { isMobile, isTablet, isTabletWide, isDesktopAndUp } =
@@ -43,7 +46,7 @@ export const MainContent = ({
   const [dragLeft, setDragLeft] = useState(0);
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(true);
-  
+
   const [eventListenerAdded, setEventListenerAdded] = useState(false);
 
   const controls = useAnimation();
@@ -191,35 +194,6 @@ export const MainContent = ({
   //   scrollState.setIsBack(false);
   // }, [router.asPath, isMobile, scrollState]);
 
-  const close = () => {
-    if (isAnimationRunningRef.current) return;
-    setIsDrawerOpen(false);
-    isAnimationRunningRef.current = true;
-
-    controls.stop();
-    controls.start({
-      translateX: dragLeft * -1,
-    });
-
-    setTimeout(() => {
-      isAnimationRunningRef.current = false;
-    }, 350);
-  };
-
-  const open = () => {
-    if (isAnimationRunningRef.current) return;
-    setIsDrawerOpen(true);
-    isAnimationRunningRef.current = true;
-    controls.stop();
-    controls.start({
-      translateX: 0,
-    });
-
-    setTimeout(() => {
-      isAnimationRunningRef.current = false;
-    }, 350);
-  };
-
   const onResize = useCallback(() => {
     let dL = window.innerWidth - 20 - 40;
 
@@ -250,9 +224,13 @@ export const MainContent = ({
 
     setDragLeft(dL);
 
-    setIsDrawerOpen(true);
+    controls.stop();
     controls.start({
       translateX: 0,
+      transition: {
+        duration: 0.3,
+        bounce: false,
+      },
     });
   }, [controls]);
 
@@ -279,9 +257,54 @@ export const MainContent = ({
     onResize();
   }, [router.asPath, onResize]);
 
+  const close = () => {
+    if (isAnimationRunningRef.current) return;
+
+    console.log("close function");
+
+    setIsDrawerOpen(false);
+    isAnimationRunningRef.current = true;
+
+    controls.stop();
+    controls.start({
+      translateX: dragLeft * -1,
+      transition: {
+        duration: 0.3,
+        bounce: false,
+      },
+    });
+
+    setTimeout(() => {
+      isAnimationRunningRef.current = false;
+    }, 350);
+  };
+
+  const open = () => {
+    if (isAnimationRunningRef.current) return;
+
+    console.log("open function");
+
+    setIsDrawerOpen(true);
+    isAnimationRunningRef.current = true;
+
+    controls.stop();
+    controls.start({
+      translateX: 0,
+      transition: {
+        duration: 0.3,
+        bounce: false,
+      },
+    });
+
+    setTimeout(() => {
+      isAnimationRunningRef.current = false;
+    }, 350);
+  };
+
   const toggle = () => {
     if (isAnimationRunningRef.current) return;
 
+    console.log("toggle");
     if (isDrawerOpen) {
       close();
     } else {
@@ -328,7 +351,7 @@ export const MainContent = ({
           }}
           animate={controls}
           transition={{
-            duration: 0.3,
+            duration: isAnimationRunningRef.current ? 0.3 : 0,
             bounce: false,
           }}
           transformTemplate={({ translateX }) => {
@@ -375,76 +398,98 @@ export const MainContent = ({
       {/* TODO: "&:active": {
             cursor: "grab",
           }, */}
-      <motion.div
+      <MotionBox
         key={`drawer-${router.asPath}`}
         className="motionDragContainer"
+        layerStyle={layerStyle}
         style={{
           position: "absolute",
           top: isVerticalContent
             ? "calc(100vh - var(--locationBarHeight) - 235px)"
             : 0,
           left: contentLeft,
-          height: isVerticalContent ? "auto" : "100vh",
+          //height: isVerticalContent ? "auto" : "100vh",
           width: isVerticalContent ? "100vw" : contentWidth,
           zIndex: 2,
           touchAction: "pan-y",
           cursor: !isDrawerOpen ? "pointer" : undefined,
         }}
-        transformTemplate={({ translateX }) => {
+        transformTemplate={({ translateX }: { translateX: any }) => {
           return `translateX(${translateX})`;
         }}
         {...(isDrawer
           ? {
               onTap: !isDrawerOpen
-                ? (event) => {
+                ? (event: any) => {
                     event.preventDefault();
+                    console.log("taptap");
                     toggle();
                   }
                 : undefined,
-
-              onPan: (event, info) => {
+              onPanStart: (event: any, info: any) => {
+                panPositionXRef.current = 0;
+              },
+              onPan: (event: any, info: any) => {
                 if (isAnimationRunningRef.current) return;
 
-                if (Math.abs(info.offset.y) > Math.abs(info.offset.x)) return;
+                if (Math.abs(info.offset.y) > Math.abs(info.offset.x)) {
+                  console.log("skip");
+                  return;
+                }
 
-                if (!isDrawerOpen && info.offset.x > 30) {
-                  console.log("open 3");
-                  open();
+                if (!isDrawerOpen) {
+                  panPositionXRef.current = -dragLeft + info.offset.x;
+                  if (info.offset.x > 30) {
+                    console.log("open 3");
+                    open();
+                  } else {
+                    controls.set({
+                      translateX: -dragLeft + info.offset.x,
+                    });
+                  }
                 } else {
+                  panPositionXRef.current = Math.min(info.offset.x, 0);
                   console.log("cs 2", {
-                    translateX: Math.min(info.offset.x, 0)
+                    translateX: Math.min(info.offset.x, 0),
                   });
-                  controls.start({
-                    translateX: Math.min(info.offset.x, 0)
+                  controls.set({
+                    translateX: Math.min(info.offset.x, 0),
                   });
                 }
               },
-              onPanEnd: (_event, info) => {
+              onPanEnd: (_event: any, info: any) => {
                 if (isAnimationRunningRef.current) return;
-                if (Math.abs(info.offset.y) > Math.abs(info.offset.x)) return;
 
-                if (Math.abs(info.offset.x) > dragLeft * 0.25) {
-                  if (info.offset.x < 0) {
+                if (
+                  Math.abs(info.offset.y) > Math.abs(panPositionXRef.current)
+                ) {
+                  console.log("skip on pan end");
+                  return;
+                }
+
+                if (Math.abs(panPositionXRef.current) > dragLeft * 0.25) {
+                  if (panPositionXRef.current < 0) {
+                    console.log(
+                      "close 1",
+                      panPositionXRef.current,
+                      dragLeft * 0.25
+                    );
                     close();
                   } else {
-                    console.log("open 1");
+                    console.log("open 1", panPositionXRef.current * 0.25);
                     open();
                   }
                 } else {
-                  if (info.offset.x < 0) {
-                    console.log("open 2");
+                  if (panPositionXRef.current < 0) {
+                    console.log("open 2", panPositionXRef.current * 0.25);
                     open();
                   } else {
+                    console.log("close 2", panPositionXRef.current * 0.25);
                     close();
                   }
                 }
               },
               animate: controls,
-
-              transition: {
-                duration: 0.3,
-                bounce: true,
-              },
             }
           : {})}
       >
@@ -457,20 +502,23 @@ export const MainContent = ({
             <Box
               ref={mainContentRef}
               className="mainContent"
-              h={{
-                // md: "calc(100vh - 60px)",
-                // xl: "calc(100vh - 80px)",
-              }}
+              h={
+                {
+                  // md: "calc(100vh - 60px)",
+                  // xl: "calc(100vh - 80px)",
+                }
+              }
+              // layerStyle={layerStyle}
               minH={isMobile ? "calc(100vh - 60px)" : "100vh"}
               // overflowY={{
               //   xl: "auto",
               // }}
-              pb={
-                !isMobile && primaryInput === "touch"
-                  ? "var(--locationBarHeight)"
-                  : undefined
-              }
-              layerStyle={layerStyle}
+              // pb={
+              //   !isMobile && primaryInput === "touch"
+              //     ? "var(--locationBarHeight)"
+              //     : undefined
+              // }
+
               // onScroll={(e: React.UIEvent<HTMLDivElement>) => {
               //   scrollState.set(
               //     "main",
@@ -483,7 +531,7 @@ export const MainContent = ({
             </Box>
           </Box>
         </Box>
-      </motion.div>
+      </MotionBox>
     </>
   );
 };

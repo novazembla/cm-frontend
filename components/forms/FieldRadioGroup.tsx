@@ -5,9 +5,7 @@ import {
   Flex,
   FormControl,
   RadioGroup,
-  Stack,
   chakra,
-  VisuallyHidden,
 } from "@chakra-ui/react";
 import { useFormContext, Controller } from "react-hook-form";
 import { MultiLangValue } from "~/components/ui";
@@ -77,7 +75,7 @@ export const FieldRadioGroup = ({
                       },
                     }}
                   >
-                    <MultiLangValue json={option.label} />
+                    <chakra.span textStyle="formOptions"><MultiLangValue json={option.label} /></chakra.span>
                   </Radio>
                 ))}
               </RadioGroup>

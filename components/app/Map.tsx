@@ -20,7 +20,7 @@ import { SVG } from "~/components/ui";
 const MAP_MIN_ZOOM = 9;
 const MAP_MAX_ZOOM = 19;
 const ZOOM_LEVEL_HIDE_ADJUSTOR = 0.5;
-const POPUP_OFFSET = [0, -20] as [number, number];
+const POPUP_OFFSET = [0, 25] as [number, number];
 
 let overlayZoomLevel = 0;
 let isAnimating = false;
@@ -68,7 +68,13 @@ export const Map = () => {
       closeOnClick: false,
     });
 
-    const showPopup = (coordinates: any, title: any, offset?: any) => {
+    const showPopup = (
+      coordinates: any,
+      title: any,
+      color: string,
+      slug: string,
+      offset?: any
+    ) => {
       // var description = e.features[0].properties.title;
 
       try {
@@ -80,7 +86,7 @@ export const Map = () => {
         popup
           .setLngLat(coordinates)
           .setHTML(
-            `<div style="height: 100px; width: 100px;background-color:#fff;">xxx${title}</div>`
+            `<div class="popup" style="border-color:${color}">${title}</div>`
           )
           .addTo(map);
 
@@ -118,30 +124,16 @@ export const Map = () => {
 
           overlayZoomLevel = map.getZoom();
 
-
-          showPopup(spiderLeg.latLng, getMultilangValue(
-            spiderLeg?.feature?.title
-          ), [
-            spiderLeg.popupOffset.bottom[0] + POPUP_OFFSET[0],
-            spiderLeg.popupOffset.bottom[1] + POPUP_OFFSET[1],
-          ])
-          // popup.setOffset([
-          //   spiderLeg.popupOffset.bottom[0] + POPUP_OFFSET[0],
-          //   spiderLeg.popupOffset.bottom[1] + POPUP_OFFSET[1],
-          // ]);
-
-          // // Populate the popup and set its coordinates
-          // // based on the feature found.
-          // popup
-          //   .setLngLat(spiderLeg.latLng)
-          //   // TODO: make more general
-          //   .setHTML(
-          //     `<div style="height: 100px; width: 100px;background-color:#fff;">${getMultilangValue(
-          //       spiderLeg?.feature?.title
-          //     )}</div>`
-          //   )
-          //   .addTo(map);
-          // popup.addTo(map);
+          showPopup(
+            spiderLeg.latLng,
+            getMultilangValue(spiderLeg?.feature?.title),
+            spiderLeg?.feature?.color,
+            getMultilangValue(spiderLeg?.feature?.slug),
+            [
+              spiderLeg.popupOffset.bottom[0] + POPUP_OFFSET[0],
+              spiderLeg.popupOffset.bottom[1] + POPUP_OFFSET[1],
+            ]
+          );
         });
 
         spiderLeg.elements.pin.addEventListener("mouseleave", () => {
@@ -358,11 +350,9 @@ export const Map = () => {
         }
 
         try {
-          e.lngLat, e?.features?.[0];
-
           const titles = JSON.parse(feature?.properties?.title);
-
-          showPopup(coordinates, getMultilangValue(titles));
+          const slugs =  JSON.parse(feature?.properties?.slug);
+          showPopup(coordinates, getMultilangValue(titles), feature?.properties?.color,  getMultilangValue(slugs));
         } catch (err) {}
       };
 
@@ -391,10 +381,10 @@ export const Map = () => {
 
         // TODO:, skip if zoom level too low ..
 
-        map.on("mouseleave", "cluster-locations", () => {
-          map.getCanvas().style.cursor = "";
-          popup.remove();
-        });
+        // map.on("mouseleave", "cluster-locations", () => {
+        //   map.getCanvas().style.cursor = "";
+        //   popup.remove();
+        // });
       }
 
       map.on("click", "cluster-locations", (e: any) => {
@@ -404,8 +394,7 @@ export const Map = () => {
             onMapPointNavigate(e?.features?.[0]?.properties);
           }
         } else {
-          if (e?.features?.[0]?.properties)
-            showMapPop(e);
+          if (e?.features?.[0]?.properties) showMapPop(e);
         }
       });
     });

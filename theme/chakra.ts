@@ -145,6 +145,7 @@ const themeConfig = {
   colors: {
     blur: {
       gray: "rgba(180,180,180,0.65)",
+      white: "rgba(255, 255, 255, 0.95)",
     },
     cm: {
       bgFooter: "#ddd",
@@ -290,6 +291,18 @@ const themeConfig = {
         base: "15px",
         md: "18px",
         xl: "18px",
+      }),
+    },
+    formOptions: {
+      fontSize: chakraToBreakpointArray({
+        base: "15px",
+        md: "17px",
+        xl: "17px",
+      }),
+      lineHeight: chakraToBreakpointArray({
+        base: "19px",
+        md: "21px",
+        xl: "21px",
       }),
     },
     categories: {

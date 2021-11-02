@@ -93,6 +93,18 @@ a {
   box-sizing: border-box;
 }
 
+.popup {
+  height: 100px;
+  width: 120px;
+  border: 2px solid;
+  border-radius: 10px;
+  
+  background: var(--chakra-colors-blur-white);
+  backdrop-filter: blur(20px);
+  background-blend-mode: lighten;
+  pointer-events: none;
+}
+
 .aspect {
   position: relative;
   width: 100%;

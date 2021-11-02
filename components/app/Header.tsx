@@ -51,13 +51,14 @@ export const Header = (/* props */) => {
       zIndex="overlay"
       layerStyle="blurredWhite"
       borderBottom="1px solid"
-      borderColor={chakraToBreakpointArray({
-        base: "red",
-        md: "blue",
-        lg: "cyan",
-        xl: "orange",
-        "2xl": "green",
-      })}
+      borderColor="cm.accentDark"
+      // borderColor={chakraToBreakpointArray({
+      //   base: "red",
+      //   md: "blue",
+      //   lg: "cyan",
+      //   xl: "orange",
+      //   "2xl": "green",
+      // })}
     >
       <Flex
         alignItems="flex-end"

@@ -79,7 +79,7 @@ export const FieldCheckboxGroup = ({
                       }
                     }}
                   >
-                    <MultiLangValue json={option.label} />
+                    <chakra.span textStyle="formOptions"><MultiLangValue json={option.label} /></chakra.span>
                   </Checkbox>
                 );
               }}
