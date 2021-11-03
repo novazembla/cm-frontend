@@ -20,7 +20,7 @@ export const TrimmedTextWithBottomEdge = ({
     span.current.innerText = text;
 
     const rects = span.current.getClientRects();
-    if (rects.length < numLines - 1) return;
+    if (rects.length < numLines) return;
     let shortEnough = false;
     let newOut = span.current.innerText;
     let count = Math.max(text.length - 60, 0);
@@ -32,7 +32,7 @@ export const TrimmedTextWithBottomEdge = ({
       );
       const test = span.current.getClientRects();
       if (
-        (test.length == numLines &&
+        (test.length <= numLines &&
           test[test.length - 1].width < span.current.offsetWidth - edgeWidth) ||
         span.current.innerText.length === 60
       ) {
@@ -43,7 +43,12 @@ export const TrimmedTextWithBottomEdge = ({
     }
 
     if (count === 0) {
-      console.log("ran out of count: ", span.current.innerText);
+
+      // TODO: REMOVE! 
+      console.log("ran out of count: ", span.current.innerText, span.current.getClientRects(), numLines);
+
+      span.current.innerText = text;
+      console.log("ran out of count: ", span.current.innerText, span.current.getClientRects(), numLines);
     }
     setOut(newOut);
   }, 350);
