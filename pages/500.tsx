@@ -15,7 +15,10 @@ export default function Page500() {
         w="100%"
         templateRows="1fr auto"
         templateColumns="100%"
-        minH="100vh"
+        minH={{
+          base: "calc(100vh - 60px)",
+          xl: "calc(100vh - 80px)"
+        }}
       >
         <Box layerStyle="page" w="100%">
           <Box layerStyle="headingPullOut" mb="3">

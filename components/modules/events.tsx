@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { gql, useQuery } from "@apollo/client";
 import { ListedEvent, LoadingIcon, ErrorMessage } from "~/components/ui";
 import { Footer, MainContent } from "~/components/app";
@@ -217,6 +217,22 @@ export const ModuleComponentEvents = ({ ...props }) => {
   }, [settings?.taxonomies, reset]);
 
   useEffect(() => {
+    let customDate = null;
+      try {
+        if (router?.query?.customDate)
+          customDate = new Date(
+            new Date(router?.query?.customDate as string).setHours(0, 0, 0, 0)
+          );
+
+        if (customDate && router?.query?.date === "ownDate") {
+          setCustomDate(customDate);
+          navigation.setDate(customDate);
+        }
+      } catch (err) {}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  
+  useEffect(() => {
     if (router.query) {
       const tois: string[] = router?.query?.tet
         ? Array.isArray(router.query.tet)
@@ -233,24 +249,11 @@ export const ModuleComponentEvents = ({ ...props }) => {
 
         if (customDate) {
           setCustomDate(customDate);
+          // calendarNavigationSetDate(customDate);
         }
       } catch (err) {}
 
       reset({
-        // TODO: date filter s: router?.query?.s ?? "",
-        // cluster: router?.query?.cluster === "1",
-        customDate,
-        eventDateRange: router?.query?.date ?? "all",
-        ...activeTermsET.reduce(
-          (acc: any, t: any) => ({
-            ...acc,
-            [`eventType_${t.id}`]: tois.includes(t.id.toString()),
-          }),
-          {}
-        ),
-      });
-
-      console.log({
         // TODO: date filter s: router?.query?.s ?? "",
         // cluster: router?.query?.cluster === "1",
         customDate,
@@ -305,7 +308,6 @@ export const ModuleComponentEvents = ({ ...props }) => {
 
     if (allVars?.eventDateRange && allVars?.eventDateRange !== "all") {
       if (allVars?.eventDateRange === "ownDate") {
-        console.log(allVars?.customDate);
         if (allVars?.customDate) {
           where.push({
             dates: {
@@ -540,7 +542,10 @@ export const ModuleComponentEvents = ({ ...props }) => {
         w="100%"
         templateRows="1fr auto"
         templateColumns="100%"
-        minH="100vh"
+        minH={{
+          base: "calc(100vh - 60px)",
+          xl: "calc(100vh - 80px)"
+        }}
       >
         <Box layerStyle="page">
           <Box layerStyle="headingPullOut" mb="3">

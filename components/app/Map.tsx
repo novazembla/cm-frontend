@@ -72,13 +72,15 @@ export const Map = () => {
       closeOnClick: false,
     });
 
-    const onMapPointNavigate = (properties: any) => {
-      if (!properties?.slug) return null;
+    const onMapPointNavigate = (slug: any) => {
+      if (!slug) return null;
 
+      popup.remove();
+      
       if (i18n?.language === "en") {
-        router.push(`/location/${properties?.slug}`);
+        router.push(`/location/${slug}`);
       } else {
-        router.push(`/kartenpunkt/${properties?.slug}`);
+        router.push(`/kartenpunkt/${slug}`);
       }
     };
 
@@ -111,7 +113,8 @@ export const Map = () => {
         arrowElem.innerText = t("map.popup.viewLocation", "View location");
         arrowElem.addEventListener("click", (e: any) => {
           e.preventDefault();
-          onMapPointNavigate({ slug });
+          onMapPointNavigate(slug);
+          popup.remove();
         });
         containerElem.className = "popup";
         containerElem.style.borderColor = color;
@@ -130,7 +133,7 @@ export const Map = () => {
             popup.remove();
           });
           containerElem.addEventListener("click", () => {
-            onMapPointNavigate({ slug });
+            onMapPointNavigate(slug);
             popup.remove();
           });
         } else {
@@ -162,7 +165,7 @@ export const Map = () => {
       dotRadius: 16,
       clusterRadius: 24,
       onClick: (e: any, spiderLeg: any) => {
-        onMapPointNavigate(spiderLeg.feature?.slug);
+        onMapPointNavigate(getMultilangValue(spiderLeg?.feature?.slug));
       },
       initializeLeg: (spiderLeg: any) => {
         const showLegPopup = (e: any) => {
@@ -200,6 +203,9 @@ export const Map = () => {
 
           spiderLeg.elements.pin.addEventListener("mouseleave", () => {
             popup.remove();
+          });
+          spiderLeg.elements.pin.addEventListener("click", () => {
+            console.log("324332");
           });
         } else {
           spiderLeg.elements.pin.addEventListener("click", showLegPopup);
@@ -469,8 +475,12 @@ export const Map = () => {
           spiderfier.unspiderfy();
           if (e?.features?.[0]?.properties?.slug) {
             try {
-              onMapPointNavigate({slug: getMultilangValue(JSON.parse(e?.features?.[0]?.properties?.slug))});
-            } catch (err){}
+              onMapPointNavigate(
+                getMultilangValue(
+                  JSON.parse(e?.features?.[0]?.properties?.slug)
+                )
+              );
+            } catch (err) {}
           }
         } else {
           if (e?.features?.[0]?.properties) showMapPop(e);

@@ -639,9 +639,12 @@ export const ModuleComponentLocations = ({ ...props }) => {
     <MainContent layerStyle="lightGray">
       <Grid
         w="100%"
-        minH="100vh"
         templateRows="1fr auto"
         templateColumns="100%"
+        minH={{
+          base: "calc(100vh - 60px)",
+          xl: "calc(100vh - 80px)"
+        }}
       >
         <Box px="20px" pt="0.5em">
           <Box mb="3">

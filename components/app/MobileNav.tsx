@@ -21,13 +21,6 @@ export const MobileNav = () => {
   const { isMobile, isTablet, isTabletWide, isDesktopAndUp } =
     useIsBreakPoint();
 
-  console.log(
-    isMobile,
-    isTablet,
-    isTabletWide,
-    isTablet ? (isTabletWide ? "50vw" : "66.66vw") : "100vw"
-  );
-
   return (
     <>
       <AnimatePresence>
@@ -41,14 +34,14 @@ export const MobileNav = () => {
               position: "fixed",
               top: 0,
               left: 0,
-              height: "100vh",
+              height: "calc(var(--vh) * 100)",
               width: isTablet ? (isTabletWide ? "66.66vw" : "80vw") : "100vw",
               zIndex: 1100,
             }}
           >
             <RemoveScroll>
               <Box
-                h="100vh"
+                h="calc(var(--vh) * 100)"
                 layerStyle="pageBg"
                 w="100%"
                 overflowY="auto"

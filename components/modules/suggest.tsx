@@ -71,8 +71,8 @@ export const ModuleComponentSuggest = () => {
         templateRows="1fr auto"
         templateColumns="100%"
         minH={{
-          base: "calc(100vh)",
-          xl: "calc(100vh)",
+          base: "calc(100vh - 60px)",
+          xl: "calc(100vh - 80px)"
         }}
       >
         <Box layerStyle="page">

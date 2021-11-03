@@ -141,7 +141,7 @@ export const Home = ({ homepage }: { homepage: any }) => {
         )}
         {homepage?.highlights?.length > 0 && (
           <Box
-            layerStyle="blurredLightGray"
+            layerStyle="lightGray"
             overflow="hidden"
             sx={{
               article: {

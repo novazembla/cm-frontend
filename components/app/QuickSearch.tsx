@@ -265,7 +265,7 @@ export const QuickSearch = () => {
           style={{
             position: "fixed",
             top: 0,
-            height: "100vh",
+            height: "calc(var(--vh) * 100)",
             width:
               isTabletWide || isDesktopAndUp
                 ? isTabletWide
@@ -281,7 +281,7 @@ export const QuickSearch = () => {
           <RemoveScroll>
             <Flex
               w="100%"
-              h="100vh"
+              h="calc(var(--vh) * 100)"
               minH="100%"
               layerStyle="pageBg"
               overflowY="auto"

@@ -199,7 +199,10 @@ export const ModuleComponentEvent = ({
         w="100%"
         templateRows="1fr auto"
         templateColumns="100%"
-        minH="100vh"
+        minH={{
+          base: "calc(100vh - 60px)",
+          xl: "calc(100vh - 80px)"
+        }}
       >
         <Box layerStyle="page">
           <Box layerStyle="headingPullOut" mb="3">
@@ -391,7 +394,7 @@ export const ModuleComponentEvent = ({
           </Box>
         </Box>
 
-        <Box layerStyle="blurredLightGray">
+        <Box layerStyle="lightGray">
           {event.locations && event.locations.length > 0 && (
             <Box p="20px">
               <chakra.h3 className="highlight" color="cm.text" pb="0" mb="20px">
