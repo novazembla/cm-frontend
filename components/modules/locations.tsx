@@ -90,7 +90,7 @@ export const LocationsFilterSchema = object().shape({});
 
 export const ModuleComponentLocations = ({ ...props }) => {
   const { t, i18n, getMultilangValue } = useAppTranslations();
-  
+
   const router = useRouter();
 
   const [currentQueryState, setCurrentQueryState] = useState<any>({
@@ -360,13 +360,7 @@ export const ModuleComponentLocations = ({ ...props }) => {
         ),
       });
     }
-  }, [
-    router.query,
-    reset,
-    activeTermsToI,
-    activeTermsToO,
-    activeTermsTA,
-  ]);
+  }, [router.query, reset, activeTermsToI, activeTermsToO, activeTermsTA]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -377,10 +371,7 @@ export const ModuleComponentLocations = ({ ...props }) => {
     if (urlParams.get("toi")) aDI.push(1);
     if (urlParams.get("ta")) aDI.push(2);
     if (urlParams.get("too")) aDI.push(3);
-    if (
-      urlParams.get("and") === "1" ||
-      urlParams.get("cluster") === "0"
-    )
+    if (urlParams.get("and") === "1" || urlParams.get("cluster") === "0")
       aDI.push(4);
 
     setAccordionDefaultIndex(aDI);
@@ -635,7 +626,12 @@ export const ModuleComponentLocations = ({ ...props }) => {
 
   return (
     <MainContent layerStyle="blurredLightGray">
-      <Grid w="100%" templateRows="1fr auto" templateColumns="100%" minH="100%">
+      <Grid
+        w="100%"
+        minH="100vh"
+        templateRows="1fr auto"
+        templateColumns="100%"
+      >
         <Box px="20px" pt="0.5em">
           <Box mb="3">
             <chakra.h1 className="highlight" color="cm.text" fontWeight="bold">

@@ -195,7 +195,12 @@ export const ModuleComponentEvent = ({
 
   return (
     <MainContent layerStyle="pageBg">
-      <Grid w="100%" templateRows="1fr auto" templateColumns="100%" minH="100%">
+      <Grid
+        w="100%"
+        templateRows="1fr auto"
+        templateColumns="100%"
+        minH="100vh"
+      >
         <Box layerStyle="page">
           <Box layerStyle="headingPullOut" mb="3">
             <Text className="highlight" color="cm.text" fontWeight="bold">
@@ -389,7 +394,7 @@ export const ModuleComponentEvent = ({
         <Box layerStyle="blurredLightGray">
           {event.locations && event.locations.length > 0 && (
             <Box p="20px">
-              <chakra.h3 className="highlight" color="cm.text" pb="0" mb="20px" >
+              <chakra.h3 className="highlight" color="cm.text" pb="0" mb="20px">
                 {t("event.title.location", "Location")}
               </chakra.h3>
 

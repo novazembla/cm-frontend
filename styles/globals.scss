@@ -93,7 +93,6 @@ a {
   box-sizing: border-box;
 }
 
-
 .maplibregl-popup {
   .maplibregl-popup-tip {
     display: none;
@@ -116,20 +115,20 @@ a {
   background: var(--chakra-colors-blur-white);
   backdrop-filter: blur(20px);
   background-blend-mode: lighten;
-  
+
   font-family: Berlin Type, Helvetica, Arial, sans-serif;
   font-size: 13px;
   line-height: 17px;
-  letter-spacing: 1.8px;
   text-transform: uppercase;
   cursor: pointer;
 
   .title {
     height: 54px;
   }
-  .row, .row-space-between {
+  .row,
+  .row-space-between {
     display: flex;
-    justify-content: flex-end;    
+    justify-content: flex-end;
     height: 37px;
     padding-right: 5px;
     align-items: flex-end;
@@ -141,6 +140,13 @@ a {
       .arrow {
         margin-bottom: 5px;
       }
+    }
+  }
+
+  &.mouse {
+    height: 70px;
+    .row, .row-space-between {
+      display: none;
     }
   }
 
@@ -160,14 +166,17 @@ a {
     background-repeat: no-repeat;
     -webkit-background-size: contain;
     background-size: contain;
-    filter: invert(18%) sepia(82%) saturate(4434%) hue-rotate(355deg) brightness(96%) contrast(85%);
+    filter: invert(18%) sepia(82%) saturate(4434%) hue-rotate(355deg)
+      brightness(96%) contrast(85%);
     background-image: url(data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeD0iMHB4IiB5PSIwcHgiCgkgdmlld0JveD0iMCAwIDI3IDE0Ij4KPHN0eWxlIHR5cGU9InRleHQvY3NzIj4KCS5zdDB7ZmlsbDpub25lO3N0cm9rZTojMDAwMDAwO3N0cm9rZS13aWR0aDoxLjU7c3Ryb2tlLWxpbmVjYXA6cm91bmQ7c3Ryb2tlLWxpbmVqb2luOnJvdW5kO30KCS5zdDF7ZmlsbDpub25lO3N0cm9rZTojMDAwMDAwO3N0cm9rZS13aWR0aDoxLjU7c3Ryb2tlLWxpbmVjYXA6cm91bmQ7fQo8L3N0eWxlPgo8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLjc1IDEuMDU2KSI+Cgk8cGF0aCBjbGFzcz0ic3QwIiBkPSJNMC4xLDUuOWgyNS40Ii8+Cgk8bGluZSBjbGFzcz0ic3QxIiB4MT0iMjAuNSIgeTE9Ii0wLjEiIHgyPSIyNS41IiB5Mj0iNS45Ii8+Cgk8cGF0aCBjbGFzcz0ic3QxIiBkPSJNMjAuNSwxMS45bDUtNiIvPgo8L2c+Cjwvc3ZnPgo=);
 
     &:hover {
-      filter: invert(13%) sepia(17%) saturate(7488%) hue-rotate(306deg) brightness(99%) contrast(106%);
+      filter: invert(13%) sepia(17%) saturate(7488%) hue-rotate(306deg)
+        brightness(99%) contrast(106%);
     }
   }
   .close {
+    margin-left: 1px;
     overflow: hidden;
     text-indent: 100px;
     font-size: 0;
@@ -182,14 +191,12 @@ a {
     background-position: center center;
     background-repeat: no-repeat;
     -webkit-background-size: contain;
-    background-size: contain;
-    border-radius: 100px;
-    border: 1px solid #000;
+    background-size: 175%;
     background-image: url(data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeD0iMHB4IiB5PSIwcHgiCgkgdmlld0JveD0iMCAwIDU1IDU1IiB4bWw6c3BhY2U9InByZXNlcnZlIj4KPHN0eWxlIHR5cGU9InRleHQvY3NzIj4KCS5zdDB7ZmlsbDpub25lO3N0cm9rZTojMDAwMDAwO30KCS5zdDF7ZmlsbDpub25lO3N0cm9rZTojMDAwMDAwO3N0cm9rZS13aWR0aDoxLjU7c3Ryb2tlLWxpbmVjYXA6cm91bmQ7fQo8L3N0eWxlPgo8ZyBpZD0iWCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMS4wNjEgMS4wNjEpIj4KCTxsaW5lIGNsYXNzPSJzdDEiIHgxPSIzNS4yIiB5MT0iMTcuOSIgeDI9IjE3LjUiIHkyPSIzNS42Ii8+Cgk8bGluZSBjbGFzcz0ic3QxIiB4MT0iMzUuMiIgeTE9IjM1LjYiIHgyPSIxNy41IiB5Mj0iMTcuOSIvPgo8L2c+Cjwvc3ZnPgo=);
     filter: invert(18%) sepia(82%) saturate(4434%) hue-rotate(355deg) brightness(96%) contrast(85%);
-    &:hover {
-      filter: invert(13%) sepia(17%) saturate(7488%) hue-rotate(306deg) brightness(99%) contrast(106%);
-    }
+    // &:hover {
+    //   filter: invert(13%) sepia(17%) saturate(7488%) hue-rotate(306deg) brightness(99%) contrast(106%);
+    // }
   }
 }
 

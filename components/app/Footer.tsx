@@ -65,7 +65,7 @@ export const Footer = ({
             variant="unstyled"
             aria-label={t("menu.button.backToTop", "Back to top")}
             icon={<SVG type="arrow-up" width={isMobile ? "17px": "22px"} height={isMobile ? "30px": "40px"} />}
-            borderRadius="100"
+            borderRadius="0"
             p="0"
             className="svgHover"
             paddingInlineStart="0"

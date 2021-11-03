@@ -20,7 +20,8 @@ import { SVG } from "~/components/ui";
 const MAP_MIN_ZOOM = 9;
 const MAP_MAX_ZOOM = 19;
 const ZOOM_LEVEL_HIDE_ADJUSTOR = 0.5;
-const POPUP_OFFSET = [53, 27] as [number, number];
+const POPUP_OFFSET_MOUSE = [0, -25] as [number, number];
+const POPUP_OFFSET_TOUCH = [53, 27] as [number, number];
 
 let overlayZoomLevel = 0;
 let isAnimating = false;
@@ -35,6 +36,7 @@ export const Map = () => {
 
   const mapContainer = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map>();
+  const clickBlockRef = useRef<boolean>(false);
 
   const { onMenuToggle, isMenuOpen } = useMenuButtonContext();
   const { isQuickSearchOpen, onQuickSearchToggle } = useQuickSearchContext();
@@ -45,6 +47,7 @@ export const Map = () => {
   const buttonDiameter = isMobile ? "38px" : "55px";
   const buttonSpacing = isMobile ? "10px" : "14px";
   const [mapLoaded, setMapLoaded] = useState(false);
+
   useEffect(() => {
     if (mapRef.current) return; //stops map from intializing more than once
 
@@ -59,6 +62,7 @@ export const Map = () => {
     //map.addControl(new maplibregl.NavigationControl(), "bottom-right"); //added
 
     if (cultureMap) cultureMap.init(map, router);
+    // if (cultureMap) cultureMap.init(map, router, i18n);
 
     mapRef.current = map;
 
@@ -88,8 +92,13 @@ export const Map = () => {
       // var description = e.features[0].properties.title;
 
       try {
-        // [x offset, y offest]
-        popup.setOffset(offset ?? POPUP_OFFSET);
+        popup.setOffset(
+          offset?.length
+            ? offset
+            : primaryInput === "mouse"
+            ? POPUP_OFFSET_MOUSE
+            : POPUP_OFFSET_TOUCH
+        );
 
         const containerElem: any = document.createElement("div");
         const titleElem: any = document.createElement("div");
@@ -106,10 +115,9 @@ export const Map = () => {
         });
         containerElem.className = "popup";
         containerElem.style.borderColor = color;
+        // containerElem.style.clipPath = makeCircleHoleClipPathRule(15, "26px", "85px");
 
         const flexElem: any = document.createElement("div");
-
-        
 
         containerElem.appendChild(titleElem);
         containerElem.appendChild(flexElem);
@@ -117,6 +125,7 @@ export const Map = () => {
         if (primaryInput === "mouse") {
           flexElem.className = "row";
 
+          containerElem.className = "popup mouse";
           containerElem.addEventListener("mouseleave", () => {
             popup.remove();
           });
@@ -124,6 +133,7 @@ export const Map = () => {
             onMapPointNavigate({ slug });
           });
         } else {
+          containerElem.className = "popup touch";
           flexElem.className = "row-space-between";
           const closeElem: any = document.createElement("a");
           closeElem.className = "close";
@@ -154,21 +164,13 @@ export const Map = () => {
         onMapPointNavigate(spiderLeg.feature?.slug);
       },
       initializeLeg: (spiderLeg: any) => {
-        spiderLeg.elements.pin.addEventListener("mouseenter", () => {
+        const showLegPopup = (e: any) => {
           if (isAnimating) return;
 
-          overlayZoomLevel = map.getZoom();
+          clickBlockRef.current = true;
+          e.preventDefault();
 
-          console.log(
-            spiderLeg.latLng,
-            getMultilangValue(spiderLeg?.feature?.title),
-            spiderLeg?.feature?.color,
-            getMultilangValue(spiderLeg?.feature?.slug),
-            [
-              spiderLeg.popupOffset.bottom[0] + POPUP_OFFSET[0],
-              spiderLeg.popupOffset.bottom[1] + POPUP_OFFSET[1],
-            ]
-          );
+          overlayZoomLevel = map.getZoom();
 
           showPopup(
             spiderLeg.latLng,
@@ -176,20 +178,37 @@ export const Map = () => {
             spiderLeg?.feature?.color,
             getMultilangValue(spiderLeg?.feature?.slug),
             [
-              spiderLeg.popupOffset.bottom[0] + POPUP_OFFSET[0],
-              spiderLeg.popupOffset.bottom[1] + POPUP_OFFSET[1],
+              spiderLeg.popupOffset.bottom[0] +
+                (primaryInput === "mouse"
+                  ? POPUP_OFFSET_MOUSE[0]
+                  : POPUP_OFFSET_TOUCH[0]),
+              spiderLeg.popupOffset.bottom[1] +
+                (primaryInput === "mouse"
+                  ? POPUP_OFFSET_MOUSE[1]
+                  : POPUP_OFFSET_TOUCH[1]),
             ]
           );
-        });
 
-        // spiderLeg.elements.pin.addEventListener("mouseleave", () => {
-        //   popup.remove();
-        // });
+          setTimeout(() => {
+            clickBlockRef.current = false;
+          }, 100);
+        };
+
+        if (primaryInput === "mouse") {
+          spiderLeg.elements.pin.addEventListener("mouseenter", showLegPopup);
+
+          spiderLeg.elements.pin.addEventListener("mouseleave", () => {
+            popup.remove();
+          });
+        } else {
+          spiderLeg.elements.pin.addEventListener("click", showLegPopup);
+        }
       },
     });
 
     map.on("load", () => {
       setMapLoaded(true);
+
       map.addSource("locations", {
         type: "geojson",
         data: `${config.apiURL}/geojson`,
@@ -272,10 +291,14 @@ export const Map = () => {
       });
 
       map.on("click", (e) => {
+        if (clickBlockRef.current) return;
+
         var features = map.queryRenderedFeatures(e.point, {
           layers: ["clusters"],
         });
-        if (!features?.length) spiderfier.unspiderfy();
+        if (!features?.length) {
+          spiderfier.unspiderfy();
+        }
       });
 
       // inspect a cluster on click
@@ -430,12 +453,10 @@ export const Map = () => {
           if (e?.features?.[0]) showMapPop(e);
         });
 
-        // TODO:, skip if zoom level too low ..
-
-        // map.on("mouseleave", "cluster-locations", () => {
-        //   map.getCanvas().style.cursor = "";
-        //   popup.remove();
-        // });
+        map.on("mouseleave", "cluster-locations", () => {
+          map.getCanvas().style.cursor = "";
+          popup.remove();
+        });
       }
 
       map.on("click", "cluster-locations", (e: any) => {

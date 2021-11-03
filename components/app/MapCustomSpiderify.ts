@@ -76,7 +76,7 @@ export class MapCustomSpiderfier {
       this.options.initializeLeg(spiderLeg);
 
       elements.container.onclick = (e: any) => {
-        this.unspiderfy();
+        // this.unspiderfy(); TODO: move to navigate click handler
         this.options.onClick(e, spiderLeg);
       };
 

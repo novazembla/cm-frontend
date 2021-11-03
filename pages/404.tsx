@@ -11,7 +11,12 @@ export default function Page404() {
 
   return (
     <MainContent isDrawer layerStyle="pageBg">
-      <Grid w="100%" templateRows="1fr auto" templateColumns="100%" minH="100%">
+      <Grid
+        w="100%"
+        templateRows="1fr auto"
+        templateColumns="100%"
+        minH="100vh"
+      >
         <Box layerStyle="page">
           <Box layerStyle="headingPullOut" mb="3">
             <Heading as="h1" className="highlight" color="cm.text">

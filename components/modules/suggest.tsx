@@ -65,32 +65,38 @@ import { useAppTranslations } from "~/hooks";
 export const ModuleComponentSuggest = () => {
   const { t } = useAppTranslations();
   return (
-
     <MainContent isDrawer layerStyle="pageBg">
-      <Grid w="100%" templateRows="1fr auto" templateColumns="100%" minH="100%">
+      <Grid
+        w="100%"
+        templateRows="1fr auto"
+        templateColumns="100%"
+        minH={{
+          base: "calc(100vh)",
+          xl: "calc(100vh)",
+        }}
+      >
         <Box layerStyle="page">
           <Box layerStyle="headingPullOut" mb="3">
             <chakra.h1 className="highlight" color="cm.text" fontWeight="bold">
-            {t("suggest.title", "Suggest location")}
+              {t("suggest.title", "Suggest location")}
             </chakra.h1>
           </Box>
 
-
-        <Box color="cm.text">
-          <Box
-            p="10"
-            size="lg"
-            color="gray.600"
-            fontWeight="bold"
-            border="2px solid red"
-            mb="1em"
-            h="200"
-          >
-            Formular, .... Suggest location / Kartenpunkt Vorschlagen
+          <Box color="cm.text">
+            <Box
+              p="10"
+              size="lg"
+              color="gray.600"
+              fontWeight="bold"
+              border="2px solid red"
+              mb="1em"
+              h="200"
+            >
+              Formular, .... Suggest location / Kartenpunkt Vorschlagen ...
+            </Box>
           </Box>
         </Box>
-      </Box>
-      <Footer />
+        <Footer />
       </Grid>
     </MainContent>
   );
