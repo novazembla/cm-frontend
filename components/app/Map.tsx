@@ -463,7 +463,9 @@ export const Map = () => {
         if (primaryInput !== "touch") {
           spiderfier.unspiderfy();
           if (e?.features?.[0]?.properties?.slug) {
-            onMapPointNavigate(e?.features?.[0]?.properties?.slug);
+            try {
+              onMapPointNavigate({slug: getMultilangValue(JSON.parse(e?.features?.[0]?.properties?.slug))});
+            } catch (err){}
           }
         } else {
           if (e?.features?.[0]?.properties) showMapPop(e);
