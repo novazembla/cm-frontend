@@ -627,13 +627,12 @@ export const ModuleComponentLocations = ({ ...props }) => {
 
   useEffect(() => {
     if (!loading && data?.locations?.totalCount !== "undefined") {
-      if (accordionDefaultIndex && accordionDefaultIndex?.length)
-        resultRef?.current?.scrollIntoView({
-          block: "center",
-          behavior: "smooth",
-        });
+      resultRef?.current?.scrollIntoView({
+        block: "center",
+        behavior: "smooth",
+      });
     }
-  }, [loading, accordionDefaultIndex, data?.locations?.totalCount]);
+  }, [loading, data?.locations?.totalCount]);
 
   return (
     <MainContent layerStyle="lightGray">
@@ -643,7 +642,7 @@ export const ModuleComponentLocations = ({ ...props }) => {
         templateColumns="100%"
         minH={{
           base: "calc(100vh - 60px)",
-          xl: "calc(100vh - 80px)"
+          xl: "calc(100vh - 80px)",
         }}
       >
         <Box px="20px" pt="0.5em">

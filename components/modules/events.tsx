@@ -218,20 +218,20 @@ export const ModuleComponentEvents = ({ ...props }) => {
 
   useEffect(() => {
     let customDate = null;
-      try {
-        if (router?.query?.customDate)
-          customDate = new Date(
-            new Date(router?.query?.customDate as string).setHours(0, 0, 0, 0)
-          );
+    try {
+      if (router?.query?.customDate)
+        customDate = new Date(
+          new Date(router?.query?.customDate as string).setHours(0, 0, 0, 0)
+        );
 
-        if (customDate && router?.query?.date === "ownDate") {
-          setCustomDate(customDate);
-          navigation.setDate(customDate);
-        }
-      } catch (err) {}
+      if (customDate && router?.query?.date === "ownDate") {
+        setCustomDate(customDate);
+        navigation.setDate(customDate);
+      }
+    } catch (err) {}
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  
+
   useEffect(() => {
     if (router.query) {
       const tois: string[] = router?.query?.tet
@@ -527,13 +527,12 @@ export const ModuleComponentEvents = ({ ...props }) => {
 
   useEffect(() => {
     if (!loading && data?.events?.totalCount !== "undefined") {
-      if (accordionDefaultIndex && accordionDefaultIndex?.length)
-        resultRef?.current?.scrollIntoView({
-          block: "center",
-          behavior: "smooth",
-        });
+      resultRef?.current?.scrollIntoView({
+        block: "center",
+        behavior: "smooth",
+      });
     }
-  }, [loading, accordionDefaultIndex, data?.events?.totalCount]);
+  }, [loading, data?.events?.totalCount]);
 
   const today = new Date(new Date().setHours(0, 0, 0, 0));
   return (
@@ -544,7 +543,7 @@ export const ModuleComponentEvents = ({ ...props }) => {
         templateColumns="100%"
         minH={{
           base: "calc(100vh - 60px)",
-          xl: "calc(100vh - 80px)"
+          xl: "calc(100vh - 80px)",
         }}
       >
         <Box layerStyle="page">

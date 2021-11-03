@@ -17,7 +17,7 @@ export const LoadingBar = ({
   const [barVisible, setBarVisible] = useState(false);
   const { onMenuClose } = useMenuButtonContext();
   const { onQuickSearchClose } = useQuickSearchContext();
-
+  const [initialLoadDone, setInitialLoadDone] = useState(false)
   const router = useRouter();
 
   const scrollState = useScrollStateContext();
@@ -51,21 +51,21 @@ export const LoadingBar = ({
   }, []);
 
   useEffect(() => {
-    if (loading) {
-      showBar();
-    } else {
-      hideBar();
+    if (!initialLoadDone) {
+      if (loading) {
+        showBar();
+      } else {
+        hideBar();
+        setInitialLoadDone(true);
+      }
     }
-  }, [loading, showBar, hideBar]);
-  
+    
+  }, [loading, showBar, hideBar, setInitialLoadDone, initialLoadDone]);
+
   return (
-    <>
-      {barVisible && (
-        <Box
-          bg={color}
-          className={`loadingbar ${barVisible ? "loading" : ""}`}
-        ></Box>
-      )}
-    </>
+    <Box
+      bg={color}
+      className={`loadingbar ${barVisible ? "loading" : ""}`}
+    ></Box>
   );
 };

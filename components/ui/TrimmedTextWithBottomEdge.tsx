@@ -23,8 +23,9 @@ export const TrimmedTextWithBottomEdge = ({
     if (rects.length < numLines - 1) return;
     let shortEnough = false;
     let newOut = span.current.innerText;
+    let count = Math.max(text.length - 60, 0);
 
-    while (!shortEnough) {
+    while (!shortEnough && count > 0) {
       span.current.innerText = span.current.innerText.slice(
         0,
         span.current.innerText.length - 1
@@ -38,6 +39,11 @@ export const TrimmedTextWithBottomEdge = ({
         shortEnough = true;
         newOut = span.current.innerText;
       }
+      count -= 1;
+    }
+
+    if (count === 0) {
+      console.log("ran out of count: ", span.current.innerText);
     }
     setOut(newOut);
   }, 350);

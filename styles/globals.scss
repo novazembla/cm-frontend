@@ -272,7 +272,7 @@ a {
   top: 0;
   left: 0;
   z-index: 3000;
-
+  background-color: violet;
   &.loading {
     display: block;
     animation: loadingAnimationCross 1.5s infinite;

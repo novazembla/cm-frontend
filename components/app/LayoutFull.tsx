@@ -24,7 +24,8 @@ export const LayoutFull = ({ children }: AppProps) => {
   const onResize = debounce(() => {
     document.documentElement.style.setProperty('--vh', (window.innerHeight * 0.01).toFixed(5) + "px");
   }, 350);
-
+  console.log(isLoadingSettings, fontsLoaded);
+  
   useEffect(() => {
     if (typeof window !== "undefined") {
       if (navigator.userAgent.toLowerCase().indexOf("firefox") > -1) {
