@@ -130,6 +130,8 @@ export const Map = () => {
             popup.remove();
           });
           containerElem.addEventListener("click", () => {
+            console.log(slug);
+
             onMapPointNavigate({ slug });
           });
         } else {
@@ -297,6 +299,7 @@ export const Map = () => {
           layers: ["clusters"],
         });
         if (!features?.length) {
+          console.log("click 1");
           spiderfier.unspiderfy();
         }
       });
@@ -315,6 +318,7 @@ export const Map = () => {
 
         const clusterSource = (map as any).getSource("locations");
 
+        console.log("click 2");
         spiderfier.unspiderfy();
 
         clusterSource.getClusterChildren(
@@ -438,6 +442,7 @@ export const Map = () => {
           map.getZoom() > overlayZoomLevel + ZOOM_LEVEL_HIDE_ADJUSTOR
         ) {
           overlayZoomLevel = 0;
+          console.log("click 3");
           spiderfier.unspiderfy();
           popup.remove();
         }
@@ -461,6 +466,7 @@ export const Map = () => {
 
       map.on("click", "cluster-locations", (e: any) => {
         if (primaryInput !== "touch") {
+          console.log("click 4");
           spiderfier.unspiderfy();
           if (e?.features?.[0]?.properties?.slug) {
             try {

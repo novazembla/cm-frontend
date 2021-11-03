@@ -1,3 +1,4 @@
+export {};
 // import maplibregl from "maplibre-gl";
 // import { I18n } from "next-i18next";
 // import { NextRouter } from "next/router";
