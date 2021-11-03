@@ -42,6 +42,7 @@ const toursQuery = gql`
           meta
           alt
           credits
+          cropPosition
         }
       }
       totalCount

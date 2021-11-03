@@ -50,12 +50,6 @@ const searchQuery = gql`
         type
         slug
         countTourStops
-        heroImage {
-          id
-          status
-          meta
-          cropPosition
-        }
         geopoint {
           lat
           lng

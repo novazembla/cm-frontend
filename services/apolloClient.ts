@@ -45,7 +45,7 @@ const createApolloClient = (config: AppConfig) => {
       errorLink,
       new HttpLink({
         uri: config.apiGraphQLURL, // Server URL (must be absolute)
-        credentials: "include", // Additional fetch() options like `credentials` or `headers`
+        // credentials: "include", // Additional fetch() options like `credentials` or `headers`
       }),
     ]),
     // TODO: find generic ways to manage the chache ...

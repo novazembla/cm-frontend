@@ -35,6 +35,8 @@ const tourQuery = gql`
         id
         meta
         status
+        alt
+        credits
         cropPosition
       }
       tourStopCount
@@ -57,6 +59,7 @@ const tourQuery = gql`
           meta
           alt
           credits
+          cropPosition
         }
         location {
           id
@@ -185,31 +188,42 @@ export const ModuleComponentTour = ({
 
             <Box bg="#fff" borderRadius="lg" overflow="hidden">
               {tour?.heroImage && tour?.heroImage.id && (
-                <AspectRatio w="100%" ratio={16 / 9}>
-                  <Box bg={color} filter="li">
-                    {tour?.heroImage && tour?.heroImage.id && (
-                      <Box w="100%" h="100%">
-                        <ApiImage
-                          id={tour?.heroImage.id}
-                          alt={tour?.heroImage.alt}
-                          meta={tour?.heroImage.meta}
-                          forceAspectRatioPB={66.66}
-                          status={tour?.heroImage.status}
-                          sizes="(min-width: 45rem) 400px, 40vw"
-                          cropPosition={tour?.heroImage?.cropPosition}
-                          objectFit="cover"
-                        />
-                      </Box>
-                    )}
-                  </Box>
-                </AspectRatio>
+                <Box>
+                  <AspectRatio w="100%" ratio={16 / 9}>
+                    <Box bg={color} filter="li">
+                      {tour?.heroImage && tour?.heroImage.id && (
+                        <Box w="100%" h="100%">
+                          <ApiImage
+                            id={tour?.heroImage.id}
+                            alt={tour?.heroImage.alt}
+                            meta={tour?.heroImage.meta}
+                            forceAspectRatioPB={66.66}
+                            status={tour?.heroImage.status}
+                            sizes="(min-width: 45rem) 400px, 40vw"
+                            cropPosition={tour?.heroImage?.cropPosition}
+                            objectFit="cover"
+                          />
+                        </Box>
+                      )}
+                    </Box>
+                  </AspectRatio>
+                  {tour?.heroImage.credits !== "" && (
+                    <Text
+                      textStyle="finePrint"
+                      mt="0.5"
+                      px={isMobile ? "20px" : "35px"}
+                    >
+                      <MultiLangValue json={tour?.heroImage.credits} />
+                    </Text>
+                  )}
+                </Box>
               )}
 
               <Box
                 px={isMobile ? "20px" : "35px"}
                 pt={isMobile ? "20px" : "35px"}
                 pb={isMobile ? "20px" : "1em"}
-                w={isMobile ? "100%" : "66%"}
+                w={isMobile ? "100%" : "66.66%"}
               >
                 {meta && (
                   <Flex
@@ -345,7 +359,7 @@ export const ModuleComponentTour = ({
                   px={isMobile ? "20px" : "35px"}
                   pt={isMobile ? "0" : "35px"}
                   pb={isMobile ? "0px" : "20px"}
-                  w={isMobile ? "100%" : "66%"}
+                  w={isMobile ? "100%" : "66.66%"}
                 >
                   <Flex
                     textStyle="categoriesHighlight"

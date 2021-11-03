@@ -83,6 +83,7 @@ export const ApiImage = ({
   let imageAspectRatioPB;
 
   let objectPosition = "center center";
+  
   if (cropPosition) {
     switch (cropPosition) {
       case ImageCropPosition.BOTTOM:

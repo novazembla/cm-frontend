@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { gql, useQuery } from "@apollo/client";
 import { LoadingIcon, ErrorMessage, CardLocation } from "~/components/ui";
 import { Footer } from "~/components/app";
@@ -90,6 +90,7 @@ export const LocationsFilterSchema = object().shape({});
 
 export const ModuleComponentLocations = ({ ...props }) => {
   const { t, i18n, getMultilangValue } = useAppTranslations();
+  const resultRef = useRef<HTMLDivElement>(null);
 
   const router = useRouter();
 
@@ -624,8 +625,18 @@ export const ModuleComponentLocations = ({ ...props }) => {
       count: data?.locations?.totalCount,
     });
 
+  useEffect(() => {
+    if (!loading && data?.locations?.totalCount !== "undefined") {
+      if (accordionDefaultIndex && accordionDefaultIndex?.length)
+        resultRef?.current?.scrollIntoView({
+          block: "center",
+          behavior: "smooth",
+        });
+    }
+  }, [loading, accordionDefaultIndex, data?.locations?.totalCount]);
+
   return (
-    <MainContent layerStyle="blurredLightGray">
+    <MainContent layerStyle="lightGray">
       <Grid
         w="100%"
         minH="100vh"
@@ -898,6 +909,7 @@ export const ModuleComponentLocations = ({ ...props }) => {
               justifyContent={loading ? "center" : "flex-start"}
               h="50px"
               alignItems="center"
+              ref={resultRef}
             >
               {(!data || loading) && <LoadingIcon my="0" />}
               {!loading && !error && <Box>{resultText}</Box>}

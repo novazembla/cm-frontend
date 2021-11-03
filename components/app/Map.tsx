@@ -130,9 +130,8 @@ export const Map = () => {
             popup.remove();
           });
           containerElem.addEventListener("click", () => {
-            console.log(slug);
-
             onMapPointNavigate({ slug });
+            popup.remove();
           });
         } else {
           containerElem.className = "popup touch";

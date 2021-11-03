@@ -120,7 +120,7 @@ export const CardTourStop = ({
           px={isMobile ? "20px" : "35px"}
           pt={isMobile ? "0" : "35px"}
           pb={isMobile ? "0px" : "20px"}
-          w={isMobile ? "100%" : "66%"}
+          w={isMobile ? "100%" : "66.66%"}
         >
           {meta && (
             <Flex
@@ -164,7 +164,7 @@ export const CardTourStop = ({
       <Box px={isMobile ? "20px" : "35px"} pb={isMobile ? "20px" : "35px"}>
         <Flex justifyContent="space-between" position="relative">
           <Box
-            w={isMobile ? "100%" : "66%"}
+            w={isMobile ? "100%" : "66.66%"}
             minH={isMobile ? "60px" : undefined}
             textStyle="card"
           >

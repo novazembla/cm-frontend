@@ -134,6 +134,7 @@ export const Header = (/* props */) => {
                   <motion.div
                     animate={{ opacity: isQuickSearchOpen ? 1 : 0 }}
                     transition={{ duration: 0.3 }}
+                    initial={{opacity: 0}}
                   >
                     <Box
                       position="absolute"
@@ -180,6 +181,7 @@ export const Header = (/* props */) => {
                       w="40px"
                       h="40px"
                       zIndex={isQuickSearchOpen ? 1 : 2}
+                      initial={{opacity: 1}}
                     >
                       <IconButton
                         aria-label={t("menu.button.togggleSearch", "Search")}
@@ -216,6 +218,7 @@ export const Header = (/* props */) => {
                 <motion.div
                   animate={{ opacity: isMenuOpen ? 1 : 0 }}
                   transition={{ duration: 0.3 }}
+                  initial={{opacity: 0}}
                 >
                   <Box
                     position="absolute"
@@ -253,6 +256,7 @@ export const Header = (/* props */) => {
                   </Box>
                 </motion.div>
                 <motion.div
+                  initial={{opacity: 1}}
                   animate={{ opacity: isMenuOpen ? 0 : 1 }}
                   transition={{ duration: 0.3 }}
                 >

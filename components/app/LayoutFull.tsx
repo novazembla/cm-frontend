@@ -21,12 +21,12 @@ export const LayoutFull = ({ children }: AppProps) => {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      if (navigator.userAgent.toLowerCase().indexOf("firefox") > -1) {
-        document.documentElement.style.setProperty(
-          "--chakra-colors-blur-gray",
-          "rgba(180,180,180,0.95)"
-        );
-      }
+      // if (navigator.userAgent.toLowerCase().indexOf("firefox") > -1) {
+      //   document.documentElement.style.setProperty(
+      //     "--chakra-colors-blur-gray",
+      //     "rgba(180,180,180,0.95)"
+      //   );
+      // }
 
       const div = document.createElement("div");
       div.style.height = "100vh";
@@ -60,13 +60,13 @@ export const LayoutFull = ({ children }: AppProps) => {
       </Head>
       <LoadingBar color="cm.accentLight" loading={isLoadingSettings} />
       <Map />
-      <Header />
+      {!isLoadingSettings && <Header />}
 
       {!isLoadingSettings && children}
       
 
-      {(isMobile || isTablet) && <MobileNav />}
-      <QuickSearch />
+      {!isLoadingSettings && (isMobile || isTablet) && <MobileNav />}
+      {!isLoadingSettings && <QuickSearch />}
     </>
   );
 };

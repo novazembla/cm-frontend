@@ -123,5 +123,15 @@
   "apiimage": {
     "errormsg": "The image could unfortunately not be processed. Please try uploading again.",
     "processsing": "Image successfuly uploaded. We are processing it now"
+  },
+  "events": {
+    "filter": {
+      "title": {
+        "eventCategory": "Veranstaltungsart"
+      }
+    }
+  },
+  "map": {
+    "title": "Map"
   }
 }

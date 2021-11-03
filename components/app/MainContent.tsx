@@ -4,7 +4,12 @@ import { useAppTranslations, useIsBreakPoint } from "~/hooks";
 import { HiChevronRight } from "react-icons/hi";
 import { motion, useAnimation } from "framer-motion";
 import { useRouter } from "next/router";
-import { useScrollStateContext } from "~/provider";
+// TODO: Scroll state really needed?
+import {
+  useScrollStateContext,
+  useMenuButtonContext,
+  useQuickSearchContext,
+} from "~/provider";
 import { primaryInput } from "detect-it";
 import { debounce } from "lodash";
 
@@ -38,6 +43,9 @@ export const MainContent = ({
   const mainContentRef = useRef<HTMLDivElement>(null);
   const isAnimationRunningRef = useRef<boolean>(false);
   const panPositionXRef = useRef<number>(0);
+
+  const { isMenuOpen } = useMenuButtonContext();
+  const { isQuickSearchOpen } = useQuickSearchContext();
 
   const router = useRouter();
   const { isMobile, isTablet, isTabletWide, isDesktopAndUp } =
@@ -337,6 +345,7 @@ export const MainContent = ({
           display={
             isTabletWide || isDesktopAndUp || !isDrawerOpen ? "none" : undefined
           }
+          
         ></Box>
       )}
       {isDrawer && !isVerticalContent && (isTabletWide || isDesktopAndUp) && (
@@ -348,6 +357,7 @@ export const MainContent = ({
             height: 40,
             width: 40,
             zIndex: 2,
+            translateZ: 0,
           }}
           animate={controls}
           transition={{
@@ -355,14 +365,22 @@ export const MainContent = ({
             bounce: false,
           }}
           transformTemplate={({ translateX }) => {
-            return `translateX(${translateX})`;
+            return `translateX(${translateX}) translateZ(0)`;
           }}
+
         >
           <Box
             pt={contentPaddingTop}
             marginLeft={buttontLeft}
             transition="opacity 0.3"
-            opacity={buttonVisible ? 1 : 0}
+            {...(isMenuOpen || isQuickSearchOpen
+              ? {
+                  opacity: 0,
+                  pointerEvents: "none",
+                }
+              : {
+                opacity: buttonVisible ? 1 : 0
+              })}
           >
             <Box
               bg="#fff"
@@ -413,9 +431,10 @@ export const MainContent = ({
           zIndex: 2,
           touchAction: "pan-y",
           cursor: !isDrawerOpen ? "pointer" : undefined,
+          translateY: 0,
         }}
         transformTemplate={({ translateX }: { translateX: any }) => {
-          return `translateX(${translateX})`;
+          return `translateX(${translateX}) translateZ(0)`;
         }}
         {...(isDrawer
           ? {
@@ -509,7 +528,7 @@ export const MainContent = ({
                 }
               }
               // layerStyle={layerStyle}
-              minH={isMobile ? "calc(100vh - 60px)" : "100vh"}
+              minH={isMobile ? "calc(100vh - 60px)" : "calc(100vh - 80px)"}
               // overflowY={{
               //   xl: "auto",
               // }}

@@ -65,6 +65,7 @@ const locationQuery = gql`
           meta
           credits
           alt
+          cropPosition
         }
         firstEventDate
         lastEventDate
@@ -87,6 +88,7 @@ const locationQuery = gql`
         meta
         alt
         credits
+        cropPosition
       }
     }
   }
@@ -120,6 +122,9 @@ export const ModuleComponentLocation = ({
       if (cultureMap) cultureMap.clearHighlight();
     };
   }, [highlight, cultureMap]);
+
+
+  console.log(location);
 
   useEffect(() => {
     if (location) {
@@ -259,12 +264,15 @@ export const ModuleComponentLocation = ({
   `;
 
   return (
-    <MainContent layerStyle="blurredLightGray">
+    <MainContent layerStyle="lightGray">
       <Grid
         w="100%"
         templateRows="1fr auto"
         templateColumns="100%"
-        minH="100vh"
+        minH={{
+          xl: "calc(100vh - 80px)"
+        }}
+          
       >
         <Box px="20px" pt="0.5em">
           <Box mb="3">
@@ -274,25 +282,33 @@ export const ModuleComponentLocation = ({
           </Box>
 
           <Box bg="#fff" borderRadius="lg" overflow="hidden">
+            
             {location?.heroImage?.id && (
-              <AspectRatio w="100%" ratio={16 / 9}>
-                <Box bg={color}>
-                  {location?.heroImage && location?.heroImage.id && (
-                    <Box w="100%" h="100%">
-                      <ApiImage
-                        id={location?.heroImage.id}
-                        alt={location?.heroImage.alt}
-                        meta={location?.heroImage.meta}
-                        forceAspectRatioPB={66.66}
-                        status={location?.heroImage.status}
-                        sizes="(min-width: 45rem) 400px, 40vw"
-                        cropPosition={location?.heroImage?.cropPosition}
-                        objectFit="cover"
-                      />
-                    </Box>
-                  )}
-                </Box>
-              </AspectRatio>
+              <Box>
+                <AspectRatio w="100%" ratio={16 / 9}>
+                  <Box bg={color}>
+                    {location?.heroImage && location?.heroImage.id && (
+                      <Box w="100%" h="100%">
+                        <ApiImage
+                          id={location?.heroImage.id}
+                          alt={location?.heroImage.alt}
+                          meta={location?.heroImage.meta}
+                          forceAspectRatioPB={66.66}
+                          status={location?.heroImage.status}
+                          sizes="(min-width: 45rem) 400px, 40vw"
+                          cropPosition={location?.heroImage?.cropPosition}
+                          objectFit="cover"
+                        />
+                      </Box>
+                    )}
+                  </Box>
+                </AspectRatio>
+                {location?.heroImage.credits !== "" && (
+                  <Text textStyle="finePrint" mt="0.5" px={isMobile ? "20px" : "35px"}>
+                    <MultiLangValue json={location?.heroImage.credits} />
+                  </Text>
+                )}
+              </Box>
             )}
 
             {!location?.heroImage?.id && (
@@ -309,7 +325,7 @@ export const ModuleComponentLocation = ({
               px={isMobile ? "20px" : "35px"}
               pt={isMobile ? "20px" : "35px"}
               pb={isMobile ? "20px" : "1em"}
-              w={isMobile ? "100%" : "66%"}
+              w={isMobile ? "100%" : "66.66%"}
             >
               {meta && (
                 <Flex

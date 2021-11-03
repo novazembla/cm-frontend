@@ -19,6 +19,12 @@
     "slideToLeft": "Hide content",
     "slideToRight": "Show content"
   },
+  "map": {
+    "popup": {
+      "viewLocation": "View location",
+      "close": "Close popup"
+    }
+  },
   "quicksearch": {
     "title": "Search",
     "placeholder": "Keyword",
@@ -106,8 +112,17 @@
     "filter": {
       "title": {
         "dateRange": "Date (range)",
+        "eventDateRange": "Date range",
         "selectDay": "Select a date",
-        "eventCategory": "Type of event"
+        "eventType": "Type of event"
+      },
+      "eventDateRange": {
+        "all": "All",
+        "today": "Today",
+        "tomorrow": "Tomorrow",
+        "weekend": "Upcoming weekend",
+        "next7days": "Next 7 days",
+        "chooseDate": "Select own date"
       }
     },
     "loadMore": "Load more events"
@@ -154,14 +169,14 @@
         "keyword": "Search by keyword",
         "typeOfInstitution": "Type of institution",
         "targetAudience": "Target audience",
-        "typeOfOrganisation": "Type of organisation"
-      }
+        "typeOfOrganisation": "Type of organisation",
+        "settings": "Other settings"
+      },
+      "andRelationship": "Locations must match all the given criteria",
+      "clusterResult": "Cluster result on map"
     },
     "loadMore": "Load more locations",
     "totalCount_plural_plural": "{{count}} locations found"
-  },
-  "map": {
-    "title": "Map"
   },
   "suggest": {
     "title": "Suggest location"

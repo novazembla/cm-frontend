@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { gql, useQuery } from "@apollo/client";
 import { ListedEvent, LoadingIcon, ErrorMessage } from "~/components/ui";
 import { Footer, MainContent } from "~/components/app";
@@ -13,7 +13,16 @@ import {
   AccordionPanel,
   AccordionIcon,
   Button,
+  Table,
+  Th,
+  Td,
+  Tr,
+  Tbody,
+  Thead,
+  Stack,
+  IconButton,
 } from "@chakra-ui/react";
+import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import { FieldCheckboxGroup, FieldRadioGroup } from "~/components/forms";
 import { useAppTranslations } from "~/hooks";
 import { useForm, FormProvider } from "react-hook-form";
@@ -23,6 +32,7 @@ import { boolean, object, mixed, number } from "yup";
 import { useSettingsContext } from "~/provider";
 import { getMultilangSortedList } from "~/utils";
 import { useRouter } from "next/router";
+import useCalendar from "@veccu/react-calendar";
 
 // @ts-ignore
 //import VirtualScroller from "virtual-scroller/react";
@@ -30,6 +40,18 @@ import { useRouter } from "next/router";
 // TODO use react-virtualized
 
 const ONE_DAY = 1000 * 60 * 60 * 24;
+
+const padTo2Digits = (num: number) => {
+  return num.toString().padStart(2, "0");
+};
+
+const formatDate = (date: Date) => {
+  return [
+    date.getFullYear(),
+    padTo2Digits(date.getMonth() + 1),
+    padTo2Digits(date.getDate()),
+  ].join("-");
+};
 
 const eventsQuery = gql`
   query events($where: JSON, $orderBy: JSON, $pageIndex: Int, $pageSize: Int) {
@@ -77,6 +99,7 @@ export const EventsFilterSchema = object().shape({});
 
 export const ModuleComponentEvents = ({ ...props }) => {
   const router = useRouter();
+  const resultRef = useRef<HTMLDivElement>(null);
 
   const [currentQueryState, setCurrentQueryState] = useState<any>({
     where: initialQueryState.where,
@@ -86,8 +109,14 @@ export const ModuleComponentEvents = ({ ...props }) => {
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
   const [extendedValidationSchema, setExtendedValidationSchema] =
     useState(EventsFilterSchema);
+  const [customDate, setCustomDate] = useState<Date | null>(null);
 
   const settings = useSettingsContext();
+
+  const { headers, body, cursorDate, navigation } = useCalendar({
+    defaultWeekStart: 1,
+    defaultDate: customDate ?? undefined,
+  });
 
   useEffect(() => {
     if (settings?.taxonomies?.eventType?.terms) {
@@ -139,13 +168,7 @@ export const ModuleComponentEvents = ({ ...props }) => {
     resolver: yupResolver(extendedValidationSchema),
   });
 
-  const {
-    handleSubmit,
-    reset,
-    getValues,
-    watch,
-    formState: { isSubmitting, isDirty },
-  } = formMethods;
+  const { handleSubmit, reset, getValues, setValue, watch } = formMethods;
 
   const showLoadMore =
     data?.events?.totalCount >
@@ -175,6 +198,7 @@ export const ModuleComponentEvents = ({ ...props }) => {
         if (terms?.length) {
           resetVars = {
             ...resetVars,
+            customDate: null,
             eventDateRange: "all",
             ...terms.reduce(
               (acc: any, t: any) => ({
@@ -200,10 +224,37 @@ export const ModuleComponentEvents = ({ ...props }) => {
           : router.query.tet.split(",")
         : [];
 
+      let customDate = null;
+      try {
+        if (router?.query?.customDate)
+          customDate = new Date(
+            new Date(router?.query?.customDate as string).setHours(0, 0, 0, 0)
+          );
+
+        if (customDate) {
+          setCustomDate(customDate);
+        }
+      } catch (err) {}
+
       reset({
         // TODO: date filter s: router?.query?.s ?? "",
         // cluster: router?.query?.cluster === "1",
-        eventDateRange: router?.query?.eventDateRange ?? "all",
+        customDate,
+        eventDateRange: router?.query?.date ?? "all",
+        ...activeTermsET.reduce(
+          (acc: any, t: any) => ({
+            ...acc,
+            [`eventType_${t.id}`]: tois.includes(t.id.toString()),
+          }),
+          {}
+        ),
+      });
+
+      console.log({
+        // TODO: date filter s: router?.query?.s ?? "",
+        // cluster: router?.query?.cluster === "1",
+        customDate,
+        eventDateRange: router?.query?.date ?? "all",
         ...activeTermsET.reduce(
           (acc: any, t: any) => ({
             ...acc,
@@ -220,7 +271,7 @@ export const ModuleComponentEvents = ({ ...props }) => {
 
     const urlParams = new URLSearchParams(window.location.search);
     const aDI = [];
-    //if (urlParams.get("s")) aDI.push(0);
+    if (urlParams.get("date") && urlParams.get("date") !== "all") aDI.push(0);
     if (urlParams.get("tet")) aDI.push(1);
 
     setAccordionDefaultIndex(aDI);
@@ -253,79 +304,103 @@ export const ModuleComponentEvents = ({ ...props }) => {
     }
 
     if (allVars?.eventDateRange && allVars?.eventDateRange !== "all") {
-      console.log("process", allVars?.eventDateRange);
-
-      let begin = new Date(new Date().setHours(0, 0, 0, 0));
-      let end = new Date(new Date().setHours(0, 0, 0, 0) + ONE_DAY);
-
-      switch (allVars?.eventDateRange) {
-        case "tomorrow":
-          begin = new Date(new Date().setHours(0, 0, 0, 0) + ONE_DAY);
-          end = new Date(new Date().setHours(0, 0, 0, 0) + ONE_DAY * 2);
-          break;
-
-        case "weekend":
-          switch (begin.getDay()) {
-            case 1:
-              begin = new Date(new Date().setHours(0, 0, 0, 0) + ONE_DAY * 5);
-              end = new Date(new Date().setHours(0, 0, 0, 0) + ONE_DAY * 7);
-              break;
-
-            case 2:
-              begin = new Date(new Date().setHours(0, 0, 0, 0) + ONE_DAY * 4);
-              end = new Date(new Date().setHours(0, 0, 0, 0) + ONE_DAY * 6);
-              break;
-
-            case 3:
-              begin = new Date(new Date().setHours(0, 0, 0, 0) + ONE_DAY * 3);
-              end = new Date(new Date().setHours(0, 0, 0, 0) + ONE_DAY * 5);
-              break;
-
-            case 4:
-              begin = new Date(new Date().setHours(0, 0, 0, 0) + ONE_DAY * 2);
-              end = new Date(new Date().setHours(0, 0, 0, 0) + ONE_DAY * 4);
-              break;
-
-            case 5:
-              begin = new Date(new Date().setHours(0, 0, 0, 0) + ONE_DAY);
-              end = new Date(new Date().setHours(0, 0, 0, 0) + ONE_DAY * 3);
-              break;
-
-            case 6:
-              begin = new Date(new Date().setHours(0, 0, 0, 0) + ONE_DAY * 7);
-              end = new Date(new Date().setHours(0, 0, 0, 0) + ONE_DAY * 9);
-              break;
-
-            case 0:
-              begin = new Date(new Date().setHours(0, 0, 0, 0) + ONE_DAY * 6);
-              end = new Date(new Date().setHours(0, 0, 0, 0) + ONE_DAY * 8);
-              break;
-          }
-          break;
-
-        case "7days":
-          begin = new Date(new Date().setHours(0, 0, 0, 0));
-          end = new Date(new Date().setHours(0, 0, 0, 0) + ONE_DAY * 7);
-          break;
-      }
-      where.push({
-        dates: {
-          some: {
-            AND: [
-              {
-                date: {
-                  gte: begin.toISOString(),
-                },
+      if (allVars?.eventDateRange === "ownDate") {
+        console.log(allVars?.customDate);
+        if (allVars?.customDate) {
+          where.push({
+            dates: {
+              some: {
+                AND: [
+                  {
+                    date: {
+                      gte: allVars?.customDate.toISOString(),
+                    },
+                  },
+                  {
+                    date: {
+                      lt: new Date(
+                        allVars?.customDate.getTime() + ONE_DAY
+                      ).toISOString(),
+                    },
+                  },
+                ],
               },
-              {
-                date: {
-                  lt: end.toISOString(),
+            },
+          });
+        }
+      } else {
+        let begin = new Date(new Date().setHours(0, 0, 0, 0));
+        let end = new Date(new Date().setHours(0, 0, 0, 0) + ONE_DAY);
+
+        switch (allVars?.eventDateRange) {
+          case "tomorrow":
+            begin = new Date(new Date().setHours(0, 0, 0, 0) + ONE_DAY);
+            end = new Date(new Date().setHours(0, 0, 0, 0) + ONE_DAY * 2);
+            break;
+
+          case "weekend":
+            switch (begin.getDay()) {
+              case 1:
+                begin = new Date(new Date().setHours(0, 0, 0, 0) + ONE_DAY * 5);
+                end = new Date(new Date().setHours(0, 0, 0, 0) + ONE_DAY * 7);
+                break;
+
+              case 2:
+                begin = new Date(new Date().setHours(0, 0, 0, 0) + ONE_DAY * 4);
+                end = new Date(new Date().setHours(0, 0, 0, 0) + ONE_DAY * 6);
+                break;
+
+              case 3:
+                begin = new Date(new Date().setHours(0, 0, 0, 0) + ONE_DAY * 3);
+                end = new Date(new Date().setHours(0, 0, 0, 0) + ONE_DAY * 5);
+                break;
+
+              case 4:
+                begin = new Date(new Date().setHours(0, 0, 0, 0) + ONE_DAY * 2);
+                end = new Date(new Date().setHours(0, 0, 0, 0) + ONE_DAY * 4);
+                break;
+
+              case 5:
+                begin = new Date(new Date().setHours(0, 0, 0, 0) + ONE_DAY);
+                end = new Date(new Date().setHours(0, 0, 0, 0) + ONE_DAY * 3);
+                break;
+
+              case 6:
+                begin = new Date(new Date().setHours(0, 0, 0, 0) + ONE_DAY * 7);
+                end = new Date(new Date().setHours(0, 0, 0, 0) + ONE_DAY * 9);
+                break;
+
+              case 0:
+                begin = new Date(new Date().setHours(0, 0, 0, 0) + ONE_DAY * 6);
+                end = new Date(new Date().setHours(0, 0, 0, 0) + ONE_DAY * 8);
+                break;
+            }
+            break;
+
+          case "7days":
+            begin = new Date(new Date().setHours(0, 0, 0, 0));
+            end = new Date(new Date().setHours(0, 0, 0, 0) + ONE_DAY * 7);
+            break;
+        }
+        where.push({
+          dates: {
+            some: {
+              AND: [
+                {
+                  date: {
+                    gte: begin.toISOString(),
+                  },
                 },
-              },
-            ],
+                {
+                  date: {
+                    lt: end.toISOString(),
+                  },
+                },
+              ],
+            },
           },
-        },
-      });     
+        });
+      }
     }
 
     let newQueryState = {
@@ -347,8 +422,6 @@ export const ModuleComponentEvents = ({ ...props }) => {
     }
 
     if (JSON.stringify(currentQueryState) !== JSON.stringify(newQueryState)) {
-      console.log("change of choice");
-
       refetch({
         ...newQueryState,
         pageIndex: 0,
@@ -374,7 +447,9 @@ export const ModuleComponentEvents = ({ ...props }) => {
         },
         {
           date: allVars?.eventDateRange ?? "all",
-          // TODO: custom date
+          customDate: allVars?.customDate
+            ? formatDate(allVars?.customDate)
+            : null,
           tet: [],
         }
       );
@@ -383,7 +458,9 @@ export const ModuleComponentEvents = ({ ...props }) => {
         .reduce((acc: any, key: string) => {
           if (key === "date" && query[key])
             return [...acc, `date=${query[key]}`];
-          // TODO: custom date
+
+          if (query["date"] === "ownDate" && key === "customDate" && query[key])
+            return [...acc, `customDate=${query[key]}`];
 
           if (Array.isArray(query[key]) && query[key]?.length)
             return [...acc, `${key}=${query[key].join(",")}`];
@@ -396,7 +473,9 @@ export const ModuleComponentEvents = ({ ...props }) => {
         .reduce((acc: any, key: string) => {
           if (key === "date" && query[key])
             return [...acc, `date=${query[key]}`];
-          // TODO: custom date
+
+          if (query["date"] === "ownDate" && key === "customDate" && query[key])
+            return [...acc, `customDate=${query[key]}`];
 
           if (Array.isArray(query[key]) && query[key]?.length)
             return [
@@ -444,6 +523,17 @@ export const ModuleComponentEvents = ({ ...props }) => {
       count: data?.events?.totalCount,
     });
 
+  useEffect(() => {
+    if (!loading && data?.events?.totalCount !== "undefined") {
+      if (accordionDefaultIndex && accordionDefaultIndex?.length)
+        resultRef?.current?.scrollIntoView({
+          block: "center",
+          behavior: "smooth",
+        });
+    }
+  }, [loading, accordionDefaultIndex, data?.events?.totalCount]);
+
+  const today = new Date(new Date().setHours(0, 0, 0, 0));
   return (
     <MainContent layerStyle="pageBg">
       <Grid
@@ -489,7 +579,7 @@ export const ModuleComponentEvents = ({ ...props }) => {
                           "Date range"
                         )}
                         type="checkbox"
-                        defaultValue="all"
+                        defaultValue={(router?.query?.date as string) ?? "all"}
                         options={[
                           {
                             label: t("events.filter.eventDateRange.all", "All"),
@@ -533,34 +623,199 @@ export const ModuleComponentEvents = ({ ...props }) => {
                         ]}
                       />
                       {getValues("eventDateRange") === "ownDate" && (
-                        <Accordion allowToggle pt="4">
-                          <AccordionItem>
-                            <AccordionButton>
-                              <Box
-                                flex="1"
-                                pl="8"
-                                textAlign="left"
-                                textStyle="larger"
-                              >
-                                {t(
-                                  "events.filter.title.selectDay",
-                                  "Select a date"
-                                )}
-                              </Box>
-                              <AccordionIcon
-                                color="cm.accentLight"
-                                fontSize="2xl"
-                              />
-                            </AccordionButton>
-                            <AccordionPanel pb={4}>
-                              Lorem ipsum dolor sit amet, consectetur adipiscing
-                              elit, sed do eiusmod tempor incididunt ut labore
-                              et dolore magna aliqua. Ut enim ad minim veniam,
-                              quis nostrud exercitation ullamco laboris nisi ut
-                              aliquip ex ea commodo consequat.
-                            </AccordionPanel>
-                          </AccordionItem>
-                        </Accordion>
+                        <>
+                          <Flex
+                            w="100%"
+                            justifyContent="space-between"
+                            maxW="300px"
+                            mt="1em"
+                            mx="auto"
+                            alignItems="center"
+                            mb=""
+                          >
+                            <IconButton
+                              aria-label={t(
+                                "event.calendar.previousMonth",
+                                "Previous month"
+                              )}
+                              icon={<ChevronLeftIcon />}
+                              onClick={navigation.toPrev}
+                              variant="unstyled"
+                              color="cm.accentLight"
+                              fontSize="2xl"
+                              _hover={{
+                                bg: "transparent",
+                                color: "cm.accentDark",
+                              }}
+                              _active={{
+                                color: "cm.accentDark",
+                              }}
+                            />
+                            <Box textStyle="navigation">
+                              {cursorDate.toLocaleDateString(i18n.language, {
+                                month: "long",
+                                year: "numeric",
+                              })}
+                            </Box>
+                            <IconButton
+                              variant="unstyled"
+                              aria-label={t(
+                                "event.calendar.nextMonth",
+                                "Next month"
+                              )}
+                              icon={<ChevronRightIcon />}
+                              onClick={navigation.toNext}
+                              color="cm.accentLight"
+                              fontSize="2xl"
+                              _hover={{
+                                bg: "transparent",
+                                color: "cm.accentDark",
+                              }}
+                              _active={{
+                                color: "cm.accentDark",
+                              }}
+                            />
+                          </Flex>
+
+                          <Table
+                            w="100%"
+                            maxW="300px"
+                            variant="unstyled"
+                            mx="auto"
+                            mb="1em"
+                          >
+                            <Thead>
+                              <Tr>
+                                {headers.weekDays.map(({ key, value }) => {
+                                  return (
+                                    <Th key={key} px="1" textAlign="center">
+                                      <chakra.span
+                                        textStyle="navigation"
+                                        fontWeight="bold"
+                                      >
+                                        {value.toLocaleDateString(
+                                          i18n.language,
+                                          { weekday: "short" }
+                                        )}
+                                      </chakra.span>
+                                    </Th>
+                                  );
+                                })}
+                              </Tr>
+                            </Thead>
+                            <Tbody>
+                              {body.value.map(({ key, value: days }) => {
+                                return (
+                                  <Tr key={key}>
+                                    {days.map(
+                                      ({ key, value, isCurrentDate }) => {
+                                        if (value < today)
+                                          return (
+                                            <Td
+                                              pt="0"
+                                              px="1"
+                                              pb="2"
+                                              key={key}
+                                              color="#999"
+                                              textStyle="navigation"
+                                              textAlign="center"
+                                            >
+                                              <Box
+                                                w="30px"
+                                                h="30px"
+                                                border="1px solid"
+                                                lineHeight="30px"
+                                                borderColor="transparent"
+                                                borderRadius="20"
+                                              >
+                                                {value.toLocaleDateString(
+                                                  i18n.language,
+                                                  { day: "numeric" }
+                                                )}
+                                              </Box>
+                                            </Td>
+                                          );
+                                        return (
+                                          <Td
+                                            key={key}
+                                            textStyle="navigation"
+                                            textAlign="center"
+                                            pt="0"
+                                            px="1"
+                                            pb="2"
+                                          >
+                                            <Button
+                                              variant="unstyled"
+                                              tabIndex={-1}
+                                              w="30px"
+                                              h="30px"
+                                              minW="30px"
+                                              border="1px solid"
+                                              lineHeight="30px"
+                                              borderColor={
+                                                value.valueOf() ===
+                                                customDate?.valueOf()
+                                                  ? "cm.accentLight"
+                                                  : value.valueOf() ===
+                                                    today.valueOf()
+                                                  ? "cm.accentDark"
+                                                  : "transparent"
+                                              }
+                                              borderRadius="20"
+                                              fontWeight="normal"
+                                              transition="all 0.3s"
+                                              _hover={{
+                                                bg: "transparent",
+                                                color: "cm.text",
+                                                borderColor: "cm.accentLight",
+                                              }}
+                                              _active={{
+                                                bg: "cm.accentLight",
+                                                color: "white",
+                                                borderColor: "cm.accenLight",
+                                              }}
+                                              onClick={() => {
+                                                setValue(
+                                                  "customDate",
+                                                  new Date(
+                                                    value.setHours(0, 0, 0, 0)
+                                                  )
+                                                );
+                                                setCustomDate(
+                                                  new Date(
+                                                    value.setHours(0, 0, 0, 0)
+                                                  )
+                                                );
+                                              }}
+                                              aria-label={t(
+                                                "event.calendar.chooseDay",
+                                                "Select day {{dayAndMonth}}",
+                                                {
+                                                  dayAndMonth: `${value.toLocaleDateString(
+                                                    i18n.language,
+                                                    {
+                                                      day: "numeric",
+                                                      year: "numeric",
+                                                    }
+                                                  )}`,
+                                                }
+                                              )}
+                                            >
+                                              {value.toLocaleDateString(
+                                                i18n.language,
+                                                { day: "numeric" }
+                                              )}
+                                            </Button>
+                                          </Td>
+                                        );
+                                      }
+                                    )}
+                                  </Tr>
+                                );
+                              })}
+                            </Tbody>
+                          </Table>
+                        </>
                       )}
                     </AccordionPanel>
                   </AccordionItem>
@@ -620,13 +875,14 @@ export const ModuleComponentEvents = ({ ...props }) => {
             justifyContent={loading ? "center" : "flex-start"}
             h="50px"
             alignItems="center"
+            ref={resultRef}
           >
             {(!data || loading) && <LoadingIcon my="0" />}
             {!loading && !error && <Box>{resultText}</Box>}
             {error && <ErrorMessage type="dataLoad" />}
           </Flex>
           <Box w="100%">
-            {data?.events?.events?.length && (
+            {data?.events?.events?.length > 0 && (
               <Box size="md" mt="3" w="100%">
                 {data?.events?.events.map((event: any) => (
                   <ListedEvent key={`event-${event.id}`} event={event} />

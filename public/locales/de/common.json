@@ -19,6 +19,12 @@
     "slideToLeft": "Hauptinhalt ausblenden",
     "slideToRight": "Hauptinhalt einblenden"
   },
+  "map": {
+    "popup": {
+      "viewLocation": "Kartenpunkt anzeigen",
+      "close": "Schließen"
+    }
+  },
   "quicksearch": {
     "title": "Suche",
     "placeholder": "Stichwort",
@@ -106,8 +112,17 @@
     "filter": {
       "title": {
         "dateRange": "Zeitraum",
+        "eventDateRange": "Zeitraum",
         "selectDay": "Datum auswählen",
-        "eventCategory": "Veranstaltungsart"
+        "eventType": "Veranstaltungsart"
+      },
+      "eventDateRange": {
+        "all": "Alle",
+        "today": "Heute",
+        "tomorrow": "Morgen",
+        "weekend": "Nächstes Wochenende",
+        "next7days": "Nächsten 7 Tage",
+        "chooseDate": "Eigenes Datum wählen"
       }
     },
     "loadMore": "Weitere Veranstaltungen anzeigen"
@@ -153,18 +168,18 @@
       "title": {
         "keyword": "Nach Stichwort suchen",
         "typeOfInstitution": "Einrichtungsart",
-        "targetAudience": "Targe audience",
-        "typeOfOrganisation": "Type of location"
-      }
+        "targetAudience": "Zielgruppe",
+        "typeOfOrganisation": "Organisationsart",
+        "settings": "Weitere Einstellungen"
+      },
+      "andRelationship": "All Kriterien müssen zutreffen",
+      "clusterResult": "Naheliegende Kartenpunkte Grupieren"
     },
     "loadMore": "Weitere Kartenpunkte laden",
     "totalCount_plural_plural": "{{count}} Kartenpunkte gefunden"
   },
-  "map": {
-    "title": "Map"
-  },
   "suggest": {
-    "title": "Suggest location"
+    "title": "Kartenpunktvorschlag"
   },
   "tour": {
     "detail": {

@@ -144,7 +144,7 @@ const themeConfig = {
   },
   colors: {
     blur: {
-      gray: "rgba(180,180,180,0.65)",
+      gray: "rgba(180,180,180,0.95)",
       white: "rgba(255, 255, 255, 0.95)",
     },
     cm: {
@@ -202,9 +202,12 @@ const themeConfig = {
         "2xl": "translateX(-35px)",
       },
     },
+    lightGray: {
+      bg: "var(--chakra-colors-blur-gray)",
+    },
     blurredLightGray: {
       bg: "var(--chakra-colors-blur-gray)",
-      backdropFilter: "blur(20px)",
+      backdropFilter: "blur(2px)",
       backgroundBlendMode: "lighten",
     },
     blurredWhite: {
