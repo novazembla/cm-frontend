@@ -18,6 +18,7 @@ export const LayoutFull = ({ children }: AppProps) => {
 
   const { isMobile, isTablet } = useIsBreakPoint();
   const [isLoadingSettings, setIsLoadingSettings] = useState(true);
+  const [fontsLoaded, setFontsLoaded] = useState(false);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -27,6 +28,12 @@ export const LayoutFull = ({ children }: AppProps) => {
       //     "rgba(180,180,180,0.95)"
       //   );
       // }
+
+      if ("fonts" in document) {
+        document.fonts.ready.then(() => {
+          setFontsLoaded(true);
+        });
+      }
 
       const div = document.createElement("div");
       div.style.height = "100vh";
@@ -60,13 +67,13 @@ export const LayoutFull = ({ children }: AppProps) => {
       </Head>
       <LoadingBar color="cm.accentLight" loading={isLoadingSettings} />
       <Map />
-      {!isLoadingSettings && <Header />}
+      {!isLoadingSettings && fontsLoaded && <Header />}
 
-      {!isLoadingSettings && children}
+      {!isLoadingSettings && fontsLoaded && children}
       
 
-      {!isLoadingSettings && (isMobile || isTablet) && <MobileNav />}
-      {!isLoadingSettings && <QuickSearch />}
+      {!isLoadingSettings && fontsLoaded && (isMobile || isTablet) && <MobileNav />}
+      {!isLoadingSettings && fontsLoaded && <QuickSearch />}
     </>
   );
 };

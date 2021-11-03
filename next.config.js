@@ -14,6 +14,7 @@ module.exports = withImages({
   images: {
     domains,
   },
+  // productionBrowserSourceMaps: true,
   experimental: {
     scrollRestoration: true,
   },
