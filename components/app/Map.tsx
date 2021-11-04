@@ -11,6 +11,7 @@ import {
   useConfigContext,
   useMenuButtonContext,
   useQuickSearchContext,
+  useMainContentContext,
 } from "~/provider";
 import { useRouter } from "next/router";
 
@@ -40,6 +41,7 @@ export const Map = () => {
 
   const { onMenuToggle, isMenuOpen } = useMenuButtonContext();
   const { isQuickSearchOpen, onQuickSearchToggle } = useQuickSearchContext();
+  const { isMainContentOpen } = useMainContentContext();
 
   const { isMobile, isTablet, isTabletWide, isDesktopAndUp } =
     useIsBreakPoint();
@@ -76,7 +78,7 @@ export const Map = () => {
       if (!slug) return null;
 
       popup.remove();
-      
+
       if (i18n?.language === "en") {
         router.push(`/location/${slug}`);
       } else {
@@ -165,10 +167,16 @@ export const Map = () => {
       dotRadius: 16,
       clusterRadius: 24,
       onClick: (e: any, spiderLeg: any) => {
-        onMapPointNavigate(getMultilangValue(spiderLeg?.feature?.slug));
+        if (primaryInput === "mouse") {
+          onMapPointNavigate(getMultilangValue(spiderLeg?.feature?.slug));
+        }
+
+        console.log("onClick");
       },
       initializeLeg: (spiderLeg: any) => {
         const showLegPopup = (e: any) => {
+          console.log("showLegPopup");
+
           if (isAnimating) return;
 
           clickBlockRef.current = true;
@@ -203,10 +211,7 @@ export const Map = () => {
 
           spiderLeg.elements.pin.addEventListener("mouseleave", () => {
             popup.remove();
-          });
-          spiderLeg.elements.pin.addEventListener("click", () => {
-            console.log("324332");
-          });
+          });          
         } else {
           spiderLeg.elements.pin.addEventListener("click", showLegPopup);
         }
@@ -491,8 +496,8 @@ export const Map = () => {
 
   return (
     <>
-      <Box className="map-wrap">
-        <Box ref={mapContainer} className="map" />
+      <Box className="map-wrap" position="fixed" zIndex="1" left="0" top="0" h="100vh" w="100vw">
+        <Box ref={mapContainer} className="map" w="100%" h="100%" />
       </Box>
 
       <Box
@@ -502,7 +507,14 @@ export const Map = () => {
         top={isDesktopAndUp ? "100px" : isTabletWide ? "80px" : "70px"}
         zIndex="1"
         transition="opacity 0.3s"
-        opacity={mapLoaded ? 1 : 0}
+        opacity={
+          mapLoaded
+            ? (isMainContentOpen) &&
+              !(isTablet || isDesktopAndUp)
+              ? 0
+              : 1
+            : 0
+        }
       >
         <Flex
           direction="column"

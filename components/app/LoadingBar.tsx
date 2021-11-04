@@ -5,6 +5,7 @@ import {
   useMenuButtonContext,
   useQuickSearchContext,
   useScrollStateContext,
+  useMainContentContext,
 } from "~/provider";
 
 export const LoadingBar = ({
@@ -17,7 +18,8 @@ export const LoadingBar = ({
   const [barVisible, setBarVisible] = useState(false);
   const { onMenuClose } = useMenuButtonContext();
   const { onQuickSearchClose } = useQuickSearchContext();
-  const [initialLoadDone, setInitialLoadDone] = useState(false)
+  const { setMainContentStatus } = useMainContentContext();
+  const [initialLoadDone, setInitialLoadDone] = useState(false);
   const router = useRouter();
 
   const scrollState = useScrollStateContext();
@@ -30,7 +32,8 @@ export const LoadingBar = ({
 
   const hideBar = useCallback(() => {
     setBarVisible(false);
-  }, []);
+    setMainContentStatus(true);
+  }, [setMainContentStatus]);
 
   useEffect(() => {
     router.events.on("routeChangeStart", showBar);
@@ -59,7 +62,6 @@ export const LoadingBar = ({
         setInitialLoadDone(true);
       }
     }
-    
   }, [loading, showBar, hideBar, setInitialLoadDone, initialLoadDone]);
 
   return (

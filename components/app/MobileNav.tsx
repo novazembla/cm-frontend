@@ -47,7 +47,7 @@ export const MobileNav = () => {
                 overflowY="auto"
                 pt="60px"
                 pb={{
-                  base: "60px",
+                  base: "80px",
                   md: "45px",
                 }}
               >
@@ -107,7 +107,7 @@ export const MobileNav = () => {
       {isMobile && (
         <Flex
           w="100%"
-          h="60px"
+          h="80px"
           layerStyle="blurredLightGray"
           position="fixed"
           left="0"
@@ -117,7 +117,7 @@ export const MobileNav = () => {
           alignItems="center"
           px="10%"
         >
-          <Box position="relative" w="38px" h="38px">
+          <Box position="relative" w="48px" h="48px">
             <motion.div
               animate={{ opacity: isMenuOpen ? 0 : 1 }}
               transition={{ duration: 0.3 }}
@@ -131,8 +131,8 @@ export const MobileNav = () => {
                   position="absolute"
                   top="0"
                   left="0"
-                  w="38px"
-                  h="38px"
+                  w="48px"
+                  h="48px"
                   zIndex={isMenuOpen ? 2 : 1}
                   bg="#fff"
                   borderRadius="70"
@@ -140,13 +140,13 @@ export const MobileNav = () => {
                   <IconButton
                     variant="outline"
                     aria-label={t("menu.button.toggleMenu", "Menu")}
-                    icon={<SVG type="cross" width="42px" height="42px" />}
+                    icon={<SVG type="cross" width="52px" height="52px" />}
                     borderRadius="100"
                     p="0"
                     paddingInlineStart="0"
                     paddingInlineEnd="0"
-                    w="38px"
-                    h="38px"
+                    w="48px"
+                    h="48px"
                     border="none"
                     onClick={() => {
                       onQuickSearchToggle();
@@ -164,17 +164,17 @@ export const MobileNav = () => {
                   position="absolute"
                   top="0"
                   left="0"
-                  w="38px"
-                  h="38px"
+                  w="48px"
+                  h="48px"
                   zIndex={isMenuOpen ? 1 : 2}
                 >
                   <IconButton
                     variant="outline"
                     aria-label={t("menu.button.togggleSearch", "Search")}
-                    borderRadius="38px"
-                    icon={<SVG type="search" width="38px" height="38px" />}
-                    w="38px"
-                    h="38px"
+                    borderRadius="48px"
+                    icon={<SVG type="search" width="48px" height="48px" />}
+                    w="48px"
+                    h="48px"
                     border="none"
                     pointerEvents={isQuickSearchOpen ? "none" : undefined}
                     onClick={() => {
@@ -185,7 +185,7 @@ export const MobileNav = () => {
               </motion.div>
             </motion.div>
           </Box>
-          <Box position="relative" w="42px" h="42px">
+          <Box position="relative" w="52px" h="52px">
             <motion.div
               animate={{ opacity: isMenuOpen ? 1 : 0 }}
               initial={{ opacity: 0 }}
@@ -195,8 +195,8 @@ export const MobileNav = () => {
                 position="absolute"
                 top="0"
                 left="0"
-                w="42px"
-                h="42px"
+                w="52px"
+                h="52px"
                 zIndex={isMenuOpen ? 2 : 1}
                 bg="#fff"
                 borderRadius="70"
@@ -204,13 +204,13 @@ export const MobileNav = () => {
                 <IconButton
                   variant="outline"
                   aria-label={t("menu.button.toggleMenu", "Menu")}
-                  icon={<SVG type="cross" width="48px" height="48px" />}
+                  icon={<SVG type="cross" width="58px" height="58px" />}
                   borderRadius="100"
                   p="0"
                   paddingInlineStart="0"
                   paddingInlineEnd="0"
-                  w="42px"
-                  h="42px"
+                  w="52px"
+                  h="52px"
                   border="none"
                   onClick={() => {
                     onMenuToggle();
@@ -228,20 +228,20 @@ export const MobileNav = () => {
                 position="absolute"
                 top="0"
                 left="0"
-                w="42px"
-                h="42px"
+                w="52px"
+                h="52px"
                 zIndex={isMenuOpen ? 1 : 2}
               >
                 <IconButton
                   variant="outline"
                   aria-label={t("menu.button.toggleMenu", "Menu")}
-                  icon={<SVG type="menu-mobile" width="48px" height="48px" />}
+                  icon={<SVG type="menu-mobile" width="64px" height="64px" />}
                   borderRadius="100"
                   p="0"
                   paddingInlineStart="0"
                   paddingInlineEnd="0"
-                  w="42px"
-                  h="42px"
+                  w="52px"
+                  h="52px"
                   border="none"
                   onClick={() => {
                     if (!isMenuOpen && isQuickSearchOpen) {
@@ -266,9 +266,9 @@ export const MobileNav = () => {
                 "Suggest a new location"
               )}
               borderRadius="100"
-              icon={<SVG type="suggestion" width="38px" height="38px" />}
-              w="38px"
-              h="38px"
+              icon={<SVG type="suggestion" width="48px" height="48px" />}
+              w="48px"
+              h="48px"
               border="none"
               onClick={() => {
                 if (i18n.language === "de") {

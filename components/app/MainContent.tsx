@@ -9,6 +9,7 @@ import {
   useScrollStateContext,
   useMenuButtonContext,
   useQuickSearchContext,
+  useMainContentContext,
 } from "~/provider";
 import { primaryInput } from "detect-it";
 import { debounce } from "lodash";
@@ -17,15 +18,8 @@ const MotionBox = motion(Box);
 
 const contentPaddingTop = {
   base: "60px",
-  // sm: "60px",
-  // md: "60px",
-  // lg: "60px",
   xl: "80px",
-  // xxl: "80px",
 };
-
-const MIN_MOVE_X = 15;
-const MAX_MOVE_Y = 10;
 
 export const MainContent = ({
   isDrawer = true,
@@ -46,6 +40,7 @@ export const MainContent = ({
 
   const { isMenuOpen } = useMenuButtonContext();
   const { isQuickSearchOpen } = useQuickSearchContext();
+  const { setMainContentStatus } = useMainContentContext();
 
   const router = useRouter();
   const { isMobile, isTablet, isTabletWide, isDesktopAndUp } =
@@ -282,6 +277,7 @@ export const MainContent = ({
       },
     });
 
+    setMainContentStatus(false);
     setTimeout(() => {
       isAnimationRunningRef.current = false;
     }, 350);
@@ -303,7 +299,7 @@ export const MainContent = ({
         bounce: false,
       },
     });
-
+    setMainContentStatus(true);
     setTimeout(() => {
       isAnimationRunningRef.current = false;
     }, 350);
@@ -526,7 +522,7 @@ export const MainContent = ({
             }
           : {})}
       >
-        <Box position="relative" w="100%" h="100%" pointerEvents={isDrawerOpen ? "none" : undefined}>
+        <Box position="relative" w="100%" h="100%" pointerEvents={!isDrawerOpen || panPositionXRef.current ? "none" : undefined}>
           <Box
             className="content"
             pt={isVerticalContent ? 0 : contentPaddingTop}

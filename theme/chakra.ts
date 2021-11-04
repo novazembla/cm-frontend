@@ -128,6 +128,9 @@ const themeConfig = {
       "p a": {
         textDecoration: "underline",
       },
+      "#__next": {
+        textDecoration: "underline",
+      },
       p: {
         mb: "0.6em",
         "&:last-child": {

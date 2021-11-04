@@ -39,7 +39,7 @@ export const Footer = ({
         xl: "45px",
       }}
       pb={{
-        base: isMobile ? "80px" : !noBackground ? "20px" : 0,
+        base: isMobile ? "100px" : !noBackground ? "20px" : 0,
         md: "45px",
         "2xl": "55px",
       }}
