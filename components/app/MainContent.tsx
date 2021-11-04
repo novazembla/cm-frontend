@@ -329,9 +329,20 @@ export const MainContent = ({
       {isDrawer && !isVerticalContent && (
         <Box
           onClick={() => {
+            if (
+              isAnimationRunningRef.current ||
+              panPositionXRef.current > 0
+            )
+              return;
+
             close();
           }}
           onTouchStart={() => {
+            if (
+              isAnimationRunningRef.current ||
+              panPositionXRef.current > 0
+            )
+              return;
             close();
           }}
           bg="transparent"
@@ -345,7 +356,6 @@ export const MainContent = ({
           display={
             isTabletWide || isDesktopAndUp || !isDrawerOpen ? "none" : undefined
           }
-          
         ></Box>
       )}
       {isDrawer && !isVerticalContent && (isTabletWide || isDesktopAndUp) && (
@@ -367,7 +377,6 @@ export const MainContent = ({
           transformTemplate={({ translateX }) => {
             return `translateX(${translateX}) translateZ(0)`;
           }}
-
         >
           <Box
             pt={contentPaddingTop}
@@ -379,8 +388,8 @@ export const MainContent = ({
                   pointerEvents: "none",
                 }
               : {
-                opacity: buttonVisible ? 1 : 0
-              })}
+                  opacity: buttonVisible ? 1 : 0,
+                })}
           >
             <Box
               bg="#fff"
@@ -426,7 +435,6 @@ export const MainContent = ({
             ? "calc(100vh - var(--locationBarHeight) - 235px)"
             : 0,
           left: contentLeft,
-          //height: isVerticalContent ? "auto" : "100vh",
           width: isVerticalContent ? "100vw" : contentWidth,
           zIndex: 2,
           touchAction: "pan-y",
@@ -440,9 +448,14 @@ export const MainContent = ({
           ? {
               onTap: !isDrawerOpen
                 ? (event: any) => {
+                    if (
+                      isAnimationRunningRef.current ||
+                      panPositionXRef.current > 0
+                    )
+                      return;
                     event.preventDefault();
                     console.log("taptap");
-                    toggle();
+                    open();
                   }
                 : undefined,
               onPanStart: (event: any, info: any) => {
@@ -507,12 +520,13 @@ export const MainContent = ({
                     close();
                   }
                 }
+                panPositionXRef.current = 0;
               },
               animate: controls,
             }
           : {})}
       >
-        <Box position="relative" w="100%" h="100%">
+        <Box position="relative" w="100%" h="100%" pointerEvents={isDrawerOpen ? "none" : undefined}>
           <Box
             className="content"
             pt={isVerticalContent ? 0 : contentPaddingTop}
