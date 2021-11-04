@@ -353,6 +353,9 @@ export const MainContent = ({
           display={
             isTabletWide || isDesktopAndUp || !isDrawerOpen ? "none" : undefined
           }
+          sx={{
+            touchAction: "none"
+          }}
         ></Box>
       )}
       {isDrawer && !isVerticalContent && (isTabletWide || isDesktopAndUp) && (

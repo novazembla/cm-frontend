@@ -67,7 +67,7 @@ export const Header = (/* props */) => {
       zIndex="overlay"
       layerStyle="blurredWhite"
       borderBottom="1px solid"
-      borderColor="cm.accentDark"
+      borderColor="#660D36"
       // // TODO: remove
       // borderColor={chakraToBreakpointArray({
       //   base: "red",
@@ -164,6 +164,7 @@ export const Header = (/* props */) => {
                       w="40px"
                       h="40px"
                       zIndex={isQuickSearchOpen ? 2 : 1}
+                      overflow="hidden"
                     >
                       <IconButton
                         aria-label={t("menu.button.togggleSearch", "Search")}
@@ -177,6 +178,7 @@ export const Header = (/* props */) => {
                         bg="transparent"
                         w="40px"
                         h="40px"
+                        overflow="hidden"
                         onClick={() => {
                           onQuickSearchToggle();
                         }}
@@ -203,6 +205,7 @@ export const Header = (/* props */) => {
                       h="40px"
                       zIndex={isQuickSearchOpen ? 1 : 2}
                       initial={{ opacity: 1 }}
+                      overflow="hidden"
                     >
                       <IconButton
                         aria-label={t("menu.button.togggleSearch", "Search")}
@@ -216,6 +219,7 @@ export const Header = (/* props */) => {
                         bg="transparent"
                         w="40px"
                         h="40px"
+                        overflow="hidden"
                         onClick={() => {
                           if (isMenuOpen && !isQuickSearchOpen) {
                             onMenuToggle();
