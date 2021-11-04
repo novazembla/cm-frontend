@@ -37,6 +37,7 @@ export const MainContent = ({
   const mainContentRef = useRef<HTMLDivElement>(null);
   const isAnimationRunningRef = useRef<boolean>(false);
   const panPositionXRef = useRef<number>(0);
+  const panActive = useRef<boolean>(false);
 
   const { isMenuOpen } = useMenuButtonContext();
   const { isQuickSearchOpen } = useQuickSearchContext();
@@ -327,7 +328,7 @@ export const MainContent = ({
           onClick={() => {
             if (
               isAnimationRunningRef.current ||
-              panPositionXRef.current > 0
+              panActive.current
             )
               return;
 
@@ -336,7 +337,7 @@ export const MainContent = ({
           onTouchStart={() => {
             if (
               isAnimationRunningRef.current ||
-              panPositionXRef.current > 0
+              panActive.current
             )
               return;
             close();
@@ -378,14 +379,14 @@ export const MainContent = ({
             pt={contentPaddingTop}
             marginLeft={buttontLeft}
             transition="opacity 0.3"
-            {...(isMenuOpen || isQuickSearchOpen
+            {...(isMenuOpen || isQuickSearchOpen)
               ? {
                   opacity: 0,
                   pointerEvents: "none",
                 }
               : {
                   opacity: buttonVisible ? 1 : 0,
-                })}
+                }}
           >
             <Box
               bg="#fff"
@@ -418,9 +419,6 @@ export const MainContent = ({
           </Box>
         </motion.div>
       )}
-      {/* TODO: "&:active": {
-            cursor: "grab",
-          }, */}
       <MotionBox
         key={`drawer-${router.asPath}`}
         className="motionDragContainer"
@@ -433,7 +431,7 @@ export const MainContent = ({
           left: contentLeft,
           width: isVerticalContent ? "100vw" : contentWidth,
           zIndex: 2,
-          touchAction: "pan-y",
+          touchAction: isDrawerOpen ? "pan-y" : "none",
           cursor: !isDrawerOpen ? "pointer" : undefined,
           translateY: 0,
         }}
@@ -446,7 +444,7 @@ export const MainContent = ({
                 ? (event: any) => {
                     if (
                       isAnimationRunningRef.current ||
-                      panPositionXRef.current > 0
+                      panActive.current
                     )
                       return;
                     event.preventDefault();
@@ -456,6 +454,7 @@ export const MainContent = ({
                 : undefined,
               onPanStart: (event: any, info: any) => {
                 panPositionXRef.current = 0;
+                panActive.current = true;
               },
               onPan: (event: any, info: any) => {
                 if (isAnimationRunningRef.current) return;
@@ -486,6 +485,12 @@ export const MainContent = ({
                 }
               },
               onPanEnd: (_event: any, info: any) => {
+                console.log("end");
+                setTimeout(() => {
+                  console.log("end panActive");
+                  panActive.current = false;
+                }, 100)
+
                 if (isAnimationRunningRef.current) return;
 
                 if (
@@ -516,13 +521,13 @@ export const MainContent = ({
                     close();
                   }
                 }
-                panPositionXRef.current = 0;
+                
               },
               animate: controls,
             }
           : {})}
       >
-        <Box position="relative" w="100%" h="100%" pointerEvents={!isDrawerOpen || panPositionXRef.current ? "none" : undefined}>
+        <Box position="relative" w="100%" h="100%" pointerEvents={(!isDrawerOpen || panActive.current || isAnimationRunningRef.current) ? "none" : undefined}>
           <Box
             className="content"
             pt={isVerticalContent ? 0 : contentPaddingTop}
