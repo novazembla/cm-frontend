@@ -23,10 +23,11 @@ import {
   SimpleGrid,
 } from "@chakra-ui/react";
 import { useIsPresent } from "framer-motion";
-import { isEmptyHtml } from "~/utils";
+import { isEmptyHtml, getLocationColors } from "~/utils";
 import { useIsBreakPoint, useAppTranslations } from "~/hooks";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { MainContent } from "~/components/app";
+import { useRouter } from "next/router";
 
 const locationQuery = gql`
   query ($slug: String!) {
@@ -101,16 +102,17 @@ export const ModuleComponentLocation = ({
   location: any;
   props: any;
 }) => {
+  const router = useRouter();
   const cultureMap = useMapContext();
   const { isMobile } = useIsBreakPoint();
   const config = useConfigContext();
   const settings = useSettingsContext();
   const { t, getMultilangValue } = useAppTranslations();
-  const [highlight, setHighlight] = useState<any>(null);
   const [color, setColor] = useState("#333");
   const [colorDark, setColorDark] = useState(config.colorDark);
   const [meta, setMeta] = useState("");
 
+  const [highlight, setHighlight] = useState<any>(null);
   useEffect(() => {
     if (typeof window !== "undefined" && highlight && cultureMap) {
       console.log("move to hightligh", highlight);
@@ -123,46 +125,29 @@ export const ModuleComponentLocation = ({
     };
   }, [highlight, cultureMap]);
 
-
   useEffect(() => {
-    if (location) {
-      let meta, color, colorDark;
+    if (location && settings) {
+      let meta;
+
+      const { color, colorDark } = getLocationColors(location, settings);
 
       if (location?.primaryTerms?.length > 0) {
         meta = getMultilangValue(location?.primaryTerms[0]?.name);
-
-        if (
-          settings?.terms &&
-          location?.primaryTerms[0].id in settings?.terms
-        ) {
-          color = settings?.terms[location?.primaryTerms[0].id].color ?? color;
-
-          colorDark =
-            settings?.terms[location?.primaryTerms[0].id].colorDark ??
-            settings?.terms[location?.primaryTerms[0].id].color ??
-            color;
-        }
       } else if (location?.terms?.length > 0) {
         meta = getMultilangValue(location?.terms[0]?.name);
-        if (settings?.terms && location?.terms[0].id in settings?.terms) {
-          color = settings?.terms[location?.terms[0].id].color ?? color;
-
-          colorDark =
-            settings?.terms[location?.terms[0].id].colorDark ??
-            settings?.terms[location?.terms[0].id].color ??
-            color;
-        }
       } else {
         meta = t("card.meta.location", "Location");
       }
 
-      console.log("setHighlight", location?.title?.de);
-      setHighlight({
-        id: location.id,
-        lng: location?.lng,
-        lat: location?.lat,
-        color,
-      });
+      if (!highlight) {
+        console.log("setHighlight", location?.title?.de);
+        setHighlight({
+          id: location.id,
+          lng: location?.lng,
+          lat: location?.lat,
+          color,
+        });
+      }
 
       setMeta(meta);
 
@@ -174,12 +159,17 @@ export const ModuleComponentLocation = ({
     location,
     setMeta,
     setColor,
+    highlight,
     setColorDark,
     setHighlight,
     t,
     getMultilangValue,
-    settings?.terms,
+    settings,
   ]);
+
+  useEffect(() => {
+    setHighlight(null)    
+  }, [router.asPath])
 
   const taxonomies =
     location?.terms?.reduce((acc: any, term: any) => {
@@ -269,7 +259,7 @@ export const ModuleComponentLocation = ({
         templateColumns="100%"
         minH={{
           base: "calc(100vh - 60px)",
-          xl: "calc(100vh - 80px)"
+          xl: "calc(100vh - 80px)",
         }}
       >
         <Box px="20px" pt="0.5em">
@@ -280,7 +270,6 @@ export const ModuleComponentLocation = ({
           </Box>
 
           <Box bg="#fff" borderRadius="lg" overflow="hidden">
-            
             {location?.heroImage?.id && (
               <Box>
                 <AspectRatio w="100%" ratio={16 / 9}>
@@ -302,7 +291,11 @@ export const ModuleComponentLocation = ({
                   </Box>
                 </AspectRatio>
                 {location?.heroImage.credits !== "" && (
-                  <Text textStyle="finePrint" mt="0.5" px={isMobile ? "20px" : "35px"}>
+                  <Text
+                    textStyle="finePrint"
+                    mt="0.5"
+                    px={isMobile ? "20px" : "35px"}
+                  >
                     <MultiLangValue json={location?.heroImage.credits} />
                   </Text>
                 )}

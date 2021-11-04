@@ -84,7 +84,7 @@ export const MainContent = ({
     "2xl": "calc(8vw - 55px)",
   });
 
-  //   if (isScrollingObserved || typeof window === undefined) return;
+  //   TODO: REMOVE if (isScrollingObserved || typeof window === undefined) return;
 
   //   setIsScrollingObserved(true);
 
@@ -240,7 +240,6 @@ export const MainContent = ({
     setIsDrawerOpen(true);
     setMainContentStatus(true);
     isAnimationRunningRef.current = false;
-
   }, [controls, setMainContentStatus]);
 
   const onResizeDebounced = debounce(onResize, 350);
@@ -248,7 +247,6 @@ export const MainContent = ({
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    console.log("main content mount");
     if (!eventListenerAdded) {
       setEventListenerAdded(true);
       window.addEventListener("resize", onResizeDebounced);
@@ -259,7 +257,6 @@ export const MainContent = ({
     return () => {
       if (typeof window === "undefined") return;
 
-      console.log("main content unmount");
       window.removeEventListener("resize", onResizeDebounced);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -267,14 +264,10 @@ export const MainContent = ({
 
   useEffect(() => {
     onResize();
-
-    console.log("onresize");
   }, [router.asPath, onResize]);
 
   const close = () => {
     if (isAnimationRunningRef.current) return;
-
-    console.log("close function");
 
     setIsDrawerOpen(false);
     isAnimationRunningRef.current = true;
@@ -297,8 +290,6 @@ export const MainContent = ({
   const open = () => {
     if (isAnimationRunningRef.current) return;
 
-    console.log("open function");
-
     setIsDrawerOpen(true);
     setMainContentStatus(true);
     isAnimationRunningRef.current = true;
@@ -319,7 +310,6 @@ export const MainContent = ({
   const toggle = () => {
     if (isAnimationRunningRef.current) return;
 
-    console.log("toggle");
     if (isDrawerOpen) {
       close();
     } else {
@@ -336,20 +326,12 @@ export const MainContent = ({
       {isDrawer && !isVerticalContent && (
         <Box
           onClick={() => {
-            if (
-              isAnimationRunningRef.current ||
-              panActive.current
-            )
-              return;
+            if (isAnimationRunningRef.current || panActive.current) return;
 
             close();
           }}
           onTouchStart={() => {
-            if (
-              isAnimationRunningRef.current ||
-              panActive.current
-            )
-              return;
+            if (isAnimationRunningRef.current || panActive.current) return;
             close();
           }}
           bg="transparent"
@@ -364,7 +346,7 @@ export const MainContent = ({
             isTabletWide || isDesktopAndUp || !isDrawerOpen ? "none" : undefined
           }
           sx={{
-            touchAction: "none"
+            touchAction: "none",
           }}
         ></Box>
       )}
@@ -392,14 +374,14 @@ export const MainContent = ({
             pt={contentPaddingTop}
             marginLeft={buttontLeft}
             transition="opacity 0.3"
-            {...(isMenuOpen || isQuickSearchOpen)
+            {...(isMenuOpen || isQuickSearchOpen
               ? {
                   opacity: 0,
                   pointerEvents: "none",
                 }
               : {
                   opacity: buttonVisible ? 1 : 0,
-                }}
+                })}
           >
             <Box
               bg="#fff"
@@ -455,13 +437,9 @@ export const MainContent = ({
           ? {
               onTap: !isDrawerOpen
                 ? (event: any) => {
-                    if (
-                      isAnimationRunningRef.current ||
-                      panActive.current
-                    )
+                    if (isAnimationRunningRef.current || panActive.current)
                       return;
                     event.preventDefault();
-                    console.log("taptap");
                     open();
                   }
                 : undefined,
@@ -473,14 +451,12 @@ export const MainContent = ({
                 if (isAnimationRunningRef.current) return;
 
                 if (Math.abs(info.offset.y) > Math.abs(info.offset.x)) {
-                  console.log("skip");
                   return;
                 }
 
                 if (!isDrawerOpen) {
                   panPositionXRef.current = -dragLeft + info.offset.x;
                   if (info.offset.x > 30) {
-                    console.log("open 3");
                     open();
                   } else {
                     controls.set({
@@ -489,58 +465,52 @@ export const MainContent = ({
                   }
                 } else {
                   panPositionXRef.current = Math.min(info.offset.x, 0);
-                  console.log("cs 2", {
-                    translateX: Math.min(info.offset.x, 0),
-                  });
                   controls.set({
                     translateX: Math.min(info.offset.x, 0),
                   });
                 }
               },
               onPanEnd: (_event: any, info: any) => {
-                console.log("end");
                 setTimeout(() => {
-                  console.log("end panActive");
                   panActive.current = false;
-                }, 100)
+                }, 100);
 
                 if (isAnimationRunningRef.current) return;
 
                 if (
                   Math.abs(info.offset.y) > Math.abs(panPositionXRef.current)
                 ) {
-                  console.log("skip on pan end");
                   return;
                 }
 
                 if (Math.abs(panPositionXRef.current) > dragLeft * 0.25) {
                   if (panPositionXRef.current < 0) {
-                    console.log(
-                      "close 1",
-                      panPositionXRef.current,
-                      dragLeft * 0.25
-                    );
                     close();
                   } else {
-                    console.log("open 1", panPositionXRef.current * 0.25);
                     open();
                   }
                 } else {
                   if (panPositionXRef.current < 0) {
-                    console.log("open 2", panPositionXRef.current * 0.25);
                     open();
                   } else {
-                    console.log("close 2", panPositionXRef.current * 0.25);
                     close();
                   }
                 }
-                
               },
               animate: controls,
             }
           : {})}
       >
-        <Box position="relative" w="100%" h="100%" pointerEvents={(!isDrawerOpen || panActive.current || isAnimationRunningRef.current) ? "none" : undefined}>
+        <Box
+          position="relative"
+          w="100%"
+          h="100%"
+          pointerEvents={
+            !isDrawerOpen || panActive.current || isAnimationRunningRef.current
+              ? "none"
+              : undefined
+          }
+        >
           <Box
             className="content"
             pt={isVerticalContent ? 0 : contentPaddingTop}
@@ -549,12 +519,12 @@ export const MainContent = ({
             <Box
               ref={mainContentRef}
               className="mainContent"
-              h={
-                {
-                  // md: "calc(100vh - 60px)",
-                  // xl: "calc(100vh - 80px)",
-                }
-              }
+              // TODO: clean up h={
+              //   {
+              //     // md: "calc(100vh - 60px)",
+              //     // xl: "calc(100vh - 80px)",
+              //   }
+              // }
               // layerStyle={layerStyle}
               minH={isMobile ? "calc(100vh - 60px)" : "calc(100vh - 80px)"}
               // overflowY={{

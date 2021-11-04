@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { gql } from "@apollo/client";
 import {
   MultiLangValue,
@@ -8,6 +8,7 @@ import {
 } from "~/components/ui";
 import { Footer, MainContent } from "~/components/app";
 import { getApolloClient } from "~/services";
+import { useMapContext, useSettingsContext } from "~/provider";
 import {
   Box,
   SimpleGrid,
@@ -17,7 +18,7 @@ import {
   Collapse,
   Link,
 } from "@chakra-ui/react";
-import { isEmptyHtml } from "~/utils";
+import { isEmptyHtml, getLocationColors } from "~/utils";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { useAppTranslations, useIsBreakPoint } from "~/hooks";
 
@@ -127,6 +128,9 @@ export const ModuleComponentEvent = ({
   event: any;
   props: any;
 }) => {
+  const cultureMap = useMapContext();
+  const settings = useSettingsContext();
+
   const { t, getMultilangValue, i18n } = useAppTranslations();
   const { isMobile } = useIsBreakPoint();
 
@@ -136,6 +140,34 @@ export const ModuleComponentEvent = ({
   let timeInfo: any = "";
 
   const today = new Date(new Date().setHours(0, 0, 0, 0));
+
+  const [highlight, setHighlight] = useState<any>(null);
+  useEffect(() => {
+    if (typeof window !== "undefined" && highlight && cultureMap) {
+      console.log("event move to hightligh", highlight);
+      cultureMap.setHighlight(highlight);
+      cultureMap.panTo(highlight.lng, highlight.lat, true);
+    }
+
+    return () => {
+      if (cultureMap) cultureMap.clearHighlight();
+    };
+  }, [highlight, cultureMap]);
+
+  useEffect(() => {
+    if (event && settings) {
+      if (event?.locations?.length && event?.locations[0]?.lat && event?.locations[0]?.lng) {
+        const {color} = getLocationColors(event?.locations[0], settings);
+        setHighlight({
+          id: event?.locations[0].id,
+          lng: event?.locations[0].lng,
+          lat: event?.locations[0].lat,
+          color,
+        });
+      }
+      
+    }
+  }, [event, setHighlight, settings]);
 
   let multipleUpcommingDates = [];
   if (event?.dates?.length > 0) {
@@ -201,7 +233,7 @@ export const ModuleComponentEvent = ({
         templateColumns="100%"
         minH={{
           base: "calc(100vh - 60px)",
-          xl: "calc(100vh - 80px)"
+          xl: "calc(100vh - 80px)",
         }}
       >
         <Box layerStyle="page">

@@ -99,7 +99,8 @@ export const ModuleComponentTour = ({
     // TODO implement tour
     if (typeof window !== "undefined") {
       if (cultureMap && tour?.lng && tour?.lat) {
-        cultureMap.clear();
+        // TODO: Make this better ... 
+        // cultureMap.clear();
         // cultureMap.addMarkers([
         //   {
         //     type: "tour",

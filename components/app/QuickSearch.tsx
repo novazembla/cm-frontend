@@ -122,7 +122,8 @@ export const QuickSearch = () => {
           },
         });
       } else {
-        if (cultureMap) cultureMap.clear();
+        // TODO: is is possible to show results in map for QS? 
+        // if (cultureMap) cultureMap.clear();
         // setQuickSearchResultInContext({});
       }
       setCurrentSearchTerm(searchTerm);

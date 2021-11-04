@@ -1,7 +1,14 @@
+import { I18n } from "next-i18next";
 import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 
-export const useAppTranslations = () => {
+export type AppTranslationHelper = {
+  t: Function;
+  i18n: I18n;
+  getMultilangValue: (data: any) => string;
+}
+
+export const useAppTranslations = (): AppTranslationHelper => {
   const { t, i18n } = useTranslation();
 
   const getMultilangValue = useCallback(

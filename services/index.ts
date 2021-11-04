@@ -1,2 +1,2 @@
 export * from "./apolloClient";
-export * from "./serviceMap";
+export * from "./CultureMap";

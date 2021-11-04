@@ -93,6 +93,7 @@ export const appConfig: AppConfig = {
   apiURL: `${process.env.NEXT_PUBLIC_API_URL}`,
   apiGraphQLURL: `${process.env.NEXT_PUBLIC_API_URL}/graphql`,
   mapApiKey: `${process.env.NEXT_PUBLIC_MAP_API_KEY}`,
+  mapStyleJsonUrl: `https://www.vincentvanuffelen.com/lichtenberg/osm_liberty_culturemap.json`,
   defaultLanguage: "de",
   activeLanguages: ["en", "de"],
   lat: 52.52559,

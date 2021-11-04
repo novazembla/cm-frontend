@@ -12,6 +12,7 @@ export interface AppConfig {
   apiURL: string;
   apiGraphQLURL: string;
   mapApiKey: string;
+  mapStyleJsonUrl: string;
   defaultLanguage: string;
   activeLanguages: string[];
   nav: Record<string, any[]>;
