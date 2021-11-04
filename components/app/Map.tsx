@@ -211,7 +211,7 @@ export const Map = () => {
 
           spiderLeg.elements.pin.addEventListener("mouseleave", () => {
             popup.remove();
-          });          
+          });
         } else {
           spiderLeg.elements.pin.addEventListener("click", showLegPopup);
         }
@@ -496,7 +496,15 @@ export const Map = () => {
 
   return (
     <>
-      <Box className="map-wrap" position="fixed" zIndex="1" left="0" top="0" h="100vh" w="100vw">
+      <Box
+        className="map-wrap"
+        position="fixed"
+        zIndex="1"
+        left="0"
+        top="0"
+        h="100vh"
+        w="100vw"
+      >
         <Box ref={mapContainer} className="map" w="100%" h="100%" />
       </Box>
 
@@ -509,8 +517,7 @@ export const Map = () => {
         transition="opacity 0.3s"
         opacity={
           mapLoaded
-            ? (isMainContentOpen) &&
-              !(isTablet || isDesktopAndUp)
+            ? isMainContentOpen && !(isTablet || isDesktopAndUp)
               ? 0
               : 1
             : 0
@@ -529,16 +536,17 @@ export const Map = () => {
           {(isTabletWide || isDesktopAndUp) && (
             <Box
               position="relative"
+              mb={buttonSpacing}
               w={buttonDiameter}
               h={buttonDiameter}
-              bg="#fff"
               borderRadius={buttonDiameter}
-              mb={buttonSpacing}
+              layerStyle="blurredWhite"
             >
               <motion.div
                 animate={{ opacity: isQuickSearchOpen ? 1 : 0 }}
                 initial={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
+                
               >
                 <Box
                   position="absolute"
@@ -547,6 +555,7 @@ export const Map = () => {
                   w={buttonDiameter}
                   h={buttonDiameter}
                   zIndex={isQuickSearchOpen ? 2 : 1}
+                  touchAction="none"
                 >
                   <IconButton
                     variant="outline"
@@ -564,6 +573,7 @@ export const Map = () => {
                     paddingInlineEnd="0"
                     w={buttonDiameter}
                     h={buttonDiameter}
+                    bg="transparent"
                     onClick={() => {
                       onQuickSearchToggle();
                     }}
@@ -575,8 +585,9 @@ export const Map = () => {
                 animate={{ opacity: isQuickSearchOpen ? 0 : 1 }}
                 initial={{ opacity: 1 }}
                 transition={{ duration: 0.3 }}
-              >
+                >
                 <Box
+                touchAction="none"
                   position="absolute"
                   top="0"
                   left="0"
@@ -598,6 +609,7 @@ export const Map = () => {
                     p="0"
                     paddingInlineStart="0"
                     paddingInlineEnd="0"
+                    bg="transparent"
                     w={buttonDiameter}
                     h={buttonDiameter}
                     onClick={() => {
@@ -613,7 +625,14 @@ export const Map = () => {
             </Box>
           )}
 
-          <Box mb={buttonSpacing}>
+          <Box
+            mb={buttonSpacing}
+            w={buttonDiameter}
+            h={buttonDiameter}
+            borderRadius={buttonDiameter}
+            layerStyle="blurredWhite"
+            touchAction="none"
+          >
             <IconButton
               variant="outline"
               aria-label={t("menu.button.zoomIntoMap", "Zoom in")}
@@ -630,12 +649,20 @@ export const Map = () => {
               paddingInlineEnd="0"
               w={buttonDiameter}
               h={buttonDiameter}
+              bg="transparent"
               onClick={() => {
                 if (mapRef.current) mapRef.current.zoomIn({ duration: 1000 });
               }}
             />
           </Box>
-          <Box mb={buttonSpacing}>
+          <Box
+            mb={buttonSpacing}
+            w={buttonDiameter}
+            h={buttonDiameter}
+            borderRadius={buttonDiameter}
+            layerStyle="blurredWhite"
+            touchAction="none"
+          >
             <IconButton
               variant="outline"
               aria-label={t("menu.button.zoomOutOfMap", "Zoom out")}
@@ -652,13 +679,21 @@ export const Map = () => {
               paddingInlineEnd="0"
               w={buttonDiameter}
               h={buttonDiameter}
+              bg="transparent"
               onClick={() => {
                 if (mapRef.current) mapRef.current.zoomOut({ duration: 1000 });
               }}
             />
           </Box>
           {isMobile && primaryInput === "touch" && (
-            <Box mb={buttonSpacing}>
+            <Box
+              mb={buttonSpacing}
+              w={buttonDiameter}
+              h={buttonDiameter}
+              borderRadius={buttonDiameter}
+              layerStyle="blurredWhite"
+              touchAction="none"
+            >
               <IconButton
                 variant="outline"
                 aria-label={t("menu.button.findMyLocation", "Find my location")}
@@ -675,6 +710,7 @@ export const Map = () => {
                 paddingInlineEnd="0"
                 w={buttonDiameter}
                 h={buttonDiameter}
+                bg="transparent"
                 onClick={() => {
                   alert("Fehlt! TODO:");
                 }}
