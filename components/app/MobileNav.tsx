@@ -116,7 +116,9 @@ export const MobileNav = () => {
           justifyContent="space-evenly"
           alignItems="center"
           px="10%"
-          touchAction="none"
+          sx={{
+            touchAction: "none"
+          }}
         >
           <Box position="relative" w="48px" h="48px">
             <motion.div

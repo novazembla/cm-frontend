@@ -36,6 +36,7 @@ export const Map = () => {
   const cultureMap = useMapContext();
 
   const mapContainer = useRef<HTMLDivElement>(null);
+  const buttonContainer = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map>();
   const clickBlockRef = useRef<boolean>(false);
 
@@ -492,7 +493,22 @@ export const Map = () => {
         }
       });
     });
+
   });
+
+  useEffect(() => {
+    const onWheel = (e: MouseEvent) => e.preventDefault();
+    const ref = buttonContainer.current;
+    if (typeof window !== undefined && ref) {
+      ref.addEventListener("wheel", onWheel, { passive: false });
+    }
+
+    return () => {
+      if (typeof window !== undefined && ref) {
+        ref.removeEventListener("wheel", onWheel);
+      }
+    };
+  }, []);
 
   return (
     <>
@@ -504,6 +520,7 @@ export const Map = () => {
         top="0"
         h="100vh"
         w="100vw"
+        ref={buttonContainer}
       >
         <Box ref={mapContainer} className="map" w="100%" h="100%" />
       </Box>
@@ -555,7 +572,9 @@ export const Map = () => {
                   w={buttonDiameter}
                   h={buttonDiameter}
                   zIndex={isQuickSearchOpen ? 2 : 1}
-                  touchAction="none"
+                  sx={{
+                    touchAction: "none"
+                  }}
                 >
                   <IconButton
                     variant="outline"
@@ -587,13 +606,15 @@ export const Map = () => {
                 transition={{ duration: 0.3 }}
                 >
                 <Box
-                touchAction="none"
                   position="absolute"
                   top="0"
                   left="0"
                   w={buttonDiameter}
                   h={buttonDiameter}
                   zIndex={isQuickSearchOpen ? 1 : 2}
+                  sx={{
+                    touchAction: "none"
+                  }}
                 >
                   <IconButton
                     variant="outline"
@@ -631,7 +652,9 @@ export const Map = () => {
             h={buttonDiameter}
             borderRadius={buttonDiameter}
             layerStyle="blurredWhite"
-            touchAction="none"
+            sx={{
+              touchAction: "none"
+            }}
           >
             <IconButton
               variant="outline"
@@ -661,7 +684,9 @@ export const Map = () => {
             h={buttonDiameter}
             borderRadius={buttonDiameter}
             layerStyle="blurredWhite"
-            touchAction="none"
+            sx={{
+              touchAction: "none"
+            }}
           >
             <IconButton
               variant="outline"
@@ -692,7 +717,9 @@ export const Map = () => {
               h={buttonDiameter}
               borderRadius={buttonDiameter}
               layerStyle="blurredWhite"
-              touchAction="none"
+              sx={{
+                touchAction: "none"
+              }}
             >
               <IconButton
                 variant="outline"
