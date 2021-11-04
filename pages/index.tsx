@@ -114,24 +114,30 @@ export const Home = ({ homepage }: { homepage: any }) => {
                   )}
                   {isMobile && (
                     <IconButton
-                      variant="solid"
-                      icon={
-                        <SVG
-                          type="cross"
-                          width={isMobile ? "20px" : "30px"}
-                          height={isMobile ? "20px" : "30px"}
-                        />
-                      }
-                      w={isMobile ? "20px" : "30px"}
-                      h={isMobile ? "20px" : "30px"}
-                      minW="0"
+
+                      icon={<SVG type="cross" width="200%" height="200%" />}
+                      borderRadius="0"
                       p="0"
-                      display="inline-block"
                       className="svgHover"
                       paddingInlineStart="0"
                       paddingInlineEnd="0"
+                      padding="0"
+                      bg="transparent"
+                      w={isMobile ? "30px" : "40px"}
+                      h={isMobile ? "30px" : "40px"}
+                      minW="30px"
+                      overflow="hidden"
+                      transition="all 0.3s"
+                      _hover={{
+                        bg: "transparent",
+                      }}
+                      _active={{
+                        bg: "transparent",
+                      }}
                       aria-label={t("mission.statement.close", "close")}
                       onClick={() => setIsMSOpen(!isMSOpen)}
+                     
+                      
                     />
                   )}
                 </Flex>

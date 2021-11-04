@@ -107,7 +107,7 @@ export const ModuleComponentLocation = ({
   const settings = useSettingsContext();
   const { t, getMultilangValue } = useAppTranslations();
   const [highlight, setHighlight] = useState<any>(null);
-  const [color, setColor] = useState(config.colorLight);
+  const [color, setColor] = useState("#333");
   const [colorDark, setColorDark] = useState(config.colorDark);
   const [meta, setMeta] = useState("");
 
@@ -123,8 +123,6 @@ export const ModuleComponentLocation = ({
     };
   }, [highlight, cultureMap]);
 
-
-  console.log(location);
 
   useEffect(() => {
     if (location) {

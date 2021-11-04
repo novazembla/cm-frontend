@@ -42,7 +42,7 @@ const themeConfig = {
       ".motionDragContainer": {
         _active: {
           cursor: "grabbing !important",
-        }
+        },
       },
       body: {
         minHeight: "100%",
@@ -142,7 +142,7 @@ const themeConfig = {
       },
       ".chakra-linkbox__overlay::before": {
         zIndex: "1 !important",
-      }
+      },
     },
   },
   colors: {
@@ -329,6 +329,18 @@ const themeConfig = {
         xl: "1.8px",
       }),
     },
+
+    calendar: {
+      fontSize: chakraToBreakpointArray({
+        base: "13px",
+        md: "17px",
+      }),
+      lineHeight: chakraToBreakpointArray({
+        base: "13px",
+        md: "17px",
+      }),
+    },
+
     categoriesHighlight: {
       fontSize: chakraToBreakpointArray({
         base: "13px",

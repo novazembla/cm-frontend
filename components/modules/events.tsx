@@ -694,7 +694,7 @@ export const ModuleComponentEvents = ({ ...props }) => {
                                   return (
                                     <Th key={key} px="1" textAlign="center">
                                       <chakra.span
-                                        textStyle="navigation"
+                                        textStyle="calendar"
                                         fontWeight="bold"
                                       >
                                         {value.toLocaleDateString(
@@ -721,7 +721,7 @@ export const ModuleComponentEvents = ({ ...props }) => {
                                               pb="2"
                                               key={key}
                                               color="#999"
-                                              textStyle="navigation"
+                                              textStyle="calendar"
                                               textAlign="center"
                                             >
                                               <Box
@@ -731,6 +731,9 @@ export const ModuleComponentEvents = ({ ...props }) => {
                                                 lineHeight="30px"
                                                 borderColor="transparent"
                                                 borderRadius="20"
+                                                textStyle="calendar"
+                                                textAlign="center"
+                                                mx="auto"
                                               >
                                                 {value.toLocaleDateString(
                                                   i18n.language,
@@ -742,7 +745,7 @@ export const ModuleComponentEvents = ({ ...props }) => {
                                         return (
                                           <Td
                                             key={key}
-                                            textStyle="navigation"
+                                            textStyle="calendar"
                                             textAlign="center"
                                             pt="0"
                                             px="1"
@@ -754,8 +757,14 @@ export const ModuleComponentEvents = ({ ...props }) => {
                                               w="30px"
                                               h="30px"
                                               minW="30px"
+                                              mx="auto"
                                               border="1px solid"
-                                              lineHeight="30px"
+                                              fontSize={{
+                                                base: "13px",
+                                                md: "17px"
+                                              }}
+                                              
+                                              lineHeight="24px"
                                               borderColor={
                                                 value.valueOf() ===
                                                 customDate?.valueOf()

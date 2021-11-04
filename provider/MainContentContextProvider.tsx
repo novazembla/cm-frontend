@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useCallback } from "react";
 
 type MainContentContext = {
   isMainContentOpen: boolean;
@@ -20,11 +20,16 @@ export const MainContentContextProvider = ({
   children: React.ReactNode;
 }) => {
   const [isMainContentOpen, onMainContentToggle] = useState(true);
+
+  const setMainContentStatus = useCallback(
+    (state: boolean) => onMainContentToggle(state),
+    [onMainContentToggle]
+  );
   return (
     <MainContentContext.Provider
       value={{
         isMainContentOpen,
-        setMainContentStatus: (state: boolean) => onMainContentToggle(state),
+        setMainContentStatus,
       }}
     >
       {children}

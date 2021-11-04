@@ -99,6 +99,16 @@ body {
   line-height: 17px;
   text-transform: uppercase;
   cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s;
+
+  &.fadeIn {
+    opacity: 1;
+
+    &.fadeOut {
+      opacity: 0 !important;
+    }
+  }
 
   .title {
     height: 54px;
@@ -261,6 +271,16 @@ body {
   height: 1px;
   overflow: display;
   will-change: transform;
+
+  opacity: 0;
+  transition: opacity .2s;
+  &.fadeIn {
+    opacity: 1;
+
+    &.fadeOut {
+      opacity: 0 !important;
+    }
+  }
 }
 
 .spider-leg-container:hover {
@@ -292,37 +312,3 @@ body {
 // }
 
 // .spider-leg-container:hover .spider-leg-line { background: linear-gradient(rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 28%, #fff 33%, #fff); }
-
-/* Animations specific styles */
-
-// .spider-leg-container.animate {
-//   -webkit-transition: margin 0.15s linear;
-//   -moz-transition: margin 0.15s linear;
-//   -ms-transition: margin 0.15s linear;
-//   -o-transition: margin 0.15s linear;
-//   transition: margin 0.15s linear;
-// }
-
-// .spider-leg-container.initial,
-// .spider-leg-container.exit {
-//   margin-left: 0 !important;
-//   margin-top: 0 !important;
-//   height: 0;
-// }
-
-// .spider-leg-container.animate .spider-leg-line {
-//   -webkit-transition: all 0.15s linear;
-//   -moz-transition: all 0.15s linear;
-//   -ms-transition: all 0.15s linear;
-//   -o-transition: all 0.15s linear;
-//   transition: all 0.15s linear;
-
-//   -webkit-transition-delay: inherit;
-//   -moz-transition-delay: inherit;
-//   -ms-transition-delay: inherit;
-//   -o-transition-delay: inherit;
-//   transition-delay: inherit;
-// }
-
-// .spider-leg-container.animate.initial .spider-leg-line,
-// .spider-leg-container.animate.exit .spider-leg-line { height: 0 !important }

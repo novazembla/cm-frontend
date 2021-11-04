@@ -236,13 +236,19 @@ export const MainContent = ({
         bounce: false,
       },
     });
-  }, [controls]);
+
+    setIsDrawerOpen(true);
+    setMainContentStatus(true);
+    isAnimationRunningRef.current = false;
+
+  }, [controls, setMainContentStatus]);
 
   const onResizeDebounced = debounce(onResize, 350);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
 
+    console.log("main content mount");
     if (!eventListenerAdded) {
       setEventListenerAdded(true);
       window.addEventListener("resize", onResizeDebounced);
@@ -252,6 +258,8 @@ export const MainContent = ({
 
     return () => {
       if (typeof window === "undefined") return;
+
+      console.log("main content unmount");
       window.removeEventListener("resize", onResizeDebounced);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -259,6 +267,8 @@ export const MainContent = ({
 
   useEffect(() => {
     onResize();
+
+    console.log("onresize");
   }, [router.asPath, onResize]);
 
   const close = () => {
@@ -290,6 +300,7 @@ export const MainContent = ({
     console.log("open function");
 
     setIsDrawerOpen(true);
+    setMainContentStatus(true);
     isAnimationRunningRef.current = true;
 
     controls.stop();
@@ -300,7 +311,6 @@ export const MainContent = ({
         bounce: false,
       },
     });
-    setMainContentStatus(true);
     setTimeout(() => {
       isAnimationRunningRef.current = false;
     }, 350);

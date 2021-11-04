@@ -78,13 +78,49 @@ export const Map = () => {
     const onMapPointNavigate = (slug: any) => {
       if (!slug) return null;
 
-      popup.remove();
+      hidePopup();
 
       if (i18n?.language === "en") {
         router.push(`/location/${slug}`);
       } else {
         router.push(`/kartenpunkt/${slug}`);
       }
+    };
+
+    let popupAnimating = false;
+    let popupAttached = false;
+    let clusterDetailOpen = false;
+    let clusterDetail: any = null;
+    let clusterDetailAnimating = false;
+    let clusterDetailClusterHash: string | null = null;
+
+    const hideClusterDetail = () => {
+      if (!clusterDetailOpen) return;
+
+      clusterDetail?.map((e: any) =>
+        e?.elements?.container?.classList.add("fadeOut")
+      );
+
+      setTimeout(() => {
+        clusterDetailAnimating = false;
+        spiderfier.unspiderfy();
+        clusterDetailOpen = false;
+        clusterDetailClusterHash = null;
+        clusterDetail = null;
+      }, 200);
+    };
+
+    const hidePopup = () => {
+      if (!popupAttached) return;
+
+      popupAnimating = true;
+      popup.getElement()?.querySelector(".popup")?.classList.add("fadeOut");
+
+      setTimeout(() => {
+        popupAnimating = false;
+        popup.remove();
+        popupAttached = false;
+      }, 200);
     };
 
     const showPopup = (
@@ -96,7 +132,11 @@ export const Map = () => {
     ) => {
       // var description = e.features[0].properties.title;
 
+      if (popupAnimating || popupAttached) return;
+
       try {
+        popupAnimating = true;
+
         popup.setOffset(
           offset?.length
             ? offset
@@ -117,7 +157,7 @@ export const Map = () => {
         arrowElem.addEventListener("click", (e: any) => {
           e.preventDefault();
           onMapPointNavigate(slug);
-          popup.remove();
+          hidePopup();
         });
         containerElem.className = "popup";
         containerElem.style.borderColor = color;
@@ -133,11 +173,11 @@ export const Map = () => {
 
           containerElem.className = "popup mouse";
           containerElem.addEventListener("mouseleave", () => {
-            popup.remove();
+            hidePopup();
           });
           containerElem.addEventListener("click", () => {
             onMapPointNavigate(slug);
-            popup.remove();
+            hidePopup();
           });
         } else {
           containerElem.className = "popup touch";
@@ -148,7 +188,7 @@ export const Map = () => {
           closeElem.innerText = t("map.popup.close", "Close popup");
           closeElem.addEventListener("click", (e: any) => {
             e.preventDefault();
-            popup.remove();
+            hidePopup();
           });
           flexElem.appendChild(closeElem);
         }
@@ -158,8 +198,14 @@ export const Map = () => {
         // Populate the popup and set its coordinates
         // based on the feature found.
         popup.setLngLat(coordinates).setDOMContent(containerElem).addTo(map);
-
+        popupAttached = true;
         overlayZoomLevel = map.getZoom();
+        setTimeout(() => {
+          containerElem.classList.add("fadeIn");
+          setTimeout(() => {
+            popupAnimating = false;
+          }, 200);
+        }, 20);
       } catch (err) {}
     };
 
@@ -211,7 +257,7 @@ export const Map = () => {
           spiderLeg.elements.pin.addEventListener("mouseenter", showLegPopup);
 
           spiderLeg.elements.pin.addEventListener("mouseleave", () => {
-            popup.remove();
+            hidePopup();
           });
         } else {
           spiderLeg.elements.pin.addEventListener("click", showLegPopup);
@@ -311,7 +357,7 @@ export const Map = () => {
         });
         if (!features?.length) {
           console.log("click 1");
-          spiderfier.unspiderfy();
+          if (clusterDetailOpen) hideClusterDetail();
         }
       });
 
@@ -329,8 +375,7 @@ export const Map = () => {
 
         const clusterSource = (map as any).getSource("locations");
 
-        console.log("click 2");
-        spiderfier.unspiderfy();
+        console.log("click 2", clusterId);
 
         clusterSource.getClusterChildren(
           clusterId,
@@ -356,6 +401,8 @@ export const Map = () => {
                       cmAnimation: true,
                     }
                   );
+
+                  if (clusterDetailOpen) hideClusterDetail();
                 } else {
                   map.easeTo(
                     {
@@ -380,12 +427,40 @@ export const Map = () => {
                     function (err: any, leafFeatures: any) {
                       if (err || !leafFeatures?.length) return;
 
-                      spiderfier.spiderfy(
-                        features[0].geometry.coordinates,
-                        leafFeatures.map((leafFeature: any) => {
-                          return leafFeature.properties;
-                        })
-                      );
+                      const coordinates = features[0].geometry.coordinates.slice();
+
+                      const newHash = `${coordinates[0].toFixed(3)}-${coordinates[1].toFixed(3)}`
+
+                      if (
+                        clusterDetailOpen &&
+                        clusterDetailClusterHash !== newHash
+                      ) {
+                        spiderfier.unspiderfy();
+                        clusterDetailOpen = false;
+                        clusterDetailAnimating = false;
+                      }
+
+                      if (!clusterDetailOpen && !clusterDetailAnimating) {
+                        console.log(555);
+                        clusterDetail = spiderfier.spiderfy(
+                          features[0].geometry.coordinates,
+                          leafFeatures.map((leafFeature: any) => {
+                            return leafFeature.properties;
+                          })
+                        );
+
+                        clusterDetailClusterHash = newHash;
+
+                        setTimeout(() => {
+                          clusterDetail?.map((e: any) =>
+                            e?.elements?.container?.classList.add("fadeIn")
+                          );
+                          setTimeout(() => {
+                            clusterDetailAnimating = true;
+                          }, 200);
+                        }, 20);
+                        clusterDetailOpen = true;
+                      }
                     }
                   );
                 }
@@ -453,9 +528,12 @@ export const Map = () => {
           map.getZoom() > overlayZoomLevel + ZOOM_LEVEL_HIDE_ADJUSTOR
         ) {
           overlayZoomLevel = 0;
+
           console.log("click 3");
-          spiderfier.unspiderfy();
-          popup.remove();
+
+          if (clusterDetailOpen) hideClusterDetail();
+
+          if (popupAttached) hidePopup();
         }
       });
 
@@ -471,14 +549,16 @@ export const Map = () => {
 
         map.on("mouseleave", "cluster-locations", () => {
           map.getCanvas().style.cursor = "";
-          popup.remove();
+          if (popupAttached) hidePopup();
         });
       }
 
       map.on("click", "cluster-locations", (e: any) => {
         if (primaryInput !== "touch") {
           console.log("click 4");
-          spiderfier.unspiderfy();
+
+          if (clusterDetailOpen) hideClusterDetail();
+
           if (e?.features?.[0]?.properties?.slug) {
             try {
               onMapPointNavigate(
@@ -493,7 +573,6 @@ export const Map = () => {
         }
       });
     });
-
   });
 
   useEffect(() => {
@@ -563,7 +642,6 @@ export const Map = () => {
                 animate={{ opacity: isQuickSearchOpen ? 1 : 0 }}
                 initial={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
-                
               >
                 <Box
                   position="absolute"
@@ -573,7 +651,7 @@ export const Map = () => {
                   h={buttonDiameter}
                   zIndex={isQuickSearchOpen ? 2 : 1}
                   sx={{
-                    touchAction: "none"
+                    touchAction: "none",
                   }}
                 >
                   <IconButton
@@ -604,7 +682,7 @@ export const Map = () => {
                 animate={{ opacity: isQuickSearchOpen ? 0 : 1 }}
                 initial={{ opacity: 1 }}
                 transition={{ duration: 0.3 }}
-                >
+              >
                 <Box
                   position="absolute"
                   top="0"
@@ -613,7 +691,7 @@ export const Map = () => {
                   h={buttonDiameter}
                   zIndex={isQuickSearchOpen ? 1 : 2}
                   sx={{
-                    touchAction: "none"
+                    touchAction: "none",
                   }}
                 >
                   <IconButton
@@ -653,7 +731,7 @@ export const Map = () => {
             borderRadius={buttonDiameter}
             layerStyle="blurredWhite"
             sx={{
-              touchAction: "none"
+              touchAction: "none",
             }}
           >
             <IconButton
@@ -685,7 +763,7 @@ export const Map = () => {
             borderRadius={buttonDiameter}
             layerStyle="blurredWhite"
             sx={{
-              touchAction: "none"
+              touchAction: "none",
             }}
           >
             <IconButton
@@ -718,7 +796,7 @@ export const Map = () => {
               borderRadius={buttonDiameter}
               layerStyle="blurredWhite"
               sx={{
-                touchAction: "none"
+                touchAction: "none",
               }}
             >
               <IconButton

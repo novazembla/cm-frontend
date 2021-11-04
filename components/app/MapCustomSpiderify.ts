@@ -20,8 +20,6 @@ export class MapCustomSpiderfier {
     this.map = map;
     this.options = {
       color: "transparent",
-      animate: false, // to animate the spiral
-      animationSpeed: 0, // animation speed in milliseconds
       customPin: false, // If false, sets a default icon for pins in spider legs.
       initializeLeg: () => {},
       onClick: () => {},
@@ -47,8 +45,6 @@ export class MapCustomSpiderfier {
   spiderfy(latLng: any, features: any) {
     var spiderLegParams = this.generateSpiderLegParams(features.length);
     var spiderLegs: any;
-
-    this.unspiderfy();
 
     spiderLegs = features.map((feature: any, index: number) => {
       var spiderLegParam = spiderLegParams[index];
@@ -76,7 +72,6 @@ export class MapCustomSpiderfier {
       this.options.initializeLeg(spiderLeg);
 
       elements.container.onclick = (e: any) => {
-        // this.unspiderfy(); TODO: move to navigate click handler
         this.options.onClick(e, spiderLeg);
       };
 
@@ -87,38 +82,14 @@ export class MapCustomSpiderfier {
       spiderLeg.maplibreMarker.addTo(this.map);
     }, spiderLegs.reverse());
 
-    if (this.options.animate) {
-      setTimeout(() => {
-        this.each((spiderLeg: any, index: any) => {
-          spiderLeg.elements.container.className = (
-            spiderLeg.elements.container.className || ""
-          ).replace("initial", "");
-          spiderLeg.elements.container.style["transitionDelay"] =
-            (this.options.animationSpeed / 1000 / spiderLegs.length) * index +
-            "s";
-        }, spiderLegs.reverse());
-      });
-    }
-
     this.previousSpiderLegs = spiderLegs;
+
+    return spiderLegs;
   }
 
   unspiderfy() {
     this.each((spiderLeg: any, index: any) => {
-      if (this.options.animate) {
-        spiderLeg.elements.container.style["transitionDelay"] =
-          (this.options.animationSpeed /
-            1000 /
-            this.previousSpiderLegs.length) *
-            index +
-          "s";
-        spiderLeg.elements.container.className += " exit";
-        setTimeout(function () {
-          spiderLeg.maplibreMarker.remove();
-        }, this.options.animationSpeed + 100); //Wait for 100ms more before clearing the DOM
-      } else {
-        spiderLeg.maplibreMarker.remove();
-      }
+      spiderLeg.maplibreMarker.remove();
     }, this.previousSpiderLegs.reverse());
     this.previousSpiderLegs = [];
   }
@@ -180,9 +151,7 @@ export class MapCustomSpiderfier {
       pinElem: any = document.createElement("div");
     // , lineElem: any = document.createElement("div")
     containerElem.setAttribute("data-id", feature?.id);
-    containerElem.className =
-      "spider-leg-container" +
-      (this.options.animate ? " animate initial " : " ");
+    containerElem.className = "spider-leg-container";
     // lineElem.className = "spider-leg-line";
     pinElem.className =
       "spider-leg-pin" + (this.options.customPin ? "" : " default-spider-pin");
