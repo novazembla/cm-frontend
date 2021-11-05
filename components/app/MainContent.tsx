@@ -354,8 +354,9 @@ export const MainContent = ({
         <motion.div
           style={{
             position: "fixed",
-            top: 0,
+            top: isMobile ? 60 : 80,
             left: contentWidth,
+            marginLeft: -10,
             height: 40,
             width: 40,
             zIndex: 2,
@@ -371,9 +372,15 @@ export const MainContent = ({
           }}
         >
           <Box
-            pt={contentPaddingTop}
             marginLeft={buttontLeft}
+            borderRadius="5px"
+            border="1px solid"
+            borderColor="cm.accentLight"
             transition="opacity 0.3"
+            w="30px"
+            minW="30px"
+            h="40px"
+            overflow="hidden"
             {...(isMenuOpen || isQuickSearchOpen
               ? {
                   opacity: 0,
@@ -383,32 +390,31 @@ export const MainContent = ({
                   opacity: buttonVisible ? 1 : 0,
                 })}
           >
-            <Box
-              bg="#fff"
-              w="30px"
-              h="40px"
-              borderRadius="5px"
-              border="1px solid"
-              borderColor="cm.accentLight"
-              transform="translateX(-50%) translateY(20px)"
-            >
+            <Box bg="#fff" w="30px" h="40px">
               <IconButton
-                aria-label={toggleLabel}
-                icon={<HiChevronRight />}
-                w="30px"
-                h="40px"
-                p="0"
-                color="cm.accentLight"
-                onClick={toggle}
-                _hover={{
-                  color: "cm.accentLight",
-                }}
-                transition="all 0.5s"
-                transform={isDrawerOpen ? "rotate(180deg)" : "rotate(0deg)"}
+                className="svgHover"
+                paddingInlineStart="0"
+                paddingInlineEnd="0"
+                padding="0"
+                border="none"
                 bg="transparent"
+                w="30px"
+                minW="30px"
+                h="40px"
+                overflow="hidden"
+                _hover={{
+                  bg: "transparent",
+                }}
                 _active={{
                   bg: "transparent",
                 }}
+                aria-label={toggleLabel}
+                icon={<HiChevronRight />}
+                p="0"
+                color="cm.accentLight"
+                onClick={toggle}
+                transition="all 0.5s"
+                transform={isDrawerOpen ? "rotate(180deg)" : "rotate(0deg)"}
               />
             </Box>
           </Box>
