@@ -526,13 +526,13 @@ export const ModuleComponentEvents = ({ ...props }) => {
     });
 
   useEffect(() => {
-    if (!loading && data?.events?.totalCount !== "undefined") {
+    if (!loading && data?.events?.totalCount !== "undefined" && currentPageIndex === 0) {
       resultRef?.current?.scrollIntoView({
         block: "center",
         behavior: "smooth",
       });
     }
-  }, [loading, data?.events?.totalCount]);
+  }, [loading, data?.events?.totalCount, currentPageIndex]);
 
   const today = new Date(new Date().setHours(0, 0, 0, 0));
   return (

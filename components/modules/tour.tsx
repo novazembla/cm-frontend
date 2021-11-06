@@ -17,6 +17,7 @@ import { Box, Flex, AspectRatio, Text, chakra, Grid } from "@chakra-ui/react";
 import { isEmptyHtml } from "~/utils";
 import { useAppTranslations, useIsBreakPoint } from "~/hooks";
 import { GetStaticPaths, GetStaticProps } from "next";
+import { useRouter } from "next/router";
 
 const tourQuery = gql`
   query ($slug: String!) {
@@ -89,11 +90,20 @@ export const ModuleComponentTour = ({
   props: any;
 }) => {
   const cultureMap = useMapContext();
+  const router = useRouter();
   const { isMobile, isTablet, isDesktopAndUp } = useIsBreakPoint();
   const config = useConfigContext();
   const settings = useSettingsContext();
   const { t, i18n, getMultilangValue } = useAppTranslations();
   const [fillContainer, setFillContainer] = useState(true);
+
+  useEffect(() => {
+    // As next.js doesn't unmount/remount if only components route changes we 
+    // need to rely on router.asPath to trigger in between tour change actions
+    // TODO: this is on mount call back  
+    // setHighlight(null)    
+  }, [router.asPath])
+
 
   useEffect(() => {
     // TODO implement tour

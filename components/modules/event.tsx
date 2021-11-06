@@ -8,6 +8,8 @@ import {
 } from "~/components/ui";
 import { Footer, MainContent } from "~/components/app";
 import { getApolloClient } from "~/services";
+import type { MapHighlightType } from "~/services/MapHighlight";
+
 import { useMapContext, useSettingsContext } from "~/provider";
 import {
   Box,
@@ -21,6 +23,7 @@ import {
 import { isEmptyHtml, getLocationColors } from "~/utils";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { useAppTranslations, useIsBreakPoint } from "~/hooks";
+import { useRouter } from "next/router";
 
 const eventQuery = gql`
   query ($slug: String!) {
@@ -128,6 +131,7 @@ export const ModuleComponentEvent = ({
   event: any;
   props: any;
 }) => {
+  const router = useRouter();
   const cultureMap = useMapContext();
   const settings = useSettingsContext();
 
@@ -141,7 +145,15 @@ export const ModuleComponentEvent = ({
 
   const today = new Date(new Date().setHours(0, 0, 0, 0));
 
-  const [highlight, setHighlight] = useState<any>(null);
+  const [highlight, setHighlight] = useState<MapHighlightType | null>(null);
+  
+  useEffect(() => {
+    // As next.js doesn't unmount/remount if only components route changes we 
+    // need to rely on router.asPath to trigger event change actions
+    // TODO: 
+    setHighlight(null)    
+  }, [router.asPath])
+
   useEffect(() => {
     if (typeof window !== "undefined" && highlight && cultureMap) {
       console.log("event move to hightligh", highlight);
@@ -162,6 +174,8 @@ export const ModuleComponentEvent = ({
           id: event?.locations[0].id,
           lng: event?.locations[0].lng,
           lat: event?.locations[0].lat,
+          title: event?.locations[0].title,
+          slug: event?.locations[0].slug,
           color,
         });
       }

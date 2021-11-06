@@ -1,4 +1,3 @@
-import maplibregl from "maplibre-gl";
 import { primaryInput } from "detect-it";
 import type { CultureMap } from "./CultureMap";
 
@@ -34,7 +33,7 @@ export class MapViewClustered {
     }
   }
 
-  init() {
+  render() {
     if (this.cultureMap?.map) {
       console.log("Run clustered view");
       if (
@@ -42,6 +41,8 @@ export class MapViewClustered {
         !this.cultureMap.map.getSource("clustered-locations")
       )
         return;
+
+      this.clear();
 
       this.cultureMap.map.addLayer({
         id: "clusters",
@@ -186,8 +187,6 @@ export class MapViewClustered {
                     (err: any, leafFeatures: any) => {
                       if (err || !leafFeatures?.length) return;
                       const coordinates = features[0].geometry.coordinates.slice();
-
-                      console.log(coordinates, leafFeatures)
                       this.cultureMap.clusterDetail.show(coordinates, leafFeatures);
                     }
                   );
@@ -284,6 +283,7 @@ export class MapViewClustered {
         this.events["mouseleave-clustered-locations"] = () => {
           if (this.cultureMap.map) {
             this.cultureMap.map.getCanvas().style.cursor = "";
+            console.log("mouseleave-clustered-locations popup hide");
             this.cultureMap.popup.hide();
           }
         };

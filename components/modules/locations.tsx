@@ -25,7 +25,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { boolean, object, mixed, number } from "yup";
 
 import { MainContent } from "~/components/app";
-import { useSettingsContext } from "~/provider";
+import { useSettingsContext, useMapContext } from "~/provider";
 import { getMultilangSortedList } from "~/utils";
 import { useRouter } from "next/router";
 
@@ -75,6 +75,14 @@ const locationsQuery = gql`
   }
 `;
 
+const locationsIdsQuery = gql`
+  query locationsIds($where: JSON) {
+    locationIds(where: $where) {
+      ids
+    }
+  }
+`;
+
 const initialQueryState = {
   where: {},
   orderBy: [
@@ -82,7 +90,7 @@ const initialQueryState = {
       id: "asc",
     },
   ],
-  pageSize: 50,
+  pageSize: 5,
   pageIndex: 0,
 };
 
@@ -91,6 +99,7 @@ export const LocationsFilterSchema = object().shape({});
 export const ModuleComponentLocations = ({ ...props }) => {
   const { t, i18n, getMultilangValue } = useAppTranslations();
   const resultRef = useRef<HTMLDivElement>(null);
+  const cultureMap = useMapContext();
 
   const router = useRouter();
 
@@ -201,6 +210,14 @@ export const ModuleComponentLocations = ({ ...props }) => {
       },
     }
   );
+
+  const locationIdsQueryResult = useQuery(locationsIdsQuery, {
+    skip: true,
+    notifyOnNetworkStatusChange: true,
+    variables: {
+      where: initialQueryState.where,
+    },
+  });
 
   const formMethods = useForm<any>({
     mode: "onTouched",
@@ -336,7 +353,7 @@ export const ModuleComponentLocations = ({ ...props }) => {
 
       reset({
         s: router?.query?.s ?? "",
-        cluster: router?.query?.cluster === "1",
+        cluster: !(router?.query?.cluster === "0"),
         and: router?.query?.and === "1",
         ...activeTermsToI.reduce(
           (acc: any, t: any) => ({
@@ -382,6 +399,8 @@ export const ModuleComponentLocations = ({ ...props }) => {
 
   useEffect(() => {
     const allVars = watch();
+
+    console.log(allVars);
 
     let where: any = [];
     let allTerms: any[] = [];
@@ -511,6 +530,12 @@ export const ModuleComponentLocations = ({ ...props }) => {
       };
     }
 
+    if (allVars?.cluster) {
+      cultureMap?.setView("clustered");
+    } else {
+      cultureMap?.setView("unclustered");
+    }
+
     if (JSON.stringify(currentQueryState) !== JSON.stringify(newQueryState)) {
       refetch({
         ...newQueryState,
@@ -518,100 +543,103 @@ export const ModuleComponentLocations = ({ ...props }) => {
         pageSize: initialQueryState.pageSize,
       });
 
-      const baseUrl = [
-        location.protocol,
-        "//",
-        location.host,
-        location.pathname,
-      ].join("");
-
-      const query = Object.keys(allVars).reduce(
-        (acc: any, key: any) => {
-          if (key.indexOf("typeOfInstitution_") > -1) {
-            if (allVars[key]) {
-              acc.toi.push(parseInt(key.split("_")[1]));
-            }
-          }
-          if (key.indexOf("typeOfOrganisation_") > -1) {
-            if (allVars[key]) {
-              acc.too.push(parseInt(key.split("_")[1]));
-            }
-          }
-          if (key.indexOf("targetAudience_") > -1) {
-            if (allVars[key]) {
-              acc.ta.push(parseInt(key.split("_")[1]));
-            }
-          }
-          return acc;
-        },
-        {
-          s: allVars?.s?.trim() ?? "",
-          and: allVars?.and === "1" || allVars?.and === true,
-          cluster: allVars?.cluster === "1" || allVars?.cluster === true,
-          toi: [],
-          ta: [],
-          too: [],
-        }
-      );
-
-      const queryString = Object.keys(query)
-        .reduce((acc: any, key: string) => {
-          if (key === "s" && query[key]?.length)
-            return [...acc, `s=${query[key]}`];
-
-          if (key === "and" && query[key]) return [...acc, `and=1`];
-
-          if (key === "cluster" && query[key]) return [...acc, `cluster=1`];
-
-          if (Array.isArray(query[key]) && query[key]?.length)
-            return [...acc, `${key}=${query[key].join(",")}`];
-
-          return acc;
-        }, [])
-        .join("&");
-
-      const queryStringEncoded = Object.keys(query)
-        .reduce((acc: any, key: string) => {
-          if (key === "s" && query[key]?.length)
-            return [...acc, `s=${encodeURIComponent(query[key])}`];
-
-          if (key === "and" && query[key]) return [...acc, `and=1`];
-
-          if (key === "cluster" && query[key]) return [...acc, `cluster=1`];
-
-          if (Array.isArray(query[key]) && query[key]?.length)
-            return [
-              ...acc,
-              `${key}=${encodeURIComponent(query[key].join(","))}`,
-            ];
-
-          return acc;
-        }, [])
-        .join("&");
-
-      const as = window.history?.state?.as
-        ? window.history?.state?.as.split("?")[0]
-        : i18n.language === "en"
-        ? "/map/"
-        : "/karte/";
-
-      window.history.replaceState(
-        {
-          ...window.history.state,
-          url: `${as}?${queryStringEncoded}`,
-          as: `${as}?${queryString}`,
-        },
-        "",
-        `${baseUrl}?${queryString}`
-      );
-
+      if (where.length > 0) {
+        locationIdsQueryResult.refetch({
+          where: newQueryState.where,
+        });
+      }
       setCurrentQueryState(newQueryState);
       setCurrentPageIndex(0);
     }
+    const baseUrl = [
+      location.protocol,
+      "//",
+      location.host,
+      location.pathname,
+    ].join("");
+
+    const query = Object.keys(allVars).reduce(
+      (acc: any, key: any) => {
+        if (key.indexOf("typeOfInstitution_") > -1) {
+          if (allVars[key]) {
+            acc.toi.push(parseInt(key.split("_")[1]));
+          }
+        }
+        if (key.indexOf("typeOfOrganisation_") > -1) {
+          if (allVars[key]) {
+            acc.too.push(parseInt(key.split("_")[1]));
+          }
+        }
+        if (key.indexOf("targetAudience_") > -1) {
+          if (allVars[key]) {
+            acc.ta.push(parseInt(key.split("_")[1]));
+          }
+        }
+        return acc;
+      },
+      {
+        s: allVars?.s?.trim() ?? "",
+        and: allVars?.and === "1" || allVars?.and === true,
+        cluster: allVars?.cluster === "1" || allVars?.cluster === true,
+        toi: [],
+        ta: [],
+        too: [],
+      }
+    );
+
+    const queryString = Object.keys(query)
+      .reduce((acc: any, key: string) => {
+        if (key === "s" && query[key]?.length)
+          return [...acc, `s=${query[key]}`];
+
+        if (key === "and" && query[key]) return [...acc, `and=1`];
+
+        if (key === "cluster" && !query[key]) return [...acc, `cluster=0`];
+
+        if (Array.isArray(query[key]) && query[key]?.length)
+          return [...acc, `${key}=${query[key].join(",")}`];
+
+        return acc;
+      }, [])
+      .join("&");
+
+    const queryStringEncoded = Object.keys(query)
+      .reduce((acc: any, key: string) => {
+        if (key === "s" && query[key]?.length)
+          return [...acc, `s=${encodeURIComponent(query[key])}`];
+
+        if (key === "and" && query[key]) return [...acc, `and=1`];
+
+        if (key === "cluster" && !query[key]) return [...acc, `cluster=0`];
+
+        if (Array.isArray(query[key]) && query[key]?.length)
+          return [...acc, `${key}=${encodeURIComponent(query[key].join(","))}`];
+
+        return acc;
+      }, [])
+      .join("&");
+
+    const as = window.history?.state?.as
+      ? window.history?.state?.as.split("?")[0]
+      : i18n.language === "en"
+      ? "/map/"
+      : "/karte/";
+
+    window.history.replaceState(
+      {
+        ...window.history.state,
+        url: `${as}?${queryStringEncoded}`,
+        as: `${as}?${queryString}`,
+      },
+      "",
+      `${baseUrl}?${queryString}`
+    );
   }, [
     watchVariables,
+    cultureMap,
     watch,
     refetch,
+    locationIdsQueryResult,
     currentQueryState,
     i18n?.language,
     router,
@@ -626,13 +654,17 @@ export const ModuleComponentLocations = ({ ...props }) => {
     });
 
   useEffect(() => {
-    if (!loading && data?.locations?.totalCount !== "undefined") {
+    if (
+      !loading &&
+      data?.locations?.totalCount !== "undefined" &&
+      currentPageIndex === 0
+    ) {
       resultRef?.current?.scrollIntoView({
         block: "center",
         behavior: "smooth",
       });
     }
-  }, [loading, data?.locations?.totalCount]);
+  }, [loading, data?.locations?.totalCount, currentPageIndex]);
 
   return (
     <MainContent layerStyle="lightGray">

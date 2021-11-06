@@ -72,6 +72,7 @@ export class MapClusterDetail {
           spiderLeg.elements.pin.addEventListener("mouseenter", showLegPopup);
 
           spiderLeg.elements.pin.addEventListener("mouseleave", () => {
+            console.log("clusterdetain mouseleave popup hide");
             this.cultureMap.popup.hide();
           });
         } else {
@@ -82,12 +83,11 @@ export class MapClusterDetail {
   }
 
   show(coordinates: [number, number], leafFeatures: any) {
-
     console.log(1);
     if (!this.spiderfier) return;
-    console.log(2); 
-    const newHash = `${coordinates[0].toFixed(3)}-${coordinates[1].toFixed(3)}`;
-
+    console.log(2);
+    const newHash = `${coordinates[0].toFixed(6)}-${coordinates[1].toFixed(6)}`;
+    console.log(22, this.clusterDetailClusterHash, newHash);
     if (this.clusterDetailOpen && this.clusterDetailClusterHash !== newHash) {
       this.spiderfier.unspiderfy();
       this.clusterDetailOpen = false;
@@ -95,8 +95,11 @@ export class MapClusterDetail {
       console.log(3);
     }
 
-    console.log(4);
-    if (!this.clusterDetailOpen && !this.clusterDetailAnimating) {
+    console.log(4, this.clusterDetailOpen, this.clusterDetailAnimating);
+    if (
+      !this.clusterDetailClusterHash ||
+      (!this.clusterDetailOpen && !this.clusterDetailAnimating)
+    ) {
       console.log(5);
       this.clusterDetail = this.spiderfier.spiderfy(
         coordinates,
@@ -106,7 +109,7 @@ export class MapClusterDetail {
       );
       console.log(this.clusterDetail);
       this.clusterDetailClusterHash = newHash;
-      
+
       setTimeout(() => {
         this.clusterDetail?.map((e: any) =>
           e?.elements?.container?.classList.add("fadeIn")
@@ -121,6 +124,7 @@ export class MapClusterDetail {
   }
 
   hide() {
+    const currentHash = this.clusterDetailClusterHash;
     if (!this.spiderfier || !this.clusterDetailOpen) return;
 
     this.clusterDetail?.map((e: any) =>
@@ -128,11 +132,13 @@ export class MapClusterDetail {
     );
 
     setTimeout(() => {
-      this.clusterDetailAnimating = false;
-      this.spiderfier?.unspiderfy();
-      this.clusterDetailOpen = false;
-      this.clusterDetailClusterHash = null;
-      this.clusterDetail = null;
+      if (this.clusterDetailClusterHash === currentHash) {
+        this.clusterDetailAnimating = false;
+        this.spiderfier?.unspiderfy();
+        this.clusterDetailOpen = false;
+        this.clusterDetailClusterHash = null;
+        this.clusterDetail = null;
+      }
     }, 200);
   }
 }

@@ -48,46 +48,77 @@ const createApolloClient = (config: AppConfig) => {
         // credentials: "include", // Additional fetch() options like `credentials` or `headers`
       }),
     ]),
+
     // TODO: find generic ways to manage the chache ...
-    cache: new InMemoryCache(
-      {
-        typePolicies: {
-          Query: {
-            fields: {
-              events: {
-                keyArgs: ["where", "orderBy"],
-                merge(
-                  existing,
-                  incoming,
-                  { args: { pageIndex = 0, pageSize = 50 } }: { args: any }
-                ) {
-                  const offset = pageIndex * pageSize;
+    cache: new InMemoryCache({
+      typePolicies: {
+        Query: {
+          fields: {
+            events: {
+              keyArgs: ["where", "orderBy"],
+              merge(
+                existing,
+                incoming,
+                { args: { pageIndex = 0, pageSize = 50 } }: { args: any }
+              ) {
+                const offset = pageIndex * pageSize;
 
-                  if (!incoming)
-                    return {
-                      totalCount: 0,
-                      events: [],
-                    };
-
-                  // Slicing is necessary because the existing data is
-                  // immutable, and frozen in development.
-                  const merged = existing?.events
-                    ? existing?.events.slice(0)
-                    : [];
-                  for (let i = 0; i < incoming?.events.length; i++) {
-                    merged[offset + i] = incoming?.events[i];
-                  }
+                if (!incoming)
                   return {
-                    totalCount: incoming?.totalCount,
-                    events: merged,
+                    totalCount: 0,
+                    events: [],
                   };
-                },
+
+                // Slicing is necessary because the existing data is
+                // immutable, and frozen in development.
+                const merged = existing?.events?.length
+                  ? existing?.events.slice(0)
+                  : [];
+                for (let i = 0; i < incoming?.events?.length; i++) {
+                  merged[offset + i] = incoming?.events[i];
+                }
+                return {
+                  totalCount: incoming?.totalCount,
+                  events: merged,
+                };
               },
+            },
+            locations: {
+              keyArgs: ["where", "orderBy"],
+              merge(
+                existing,
+                incoming,
+                { args: { pageIndex = 0, pageSize = 50 } }: { args: any }
+              ) {
+                const offset = pageIndex * pageSize;
+
+                if (!incoming)
+                  return {
+                    totalCount: 0,
+                    locations: [],
+                  };
+
+                // Slicing is necessary because the existing data is
+                // immutable, and frozen in development.
+                const merged = existing?.locations?.length
+                  ? existing?.locations.slice(0)
+                  : [];
+                for (let i = 0; i < incoming?.locations?.length; i++) {
+                  merged[offset + i] = incoming?.locations[i];
+                }
+                return {
+                  totalCount: incoming?.totalCount,
+                  locations: merged,
+                };
+              },
+            },
+            locationIds: {
+              keyArgs: ["where"],
             },
           },
         },
-      }
-    ),
+      },
+    }),
     defaultOptions: {
       watchQuery: {
         fetchPolicy: "cache-and-network",

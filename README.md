@@ -1,48 +1,41 @@
-Einrichtungen H:#15968F D: #005252
-KünstlerInnen H:#3283D5 D:#003F7E
-Kirchen H: #D6B227 D: #695400
-Kultureinrichtungen H: #0B4E8D D: #001A33
-Kulturinitiativen H: #D3736F D: #81413E
-Begegenungsstätten H: #4C9D62 D: #30603D
-Stiftungen H: #30603D  D: #535353
-Hochschulen H: #003E4A D: #003E4A
-Kreativ: H: #9D4C4C D: #503030
-Erinnerungsorte: H: #554577 D: #554577
-KimSt H: #8F4B9A  D: #7B4084
+The CultureMap frontend is a [Next.js](https://nextjs.org/) project.
 
+## Installation
 
+For productions
 
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+```bash
+npm ci 
+```
 
-## Getting Started
+For development
 
-First, run the development server:
+```bash
+npm i 
+```
+
+... and create a file `.env.local` or rename `.env.example` and ensure that the following variables are set
+
+```
+NEXT_PUBLIC_API_URL=...
+NEXT_PUBLIC_MAP_JSON_URL=...
+PREVIEW_SECRET=...
+```
+
+The PREVIEW_SECRET is shared between between API and Frontend and needs to be the same.
+
+## Starting
+
+on the server
+
+```bash
+npm run start
+```
+
+for development
 
 ```bash
 npm run dev
-# or
-yarn dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
-
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.

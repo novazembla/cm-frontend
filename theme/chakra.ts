@@ -13,6 +13,8 @@ import { chakraToBreakpointArray } from "./helpers";
 // https://codepen.io/sosuke/pen/Pjoqqp
 
 const themeConfig = {
+  initialColorMode: "light",
+  useSystemColorMode: false,
   fonts: {
     heading: "Berlin Type",
     body: "Berlin Type",
@@ -215,7 +217,7 @@ const themeConfig = {
       backgroundBlendMode: "lighten",
     },
     blurredWhite: {
-      bg: "rgba(255,255,255,0.8)",
+      bg: "rgba(255,255,255,0.75)",
       backdropFilter: "blur(20px)",
       backgroundBlendMode: "lighten",
     },

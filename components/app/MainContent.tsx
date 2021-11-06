@@ -283,6 +283,7 @@ export const MainContent = ({
 
     setMainContentStatus(false);
     setTimeout(() => {
+      panActive.current = false;
       isAnimationRunningRef.current = false;
     }, 350);
   };
@@ -303,6 +304,7 @@ export const MainContent = ({
       },
     });
     setTimeout(() => {
+      panActive.current = false;
       isAnimationRunningRef.current = false;
     }, 350);
   };

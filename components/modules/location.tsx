@@ -22,7 +22,8 @@ import {
   Grid,
   SimpleGrid,
 } from "@chakra-ui/react";
-import { useIsPresent } from "framer-motion";
+import type { MapHighlightType } from "~/services/MapHighlight";
+
 import { isEmptyHtml, getLocationColors } from "~/utils";
 import { useIsBreakPoint, useAppTranslations } from "~/hooks";
 import { GetStaticPaths, GetStaticProps } from "next";
@@ -112,8 +113,18 @@ export const ModuleComponentLocation = ({
   const [colorDark, setColorDark] = useState(config.colorDark);
   const [meta, setMeta] = useState("");
 
-  const [highlight, setHighlight] = useState<any>(null);
+  const [highlight, setHighlight] = useState<MapHighlightType | null>(null);
+  
   useEffect(() => {
+    // As next.js doesn't unmount/remount if only components route changes we 
+    // need to rely on router.asPath to trigger location change actions
+    console.log("set highlight null");
+    setHighlight(null)    
+  }, [router.asPath])
+
+  useEffect(() => {
+    console.log("highlight", highlight, cultureMap);
+
     if (typeof window !== "undefined" && highlight && cultureMap) {
       console.log("move to hightligh", highlight);
       cultureMap.setHighlight(highlight);
@@ -145,6 +156,8 @@ export const ModuleComponentLocation = ({
           id: location.id,
           lng: location?.lng,
           lat: location?.lat,
+          title: location?.title,
+          slug: location?.slug,
           color,
         });
       }
@@ -166,10 +179,6 @@ export const ModuleComponentLocation = ({
     getMultilangValue,
     settings,
   ]);
-
-  useEffect(() => {
-    setHighlight(null)    
-  }, [router.asPath])
 
   const taxonomies =
     location?.terms?.reduce((acc: any, term: any) => {

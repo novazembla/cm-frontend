@@ -8,14 +8,10 @@ import type { AppTranslationHelper } from "~/hooks";
 import { MapPopup } from "./MapPopup";
 import axios, { AxiosResponse } from "axios";
 import { MapViewClustered } from "./MapViewClustered";
+import { MapViewUnclustered } from "./MapViewUnclustered";
 import { MapClusterDetail } from "./MapClusterDetail";
+import { MapHighlight, MapHighlightType } from "./MapHighlight";
 
-type MapHighlight = {
-  id: number;
-  lng: number;
-  lat: number;
-  color: string;
-};
 
 export class CultureMap {
   POPUP_OFFSET_MOUSE = [0, -25] as [number, number];
@@ -28,7 +24,7 @@ export class CultureMap {
   isAnimating = false;
   clickBlock = false;
 
-  highlight: MapHighlight | null;
+  highlight: MapHighlight;
 
   router: NextRouter;
   map: maplibregl.Map | null;
@@ -37,7 +33,7 @@ export class CultureMap {
   config: AppConfig;
   popup: MapPopup;
   clusterDetail: MapClusterDetail;
-
+  
   locationId: number | null;
   overlayZoomLevel: number;
   geoJsonAllData: any = null;
@@ -46,7 +42,6 @@ export class CultureMap {
   baseDataLoaded = false;
   ready = false;
   onLoadJobs: any[] = [];
-  initialView = "clustered";
   activeView = "clustered";
 
   views: Record<string, any> = {};
@@ -56,7 +51,6 @@ export class CultureMap {
     tHelper: AppTranslationHelper,
     config: AppConfig
   ) {
-    this.highlight = null;
     this.map = null;
     this.mapContainerRef = null;
     this.locationId = null;
@@ -69,8 +63,10 @@ export class CultureMap {
 
     this.popup = new MapPopup(this);
     this.clusterDetail = new MapClusterDetail(this);
+    this.highlight = new MapHighlight(this);
 
     this.views["clustered"] = new MapViewClustered(this);
+    this.views["unclustered"] = new MapViewUnclustered(this);
   }
 
   init(ref: HTMLDivElement) {
@@ -89,13 +85,12 @@ export class CultureMap {
 
     const process = () => {
       this.ready = true;
-      
-      if (this.initialView in this.views) {
-        this.views[this.initialView].setData();
-        this.views[this.initialView].init();
-        this.activeView = this.initialView;
+
+      if (this.activeView in this.views) {
+        this.views[this.activeView].setData();
+        this.views[this.activeView].render();
       }
-      
+
       this.onLoadJobs.map((f) => {
         if (typeof f === "function") f.call();
       });
@@ -152,15 +147,40 @@ export class CultureMap {
       });
   }
 
-  setInitialView(view: string) {
-    this.initialView = view;
+  setView(view: string) {
+    console.log("CultureMap Set view", view);
+    if (this.map) {
+      const run = () => {
+        console.log("CultureMap Set run", view);
+        console.log("CultureMap Set change", view);
+        Object.keys(this.views).forEach((v: string) => {
+          if (v !== view) {
+            this.views[v].clear();
+          }
+        });
+        this.popup.hide();
+        this.clusterDetail.hide();
+        this.views[view].setData();
+        this.views[view].render();
+        this.activeView = view;
+      };
+
+      if (view === this.activeView) return;
+
+      if (!this.ready) {
+        this.activeView = view;
+        this.onLoadJobs.push(run);
+      } else {
+        run();
+      }
+    }
   }
 
   onMapPointNavigate(slug: any) {
     if (!slug) return null;
 
     this.popup.hide();
-    
+
     if (this.tHelper.i18n?.language === "en") {
       this.router.push(`/location/${slug}`);
     } else {
@@ -168,13 +188,10 @@ export class CultureMap {
     }
   }
 
-  setHighlight(highlight: MapHighlight) {
-    this.highlight = highlight;
+  setHighlight(highlight: MapHighlightType) {
 
     if (this.map) {
       const run = () => {
-
-        console.log("setting new highlight")
         const data = {
           features: [
             {
@@ -189,6 +206,8 @@ export class CultureMap {
                 strokeColor: highlight.color,
                 radius: 20,
                 strokeWidth: 2,
+                title: highlight.title,
+                slug: highlight.slug,
               },
             },
             {
@@ -208,39 +227,10 @@ export class CultureMap {
           ],
           type: "FeatureCollection",
         };
-        if (this.map?.getLayer("highlight")) this.map?.removeLayer("highlight");
-        if (!this.map?.getSource("highlight")) {
-          this.map?.addSource("highlight", {
-            type: "geojson",
-            data,
-          });
-        } else {
-          (
-            this.map?.getSource("highlight") as maplibregl.GeoJSONSource
-          )?.setData(data);
-        }
-        this.map?.addLayer({
-          id: "highlight",
-          type: "circle",
-          source: "highlight",
-          paint: {
-            "circle-color": ["get", "color"],
-            "circle-radius": ["get", "radius"],
-            "circle-stroke-color": ["get", "strokeColor"],
-            "circle-stroke-width": ["get", "strokeWidth"],
-            // [
-            //   "interpolate",
-            //   ["linear"],
-            //   ["zoom"],
-            //   // zoom is 8 (or less) -> circle radius will be 2px
-            //   8,
-            //   2,
-            //   // zoom is 18 (or greater) -> circle radius will be 20px
-            //   16,
-            //   16,
-            // ],
-          },
-        });
+
+        this.highlight.setData(data);
+        this.highlight.render();
+
       };
       if (!this.ready) {
         this.onLoadJobs.push(run);
@@ -251,12 +241,9 @@ export class CultureMap {
   }
 
   clearHighlight() {
-    this.highlight = null;
-
     if (this.map) {
       const run = () => {
-        console.log("removing highlight")
-        if (this.map?.getLayer("highlight")) this.map?.removeLayer("highlight");
+        this.highlight.clear();
       };
       if (!this.ready) {
         this.onLoadJobs.push(run);

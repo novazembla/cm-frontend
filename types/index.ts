@@ -11,7 +11,6 @@ export interface AppConfig {
   contactEmail: string;
   apiURL: string;
   apiGraphQLURL: string;
-  mapApiKey: string;
   mapStyleJsonUrl: string;
   defaultLanguage: string;
   activeLanguages: string[];

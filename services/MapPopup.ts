@@ -23,11 +23,14 @@ export class MapPopup {
     slug: string,
     offset?: any
   ) {
-    if (!this?.cultureMap?.map) return;
+    console.log(1);
 
+    if (!this?.cultureMap?.map) return;
+    console.log(11);
     try {
       this.popupAnimating = true;
 
+      console.log(111);
       this.popup.setOffset(
         offset?.length
           ? offset
@@ -87,6 +90,8 @@ export class MapPopup {
 
       flexElem.appendChild(arrowElem);
 
+      console.log(2);
+
       // Populate the popup and set its coordinates
       // based on the feature found.
       this.popup
@@ -101,7 +106,9 @@ export class MapPopup {
           this.popupAnimating = false;
         }, 125);
       }, 20);
-    } catch (err) {}
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   hide() {
@@ -114,6 +121,8 @@ export class MapPopup {
 
     setTimeout(() => {
       this.popupAnimating = false;
+
+      console.log("hide npopup")
       this.popup.remove();
       this.popupAttached = false;
     }, 125);
