@@ -1,8 +1,9 @@
+import { useEffect, useState, useRef, useCallback } from "react";
+
 import { GetStaticProps } from "next";
 import NextLink from "next/link";
 import { getApolloClient } from "~/services";
 import { motion, AnimatePresence } from "framer-motion";
-import { useEffect, useState } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import {
   Box,
@@ -11,6 +12,7 @@ import {
   Link,
   chakra,
   Collapse,
+  Grid,
 } from "@chakra-ui/react";
 import { gql } from "@apollo/client";
 
@@ -23,8 +25,14 @@ import {
 } from "~/components/ui";
 
 import { useAppTranslations, useIsBreakPoint } from "~/hooks";
+import { getLocationColors } from "~/utils";
 
 import { Footer, MainContent } from "~/components/app";
+import {
+  useSettingsContext,
+  useMapContext,
+  useConfigContext,
+} from "~/provider";
 
 const homepageQuery = gql`
   query {
@@ -38,6 +46,11 @@ const homepageQuery = gql`
 
 export const Home = ({ homepage }: { homepage: any }) => {
   const { t, getMultilangValue } = useAppTranslations();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const highlightsRef = useRef<HTMLDivElement>(null);
+  const settings = useSettingsContext();
+  const config = useConfigContext();
+  const cultureMap = useMapContext();
 
   const { isMobile, isTablet, isDesktopAndUp } = useIsBreakPoint();
 
@@ -47,9 +60,94 @@ export const Home = ({ homepage }: { homepage: any }) => {
     ? { flexBasis: "295px", minW: "295px", maxW: "295px" }
     : {};
 
+  const onResize = useCallback(() => {
+    const isMobile = window.matchMedia("(max-width: 44.999em)").matches;
+  }, []);
+
   useEffect(() => {
     setIsMSOpen(true);
+
+    console.log("bound index");
+    if (typeof window === "undefined") return;
+    window.addEventListener("resize", onResize);
+    onResize();
+    document.addEventListener("DOMContentLoaded", onResize);
+
+    return () => {
+      if (typeof window === "undefined") return;
+      window.removeEventListener("resize", onResize);
+      console.log("unmounted index");
+    };
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    if (homepage?.highlights?.length > 0 && settings && cultureMap) {
+      console.log(homepage?.highlights);
+
+      const highlights = homepage?.highlights.reduce(
+        (hAcc: any, highlight: any) => {
+          if (highlight.type === "location") {
+            hAcc.push({
+              id: highlight.id,
+              lng: highlight?.lng,
+              lat: highlight?.lat,
+              title: highlight?.title,
+              slug: highlight?.slug,
+              color: getLocationColors(highlight, settings).color,
+            });
+          }
+
+          if (highlight.type === "event" && highlight?.location) {
+            hAcc.push({
+              id: highlight?.location.id,
+              lng: highlight?.location?.lng,
+              lat: highlight?.location?.lat,
+              title: highlight?.location?.title,
+              slug: highlight?.location?.slug,
+              color: getLocationColors(highlight?.location, settings).color,
+            });
+          }
+
+          if (
+            highlight.type === "tour" &&
+            highlight?.tourStops?.length &&
+            highlight?.tourStops[0]?.location
+          ) {
+            hAcc.push({
+              id: highlight?.tourStops[0]?.location.id,
+              lng: highlight?.tourStops[0]?.location?.lng,
+              lat: highlight?.tourStops[0]?.location?.lat,
+              title: highlight?.tourStops[0]?.location?.title,
+              slug: highlight?.tourStops[0]?.location?.slug,
+              color: getLocationColors(
+                highlight?.tourStops[0]?.location,
+                settings
+              ).color,
+            });
+          }
+
+          return hAcc;
+        },
+        []
+      );
+      if (highlights.length) {
+        cultureMap.setHighlights(highlights);
+        cultureMap.panTo(
+          highlights[0].lng,
+          highlights[1].lat,
+          !window.matchMedia("(max-width: 44.999em)").matches
+        );
+      }
+      console.log(highlights);
+    }
+    return () => {
+      if (cultureMap) cultureMap.clearHighlights();
+    };
+  }, [homepage?.highlights, settings, cultureMap, config]);
 
   if (!homepage) return <></>;
 
@@ -57,7 +155,6 @@ export const Home = ({ homepage }: { homepage: any }) => {
     <MainContent
       isDrawer={isTablet || isDesktopAndUp}
       isVerticalContent={!isTablet && !isDesktopAndUp}
-    
     >
       <Box>
         {homepage?.missionStatement && (
@@ -68,12 +165,13 @@ export const Home = ({ homepage }: { homepage: any }) => {
               borderColor="cm.accentDark"
               position={isMobile ? "fixed" : "static"}
               top="60px"
+              zIndex="2"
             >
               <Box>
                 <Box className={isMobile ? "clampThreeLines" : undefined}>
                   <b>
-                  <MultiLangHtml json={homepage?.missionStatement} />
-                </b>
+                    <MultiLangHtml json={homepage?.missionStatement} />
+                  </b>
                 </Box>
                 <Flex
                   w="100%"
@@ -114,7 +212,6 @@ export const Home = ({ homepage }: { homepage: any }) => {
                   )}
                   {isMobile && (
                     <IconButton
-
                       icon={<SVG type="cross" width="200%" height="200%" />}
                       borderRadius="0"
                       p="0"
@@ -136,8 +233,6 @@ export const Home = ({ homepage }: { homepage: any }) => {
                       }}
                       aria-label={t("mission.statement.close", "close")}
                       onClick={() => setIsMSOpen(!isMSOpen)}
-                     
-                      
                     />
                   )}
                 </Flex>
@@ -157,79 +252,107 @@ export const Home = ({ homepage }: { homepage: any }) => {
             }}
             w="100%"
           >
-            <chakra.h3
-              className="highlight"
-              color="cm.text"
-              mt="0.5em"
-              px="20px"
-              textTransform="uppercase"
-              textAlign={isMobile ? "center" : undefined}
-              fontWeight="bold"
-            >
-              {t("homepage.title.highlights", "Highlights")}
-            </chakra.h3>
-
-            <Box
-              overflowY={isMobile ? "auto" : "hidden"}
+            <Grid
               w="100%"
-              pl="20px"
-              pb="20px"
-              mb={isMobile ? "40px" : "0px"}
+              templateRows={{
+                base: "1fr",
+                md: "1fr auto",
+              }}
+              templateColumns="100%"
+              minH={{
+                md: "calc(100vh - 60px)",
+                xl: "calc(100vh - 80px)",
+              }}
             >
-              <Flex
-                flexDirection={isMobile ? "row" : "column"}
-                // w={isMobile ? "2000px" : "100%"}
-                sx={{
-                  "@media (max-width: 44.9999em)": {
-                    flexDirection: "row",
-                    //   w: "2000px",
-                  },
-                  "@media (min-width: 45em)": {
-                    flexDirection: "column",
-                    // w: "auto",
-                    overflowY: "hidden",
-                  },
-                }}
-              >
-                {homepage?.highlights.map((h: any) => {
-                  if (h.type === "location") {
-                    return (
-                      <Box key={`hb-${h.id}`} {...mobileCardWrapper} pr="20px">
-                        <CardLocation
-                          fillContainer={!isMobile}
-                          key={`h-${h.id}`}
-                          location={h}
-                        />
-                      </Box>
-                    );
-                  } else if (h.type === "event") {
-                    return (
-                      <Box key={`hb-${h.id}`} {...mobileCardWrapper} pr="20px">
-                        <CardEvent
-                          fillContainer={!isMobile}
-                          key={`h-${h.id}`}
-                          event={h}
-                        />
-                      </Box>
-                    );
-                  } else if (h.type === "tour") {
-                    return (
-                      <Box key={`hb-${h.id}`} {...mobileCardWrapper} pr="20px">
-                        <CardTour
-                          fillContainer={!isMobile}
-                          key={`h-${h.id}`}
-                          tour={h}
-                        />
-                      </Box>
-                    );
-                  } else {
-                    return <></>;
-                  }
-                })}
-              </Flex>
-            </Box>
+              {" "}
+              <Box>
+                <chakra.h3
+                  className="highlight"
+                  color="cm.text"
+                  mt="0.5em"
+                  px="20px"
+                  textTransform="uppercase"
+                  textAlign={isMobile ? "center" : undefined}
+                  fontWeight="bold"
+                >
+                  {t("homepage.title.highlights", "Highlights")}
+                </chakra.h3>
 
-            <Footer noBackground />
+                <Box
+                  overflowY={isMobile ? "auto" : "hidden"}
+                  w="100%"
+                  pl="20px"
+                  pb="20px"
+                  mb={isMobile ? "40px" : "0px"}
+                  ref={highlightsRef}
+                >
+                  <Flex
+                    flexDirection={isMobile ? "row" : "column"}
+                    // w={isMobile ? "2000px" : "100%"}
+                    sx={{
+                      "@media (max-width: 44.9999em)": {
+                        flexDirection: "row",
+                        //   w: "2000px",
+                      },
+                      "@media (min-width: 45em)": {
+                        flexDirection: "column",
+                        // w: "auto",
+                        overflowY: "hidden",
+                      },
+                    }}
+                  >
+                    {homepage?.highlights.map((h: any) => {
+                      if (h.type === "location") {
+                        return (
+                          <Box
+                            key={`hb-${h.id}`}
+                            {...mobileCardWrapper}
+                            pr="20px"
+                          >
+                            <CardLocation
+                              fillContainer={!isMobile}
+                              key={`h-${h.id}`}
+                              location={h}
+                            />
+                          </Box>
+                        );
+                      } else if (h.type === "event") {
+                        return (
+                          <Box
+                            key={`hb-${h.id}`}
+                            {...mobileCardWrapper}
+                            pr="20px"
+                          >
+                            <CardEvent
+                              fillContainer={!isMobile}
+                              key={`h-${h.id}`}
+                              event={h}
+                            />
+                          </Box>
+                        );
+                      } else if (h.type === "tour") {
+                        return (
+                          <Box
+                            key={`hb-${h.id}`}
+                            {...mobileCardWrapper}
+                            pr="20px"
+                          >
+                            <CardTour
+                              fillContainer={!isMobile}
+                              key={`h-${h.id}`}
+                              tour={h}
+                            />
+                          </Box>
+                        );
+                      } else {
+                        return <></>;
+                      }
+                    })}
+                  </Flex>
+                </Box>
+              </Box>
+              <Footer noBackground />
+            </Grid>
           </Box>
         )}
       </Box>

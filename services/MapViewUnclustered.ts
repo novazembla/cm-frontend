@@ -19,51 +19,54 @@ export class MapViewUnclustered {
     if (this.cultureMap?.map) {
       if (!this.cultureMap?.map) return;
 
-      console.log("setdata");
-
       this.hide();
-      if (!this.cultureMap.map.getSource("unclustered-locations")) {
-        this.cultureMap.map.addSource("unclustered-locations", {
-          type: "geojson",
-          data: data ?? this.cultureMap.geoJsonAllData ?? {},
-        });
-      } else {
-        (
-          this.cultureMap?.map?.getSource("unclustered-locations") as any
-        )?.setData(data ?? this.cultureMap.geoJsonAllData ?? {});
-      }
+      
+      setTimeout(() => {
+        if (!this.cultureMap?.map) return;
 
-      this.bounds = new maplibregl.LngLatBounds(
-        [this.cultureMap.config.lng, this.cultureMap.config.lat],
-        [this.cultureMap.config.lng, this.cultureMap.config.lat]
-      );
-
-      if ((data ?? this.cultureMap.geoJsonAllData ?? {})?.features?.length) {
-        for (
-          let i = 0;
-          i < (data ?? this.cultureMap.geoJsonAllData ?? {})?.features?.length;
-          i++
-        ) {
-          const coordinates = (data ?? this.cultureMap.geoJsonAllData ?? {})?.features[i]
-          ?.geometry?.coordinates ?? [
-            this.cultureMap.config.lng,
-            this.cultureMap.config.lat,
-          ];
-
-          if (coordinates[0] !== 0 && coordinates[1] !== 0) {
-            this.bounds.extend(
-              coordinates
-            );
+        if (!this.cultureMap.map.getSource("unclustered-locations")) {
+          this.cultureMap.map.addSource("unclustered-locations", {
+            type: "geojson",
+            data: data ?? this.cultureMap.geoJsonAllData ?? {},
+          });
+        } else {
+          (
+            this.cultureMap?.map?.getSource("unclustered-locations") as any
+          )?.setData(data ?? this.cultureMap.geoJsonAllData ?? {});
+        }
+  
+        this.bounds = new maplibregl.LngLatBounds(
+          [this.cultureMap.config.lng, this.cultureMap.config.lat],
+          [this.cultureMap.config.lng, this.cultureMap.config.lat]
+        );
+  
+        if ((data ?? this.cultureMap.geoJsonAllData ?? {})?.features?.length) {
+          for (
+            let i = 0;
+            i < (data ?? this.cultureMap.geoJsonAllData ?? {})?.features?.length;
+            i++
+          ) {
+            const coordinates = (data ?? this.cultureMap.geoJsonAllData ?? {})?.features[i]
+            ?.geometry?.coordinates ?? [
+              this.cultureMap.config.lng,
+              this.cultureMap.config.lat,
+            ];
+  
+            if (coordinates[0] !== 0 && coordinates[1] !== 0) {
+              this.bounds.extend(
+                coordinates
+              );
+            }
           }
         }
-      }
-      this.show();
+        this.show();
+      }, 60);
+      
     }
   }
 
   render() {
     if (this.cultureMap?.map) {
-      console.log("render unclustered view");
       if (
         !this.cultureMap?.map ||
         !this.cultureMap.map.getSource("unclustered-locations")
@@ -71,7 +74,7 @@ export class MapViewUnclustered {
         return;
 
       this.clear();
-
+      
       this.cultureMap.map.addLayer({
         id: "unclustered-locations",
         type: "circle",
@@ -192,7 +195,7 @@ export class MapViewUnclustered {
         this.events["click-unclustered-locations"]
       );
 
-      //this.show();
+      this.show();
     }
   }
 

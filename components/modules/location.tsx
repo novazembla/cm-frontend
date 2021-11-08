@@ -22,7 +22,7 @@ import {
   Grid,
   SimpleGrid,
 } from "@chakra-ui/react";
-import type { MapHighlightType } from "~/services/MapHighlight";
+import type { MapHighlightType } from "~/services/MapHighlights";
 
 import { isEmptyHtml, getLocationColors } from "~/utils";
 import { useIsBreakPoint, useAppTranslations } from "~/hooks";
@@ -127,12 +127,12 @@ export const ModuleComponentLocation = ({
 
     if (typeof window !== "undefined" && highlight && cultureMap) {
       console.log("move to hightligh", highlight);
-      cultureMap.setHighlight(highlight);
+      cultureMap.setHighlights([highlight]);
       cultureMap.panTo(highlight.lng, highlight.lat, true);
     }
 
     return () => {
-      if (cultureMap) cultureMap.clearHighlight();
+      if (cultureMap) cultureMap.clearHighlights();
     };
   }, [highlight, cultureMap]);
 

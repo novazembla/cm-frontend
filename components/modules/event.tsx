@@ -8,7 +8,7 @@ import {
 } from "~/components/ui";
 import { Footer, MainContent } from "~/components/app";
 import { getApolloClient } from "~/services";
-import type { MapHighlightType } from "~/services/MapHighlight";
+import type { MapHighlightType } from "~/services/MapHighlights";
 
 import { useMapContext, useSettingsContext } from "~/provider";
 import {
@@ -157,12 +157,12 @@ export const ModuleComponentEvent = ({
   useEffect(() => {
     if (typeof window !== "undefined" && highlight && cultureMap) {
       console.log("event move to hightligh", highlight);
-      cultureMap.setHighlight(highlight);
+      cultureMap.setHighlights([highlight]);
       cultureMap.panTo(highlight.lng, highlight.lat, true);
     }
 
     return () => {
-      if (cultureMap) cultureMap.clearHighlight();
+      if (cultureMap) cultureMap.clearHighlights();
     };
   }, [highlight, cultureMap]);
 

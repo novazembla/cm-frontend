@@ -10,7 +10,7 @@ export type MapHighlightType = {
   slug: any;
 };
 
-export class MapHighlight {
+export class MapHighlights {
   cultureMap: CultureMap;
   
   events: Record<string, any> = {};
@@ -23,14 +23,14 @@ export class MapHighlight {
     if (this.cultureMap?.map) {
       if (!this.cultureMap?.map) return;
 
-      if (!this.cultureMap.map.getSource("highlight")) {
-        this.cultureMap.map.addSource("highlight", {
+      if (!this.cultureMap.map.getSource("highlights")) {
+        this.cultureMap.map.addSource("highlights", {
           type: "geojson",
           data: data ?? {},
         });
       } else {
         (
-          this.cultureMap?.map?.getSource("highlight") as any
+          this.cultureMap?.map?.getSource("highlights") as any
         )?.setData(data ?? {});
       }
     }
@@ -40,16 +40,16 @@ export class MapHighlight {
     if (this.cultureMap?.map) {
       if (
         !this.cultureMap?.map ||
-        !this.cultureMap.map.getSource("highlight")
+        !this.cultureMap.map.getSource("highlights")
       )
         return;
 
       this.clear();
 
       this.cultureMap?.map?.addLayer({
-        id: "highlight",
+        id: "highlights",
         type: "circle",
-        source: "highlight",
+        source: "highlights",
         paint: {
           "circle-color": ["get", "color"],
           "circle-radius": ["get", "radius"],
@@ -57,7 +57,6 @@ export class MapHighlight {
           "circle-stroke-width": ["get", "strokeWidth"],       
         },
       });
-
      
       const showMapPop = (e: any) => {
         const feature = e?.features?.[0];
@@ -100,7 +99,7 @@ export class MapHighlight {
       this.cultureMap.map.on("zoom", this.events["zoom"]);
 
       if (primaryInput !== "touch") {
-        this.events["mouseenter-highlight"] = (e: any) => {
+        this.events["mouseenter-highlights"] = (e: any) => {
 
           if (this.cultureMap.isAnimating) return;
           if (this.cultureMap.map) {
@@ -112,11 +111,11 @@ export class MapHighlight {
 
         this.cultureMap.map.on(
           "mouseenter",
-          "highlight",
-          this.events["mouseenter-highlight"]
+          "highlights",
+          this.events["mouseenter-highlights"]
         );
 
-        this.events["mouseleave-highlight"] = () => {
+        this.events["mouseleave-highlights"] = () => {
           if (this.cultureMap.map) {
             this.cultureMap.map.getCanvas().style.cursor = "";
             this.cultureMap.popup.hide();
@@ -125,12 +124,12 @@ export class MapHighlight {
 
         this.cultureMap.map.on(
           "mouseleave",
-          "highlight",
-          this.events["mouseleave-highlight"]
+          "highlights",
+          this.events["mouseleave-highlights"]
         );
       }
 
-      this.events["click-highlight"] = (e: any) => {
+      this.events["click-highlights"] = (e: any) => {
         if (primaryInput !== "touch") {
           this.cultureMap.clusterDetail.hide();
           if (e?.features?.[0]?.properties?.slug) {
@@ -149,15 +148,15 @@ export class MapHighlight {
 
       this.cultureMap.map.on(
         "click",
-        "highlight",
-        this.events["click-highlight"]
+        "highlights",
+        this.events["click-highlights"]
       );
     }
   }
 
   hide() {
     if (this.cultureMap?.map) {
-      if (this.cultureMap?.map?.getLayer("highlight"))
+      if (this.cultureMap?.map?.getLayer("highlights"))
         this.cultureMap?.map?.setLayoutProperty(
           "clustered-locations",
           "visibility",
@@ -168,9 +167,9 @@ export class MapHighlight {
 
   show() {
     if (this.cultureMap?.map) {
-      if (this.cultureMap?.map?.getLayer("highlight"))
+      if (this.cultureMap?.map?.getLayer("highlights"))
         this.cultureMap?.map?.setLayoutProperty(
-          "highlight",
+          "highlights",
           "visibility",
           "visible"
         );
@@ -179,8 +178,8 @@ export class MapHighlight {
 
   clear() {
     if (this.cultureMap?.map) {
-      if (this.cultureMap?.map?.getLayer("highlight"))
-        this.cultureMap?.map?.removeLayer("highlight");
+      if (this.cultureMap?.map?.getLayer("highlights"))
+        this.cultureMap?.map?.removeLayer("highlights");
 
       if (Object.keys(this.events).length) {
         Object.keys(this.events).forEach((key) => {

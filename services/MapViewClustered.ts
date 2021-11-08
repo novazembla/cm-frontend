@@ -18,7 +18,7 @@ export class MapViewClustered {
   setData(data?: any) {
     if (this.cultureMap?.map) {
       if (!this.cultureMap?.map) return;
-      console.log("render clustered data");
+      
       this.hide();
 
       if (!this.cultureMap.map.getSource("clustered-locations")) {
@@ -63,7 +63,6 @@ export class MapViewClustered {
 
   render() {
     if (this.cultureMap?.map) {
-      console.log("render clustered view");
       if (
         !this.cultureMap?.map ||
         !this.cultureMap.map.getSource("clustered-locations")

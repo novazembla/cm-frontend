@@ -50,6 +50,7 @@ export const MainContent = ({
   const [dragLeft, setDragLeft] = useState(0);
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(true);
+  const [isAnimating, setIsAnimating] = useState(false);
 
   const [eventListenerAdded, setEventListenerAdded] = useState(false);
 
@@ -270,6 +271,9 @@ export const MainContent = ({
     if (isAnimationRunningRef.current) return;
 
     setIsDrawerOpen(false);
+    setMainContentStatus(false);
+
+    setIsAnimating(true);
     isAnimationRunningRef.current = true;
 
     controls.stop();
@@ -281,9 +285,9 @@ export const MainContent = ({
       },
     });
 
-    setMainContentStatus(false);
     setTimeout(() => {
       panActive.current = false;
+      setIsAnimating(false);
       isAnimationRunningRef.current = false;
     }, 350);
   };
@@ -293,6 +297,7 @@ export const MainContent = ({
 
     setIsDrawerOpen(true);
     setMainContentStatus(true);
+    setIsAnimating(true);
     isAnimationRunningRef.current = true;
 
     controls.stop();
@@ -306,6 +311,7 @@ export const MainContent = ({
     setTimeout(() => {
       panActive.current = false;
       isAnimationRunningRef.current = false;
+      setIsAnimating(false);
     }, 350);
   };
 
@@ -431,6 +437,7 @@ export const MainContent = ({
           top: isVerticalContent
             ? "calc(100vh - var(--locationBarHeight) - 235px)"
             : 0,
+          height: isVerticalContent ? "auto" : undefined,
           left: contentLeft,
           width: isVerticalContent ? "100vw" : contentWidth,
           zIndex: 2,
@@ -534,7 +541,13 @@ export const MainContent = ({
               //   }
               // }
               // layerStyle={layerStyle}
-              minH={isMobile ? "calc(100vh - 60px)" : "calc(100vh - 80px)"}
+              minH={
+                isMobile
+                  ? isVerticalContent
+                    ? undefined
+                    : "calc(100vh - 60px)"
+                  : "calc(100vh - 80px)"
+              }
               // overflowY={{
               //   xl: "auto",
               // }}

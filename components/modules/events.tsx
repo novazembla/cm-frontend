@@ -903,12 +903,12 @@ export const ModuleComponentEvents = ({ ...props }) => {
               </Box>
             )}
 
-            {data?.events?.totalCount > data?.events?.locations?.length && !loading && !error && (
+            {data?.events?.totalCount > data?.events?.events?.length && !loading && !error && (
               <Box textAlign="center" mt="2em">
                 <Button
                   onClick={() => {
 
-                    const nextPageIndex = Math.floor(data?.events?.locations?.length/initialQueryState?.pageSize);
+                    const nextPageIndex = Math.floor(data?.events?.events?.length/initialQueryState?.pageSize);
                     fetchMore({
                       variables: {
                         pageIndex: nextPageIndex,

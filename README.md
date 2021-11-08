@@ -2,7 +2,7 @@ The CultureMap frontend is a [Next.js](https://nextjs.org/) project.
 
 ## Installation
 
-For productions
+For production
 
 ```bash
 npm ci 
@@ -22,7 +22,7 @@ NEXT_PUBLIC_MAP_JSON_URL=...
 PREVIEW_SECRET=...
 ```
 
-The PREVIEW_SECRET is shared between between API and Frontend and needs to be the same.
+The PREVIEW_SECRET is shared between between backend and front end and needs to be the same.
 
 ## Starting
 
@@ -39,3 +39,6 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+
+

@@ -389,13 +389,16 @@ export const ModuleComponentLocations = ({ ...props }) => {
     if (urlParams.get("and") === "1" || urlParams.get("cluster") === "0")
       aDI.push(4);
     
-    if (urlParams.get("cluster") === "0")
+    if (urlParams.get("cluster") === "0") {
       setCurrentMapView("unclustered");
+      console.log("setCurrentMapView(unclustered);");
+    }
     
     setAccordionDefaultIndex(aDI);
     setIsFiltered(aDI.length > 0);
 
     return () => {
+      console.log("cvd 1");
       cultureMap?.setCurrentViewData();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -419,12 +422,14 @@ export const ModuleComponentLocations = ({ ...props }) => {
     ) {
       console.log("f2");
       if (layzLocationIdsQueryResult.data?.locationIds?.ids?.length) {
+        console.log("cvd 2");
         cultureMap?.setFilteredViewData(
           layzLocationIdsQueryResult.data?.locationIds?.ids.map(
             (id: any) => `loc-${id}`
           )
         );
       } else {
+        console.log("cvd 3");
         cultureMap?.setFilteredViewData([]);
         console.log("f4");
       }
@@ -604,6 +609,7 @@ export const ModuleComponentLocations = ({ ...props }) => {
         });
         setIsFiltered(true);
       } else {
+        console.log("cvd 4");
         cultureMap?.setCurrentViewData();
         setIsFiltered(false);
       }
