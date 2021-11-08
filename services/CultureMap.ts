@@ -12,13 +12,13 @@ import { MapViewUnclustered } from "./MapViewUnclustered";
 import { MapClusterDetail } from "./MapClusterDetail";
 import { MapHighlight, MapHighlightType } from "./MapHighlight";
 
-
 export class CultureMap {
   POPUP_OFFSET_MOUSE = [0, -25] as [number, number];
   POPUP_OFFSET_TOUCH = [53, 27] as [number, number];
 
   MAP_MIN_ZOOM = 9;
   MAP_MAX_ZOOM = 19;
+  MAX_BOUNDS_ZOOM = 14;
   ZOOM_LEVEL_HIDE_ADJUSTOR = 0.5;
 
   isAnimating = false;
@@ -33,16 +33,16 @@ export class CultureMap {
   config: AppConfig;
   popup: MapPopup;
   clusterDetail: MapClusterDetail;
-  
+
   locationId: number | null;
   overlayZoomLevel: number;
   geoJsonAllData: any = null;
-
+  
   loaded = false;
   baseDataLoaded = false;
   ready = false;
   onLoadJobs: any[] = [];
-  activeView = "clustered";
+  currentView = "clustered";
 
   views: Record<string, any> = {};
 
@@ -67,6 +67,8 @@ export class CultureMap {
 
     this.views["clustered"] = new MapViewClustered(this);
     this.views["unclustered"] = new MapViewUnclustered(this);
+
+    
   }
 
   init(ref: HTMLDivElement) {
@@ -86,9 +88,10 @@ export class CultureMap {
     const process = () => {
       this.ready = true;
 
-      if (this.activeView in this.views) {
-        this.views[this.activeView].setData();
-        this.views[this.activeView].render();
+      if (this.currentView in this.views) {
+        this.views[this.currentView].setData();
+        this.views[this.currentView].render();
+        this.views[this.currentView].fitToBounds();
       }
 
       this.onLoadJobs.map((f) => {
@@ -136,7 +139,6 @@ export class CultureMap {
           Array.isArray(response?.data?.features)
         ) {
           this.geoJsonAllData = response?.data;
-          console.log("trigger data", this.geoJsonAllData);
           this.baseDataLoaded = true;
 
           if (this.loaded) process();
@@ -148,11 +150,8 @@ export class CultureMap {
   }
 
   setView(view: string) {
-    console.log("CultureMap Set view", view);
     if (this.map) {
       const run = () => {
-        console.log("CultureMap Set run", view);
-        console.log("CultureMap Set change", view);
         Object.keys(this.views).forEach((v: string) => {
           if (v !== view) {
             this.views[v].clear();
@@ -162,13 +161,74 @@ export class CultureMap {
         this.clusterDetail.hide();
         this.views[view].setData();
         this.views[view].render();
-        this.activeView = view;
+        this.currentView = view;
       };
 
-      if (view === this.activeView) return;
+      if (view === this.currentView) return;
 
       if (!this.ready) {
-        this.activeView = view;
+        this.currentView = view;
+        this.onLoadJobs.push(run);
+      } else {
+        run();
+      }
+    }
+  }
+
+  setCurrentViewData(data?: any) {
+    if (this.map) {
+      const run = () => {
+        this.popup.hide();
+        this.clusterDetail.hide();
+        this.views[this.currentView].setData(data);
+      };
+
+      if (!this.ready) {
+        this.onLoadJobs.push(run);
+      } else {
+        run();
+      }
+    }
+  }
+
+  setFilteredViewData(ids: any[]) {
+    if (this.map) {
+      const run = () => {
+        this.popup.hide();
+        this.clusterDetail.hide();
+
+        if (this.geoJsonAllData && this.geoJsonAllData?.features?.length) {
+          this.views[this.currentView].setData({
+            type: "FeatureCollection",
+            features: this.geoJsonAllData?.features.filter((f: any) =>
+              ids.includes(f?.properties?.id)
+            ),
+          });
+        } else {
+          this.views[this.currentView].setData({
+            type: "FeatureCollection",
+            features: [],
+          });
+        }
+      };
+
+      if (!this.ready) {
+        this.onLoadJobs.push(run);
+      } else {
+        run();
+      }
+    }
+  }
+
+  fitToCurrentViewBounds() {
+    if (this.map) {
+      const run = () => {
+        this.popup.hide();
+        this.clusterDetail.hide();
+        this.views[this.currentView].fitToBounds();
+      };
+
+      if (!this.ready) {
         this.onLoadJobs.push(run);
       } else {
         run();
@@ -189,7 +249,6 @@ export class CultureMap {
   }
 
   setHighlight(highlight: MapHighlightType) {
-
     if (this.map) {
       const run = () => {
         const data = {
@@ -230,7 +289,6 @@ export class CultureMap {
 
         this.highlight.setData(data);
         this.highlight.render();
-
       };
       if (!this.ready) {
         this.onLoadJobs.push(run);
@@ -277,6 +335,63 @@ export class CultureMap {
       return [725 / 2, 40];
     } else {
       return [(695 + (window.innerWidth * 0.08 - 55)) / 2, 40];
+    }
+  }
+
+  getBoundsPadding() {
+    if (typeof window === "undefined") return {
+      top: 0,
+      right: 0,
+      bottom: 0,
+      left: 0,
+    };
+
+    const isMobile = window.matchMedia("(max-width: 44.9999em)").matches;
+    const isTablet = window.matchMedia(
+      "(min-width: 45em) and (max-width: 74.9999em)"
+    ).matches;
+    const isTabletWide = window.matchMedia(
+      "(min-width: 62em) and (max-width: 74.9999em)"
+    ).matches;
+    const isDesktop = window.matchMedia(
+      "(min-width: 75em) and (max-width: 119.9999em)"
+    ).matches;
+
+    if (isMobile) {
+      return {
+        top: 80,
+        right: 40,
+        bottom: 100,
+        left: 80,
+      };
+    } else if (isTablet && !isTabletWide) {
+      return {
+        top: 80,
+        right: 40,
+        bottom: 40,
+        left: 120,
+      };
+    } else if (isTabletWide) {
+      return {
+        top: 80,
+        right: 40,
+        bottom: 40,
+        left: 160,
+      };
+    } else if (isDesktop) {
+      return {
+        top: 80,
+        right: 40,
+        bottom: 100,
+        left: 400,
+      };
+    } else {
+      return{
+        top: 80,
+        right: 40,
+        bottom: 100,
+        left: (695 + (window.innerWidth * 0.08 - 55)) + 40,
+      };
     }
   }
 

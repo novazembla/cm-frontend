@@ -1,40 +1,28 @@
-import React, { useRef, useState, useEffect, useContext, useMemo } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { primaryInput } from "detect-it";
 
-import maplibregl from "maplibre-gl";
-import MapCustomSpiderfier from "./MapCustomSpiderify";
 import { useAppTranslations, useIsBreakPoint } from "~/hooks";
 import { motion } from "framer-motion";
 
 import {
   useMapContext,
-  useConfigContext,
   useMenuButtonContext,
   useQuickSearchContext,
   useMainContentContext,
 } from "~/provider";
-import { useRouter } from "next/router";
 
 import { Box, IconButton, Flex } from "@chakra-ui/react";
 import { SVG } from "~/components/ui";
-import type {CultureMap} from "~/services/CultureMap";
-
-
-let overlayZoomLevel = 0;
-let isAnimating = false;
+import type { CultureMap } from "~/services/CultureMap";
 
 export const Map = () => {
-  const router = useRouter();
+  const { t } = useAppTranslations();
 
-  const { t, i18n, getMultilangValue } = useAppTranslations();
-
-  
   const cultureMap = useMapContext();
 
   const mapContainer = useRef<HTMLDivElement>(null);
   const buttonContainer = useRef<HTMLDivElement>(null);
   const cultureMapRef = useRef<CultureMap>();
-  const clickBlockRef = useRef<boolean>(false);
 
   const { onMenuToggle, isMenuOpen } = useMenuButtonContext();
   const { isQuickSearchOpen, onQuickSearchToggle } = useQuickSearchContext();
@@ -49,20 +37,18 @@ export const Map = () => {
 
   useEffect(() => {
     if (cultureMapRef.current || !mapContainer.current || !cultureMap) return; //stops map from intializing more than once
-    
+
     cultureMap.init(mapContainer.current);
 
     cultureMapRef.current = cultureMap;
-
-    
   });
 
   useEffect(() => {
     if (cultureMapRef?.current?.loaded) {
       setMapLoaded(true);
     }
-    
-  }, [cultureMapRef?.current?.loaded])
+  }, [cultureMapRef?.current?.loaded]);
+
   useEffect(() => {
     const onWheel = (e: MouseEvent) => e.preventDefault();
     const ref = buttonContainer.current;
@@ -95,7 +81,6 @@ export const Map = () => {
       <Box
         position="fixed"
         right={isTabletWide || isDesktopAndUp ? "20px" : "10px"}
-        // left={!(isTabletWide || isDesktopAndUp) ? "10px" : undefined}
         top={isDesktopAndUp ? "100px" : isTabletWide ? "80px" : "70px"}
         zIndex="1"
         transition="opacity 0.3s"
@@ -240,7 +225,8 @@ export const Map = () => {
               h={buttonDiameter}
               bg="transparent"
               onClick={() => {
-                if (cultureMapRef?.current?.map) cultureMapRef.current.map.zoomIn({ duration: 1000 });
+                if (cultureMapRef?.current?.map)
+                  cultureMapRef.current.map.zoomIn({ duration: 1000 });
               }}
             />
           </Box>
@@ -272,7 +258,8 @@ export const Map = () => {
               h={buttonDiameter}
               bg="transparent"
               onClick={() => {
-                if (cultureMapRef?.current?.map) cultureMapRef.current.map.zoomOut({ duration: 1000 });
+                if (cultureMapRef?.current?.map)
+                  cultureMapRef.current.map.zoomOut({ duration: 1000 });
               }}
             />
           </Box>

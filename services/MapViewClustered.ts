@@ -1,22 +1,27 @@
+import maplibregl from "maplibre-gl";
 import { primaryInput } from "detect-it";
 import type { CultureMap } from "./CultureMap";
 
 export class MapViewClustered {
   cultureMap: CultureMap;
-  baseDataLoaded = false;
-
+  bounds: maplibregl.LngLatBounds;
   events: Record<string, any> = {};
 
   constructor(cultureMap: CultureMap) {
     this.cultureMap = cultureMap;
+    this.bounds = new maplibregl.LngLatBounds(
+      [this.cultureMap.config.lng, this.cultureMap.config.lat],
+      [this.cultureMap.config.lng, this.cultureMap.config.lat]
+    );
   }
 
   setData(data?: any) {
     if (this.cultureMap?.map) {
       if (!this.cultureMap?.map) return;
+      console.log("render clustered data");
+      this.hide();
 
       if (!this.cultureMap.map.getSource("clustered-locations")) {
-        console.log(1232323);
         this.cultureMap.map.addSource("clustered-locations", {
           type: "geojson",
           data: data ?? this.cultureMap.geoJsonAllData ?? {},
@@ -29,13 +34,36 @@ export class MapViewClustered {
           this.cultureMap?.map?.getSource("clustered-locations") as any
         )?.setData(data ?? this.cultureMap.geoJsonAllData ?? {});
       }
-      this.baseDataLoaded = !!data;
+
+      this.bounds = new maplibregl.LngLatBounds(
+        [this.cultureMap.config.lng, this.cultureMap.config.lat],
+        [this.cultureMap.config.lng, this.cultureMap.config.lat]
+      );
+
+      if ((data ?? this.cultureMap.geoJsonAllData ?? {})?.features?.length) {
+        for (
+          let i = 0;
+          i < (data ?? this.cultureMap.geoJsonAllData ?? {})?.features?.length;
+          i++
+        ) {
+          const coordinates = (data ?? this.cultureMap.geoJsonAllData ?? {})
+            ?.features[i]?.geometry?.coordinates ?? [
+            this.cultureMap.config.lng,
+            this.cultureMap.config.lat,
+          ];
+
+          if (coordinates[0] !== 0 && coordinates[1] !== 0) {
+            this.bounds.extend(coordinates);
+          }
+        }
+      }
+      this.show();
     }
   }
 
   render() {
     if (this.cultureMap?.map) {
-      console.log("Run clustered view");
+      console.log("render clustered view");
       if (
         !this.cultureMap?.map ||
         !this.cultureMap.map.getSource("clustered-locations")
@@ -47,8 +75,12 @@ export class MapViewClustered {
       this.cultureMap.map.addLayer({
         id: "clusters",
         type: "circle",
+        
         source: "clustered-locations",
         filter: ["has", "point_count"],
+        layout: {
+          "visibility": "none"
+        },
         paint: {
           // Use step expressions (https://maplibre.org/maplibre-gl-js-docs/style-spec/#expressions-step)
           // with three steps to implement three types of circles:
@@ -87,6 +119,7 @@ export class MapViewClustered {
           "text-field": "{point_count_abbreviated}",
           "text-font": ["Berlin Type Bold"],
           "text-size": 13,
+          "visibility": "none"
         },
         paint: {
           "text-color": "#fff",
@@ -98,6 +131,9 @@ export class MapViewClustered {
         type: "circle",
         source: "clustered-locations",
         filter: ["!", ["has", "point_count"]],
+        layout: {
+          "visibility": "none"
+        },
         paint: {
           "circle-color": ["get", "color"],
           "circle-radius": 16,
@@ -122,7 +158,6 @@ export class MapViewClustered {
           layers: ["clusters"],
         });
         if (!features?.length) {
-          console.log("click 1");
           this.cultureMap.clusterDetail.hide();
         }
       });
@@ -137,11 +172,12 @@ export class MapViewClustered {
         if (!features?.length) return;
         var clusterId = features[0].properties.cluster_id;
         if (!clusterId) return;
-        const clusterSource = (this.cultureMap.map as any).getSource("clustered-locations");
+        const clusterSource = (this.cultureMap.map as any).getSource(
+          "clustered-locations"
+        );
 
         if (!clusterSource) return;
 
-        console.log("click 2", clusterId);
         clusterSource.getClusterChildren(
           clusterId,
           (err: any, children: any) => {
@@ -172,22 +208,30 @@ export class MapViewClustered {
                       offset: this.cultureMap.getCenterOffset() ?? [0, 0],
                       zoom: Math.max(
                         16.5,
-                        Math.min(this.cultureMap.map.getZoom(), this.cultureMap.MAP_MAX_ZOOM - 1.1)
+                        Math.min(
+                          this.cultureMap.map.getZoom(),
+                          this.cultureMap.MAP_MAX_ZOOM - 1.1
+                        )
                       ),
                     },
                     {
                       cmAnimation: true,
                     }
                   );
-                  this.cultureMap.overlayZoomLevel = this.cultureMap.map.getZoom();
+                  this.cultureMap.overlayZoomLevel =
+                    this.cultureMap.map.getZoom();
                   clusterSource.getClusterLeaves(
                     clusterId,
                     100,
                     0,
                     (err: any, leafFeatures: any) => {
                       if (err || !leafFeatures?.length) return;
-                      const coordinates = features[0].geometry.coordinates.slice();
-                      this.cultureMap.clusterDetail.show(coordinates, leafFeatures);
+                      const coordinates =
+                        features[0].geometry.coordinates.slice();
+                      this.cultureMap.clusterDetail.show(
+                        coordinates,
+                        leafFeatures
+                      );
                     }
                   );
                 }
@@ -201,7 +245,7 @@ export class MapViewClustered {
         "clusters",
         this.events["click-clusters"]
       );
-      
+
       this.events["mouseenter-clusters"] = () => {
         if (!this.cultureMap.map) return;
         this.cultureMap.map.getCanvas().style.cursor = "pointer";
@@ -257,7 +301,6 @@ export class MapViewClustered {
                 this.cultureMap.ZOOM_LEVEL_HIDE_ADJUSTOR)
         ) {
           this.cultureMap.overlayZoomLevel = 0;
-          console.log("click 3");
           this.cultureMap.clusterDetail.hide();
           this.cultureMap.popup.hide();
         }
@@ -283,7 +326,6 @@ export class MapViewClustered {
         this.events["mouseleave-clustered-locations"] = () => {
           if (this.cultureMap.map) {
             this.cultureMap.map.getCanvas().style.cursor = "";
-            console.log("mouseleave-clustered-locations popup hide");
             this.cultureMap.popup.hide();
           }
         };
@@ -317,6 +359,26 @@ export class MapViewClustered {
         "clustered-locations",
         this.events["click-clustered-locations"]
       );
+
+      this.show();
+    }
+  }
+
+  setFilter(filter: any) {
+    if (this.cultureMap?.map) {
+      if (this.cultureMap.map?.getLayer("unclustered-locations"))
+        this.cultureMap.map.setFilter("unclustered-locations", filter);
+      //["match", ["get", "id"], ["loc-1", "loc-2", "loc-3", "loc-4", "loc-5", "loc-8", "loc-10"], true, false]
+    }
+  }
+
+  fitToBounds() {
+    if (this.cultureMap?.map) {
+      this.cultureMap.map?.fitBounds(this.bounds, {
+        maxZoom: this.cultureMap.MAX_BOUNDS_ZOOM,
+        linear: true,
+        padding: this.cultureMap.getBoundsPadding(),
+      });
     }
   }
 

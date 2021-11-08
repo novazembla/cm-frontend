@@ -1,20 +1,27 @@
+import maplibregl from "maplibre-gl";
 import { primaryInput } from "detect-it";
 import type { CultureMap } from "./CultureMap";
 
 export class MapViewUnclustered {
   cultureMap: CultureMap;
-  baseDataLoaded = false;
-
+  bounds: maplibregl.LngLatBounds;
   events: Record<string, any> = {};
 
   constructor(cultureMap: CultureMap) {
     this.cultureMap = cultureMap;
+    this.bounds = new maplibregl.LngLatBounds(
+      [this.cultureMap.config.lng, this.cultureMap.config.lat],
+      [this.cultureMap.config.lng, this.cultureMap.config.lat]
+    );
   }
 
   setData(data?: any) {
     if (this.cultureMap?.map) {
       if (!this.cultureMap?.map) return;
 
+      console.log("setdata");
+
+      this.hide();
       if (!this.cultureMap.map.getSource("unclustered-locations")) {
         this.cultureMap.map.addSource("unclustered-locations", {
           type: "geojson",
@@ -25,13 +32,38 @@ export class MapViewUnclustered {
           this.cultureMap?.map?.getSource("unclustered-locations") as any
         )?.setData(data ?? this.cultureMap.geoJsonAllData ?? {});
       }
-      this.baseDataLoaded = !!data;
+
+      this.bounds = new maplibregl.LngLatBounds(
+        [this.cultureMap.config.lng, this.cultureMap.config.lat],
+        [this.cultureMap.config.lng, this.cultureMap.config.lat]
+      );
+
+      if ((data ?? this.cultureMap.geoJsonAllData ?? {})?.features?.length) {
+        for (
+          let i = 0;
+          i < (data ?? this.cultureMap.geoJsonAllData ?? {})?.features?.length;
+          i++
+        ) {
+          const coordinates = (data ?? this.cultureMap.geoJsonAllData ?? {})?.features[i]
+          ?.geometry?.coordinates ?? [
+            this.cultureMap.config.lng,
+            this.cultureMap.config.lat,
+          ];
+
+          if (coordinates[0] !== 0 && coordinates[1] !== 0) {
+            this.bounds.extend(
+              coordinates
+            );
+          }
+        }
+      }
+      this.show();
     }
   }
 
   render() {
     if (this.cultureMap?.map) {
-      console.log("Run unclustered view");
+      console.log("render unclustered view");
       if (
         !this.cultureMap?.map ||
         !this.cultureMap.map.getSource("unclustered-locations")
@@ -44,24 +76,15 @@ export class MapViewUnclustered {
         id: "unclustered-locations",
         type: "circle",
         source: "unclustered-locations",
+        layout: {
+          "visibility": "none"
+        },
         paint: {
           "circle-color": ["get", "color"],
           "circle-radius": 16,
-          // [
-          //   "interpolate",
-          //   ["linear"],
-          //   ["zoom"],
-          //   // zoom is 8 (or less) -> circle radius will be 2px
-          //   8,
-          //   2,
-          //   // zoom is 18 (or greater) -> circle radius will be 20px
-          //   16,
-          //   16,
-          // ],
         },
       });
 
-     
       const showMapPop = (e: any) => {
         const feature = e?.features?.[0];
         if (!feature) return;
@@ -118,6 +141,20 @@ export class MapViewUnclustered {
           this.events["mouseenter-unclustered-locations"]
         );
 
+        this.events["mousemove-unclustered-locations"] = (e: any) => {
+          if (this.cultureMap.isAnimating) return;
+          if (this.cultureMap.map) {
+            // Change the cursor style as a UI indicator.
+            this.cultureMap.map.getCanvas().style.cursor = "pointer";
+            if (e?.features?.[0]) showMapPop(e);
+          }
+        };
+        this.cultureMap.map.on(
+          "mousemove",
+          "unclustered-locations",
+          this.events["mousemove-unclustered-locations"]
+        );
+
         this.events["mouseleave-unclustered-locations"] = () => {
           if (this.cultureMap.map) {
             this.cultureMap.map.getCanvas().style.cursor = "";
@@ -154,6 +191,26 @@ export class MapViewUnclustered {
         "unclustered-locations",
         this.events["click-unclustered-locations"]
       );
+
+      //this.show();
+    }
+  }
+
+  setFilter(filter: any) {
+    if (this.cultureMap?.map) {
+      if (this.cultureMap.map?.getLayer("unclustered-locations"))
+        this.cultureMap.map.setFilter("unclustered-locations", filter);
+        //["match", ["get", "id"], ["loc-1", "loc-2", "loc-3", "loc-4", "loc-5", "loc-8", "loc-10"], true, false]      
+    }
+  }
+
+  fitToBounds() {
+    if (this.cultureMap?.map) {
+      this.cultureMap.map?.fitBounds(this.bounds, {
+        maxZoom: this.cultureMap.MAX_BOUNDS_ZOOM,
+        linear: true,
+        padding: this.cultureMap.getBoundsPadding()
+      })
     }
   }
 
@@ -161,7 +218,7 @@ export class MapViewUnclustered {
     if (this.cultureMap?.map) {
       if (this.cultureMap.map?.getLayer("unclustered-locations"))
         this.cultureMap?.map?.setLayoutProperty(
-          "clustered-locations",
+          "unclustered-locations",
           "visibility",
           "none"
         );

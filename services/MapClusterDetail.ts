@@ -29,13 +29,9 @@ export class MapClusterDetail {
             this.cultureMap.tHelper.getMultilangValue(spiderLeg?.feature?.slug)
           );
         }
-
-        console.log("spiderfier onClick");
       },
       initializeLeg: (spiderLeg: any) => {
         const showLegPopup = (e: any) => {
-          console.log("showLegPopup");
-
           if (this.cultureMap.isAnimating) return;
 
           this.cultureMap.clickBlock = true;
@@ -72,7 +68,6 @@ export class MapClusterDetail {
           spiderLeg.elements.pin.addEventListener("mouseenter", showLegPopup);
 
           spiderLeg.elements.pin.addEventListener("mouseleave", () => {
-            console.log("clusterdetain mouseleave popup hide");
             this.cultureMap.popup.hide();
           });
         } else {
@@ -83,31 +78,25 @@ export class MapClusterDetail {
   }
 
   show(coordinates: [number, number], leafFeatures: any) {
-    console.log(1);
     if (!this.spiderfier) return;
-    console.log(2);
+    
     const newHash = `${coordinates[0].toFixed(6)}-${coordinates[1].toFixed(6)}`;
-    console.log(22, this.clusterDetailClusterHash, newHash);
     if (this.clusterDetailOpen && this.clusterDetailClusterHash !== newHash) {
       this.spiderfier.unspiderfy();
       this.clusterDetailOpen = false;
       this.clusterDetailAnimating = false;
-      console.log(3);
     }
 
-    console.log(4, this.clusterDetailOpen, this.clusterDetailAnimating);
     if (
       !this.clusterDetailClusterHash ||
       (!this.clusterDetailOpen && !this.clusterDetailAnimating)
     ) {
-      console.log(5);
       this.clusterDetail = this.spiderfier.spiderfy(
         coordinates,
         leafFeatures.map((leafFeature: any) => {
           return leafFeature.properties;
         })
       );
-      console.log(this.clusterDetail);
       this.clusterDetailClusterHash = newHash;
 
       setTimeout(() => {
@@ -116,7 +105,6 @@ export class MapClusterDetail {
         );
         setTimeout(() => {
           this.clusterDetailAnimating = true;
-          console.log(6);
         }, 200);
       }, 20);
       this.clusterDetailOpen = true;

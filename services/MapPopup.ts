@@ -1,9 +1,14 @@
 import maplibregl from "maplibre-gl";
 import { primaryInput } from "detect-it";
 import type { CultureMap } from "./CultureMap";
-
+import { AnyKindOfDictionary } from "lodash";
 
 export class MapPopup {
+  locationHash: string = "";
+
+  closeTimeout1: any = null;
+  closeTimeout2: any = null;
+
   popup = new maplibregl.Popup({
     closeButton: false,
     closeOnClick: false,
@@ -23,14 +28,18 @@ export class MapPopup {
     slug: string,
     offset?: any
   ) {
-    console.log(1);
-
     if (!this?.cultureMap?.map) return;
-    console.log(11);
+
+    const hash = `${coordinates[0].toFixed(6)}-${coordinates[1].toFixed(6)}`;
+
+    if (this.popupAttached && this.locationHash === hash) return;
+
+    clearTimeout(this.closeTimeout1);
+    clearTimeout(this.closeTimeout2);
+
     try {
       this.popupAnimating = true;
 
-      console.log(111);
       this.popup.setOffset(
         offset?.length
           ? offset
@@ -47,7 +56,10 @@ export class MapPopup {
       const arrowElem: any = document.createElement("a");
       arrowElem.className = "arrow";
       arrowElem.setAttribute("href", "#");
-      arrowElem.innerText = this?.cultureMap.tHelper.t("map.this.popupviewLocation", "View location");
+      arrowElem.innerText = this?.cultureMap.tHelper.t(
+        "map.this.popupviewLocation",
+        "View location"
+      );
       arrowElem.addEventListener("click", (e: any) => {
         if (!this?.cultureMap?.map) return;
         e.preventDefault();
@@ -56,7 +68,7 @@ export class MapPopup {
       });
       containerElem.className = "popup";
       containerElem.style.borderColor = color;
-      
+
       const flexElem: any = document.createElement("div");
 
       containerElem.appendChild(titleElem);
@@ -66,6 +78,10 @@ export class MapPopup {
         flexElem.className = "row";
 
         containerElem.className = "popup mouse";
+        containerElem.addEventListener("mouseenter", () => {
+          clearTimeout(this.closeTimeout1);
+          clearTimeout(this.closeTimeout2);
+        });
         containerElem.addEventListener("mouseleave", () => {
           this.hide();
         });
@@ -80,7 +96,10 @@ export class MapPopup {
         const closeElem: any = document.createElement("a");
         closeElem.className = "close";
         closeElem.setAttribute("href", "#");
-        closeElem.innerText = this?.cultureMap.tHelper.t("map.this.popupclose", "Close popup");
+        closeElem.innerText = this?.cultureMap.tHelper.t(
+          "map.this.popupclose",
+          "Close popup"
+        );
         closeElem.addEventListener("click", (e: any) => {
           e.preventDefault();
           this.hide();
@@ -90,8 +109,7 @@ export class MapPopup {
 
       flexElem.appendChild(arrowElem);
 
-      console.log(2);
-
+      this.locationHash = hash;
       // Populate the popup and set its coordinates
       // based on the feature found.
       this.popup
@@ -100,15 +118,14 @@ export class MapPopup {
         .addTo(this.cultureMap.map);
       this.popupAttached = true;
       this.cultureMap.overlayZoomLevel = this?.cultureMap?.map?.getZoom() ?? 0;
+
       setTimeout(() => {
         containerElem.classList.add("fadeIn");
         setTimeout(() => {
           this.popupAnimating = false;
         }, 125);
       }, 20);
-    } catch (err) {
-      console.log(err);
-    }
+    } catch (err) {}
   }
 
   hide() {
@@ -116,15 +133,21 @@ export class MapPopup {
 
     if (!this.popupAttached) return;
 
-    this.popupAnimating = true;
-    this.popup.getElement()?.querySelector(".popup")?.classList.add("fadeOut");
+    clearTimeout(this.closeTimeout1);
+    clearTimeout(this.closeTimeout2);
 
-    setTimeout(() => {
+    this.closeTimeout1 = setTimeout(() => {
+      this.popupAnimating = true;
+      this.popup
+        .getElement()
+        ?.querySelector(".popup")
+        ?.classList.add("fadeOut");
+    }, 60);
+    this.closeTimeout2 = setTimeout(() => {
       this.popupAnimating = false;
-
-      console.log("hide npopup")
       this.popup.remove();
       this.popupAttached = false;
-    }, 125);
+      this.locationHash = "";
+    }, 185);
   }
 }

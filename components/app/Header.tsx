@@ -78,7 +78,7 @@ export const Header = (/* props */) => {
       // })}
       ref={headerRef}
       sx={{
-        touchAction: "none"
+        touchAction: "none",
       }}
     >
       <Flex
@@ -117,8 +117,12 @@ export const Header = (/* props */) => {
                   color: "cm.accentDark",
                 },
                 _first: {
-                  marginLeft: 0,
+                  marginLeft: {
+                    xl: "25%",
+                    "2xl": 0
+                  },
                 },
+                
               },
             }}
             textStyle="navigation"

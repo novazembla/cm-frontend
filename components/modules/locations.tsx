@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { gql, useQuery } from "@apollo/client";
+import { gql, useQuery, useLazyQuery } from "@apollo/client";
 import { LoadingIcon, ErrorMessage, CardLocation } from "~/components/ui";
 import { Footer } from "~/components/app";
 import {
@@ -102,6 +102,8 @@ export const ModuleComponentLocations = ({ ...props }) => {
   const cultureMap = useMapContext();
 
   const router = useRouter();
+  const [isFiltered, setIsFiltered] = useState<boolean>(false);
+  const [currentMapView, setCurrentMapView] = useState("clustered");
 
   const [currentQueryState, setCurrentQueryState] = useState<any>({
     where: initialQueryState.where,
@@ -211,13 +213,14 @@ export const ModuleComponentLocations = ({ ...props }) => {
     }
   );
 
-  const locationIdsQueryResult = useQuery(locationsIdsQuery, {
-    skip: true,
-    notifyOnNetworkStatusChange: true,
-    variables: {
-      where: initialQueryState.where,
-    },
-  });
+  const [layzLocationIdsQuery, layzLocationIdsQueryResult] = useLazyQuery(
+    locationsIdsQuery,
+    {
+      variables: {
+        where: initialQueryState.where,
+      },
+    }
+  );
 
   const formMethods = useForm<any>({
     mode: "onTouched",
@@ -231,12 +234,6 @@ export const ModuleComponentLocations = ({ ...props }) => {
     watch,
     formState: { isSubmitting, isDirty },
   } = formMethods;
-
-  const showLoadMore =
-    data?.locations?.totalCount >
-      initialQueryState?.pageSize +
-        initialQueryState?.pageSize * currentPageIndex &&
-    data?.locations?.locations?.length !== data?.locations?.totalCount;
 
   const onSubmit = async () => {};
 
@@ -391,18 +388,64 @@ export const ModuleComponentLocations = ({ ...props }) => {
     if (urlParams.get("too")) aDI.push(3);
     if (urlParams.get("and") === "1" || urlParams.get("cluster") === "0")
       aDI.push(4);
-
+    
+    if (urlParams.get("cluster") === "0")
+      setCurrentMapView("unclustered");
+    
     setAccordionDefaultIndex(aDI);
+    setIsFiltered(aDI.length > 0);
+
+    return () => {
+      cultureMap?.setCurrentViewData();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const watchVariables = JSON.stringify(watch());
+  useEffect(() => {
+    console.log(
+      "f1",
+      isFiltered,
+      layzLocationIdsQueryResult.loading,
+      layzLocationIdsQueryResult.error,
+      layzLocationIdsQueryResult.data?.locationIds?.ids
+    );
+    if (
+      isFiltered &&
+      !layzLocationIdsQueryResult.loading &&
+      !layzLocationIdsQueryResult.error &&
+      layzLocationIdsQueryResult.data?.locationIds?.ids &&
+      cultureMap &&
+      cultureMap?.setCurrentViewData
+    ) {
+      console.log("f2");
+      if (layzLocationIdsQueryResult.data?.locationIds?.ids?.length) {
+        cultureMap?.setFilteredViewData(
+          layzLocationIdsQueryResult.data?.locationIds?.ids.map(
+            (id: any) => `loc-${id}`
+          )
+        );
+      } else {
+        cultureMap?.setFilteredViewData([]);
+        console.log("f4");
+      }
+      cultureMap?.fitToCurrentViewBounds();
+    }
+  }, [
+    layzLocationIdsQueryResult.loading,
+    layzLocationIdsQueryResult.error,
+    layzLocationIdsQueryResult.data,
+    cultureMap,
+    isFiltered,
+    currentMapView,
+  ]);
 
+  const watchVariables = JSON.stringify(watch());
   useEffect(() => {
     const allVars = watch();
-
     console.log(allVars);
 
     let where: any = [];
+    let termsWhere: any = [];
     let allTerms: any[] = [];
     const termsToI = Object.keys(allVars).reduce((acc: any, key: any) => {
       if (key.indexOf("typeOfInstitution_") > -1) {
@@ -415,8 +458,8 @@ export const ModuleComponentLocations = ({ ...props }) => {
     if (termsToI?.length) {
       allTerms = [...allTerms, ...termsToI];
       if (allVars?.and === "1" || allVars?.and === true) {
-        where = [
-          ...where,
+        termsWhere = [
+          ...termsWhere,
           ...termsToI.map((t: number) => ({
             terms: {
               some: {
@@ -425,7 +468,7 @@ export const ModuleComponentLocations = ({ ...props }) => {
                 },
               },
             },
-          })),
+          })), 
         ];
       }
     }
@@ -441,8 +484,8 @@ export const ModuleComponentLocations = ({ ...props }) => {
     if (termsToO?.length) {
       allTerms = [...allTerms, ...termsToO];
       if (allVars?.and === "1" || allVars?.and === true) {
-        where = [
-          ...where,
+        termsWhere = [
+          ...termsWhere,
           ...termsToO.map((t: number) => ({
             terms: {
               some: {
@@ -467,8 +510,8 @@ export const ModuleComponentLocations = ({ ...props }) => {
     if (termsTA?.length) {
       allTerms = [...allTerms, ...termsTA];
       if (allVars?.and === "1" || allVars?.and === true) {
-        where = [
-          ...where,
+        termsWhere = [
+          ...termsWhere,
           ...termsTA.map((t: number) => ({
             terms: {
               some: {
@@ -483,7 +526,7 @@ export const ModuleComponentLocations = ({ ...props }) => {
     }
 
     if (allTerms?.length && (allVars?.and === "0" || allVars?.and === false)) {
-      where.push({
+      termsWhere.push({
         terms: {
           some: {
             id: {
@@ -507,22 +550,25 @@ export const ModuleComponentLocations = ({ ...props }) => {
       ...currentQueryState,
     };
 
-    if (where?.length) {
+    if (termsWhere?.length) {
       if (allVars?.and === "1" || allVars?.and === true) {
-        newQueryState = {
-          ...newQueryState,
-          where: {
-            AND: where,
-          },
-        };
+        where.push({
+          AND: termsWhere,
+        });
       } else {
-        newQueryState = {
-          ...newQueryState,
-          where: {
-            OR: where,
-          },
-        };
+        where.push({
+          OR: termsWhere,
+        });
       }
+    }
+
+    if (where?.length) {
+      newQueryState = {
+        ...newQueryState,
+        where: {
+          AND: where,
+        },
+      };
     } else {
       newQueryState = {
         ...newQueryState,
@@ -532,8 +578,10 @@ export const ModuleComponentLocations = ({ ...props }) => {
 
     if (allVars?.cluster) {
       cultureMap?.setView("clustered");
+      setCurrentMapView("clustered");
     } else {
       cultureMap?.setView("unclustered");
+      setCurrentMapView("unclustered");
     }
 
     if (JSON.stringify(currentQueryState) !== JSON.stringify(newQueryState)) {
@@ -544,9 +592,20 @@ export const ModuleComponentLocations = ({ ...props }) => {
       });
 
       if (where.length > 0) {
-        locationIdsQueryResult.refetch({
-          where: newQueryState.where,
+        layzLocationIdsQuery({
+          variables: {
+            where: newQueryState.where,
+          },
         });
+        console.log({
+          variables: {
+            where: newQueryState.where,
+          },
+        });
+        setIsFiltered(true);
+      } else {
+        cultureMap?.setCurrentViewData();
+        setIsFiltered(false);
       }
       setCurrentQueryState(newQueryState);
       setCurrentPageIndex(0);
@@ -639,7 +698,7 @@ export const ModuleComponentLocations = ({ ...props }) => {
     cultureMap,
     watch,
     refetch,
-    locationIdsQueryResult,
+    layzLocationIdsQuery,
     currentQueryState,
     i18n?.language,
     router,
@@ -656,6 +715,7 @@ export const ModuleComponentLocations = ({ ...props }) => {
   useEffect(() => {
     if (
       !loading &&
+      isFiltered &&
       data?.locations?.totalCount !== "undefined" &&
       currentPageIndex === 0
     ) {
@@ -664,7 +724,7 @@ export const ModuleComponentLocations = ({ ...props }) => {
         behavior: "smooth",
       });
     }
-  }, [loading, data?.locations?.totalCount, currentPageIndex]);
+  }, [loading, data?.locations?.totalCount, currentPageIndex, isFiltered]);
 
   return (
     <MainContent layerStyle="lightGray">
@@ -901,7 +961,7 @@ export const ModuleComponentLocations = ({ ...props }) => {
                                 <span>
                                   {t(
                                     "locations.filter.andRelationship",
-                                    "Locations must match all the given criteria"
+                                    "Locations must match all the given terms"
                                   )}
                                 </span>
                               }
@@ -967,24 +1027,29 @@ export const ModuleComponentLocations = ({ ...props }) => {
               </Box>
             )}
 
-            {showLoadMore && !loading && !error && (
-              <Box textAlign="center" mt="2em">
-                <Button
-                  onClick={() => {
-                    const nextPageIndex = currentPageIndex + 1;
-                    fetchMore({
-                      variables: {
-                        pageIndex: nextPageIndex,
-                      },
-                    });
-                    setCurrentPageIndex(nextPageIndex);
-                  }}
-                  variant="ghost"
-                >
-                  {t("locations.loadMore", "Load more locations")}
-                </Button>
-              </Box>
-            )}
+            {data?.locations?.totalCount > data?.locations?.locations?.length &&
+              !loading &&
+              !error && (
+                <Box textAlign="center" mt="2em">
+                  <Button
+                    onClick={() => {
+                      const nextPageIndex = Math.floor(
+                        data?.locations?.locations?.length /
+                          initialQueryState?.pageSize
+                      );
+                      fetchMore({
+                        variables: {
+                          pageIndex: nextPageIndex,
+                        },
+                      });
+                      setCurrentPageIndex(nextPageIndex);
+                    }}
+                    variant="ghost"
+                  >
+                    {t("locations.loadMore", "Load more locations")}
+                  </Button>
+                </Box>
+              )}
           </Box>
         </Box>
         <Footer noBackground />

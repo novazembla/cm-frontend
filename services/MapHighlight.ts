@@ -38,7 +38,6 @@ export class MapHighlight {
 
   render() {
     if (this.cultureMap?.map) {
-      console.log("Run set hightlght view");
       if (
         !this.cultureMap?.map ||
         !this.cultureMap.map.getSource("highlight")
@@ -71,7 +70,6 @@ export class MapHighlight {
           coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
         }
         try {
-          console.log("show highlithc popup", coordinates, feature?.properties);
           const titles = JSON.parse(feature?.properties?.title);
           const slugs = JSON.parse(feature?.properties?.slug);
           this.cultureMap.popup.show(
@@ -104,10 +102,8 @@ export class MapHighlight {
       if (primaryInput !== "touch") {
         this.events["mouseenter-highlight"] = (e: any) => {
 
-          console.log("h enter 1");
           if (this.cultureMap.isAnimating) return;
           if (this.cultureMap.map) {
-            console.log("h enter 2");
             // Change the cursor style as a UI indicator.
             this.cultureMap.map.getCanvas().style.cursor = "pointer";
             if (e?.features?.[0]) showMapPop(e);

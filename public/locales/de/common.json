@@ -53,7 +53,7 @@
   },
   "form": {
     "datepicker": {
-      "close": "Schließ´n"
+      "close": "Schließen"
     },
     "unsavedchanges": "Offenbar haben Sie Änderungen nicht gespeichert. Verlassen ohne zu speichern?"
   },
@@ -172,7 +172,7 @@
         "typeOfOrganisation": "Organisationsart",
         "settings": "Weitere Einstellungen"
       },
-      "andRelationship": "All Kriterien müssen zutreffen",
+      "andRelationship": "Alle gewählten Begriffe müssen zugewiesen sein",
       "clusterResult": "Naheliegende Kartenpunkte Grupieren"
     },
     "loadMore": "Weitere Kartenpunkte laden",

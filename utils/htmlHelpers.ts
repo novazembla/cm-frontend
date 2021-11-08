@@ -30,7 +30,7 @@ export const convertToHtml = (str: string) => {
   );
 };
 
-export const isEmptyHtml = (html: string) => {
+export const isEmptyHtml = (html: string, fast?: boolean) => {
   if (!html) return true;
 
   if (typeof html !== "string") return true;
@@ -38,7 +38,7 @@ export const isEmptyHtml = (html: string) => {
   if (html.length === 0) return true;
 
   try {
-    if (typeof DOMParser !== "undefined") {
+    if (typeof DOMParser !== "undefined" && !fast) {
       const dom = new DOMParser().parseFromString(html ?? "", "text/html");
       return (dom?.body?.textContent ?? "").trim().length === 0;
     } else {

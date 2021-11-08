@@ -170,12 +170,7 @@ export const ModuleComponentEvents = ({ ...props }) => {
 
   const { handleSubmit, reset, getValues, setValue, watch } = formMethods;
 
-  const showLoadMore =
-    data?.events?.totalCount >
-      initialQueryState?.pageSize +
-        initialQueryState?.pageSize * currentPageIndex &&
-    data?.events?.events?.length !== data?.events?.totalCount;
-
+ 
   const onSubmit = async () => {};
 
   const [activeTermsET, setActiveTermsET] = useState([]);
@@ -908,11 +903,12 @@ export const ModuleComponentEvents = ({ ...props }) => {
               </Box>
             )}
 
-            {showLoadMore && !loading && !error && (
+            {data?.events?.totalCount > data?.events?.locations?.length && !loading && !error && (
               <Box textAlign="center" mt="2em">
                 <Button
                   onClick={() => {
-                    const nextPageIndex = currentPageIndex + 1;
+
+                    const nextPageIndex = Math.floor(data?.events?.locations?.length/initialQueryState?.pageSize);
                     fetchMore({
                       variables: {
                         pageIndex: nextPageIndex,

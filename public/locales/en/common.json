@@ -172,7 +172,7 @@
         "typeOfOrganisation": "Type of organisation",
         "settings": "Other settings"
       },
-      "andRelationship": "Locations must match all the given criteria",
+      "andRelationship": "Locations must match all the given terms",
       "clusterResult": "Cluster result on map"
     },
     "loadMore": "Load more locations",
