@@ -135,7 +135,7 @@ export const ModuleComponentEvent = ({
   const cultureMap = useMapContext();
   const settings = useSettingsContext();
 
-  const { t, getMultilangValue, i18n } = useAppTranslations();
+  const { t, getMultilangValue, i18n, getMultilangHtml } = useAppTranslations();
   const { isMobile } = useIsBreakPoint();
 
   const [showDates, setShowDates] = useState(false);
@@ -297,8 +297,8 @@ export const ModuleComponentEvent = ({
                   }}
                 />
               </Box>
-              {!isEmptyHtml(getMultilangValue(event?.description ?? "")) && (
-                <MultiLangHtml json={event.description} />
+              {!isEmptyHtml(getMultilangHtml(event?.description ?? "", true)) && (
+                <MultiLangHtml json={event.description} addMissingTranslationInfo />
               )}
             </Box>
 

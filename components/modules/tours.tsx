@@ -64,7 +64,7 @@ const initialQueryState = {
 export const ModuleComponentTours = ({ ...props }) => {
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
 
-  const { t, getMultilangValue, i18n } = useAppTranslations();
+  const { t } = useAppTranslations();
 
   const { data, loading, error, fetchMore } = useQuery(toursQuery, {
     notifyOnNetworkStatusChange: true,

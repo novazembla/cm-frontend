@@ -108,7 +108,7 @@ export const ModuleComponentLocation = ({
   const { isMobile } = useIsBreakPoint();
   const config = useConfigContext();
   const settings = useSettingsContext();
-  const { t, getMultilangValue } = useAppTranslations();
+  const { t, getMultilangValue, getMultilangHtml } = useAppTranslations();
   const [color, setColor] = useState("#333");
   const [colorDark, setColorDark] = useState(config.colorDark);
   const [meta, setMeta] = useState("");
@@ -374,7 +374,7 @@ export const ModuleComponentLocation = ({
               </Box>
             )}
 
-            {!isEmptyHtml(getMultilangValue(location.description)) && (
+            {!isEmptyHtml(getMultilangHtml(location.description, true)) && (
               <Box
                 px={{
                   base: "20px",
@@ -382,11 +382,11 @@ export const ModuleComponentLocation = ({
                 }}
                 pb="2em"
               >
-                <MultiLangHtml json={location.description} />
+                <MultiLangHtml json={location.description}  addMissingTranslationInfo/>
               </Box>
             )}
 
-            {!isEmptyHtml(getMultilangValue(location.offers)) && (
+            {!isEmptyHtml(getMultilangHtml(location.offers, true)) && (
               <Box
                 className="item"
                 px={{
@@ -404,13 +404,13 @@ export const ModuleComponentLocation = ({
                   {t("location.title.offers", "Offering the following")}:
                 </Box>
                 <Box textStyle="card">
-                  <MultiLangHtml json={location.offers} />
+                  <MultiLangHtml json={location.offers}  addMissingTranslationInfo/>
                 </Box>
               </Box>
             )}
 
             {!isEmptyHtml(
-              getMultilangValue(location.accessibilityInformation)
+              getMultilangHtml(location.accessibilityInformation)
             ) && (
               <Box
                 className="item"

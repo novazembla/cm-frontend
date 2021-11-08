@@ -26,7 +26,7 @@ export const CardEvent = ({
   event: any;
   fillContainer?: boolean;
 }) => {
-  const { t, i18n, getMultilangValue } = useAppTranslations();
+  const { t, i18n, getMultilangValue, getMultilangHtml } = useAppTranslations();
   const settings = useSettingsContext();
   const { isMobile, isTablet, isDesktopAndUp } = useIsBreakPoint();
 
@@ -70,7 +70,7 @@ export const CardEvent = ({
   if (i18n.language === "en") type = "event";
 
   const description = htmlToTrimmedString(
-    getMultilangValue(event.description) ?? "",
+    getMultilangHtml(event.description) ?? "",
     200
   );
 

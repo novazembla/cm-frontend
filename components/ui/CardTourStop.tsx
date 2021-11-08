@@ -26,7 +26,7 @@ export const CardTourStop = ({
   tourStop: any;
   fillContainer?: boolean;
 }) => {
-  const { t, i18n, getMultilangValue } = useAppTranslations();
+  const { t, i18n, getMultilangValue, getMultilangHtml } = useAppTranslations();
   const settings = useSettingsContext();
   const { isMobile, isTablet, isDesktopAndUp } = useIsBreakPoint();
 
@@ -63,7 +63,7 @@ export const CardTourStop = ({
   if (i18n.language === "en") type = "tourStop";
 
   const description = htmlToTrimmedString(
-    getMultilangValue(tourStop.description) ?? "",
+    getMultilangHtml(tourStop.description) ?? "",
     200
   );
 

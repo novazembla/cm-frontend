@@ -90,7 +90,7 @@ const initialQueryState = {
       id: "asc",
     },
   ],
-  pageSize: 5,
+  pageSize: 20,
   pageIndex: 0,
 };
 

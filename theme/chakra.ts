@@ -145,6 +145,9 @@ const themeConfig = {
       ".chakra-linkbox__overlay::before": {
         zIndex: "1 !important",
       },
+      ".translationMissing": {
+        color: "#999"
+      }
     },
   },
   colors: {

@@ -1,14 +1,18 @@
 import { I18n } from "next-i18next";
 import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
+import { useConfigContext } from "~/provider";
+import { isEmptyHtml } from "~/utils";
 
 export type AppTranslationHelper = {
   t: Function;
   i18n: I18n;
   getMultilangValue: (data: any) => string;
-}
+  getMultilangHtml: (data: any, addMissingTranslationInfo?: boolean) => string;
+};
 
 export const useAppTranslations = (): AppTranslationHelper => {
+  const config = useConfigContext();
   const { t, i18n } = useTranslation();
 
   const getMultilangValue = useCallback(
@@ -17,10 +21,8 @@ export const useAppTranslations = (): AppTranslationHelper => {
 
       if (typeof json === "string") return json;
 
-      const defaultLanguage = "de"; // Todo: make this configurable!
-
-      const defVal = json[defaultLanguage]
-        ? `${json[defaultLanguage]}`
+      const defVal = json[config.defaultLanguage ?? ""]
+        ? `${json[config.defaultLanguage ?? ""]}`
         : undefined;
 
       let value =
@@ -30,12 +32,44 @@ export const useAppTranslations = (): AppTranslationHelper => {
 
       return value;
     },
-    [i18n]
+    [i18n, config]
+  );
+
+  const getMultilangHtml = useCallback(
+    (
+      json: Record<string, string> | string,
+      addMissingTranslationInfo?: boolean
+    ): string => {
+      if (!json) return "";
+
+      if (typeof json === "string") return json;
+
+      const defVal = json[config.defaultLanguage ?? ""];
+
+      let value = json[i18n.language];
+
+      if (isEmptyHtml(json[i18n.language]) && !isEmptyHtml(defVal)) {
+        if (addMissingTranslationInfo) {
+          value = `<p class="translationMissing">${t(
+            "translation.comingSoon",
+            "Please bear with us. We are working on the English translation."
+          )}</p>${defVal}`;
+        } else {
+          value = defVal;
+        }
+      }
+
+      if (!value) return "";
+
+      return value;
+    },
+    [i18n, config, t]
   );
 
   return {
     t,
     i18n,
     getMultilangValue,
+    getMultilangHtml,
   };
 };

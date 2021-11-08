@@ -94,7 +94,7 @@ export const ModuleComponentTour = ({
   const { isMobile, isTablet, isDesktopAndUp } = useIsBreakPoint();
   const config = useConfigContext();
   const settings = useSettingsContext();
-  const { t, i18n, getMultilangValue } = useAppTranslations();
+  const { t, i18n, getMultilangHtml } = useAppTranslations();
   const [fillContainer, setFillContainer] = useState(true);
 
   useEffect(() => {
@@ -289,7 +289,7 @@ export const ModuleComponentTour = ({
                 </Box>
               )}
 
-              {!isEmptyHtml(getMultilangValue(tour.teaser)) && (
+              {!isEmptyHtml(getMultilangHtml(tour.teaser, true)) && (
                 <Box
                   px={{
                     base: "20px",
@@ -298,11 +298,11 @@ export const ModuleComponentTour = ({
                   pb="2em"
                   textStyle="larger"
                 >
-                  <MultiLangHtml json={tour.teaser} />
+                  <MultiLangHtml json={tour.teaser} addMissingTranslationInfo/>
                 </Box>
               )}
 
-              {!isEmptyHtml(getMultilangValue(tour.description)) && (
+              {!isEmptyHtml(getMultilangHtml(tour.description), true) && (
                 <Box
                   px={{
                     base: "20px",
@@ -310,7 +310,7 @@ export const ModuleComponentTour = ({
                   }}
                   pb="2em"
                 >
-                  <MultiLangHtml json={tour.description} />
+                  <MultiLangHtml json={tour.description} addMissingTranslationInfo/>
                 </Box>
               )}
             </Box>

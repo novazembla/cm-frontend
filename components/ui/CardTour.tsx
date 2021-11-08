@@ -26,7 +26,7 @@ export const CardTour = ({
   tour: any;
   fillContainer?: boolean;
 }) => {
-  const { t, i18n, getMultilangValue } = useAppTranslations();
+  const { t, i18n, getMultilangValue, getMultilangHtml } = useAppTranslations();
   const settings = useSettingsContext();
   const { isMobile, isTablet, isDesktopAndUp } = useIsBreakPoint();
 
@@ -43,7 +43,7 @@ export const CardTour = ({
   if (i18n.language === "en") type = "tour";
 
   const description = htmlToTrimmedString(
-    getMultilangValue(tour.teaser) ?? "",
+    getMultilangHtml(tour.teaser) ?? "",
     200
   );
 

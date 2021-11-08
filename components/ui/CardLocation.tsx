@@ -22,7 +22,7 @@ export const CardLocation = ({
   location: any;
   fillContainer?: boolean;
 }) => {
-  const { t, i18n, getMultilangValue } = useAppTranslations();
+  const { t, i18n, getMultilangValue, getMultilangHtml } = useAppTranslations();
   const settings = useSettingsContext();
   const { isMobile, isTablet, isDesktopAndUp } = useIsBreakPoint();
 
@@ -60,7 +60,7 @@ export const CardLocation = ({
   if (i18n.language === "en") type = "location";
 
   const description = htmlToTrimmedString(
-    getMultilangValue(location.description) ?? "",
+    getMultilangHtml(location.description) ?? "",
     200
   );
 
