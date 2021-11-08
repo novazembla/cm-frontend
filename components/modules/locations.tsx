@@ -405,13 +405,6 @@ export const ModuleComponentLocations = ({ ...props }) => {
   }, []);
 
   useEffect(() => {
-    console.log(
-      "f1",
-      isFiltered,
-      layzLocationIdsQueryResult.loading,
-      layzLocationIdsQueryResult.error,
-      layzLocationIdsQueryResult.data?.locationIds?.ids
-    );
     if (
       isFiltered &&
       !layzLocationIdsQueryResult.loading &&
@@ -447,8 +440,7 @@ export const ModuleComponentLocations = ({ ...props }) => {
   const watchVariables = JSON.stringify(watch());
   useEffect(() => {
     const allVars = watch();
-    console.log(allVars);
-
+    
     let where: any = [];
     let termsWhere: any = [];
     let allTerms: any[] = [];
@@ -598,11 +590,6 @@ export const ModuleComponentLocations = ({ ...props }) => {
 
       if (where.length > 0) {
         layzLocationIdsQuery({
-          variables: {
-            where: newQueryState.where,
-          },
-        });
-        console.log({
           variables: {
             where: newQueryState.where,
           },
