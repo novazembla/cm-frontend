@@ -34,7 +34,8 @@
     "react-spinners": "^0.11.0",
     "sass": "^1.37.5",
     "virtual-scroller": "^1.7.9",
-    "yup": "^0.32.11"
+    "yup": "^0.32.11",
+    "nth-check": ">=2.0.1"
   },
   "devDependencies": {
     "@types/detect-it": "^4.0.1",
