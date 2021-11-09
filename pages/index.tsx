@@ -33,6 +33,7 @@ import {
   useMapContext,
   useConfigContext,
 } from "~/provider";
+import { debounce } from "lodash";
 
 const homepageQuery = gql`
   query {
@@ -48,7 +49,8 @@ const MOBILE_CARD_WIDTH = 275;
 
 export const Home = ({ homepage }: { homepage: any }) => {
   const { t, getMultilangValue } = useAppTranslations();
-  const containerRef = useRef<HTMLDivElement>(null);
+  const containersRef = useRef<any>(null);
+  const parsedHighlightsRef = useRef<any>(null);
   const highlightsRef = useRef<HTMLDivElement>(null);
   const highlightsCardsContainerRef = useRef<HTMLDivElement>(null);
   const settings = useSettingsContext();
@@ -65,18 +67,23 @@ export const Home = ({ homepage }: { homepage: any }) => {
     ? { flexBasis: "295px", minW: "295px", maxW: "295px" }
     : {};
 
-  const onResize = useCallback(() => {
-    if (!highlightsRef.current) return;
-    if (!highlightsCardsContainerRef.current) return;
+  const onResize = debounce(() => {
+    if (
+      !highlightsRef.current ||
+      !highlightsCardsContainerRef.current ||
+      !containersRef.current
+    )
+      return;
 
     const isMobile = window.matchMedia("(max-width: 44.999em)").matches;
-    const containers =
-        highlightsCardsContainerRef.current.querySelectorAll(".cardContainer");
+    const isTablet = window.matchMedia(
+      "(min-width: 45em) and (max-width: 74.999em)"
+    ).matches;
 
     if (isMobile) {
-      if (containers?.length) {
+      if (containersRef.current?.length) {
         highlightsCardsContainerRef.current.style.width = `${
-          containers?.length * (MOBILE_CARD_WIDTH + 20) +
+          containersRef.current?.length * (MOBILE_CARD_WIDTH + 20) +
           window.innerWidth -
           (MOBILE_CARD_WIDTH + 40)
         }px`;
@@ -85,35 +92,78 @@ export const Home = ({ homepage }: { homepage: any }) => {
       }
       highlightsCardsContainerRef.current.style.paddingBottom = "";
     } else {
-      if (containers?.length) {
-        console.log(containers[containers.length - 1].offsetTop - window.scrollY);
-
-        // highlightsCardsContainerRef.current.style.paddingBottom = `${
-        //   containers[containers.length * (MOBILE_CARD_WIDTH + 20) +
-        //   window.innerWidth -
-        //   (MOBILE_CARD_WIDTH + 40)
-        // }px`;
+      if (containersRef.current?.length) {
         highlightsCardsContainerRef.current.style.paddingBottom = "";
+        const pB = Math.max(
+          0,
+          window.innerHeight -
+            (isTablet ? 80 : 100) -
+            (document.documentElement.scrollHeight -
+              containersRef.current[containersRef.current.length - 1].offsetTop)
+        );
+        if (pB > 0) {
+          highlightsCardsContainerRef.current.style.paddingBottom = `${pB}px`;
+        } else {
+          highlightsCardsContainerRef.current.style.paddingBottom = "";
+        }
       } else {
         highlightsCardsContainerRef.current.style.paddingBottom = "";
       }
 
       highlightsCardsContainerRef.current.style.width = "";
-     
     }
-  }, []);
+  }, 350);
 
-  const onScroll = useCallback(() => {
-    if (isMobile) return;
+  const onScroll = () => {
+    if (
+      isMobile ||
+      !highlightsRef.current ||
+      !highlightsCardsContainerRef.current ||
+      !containersRef.current ||
+      !cultureMap ||
+      !parsedHighlightsRef.current
+    )
+      return;
 
-    // console.log(window.scrollY);
-  }, [isMobile]);
+    if (containersRef.current?.length) {
+      let newIndex = [...containersRef.current].reduce(
+        (acc: number, container: HTMLDivElement, index: number) => {
+          if (
+            container.offsetTop <
+              window.scrollY + (isDesktopAndUp ? 120 : 100) &&
+            window.scrollY + (isDesktopAndUp ? 120 : 100) <
+              container.offsetTop + container.offsetHeight
+          )
+            return index;
+
+          return acc;
+        },
+        0
+      );
+
+      if (currentHightlightIndex !== newIndex) {
+        setCurrentHightlightIndex(newIndex);
+
+        if (parsedHighlightsRef.current?.[newIndex]) {
+          cultureMap.panTo(
+            parsedHighlightsRef.current?.[newIndex].lng,
+            parsedHighlightsRef.current?.[newIndex].lat,
+            !isMobile
+          );
+        }
+      }
+    }
+  };
 
   useEffect(() => {
     setIsMSOpen(true);
 
-    console.log("bound index");
-    if (typeof window === "undefined") return;
+    if (typeof window === "undefined" || !highlightsCardsContainerRef.current)
+      return;
+
+    containersRef.current =
+      highlightsCardsContainerRef.current.querySelectorAll(".cardContainer");
+
     window.addEventListener("resize", onResize);
     window.addEventListener("scroll", onScroll);
     onResize();
@@ -124,7 +174,6 @@ export const Home = ({ homepage }: { homepage: any }) => {
       if (typeof window === "undefined") return;
       window.removeEventListener("resize", onResize);
       window.removeEventListener("scroll", onScroll);
-      console.log("unmounted index");
     };
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -188,6 +237,7 @@ export const Home = ({ homepage }: { homepage: any }) => {
           !window.matchMedia("(max-width: 44.999em)").matches
         );
         setHighlights(highlights);
+        parsedHighlightsRef.current = highlights;
       }
     }
     return () => {
@@ -343,16 +393,14 @@ export const Home = ({ homepage }: { homepage: any }) => {
 
                             if (
                               currentHightlightIndex !== newIndex &&
-                              newIndex < highlights.length
+                              parsedHighlightsRef.current?.[newIndex]
                             ) {
                               cultureMap.panTo(
-                                highlights[newIndex].lng,
-                                highlights[newIndex].lat,
+                                parsedHighlightsRef.current[newIndex].lng,
+                                parsedHighlightsRef.current[newIndex].lat,
                                 !isMobile
                               );
                               setCurrentHightlightIndex(newIndex);
-
-                              console.log(newIndex);
                             }
                           }
                         }
