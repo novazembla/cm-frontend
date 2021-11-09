@@ -11,6 +11,7 @@ import { MapViewClustered } from "./MapViewClustered";
 import { MapViewUnclustered } from "./MapViewUnclustered";
 import { MapClusterDetail } from "./MapClusterDetail";
 import { MapHighlights, MapHighlightType } from "./MapHighlights";
+import { MapTour, MapTourType } from "./MapTour";
 
 export class CultureMap {
   POPUP_OFFSET_MOUSE = [0, -25] as [number, number];
@@ -33,12 +34,14 @@ export class CultureMap {
   config: AppConfig;
   popup: MapPopup;
   clusterDetail: MapClusterDetail;
+  tour: MapTour;
 
   locationId: number | null;
   overlayZoomLevel: number;
   geoJsonAllData: any = null;
 
   loaded = false;
+  styleLoaded = false;
   baseDataLoaded = false;
   ready = false;
   onLoadJobs: any[] = [];
@@ -64,6 +67,7 @@ export class CultureMap {
     this.popup = new MapPopup(this);
     this.clusterDetail = new MapClusterDetail(this);
     this.highlights = new MapHighlights(this);
+    this.tour = new MapTour(this);
 
     this.views["clustered"] = new MapViewClustered(this);
     this.views["unclustered"] = new MapViewUnclustered(this);
@@ -101,6 +105,14 @@ export class CultureMap {
       }, 1000);
     };
 
+    const maybeProcess = () => {
+      if (this.baseDataLoaded && this.styleLoaded && this.loaded) process();
+    };
+
+    this.map.once("style.load", () => {
+      this.styleLoaded = true;
+      maybeProcess();
+    });
     this.map.once("load", () => {
       this.loaded = true;
 
@@ -124,7 +136,7 @@ export class CultureMap {
         }
       });
 
-      if (this.baseDataLoaded) process();
+      maybeProcess();
     });
 
     const client = axios.create({
@@ -143,7 +155,7 @@ export class CultureMap {
           this.geoJsonAllData = response?.data;
           this.baseDataLoaded = true;
 
-          if (this.loaded) process();
+          maybeProcess();
         }
       })
       .catch((err) => {
@@ -174,6 +186,36 @@ export class CultureMap {
 
       if (!this.ready) {
         this.currentView = view;
+        this.onLoadJobs.push(run);
+      } else {
+        run();
+      }
+    }
+  }
+
+  hideCurrentView() {
+    if (this.map) {
+      const run = () => {
+        this.popup.hide();
+        this.clusterDetail.hide();
+        this.views[this.currentView].hide();
+      };
+      if (!this.ready) {
+        this.onLoadJobs.push(run);
+      } else {
+        run();
+      }
+    }
+  }
+
+  showCurrentView() {
+    if (this.map) {
+      const run = () => {
+        this.popup.hide();
+        this.clusterDetail.hide();
+        this.views[this.currentView].show();
+      };
+      if (!this.ready) {
         this.onLoadJobs.push(run);
       } else {
         run();
@@ -251,6 +293,56 @@ export class CultureMap {
       this.router.push(`/location/${slug}`);
     } else {
       this.router.push(`/kartenpunkt/${slug}`);
+    }
+  }
+
+  setTour( path: any, stops: MapTourType[]) {
+    if (this.map) {
+      const run = () => {
+        const stopsGeoJSON = {
+          features: [
+            {},
+            ...stops.reduce((features: any, tourStop: any, index: number) => {
+              features.push({
+                type: "Feature",
+                geometry: {
+                  coordinates: [tourStop.lng ?? 0.0, tourStop.lat ?? 0.0],
+                  type: "Point",
+                },
+                properties: {
+                  id: `loc-${tourStop.id}`,
+                  color: tourStop.color,
+                  strokeColor: "transparent",
+                  radius: 16,
+                  strokeWidth: 0,
+                },
+              });
+              features.push({
+                type: "Feature",
+                geometry: {
+                  coordinates: [tourStop.lng ?? 0.0, tourStop.lat ?? 0.0],
+                  type: "Point",
+                },
+                properties: {
+                  id: `loc-number-${tourStop.id}`,
+                  number: tourStop?.number,
+                },
+              });
+              return features;
+            }, []),
+          ],
+          type: "FeatureCollection",
+        };
+        console.log(stopsGeoJSON);
+        
+        this.tour.setTourData(path, stopsGeoJSON);
+        this.tour.render();
+        };
+      if (!this.ready) {
+        this.onLoadJobs.push(run);
+      } else {
+        run();
+      }
     }
   }
 

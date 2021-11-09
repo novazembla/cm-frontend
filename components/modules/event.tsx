@@ -267,7 +267,7 @@ export const ModuleComponentEvent = ({
                     meta={event.heroImage.meta}
                     status={event.heroImage.status}
                     useImageAspectRatioPB
-                    sizes="(min-width: 55rem) 800px, 100vw"
+                    sizes="(min-width: 45rem) 700px, 100vw"
                     objectFit="cover"
                   />
                 </Box>

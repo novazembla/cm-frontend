@@ -117,7 +117,7 @@ export const ApiImage = ({
       const originalHeight = aSizes.original?.height ?? 0;
 
       if (useImageAspectRatioPB && originalWidth > 0)
-        imageAspectRatioPB = Math.floor((originalHeight / originalWidth) * 100);
+        imageAspectRatioPB = ((originalHeight / originalWidth) * 100).toFixed(3);
 
       const sourceWebp = Object.keys(aSizes).reduce((acc: any, key: any) => {
         const size = aSizes[key];

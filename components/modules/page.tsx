@@ -54,7 +54,7 @@ export const ModuleComponentPage = ({ page }: { page: any }) => {
                     meta={page.heroImage.meta}
                     forceAspectRatioPB={75}
                     status={page.heroImage.status}
-                    sizes="(min-width: 55rem) 800px, 100vw"
+                    sizes="(min-width: 45rem) 700px, 100vw"
                   />
                 </Box>
                 {page.heroImage.credits && (

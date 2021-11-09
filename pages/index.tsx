@@ -1,9 +1,8 @@
-import { useEffect, useState, useRef, useCallback, UIEvent } from "react";
+import { useEffect, useState, useRef, UIEvent } from "react";
 
 import { GetStaticProps } from "next";
 import NextLink from "next/link";
 import { getApolloClient } from "~/services";
-import { motion, AnimatePresence } from "framer-motion";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import {
   Box,
@@ -49,17 +48,21 @@ const MOBILE_CARD_WIDTH = 275;
 
 export const Home = ({ homepage }: { homepage: any }) => {
   const { t, getMultilangValue } = useAppTranslations();
-  const containersRef = useRef<any>(null);
-  const parsedHighlightsRef = useRef<any>(null);
-  const highlightsRef = useRef<HTMLDivElement>(null);
-  const highlightsCardsContainerRef = useRef<HTMLDivElement>(null);
   const settings = useSettingsContext();
   const config = useConfigContext();
   const cultureMap = useMapContext();
+  
+  const { isMobile, isTablet, isDesktopAndUp } = useIsBreakPoint();
+
+  const containersRef = useRef<any>(null);
+  const parsedHighlightsRef = useRef<any>(null);
+  const currentHightlightIndexRef = useRef<number>(0);
+  const highlightsRef = useRef<HTMLDivElement>(null);
+  const highlightsCardsContainerRef = useRef<HTMLDivElement>(null);
+  
 
   const [highlights, setHighlights] = useState<any[]>([]);
   const [currentHightlightIndex, setCurrentHightlightIndex] = useState(0);
-  const { isMobile, isTablet, isDesktopAndUp } = useIsBreakPoint();
 
   const [isMSOpen, setIsMSOpen] = useState(true);
 
@@ -141,10 +144,9 @@ export const Home = ({ homepage }: { homepage: any }) => {
         0
       );
 
-      if (currentHightlightIndex !== newIndex) {
-        setCurrentHightlightIndex(newIndex);
-
+      if (currentHightlightIndexRef.current !== newIndex) {
         if (parsedHighlightsRef.current?.[newIndex]) {
+          currentHightlightIndexRef.current = newIndex;
           cultureMap.panTo(
             parsedHighlightsRef.current?.[newIndex].lng,
             parsedHighlightsRef.current?.[newIndex].lat,
@@ -233,7 +235,7 @@ export const Home = ({ homepage }: { homepage: any }) => {
         cultureMap.setHighlights(highlights);
         cultureMap.panTo(
           highlights[0].lng,
-          highlights[1].lat,
+          highlights[0].lat,
           !window.matchMedia("(max-width: 44.999em)").matches
         );
         setHighlights(highlights);
@@ -360,7 +362,6 @@ export const Home = ({ homepage }: { homepage: any }) => {
                 xl: "calc(100vh - 80px)",
               }}
             >
-              {" "}
               <Box>
                 <chakra.h3
                   className="highlight"

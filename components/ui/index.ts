@@ -13,3 +13,4 @@ export * from "./LoadingIcon";
 export * from "./ErrorMessage";
 export * from "./TrimmedTextWithBottomEdge";
 export * from "./SVG";
+export * from "./Images";

@@ -186,8 +186,8 @@
       "title": "Tour",
       "facts": "About the tour",
       "label": {
-        "start": "Stop",
-        "stop": "Stop",
+        "start": "Begin",
+        "stop": "End",
         "distance": "Distance"
       }
     },

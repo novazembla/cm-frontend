@@ -5,6 +5,7 @@ import {
   MultiLangHtml,
   ApiImage,
   CardEvent,
+  Images,
 } from "~/components/ui";
 import { Footer } from "~/components/app";
 import { getApolloClient } from "~/services";
@@ -291,7 +292,7 @@ export const ModuleComponentLocation = ({
                           meta={location?.heroImage.meta}
                           forceAspectRatioPB={66.66}
                           status={location?.heroImage.status}
-                          sizes="(min-width: 45rem) 400px, 40vw"
+                          sizes="(min-width: 45rem) 700px, 100vw"
                           cropPosition={location?.heroImage?.cropPosition}
                           objectFit="cover"
                         />
@@ -535,6 +536,8 @@ export const ModuleComponentLocation = ({
                 </Box>
               )}
             </SimpleGrid>
+
+            {location?.images?.length > 0 && <Box mt="0.5em"><Images images={location?.images} /></Box>}
           </Box>
 
           {location.events && location.events.length > 0 && (
