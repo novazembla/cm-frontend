@@ -1,4 +1,5 @@
 import maplibregl from "maplibre-gl";
+import "maplibre-gl/dist/maplibre-gl.css";
 import { I18n } from "next-i18next";
 import { NextRouter } from "next/router";
 
@@ -346,6 +347,19 @@ export class CultureMap {
     }
   }
 
+  clearTour() {
+    if (this.map) {
+      const run = () => {
+        this.tour.clear();
+      };
+      if (!this.ready) {
+        this.onLoadJobs.push(run);
+      } else {
+        run();
+      }
+    }
+  }
+
   setHighlights(highlights: MapHighlightType[]) {
     if (this.map) {
       const run = () => {
@@ -396,6 +410,8 @@ export class CultureMap {
       }
     }
   }
+
+  
 
   clearHighlights() {
     if (this.map) {

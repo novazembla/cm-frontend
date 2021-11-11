@@ -71,6 +71,16 @@ body {
   -webkit-box-orient: vertical;
 }
 
+.clampFifeLines {
+  overflow: hidden;
+  hyphens: auto;
+  text-overflow: ellipsis;
+  -moz-box-orient: vertical;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+}
+
 .maplibregl-popup {
   .maplibregl-popup-tip {
     display: none;

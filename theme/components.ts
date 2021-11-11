@@ -285,6 +285,33 @@ export const components = {
       },
     },
   },
+  Textarea: {
+    variants: {
+      outline: {
+        field: {
+          bg: "#fff",
+          borderRadius: "4px",
+          borderColor: "cm.accentLight",
+          _hover: {
+            borderColor: "cm.accentLight",
+          },
+          _autofill: {
+            bg: "wine.300",
+          },
+          _invalid: {
+            _focus: {
+              borderColor: "#fff",
+              boxShadow: "0 0 3px 3px #E42B20",
+            },
+            _hover: {
+              borderColor: "#fff",
+              boxShadow: "0px 0 3px 3px #E42B20",
+            },
+          },
+        },
+      },
+    },
+  },
   Link: {
     baseStyle: {
       color: "wine.600",

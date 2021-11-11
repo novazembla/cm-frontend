@@ -21,6 +21,8 @@ const settingsQuery = gql`
       centerOfGravity
       mapJsonUrl
       taxMapping
+      suggestionsIntro,
+      suggestionsTandCInfo
       taxonomies {
         id
         name

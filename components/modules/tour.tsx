@@ -2,9 +2,10 @@ import { useEffect, useState, useRef, UIEvent } from "react";
 import { gql } from "@apollo/client";
 import {
   MultiLangValue,
-  MultiLangHtml,
+  TrimmedTextWithBottomEdge,
   ApiImage,
   CardTourStop,
+  SVG,
 } from "~/components/ui";
 import { Footer, MainContent } from "~/components/app";
 import { getApolloClient } from "~/services";
@@ -13,13 +14,23 @@ import {
   useConfigContext,
   useSettingsContext,
 } from "~/provider";
-import { Box, Flex, AspectRatio, Text, chakra, Grid } from "@chakra-ui/react";
-import { isEmptyHtml } from "~/utils";
+import {
+  Box,
+  Flex,
+  AspectRatio,
+  LinkBox,
+  Text,
+  LinkOverlay,
+  chakra,
+  Grid,
+} from "@chakra-ui/react";
+import { htmlToTrimmedString } from "~/utils";
 import { useAppTranslations, useIsBreakPoint } from "~/hooks";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { useRouter } from "next/router";
 import { debounce } from "lodash";
 import { getLocationColors } from "~/utils";
+import NextLink from "next/link";
 
 const MOBILE_CARD_WIDTH = 275;
 
@@ -98,7 +109,7 @@ export const ModuleComponentTour = ({
   const { isMobile, isTablet, isDesktopAndUp } = useIsBreakPoint();
   const config = useConfigContext();
   const settings = useSettingsContext();
-  const { t, i18n, getMultilangHtml } = useAppTranslations();
+  const { t, i18n, getMultilangValue, getMultilangHtml } = useAppTranslations();
   const [fillContainer, setFillContainer] = useState(true);
 
   const containersRef = useRef<any>(null);
@@ -124,10 +135,13 @@ export const ModuleComponentTour = ({
     // setTourStop(null)
     return () => {
       console.log("unmount tour");
-      if (cultureMap) cultureMap.showCurrentView();
+      if (cultureMap) {
+        cultureMap.showCurrentView();
+        cultureMap.clearTour();
+      }
     };
   }, [router.asPath, cultureMap]);
-
+  
   // useEffect(() => {
   //   if (cultureMap) cultureMap.hideCurrentView();
 
@@ -140,22 +154,23 @@ export const ModuleComponentTour = ({
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-
     if (tour?.tourStops?.length > 0 && settings && cultureMap) {
       if (tour?.path) {
-        const stops = tour?.tourStops?.map((ts: any, index: number) => ({
-          number: ts?.number,
-          id: ts?.location.id,
-          lng: ts?.location?.lng,
-          lat: ts?.location?.lat,
-          title: ts?.location?.title,
-          slug: ts?.location?.slug,
-          color: getLocationColors(ts?.location, settings).color,
-        })).sort((a: any, b: any) => {
-          if (a?.number < b?.number) return -1;
-          if (a?.number > b?.number) return 1;
-          return 0;
-        });
+        const stops = tour?.tourStops
+          ?.map((ts: any, index: number) => ({
+            number: ts?.number,
+            id: ts?.location.id,
+            lng: ts?.location?.lng,
+            lat: ts?.location?.lat,
+            title: ts?.location?.title,
+            slug: ts?.location?.slug,
+            color: getLocationColors(ts?.location, settings).color,
+          }))
+          .sort((a: any, b: any) => {
+            if (a?.number < b?.number) return -1;
+            if (a?.number > b?.number) return 1;
+            return 0;
+          });
 
         console.log(stops, tour?.path);
 
@@ -177,12 +192,14 @@ export const ModuleComponentTour = ({
   let meta: any = t("card.meta.tour", "Tour");
   let color = config.colorDark;
 
+  const teaser = htmlToTrimmedString(getMultilangHtml(tour.teaser) ?? "", 200);
+
   return (
     <MainContent
       isDrawer={isTablet || isDesktopAndUp}
       isVerticalContent={!isTablet && !isDesktopAndUp}
     >
-      {tour?.tourStop?.length > 0 && (
+      {tour?.tourStops?.length > 0 && (
         <Box
           layerStyle="lightGray"
           overflow="hidden"
@@ -213,10 +230,15 @@ export const ModuleComponentTour = ({
                 mt="0.5em"
                 px="20px"
                 textTransform="uppercase"
-                textAlign={isMobile ? "center" : undefined}
                 fontWeight="bold"
+                w="100%"
+                whiteSpace="nowrap"
+                textOverflow="ellipsis"
+                overflow="hidden"
               >
-                {t("tour.title.tour", "Tour")}
+                {isMobile
+                  ? getMultilangValue(tour?.title)
+                  : t("tour.title.tour", "Tour")}
               </chakra.h3>
 
               <Box
@@ -231,10 +253,16 @@ export const ModuleComponentTour = ({
                     ? (e: UIEvent<HTMLDivElement>) => {
                         if (tour?.tourStops?.length && cultureMap) {
                           const scrollLeft = (e.target as any).scrollLeft;
-                          let newIndex = Math.floor(
-                            (scrollLeft + (MOBILE_CARD_WIDTH + 20) * 0.5) /
-                              (MOBILE_CARD_WIDTH + 20)
-                          );
+
+                          let newIndex = 0;
+                          if (scrollLeft - (MOBILE_CARD_WIDTH + 20) * 2 > 0) {
+                            newIndex = Math.floor(
+                              (scrollLeft -
+                                (MOBILE_CARD_WIDTH + 20) * 2 +
+                                (MOBILE_CARD_WIDTH + 20) * 0.5) /
+                                (MOBILE_CARD_WIDTH + 20)
+                            );
+                          }
 
                           if (
                             currentHightlightIndex !== newIndex &&
@@ -267,6 +295,323 @@ export const ModuleComponentTour = ({
                   }}
                   ref={tourStopsCardsContainerRef}
                 >
+                  <Box
+                    key={`ts-intro`}
+                    {...mobileCardWrapper}
+                    pr="20px"
+                    className="cardContainer"
+                  >
+                    <LinkBox
+                      as="article"
+                      data-id="introduction"
+                      bg="#fff"
+                      borderRadius="lg"
+                      overflow="hidden"
+                      w="100%"
+                      maxW={isMobile && !fillContainer ? "275px" : "100%"}
+                      h={isMobile && fillContainer ? "100%" : undefined}
+                      className="svgHover"
+                    >
+                      <Flex
+                        flexDirection="column"
+                        alignItems={isMobile ? "flex-end" : "flex-start"}
+                      >
+                        <Box w={isMobile ? "50%" : "100%"} pb="0px">
+                          <AspectRatio
+                            w="100%"
+                            ratio={isMobile ? 3 / 2 : 16 / 9}
+                          >
+                            <Box bg={color}>
+                              {tour?.heroImage && tour?.heroImage.id && (
+                                <Box
+                                  w="100%"
+                                  h="100%"
+                                  sx={
+                                    isMobile
+                                      ? {
+                                          mixBlendMode: "screen",
+
+                                          "img, picture": {
+                                            filter: " grayscale(1)",
+                                          },
+                                        }
+                                      : {}
+                                  }
+                                >
+                                  <ApiImage
+                                    id={tour?.heroImage.id}
+                                    alt={tour?.heroImage.alt}
+                                    meta={tour?.heroImage.meta}
+                                    forceAspectRatioPB={66.66}
+                                    status={tour?.heroImage.status}
+                                    sizes="(min-width: 45rem) 700px, 100vw"
+                                    objectFit="cover"
+                                    cropPosition={tour?.heroImage?.cropPosition}
+                                  />
+                                </Box>
+                              )}
+                            </Box>
+                          </AspectRatio>
+                        </Box>
+                        {!isMobile && tour?.heroImage.credits !== "" && (
+                          <Text
+                            textStyle="finePrint"
+                            mt="0.5"
+                            px={isMobile ? "20px" : "35px"}
+                          >
+                            <MultiLangValue json={tour?.heroImage.credits} />
+                          </Text>
+                        )}
+                      </Flex>
+
+                      {!isMobile && (
+                        <Box px="35px" pt="35px" w="66.66%">
+                          {meta && (
+                            <Flex
+                              textStyle="categoriesHighlight"
+                              color={color}
+                              h="35px"
+                              alignItems="flex-end"
+                            >
+                              {meta}
+                            </Flex>
+                          )}
+                          <chakra.h2
+                            mb="0.3em !important"
+                            sx={{
+                              a: {
+                                _hover: {
+                                  color: "#333 !important",
+                                },
+                              },
+                            }}
+                          >
+                            <NextLink
+                              passHref
+                              href={`${
+                                i18n.language === "en" ? "/en" : ""
+                              }/tour/${getMultilangValue(tour.slug)}/0`}
+                            >
+                              <LinkOverlay
+                                textStyle="headline"
+                                textDecoration="none"
+                                minH={isMobile ? "50px" : undefined}
+                                className={
+                                  isMobile ? "clampTwoLines" : "clampFourLines"
+                                }
+                              >
+                                <MultiLangValue json={tour.title} />
+                              </LinkOverlay>
+                            </NextLink>
+                          </chakra.h2>
+                        </Box>
+                      )}
+
+                      <Box
+                        pt={isMobile ? "0" : "35px"}
+                        px={isMobile ? "20px" : "35px"}
+                        pb={isMobile ? "20px" : "35px"}
+                      >
+                        <Flex
+                          justifyContent="space-between"
+                          position="relative"
+                        >
+                          <Box
+                            w={isMobile ? "100%" : "85%"}
+                            minH={isMobile ? "60px" : undefined}
+                          >
+                            {isMobile && (
+                              <NextLink
+                                passHref
+                                href={`${
+                                  i18n.language === "en" ? "/en" : ""
+                                }/tour/${getMultilangValue(tour.slug)}/0`}
+                              >
+                                <LinkOverlay
+                                  textStyle="headline"
+                                  textDecoration="none"
+                                  minH={isMobile ? "50px" : undefined}
+                                  className="clampFourLines"
+                                >
+                                  <Box textStyle="card">
+                                    <TrimmedTextWithBottomEdge
+                                      text={teaser}
+                                      edgeWidth={60}
+                                      numLines={3}
+                                    />
+                                  </Box>
+                                </LinkOverlay>
+                              </NextLink>
+                            )}
+                            {!isMobile && (
+                              <Box className="clampFourLines">
+                                <Box textStyle="intro">xxx{teaser}xxx</Box>
+                              </Box>
+                            )}
+                          </Box>
+                          <Box
+                            alignSelf="flex-end"
+                            sx={{
+                              ...(isMobile
+                                ? {
+                                    position: "absolute",
+                                    bottom: "-6px",
+                                    right: 0,
+                                  }
+                                : {}),
+                            }}
+                          >
+                            <SVG
+                              type="arrow-right"
+                              width={isMobile ? "30px" : "40px"}
+                              height={isMobile ? "17px" : "22px"}
+                            />
+                          </Box>
+                        </Flex>
+                      </Box>
+                    </LinkBox>
+                  </Box>
+                  <Box
+                    key={`ts-facts`}
+                    {...mobileCardWrapper}
+                    pr="20px"
+                    className="cardContainer"
+                  >
+                    <Box
+                      as="article"
+                      data-id="facts"
+                      bg="#fff"
+                      borderRadius="lg"
+                      overflow="hidden"
+                      w="100%"
+                      maxW={isMobile && !fillContainer ? "275px" : "100%"}
+                      h={isMobile && fillContainer ? "100%" : undefined}
+                      className="svgHover"
+                    >
+                      <Flex
+                        flexDirection={isMobile ? "column" : "row-reverse"}
+                        alignItems={isMobile ? "flex-end" : "flex-start"}
+                      >
+                        <Box
+                          w={isMobile ? "50%" : "33.33%"}
+                          pb={isMobile ? "0px" : "20px"}
+                        >
+                          <AspectRatio w="100%" ratio={3 / 2}>
+                            <Box bg={color}></Box>
+                          </AspectRatio>
+                        </Box>
+                        <Box
+                          px={isMobile ? "20px" : "35px"}
+                          pt={isMobile ? "0" : "35px"}
+                          pb={isMobile ? "0px" : "20px"}
+                          w={isMobile ? "100%" : "66.66%"}
+                        >
+                          <Flex
+                            textStyle="categoriesTourStop"
+                            color={color}
+                            h="35px"
+                            alignItems="flex-end"
+                          ></Flex>
+                          <chakra.h2
+                            mb="0.3em !important"
+                            sx={{
+                              a: {
+                                _hover: {
+                                  color: "#333 !important",
+                                },
+                              },
+                            }}
+                          >
+                            {t("tour.detail.facts", "About the tour")}
+                          </chakra.h2>
+                        </Box>
+                      </Flex>
+
+                      <Box
+                        px={isMobile ? "20px" : "35px"}
+                        pb={isMobile ? "20px" : "35px"}
+                      >
+                        {tour?.tourStops?.length > 0 && (
+                          <Flex>
+                            <Box
+                              mb="0.5em"
+                              color="cm.accentDark"
+                              textTransform="uppercase"
+                              textStyle="categories"
+                              w="100px"
+                              pt="0.2em"
+                              mt="0.3em"
+                            >
+                              {t("tour.detail.label.stops", "Stops")}
+                            </Box>
+                            <Box textStyle="card">
+                              {tour?.tourStops?.length}
+                            </Box>
+                          </Flex>
+                        )}
+                        {tour?.tourStops?.length > 0 && (
+                          <Flex>
+                            <Box
+                              mb="0.5em"
+                              color="cm.accentDark"
+                              textTransform="uppercase"
+                              textStyle="categories"
+                              w="100px"
+                              pt="0.2em"
+                              mt="0.3em"
+                            >
+                              {t("tour.detail.label.start", "Start")}
+                            </Box>
+                            <Box textStyle="card">
+                              <MultiLangValue json={tour?.tourStops[0].title} />
+                            </Box>
+                          </Flex>
+                        )}
+                        {tour?.tourStops?.length > 1 && (
+                          <Flex>
+                            <Box
+                              mb="0.5em"
+                              color="cm.accentDark"
+                              textTransform="uppercase"
+                              textStyle="categories"
+                              w="100px"
+                              pt="0.2em"
+                              mt="0.3em"
+                            >
+                              {t("tour.detail.label.stop", "Stop")}
+                            </Box>
+                            <Box textStyle="card">
+                              <MultiLangValue
+                                json={
+                                  tour?.tourStops[tour?.tourStops.length - 1]
+                                    .title
+                                }
+                              />
+                            </Box>
+                          </Flex>
+                        )}
+                        {tour?.distance && tour?.duration && (
+                          <Flex>
+                            <Box
+                              mb="0.5em"
+                              color="cm.accentDark"
+                              textTransform="uppercase"
+                              textStyle="categories"
+                              w="100px"
+                              pt="0.2em"
+                              mt="0.3em"
+                            >
+                              {t("tour.detail.label.distance", "Distance")}
+                            </Box>
+                            <Box textStyle="card">
+                              <MultiLangValue json={tour?.distance} /> |{" "}
+                              <MultiLangValue json={tour?.duration} />
+                            </Box>
+                          </Flex>
+                        )}
+                      </Box>
+                    </Box>
+                  </Box>
                   {tour?.tourStops?.length > 0 &&
                     tour?.tourStops.map((tourStop: any) => (
                       <Box
@@ -275,7 +620,7 @@ export const ModuleComponentTour = ({
                         pr="20px"
                         className="cardContainer"
                       >
-                        <CardTourStop tourStop={tourStop} />
+                        <CardTourStop tourStop={tourStop} tour={tour} />
                       </Box>
                     ))}
                 </Flex>
@@ -304,7 +649,7 @@ export const ModuleComponentTour = ({
     //           {tour?.heroImage && tour?.heroImage.id && (
     //             <Box>
     //               <AspectRatio w="100%" ratio={16 / 9}>
-    //                 <Box bg={color} filter="li">
+    //                 <Box bg={color}>
     //                   {tour?.heroImage && tour?.heroImage.id && (
     //                     <Box w="100%" h="100%">
     //                       <ApiImage
@@ -390,148 +735,7 @@ export const ModuleComponentTour = ({
     //           )}
     //         </Box>
 
-    //         <Box
-    //           as="article"
-    //           data-id={tour.id}
-    //           bg="#fff"
-    //           borderRadius="lg"
-    //           overflow="hidden"
-    //           w="100%"
-    //           mt="20px"
-    //           maxW={isMobile && !fillContainer ? "275px" : "100%"}
-    //           h={isMobile && fillContainer ? "100%" : undefined}
-    //           className="svgHover"
-    //         >
-    //           <Flex
-    //             flexDirection={isMobile ? "column" : "row-reverse"}
-    //             alignItems={isMobile ? "flex-end" : "flex-start"}
-    //           >
-    //             <Box
-    //               w={isMobile ? "50%" : "33.33%"}
-    //               pb={isMobile ? "0px" : "20px"}
-    //             >
-    //               <Box position="relative">
-    //                 <AspectRatio w="100%" ratio={3 / 2}>
-    //                   <Box bg={color}>
-    //                     {tour?.heroImage && tour?.heroImage.id && (
-    //                       <Box
-    //                         w="100%"
-    //                         h="100%"
-    //                         sx={{
-    //                           mixBlendMode: "screen",
-
-    //                           "img, picture": {
-    //                             filter: " grayscale(1)",
-    //                           },
-    //                         }}
-    //                       >
-    //                         <ApiImage
-    //                           id={tour?.heroImage.id}
-    //                           alt={tour?.heroImage.alt}
-    //                           meta={tour?.heroImage.meta}
-    //                           forceAspectRatioPB={66.66}
-    //                           status={tour?.heroImage.status}
-    //                           sizes="(min-width: 45rem) 700px, 100vw"
-    //                           objectFit="cover"
-    //                           cropPosition={tour?.heroImage?.cropPosition}
-    //                         />
-    //                       </Box>
-    //                     )}
-    //                   </Box>
-    //                 </AspectRatio>
-    //               </Box>
-    //             </Box>
-    //             <Box
-    //               px={isMobile ? "20px" : "35px"}
-    //               pt={isMobile ? "0" : "35px"}
-    //               pb={isMobile ? "0px" : "20px"}
-    //               w={isMobile ? "100%" : "66.66%"}
-    //             >
-    //               <Flex
-    //                 textStyle="categoriesTourStop"
-    //                 color={color}
-    //                 h="35px"
-    //                 alignItems="flex-end"
-    //               ></Flex>
-    //               <chakra.h2
-    //                 mb="0.3em !important"
-    //                 sx={{
-    //                   a: {
-    //                     _hover: {
-    //                       color: "#333 !important",
-    //                     },
-    //                   },
-    //                 }}
-    //               >
-    //                 {t("tour.detail.facts", "About the tour")}
-    //               </chakra.h2>
-    //             </Box>
-    //           </Flex>
-
-    //           <Box
-    //             px={isMobile ? "20px" : "35px"}
-    //             pb={isMobile ? "20px" : "35px"}
-    //           >
-    //             {tour?.tourStops?.length > 0 && (
-    //               <Flex>
-    //                 <Box
-    //                   mb="0.5em"
-    //                   color="cm.accentDark"
-    //                   textTransform="uppercase"
-    //                   textStyle="categories"
-    //                   w="100px"
-    //                   pt="0.2em"
-    //                   mt="0.3em"
-    //                 >
-    //                   {t("tour.detail.label.start", "Start")}
-    //                 </Box>
-    //                 <Box textStyle="card">
-    //                   <MultiLangValue json={tour?.tourStops[0].title} />
-    //                 </Box>
-    //               </Flex>
-    //             )}
-    //             {tour?.tourStops?.length > 1 && (
-    //               <Flex>
-    //                 <Box
-    //                   mb="0.5em"
-    //                   color="cm.accentDark"
-    //                   textTransform="uppercase"
-    //                   textStyle="categories"
-    //                   w="100px"
-    //                   pt="0.2em"
-    //                   mt="0.3em"
-    //                 >
-    //                   {t("tour.detail.label.stop", "Stop")}
-    //                 </Box>
-    //                 <Box textStyle="card">
-    //                   <MultiLangValue
-    //                     json={tour?.tourStops[tour?.tourStops.length - 1].title}
-    //                   />
-    //                 </Box>
-    //               </Flex>
-    //             )}
-    //             {tour?.distance && tour?.duration && (
-    //               <Flex>
-    //                 <Box
-    //                   mb="0.5em"
-    //                   color="cm.accentDark"
-    //                   textTransform="uppercase"
-    //                   textStyle="categories"
-    //                   w="100px"
-    //                   pt="0.2em"
-    //                   mt="0.3em"
-    //                 >
-    //                   {t("tour.detail.label.distance", "Distance")}
-    //                 </Box>
-    //                 <Box textStyle="card">
-    //                   <MultiLangValue json={tour?.distance} /> |{" "}
-    //                   <MultiLangValue json={tour?.duration} />
-    //                 </Box>
-    //               </Flex>
-    //             )}
-    //           </Box>
-    //         </Box>
-    //       </Box>
+    //
 
     //     </Box>
     //     <Footer noBackground />

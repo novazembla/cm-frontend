@@ -82,7 +82,7 @@ export const CardLocation = ({
       >
         <Box w={isMobile ? "50%" : "33.33%"} pb={isMobile ? "0px" : "20px"}>
           <AspectRatio w="100%" ratio={3 / 2}>
-            <Box bg={color} filter="li">
+            <Box bg={color}>
               {location?.heroImage && location?.heroImage.id && (
                 <Box
                   w="100%"

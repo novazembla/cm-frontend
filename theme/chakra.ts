@@ -129,6 +129,11 @@ const themeConfig = {
       },
       "p a": {
         textDecoration: "underline",
+        textDecorationColor: "cm.accentLight",
+        _hover: {
+          color: "cm.accentDark",
+          textDecorationColor: "cm.accentDark",
+        },
       },
       "#__next": {
         textDecoration: "underline",
@@ -431,11 +436,11 @@ export const chakraTheme = extendTheme(
   }),
   withDefaultVariant({
     variant: "outline",
-    components: ["Input", "NumberInput", "PinInput"],
+    components: ["Input", "NumberInput", "PinInput",  "Textarea"],
   }),
   withDefaultSize({
     size: "md",
-    components: ["Input", "NumberInput", "PinInput", "Button", "Select"],
+    components: ["Input", "NumberInput",  "Textarea", "PinInput", "Button", "Select"],
   })
 );
 

@@ -179,7 +179,7 @@
     "totalCount_plural_plural": "{{count}} locations found"
   },
   "suggest": {
-    "title": "Suggest location"
+    "title": "Suggest a location"
   },
   "tour": {
     "detail": {

@@ -20,9 +20,11 @@ import { useConfigContext, useSettingsContext } from "~/provider";
 import NextLink from "next/link";
 
 export const CardTourStop = ({
+  tour,
   tourStop,
   fillContainer = true,
 }: {
+  tour: any;
   tourStop: any;
   fillContainer?: boolean;
 }) => {
@@ -85,7 +87,7 @@ export const CardTourStop = ({
       >
         <Box w={isMobile ? "50%" : "33.33%"} pb={isMobile ? "0px" : "20px"}>
           <AspectRatio w="100%" ratio={3 / 2}>
-            <Box bg={color} filter="li">
+            <Box bg={color}>
               {tourStop?.heroImage && tourStop?.heroImage.id && (
                 <Box
                   w="100%"
@@ -146,7 +148,7 @@ export const CardTourStop = ({
               passHref
               href={`${
                 i18n.language === "en" ? "/en" : ""
-              }/${type}/${getMultilangValue(tourStop?.location.slug)}/`}
+              }/tour/${getMultilangValue(tour.slug)}/${tourStop?.number}`}
             >
               <LinkOverlay
                 textStyle="headline"

@@ -1,35 +1,34 @@
-export {}
-// import React from "react";
-// import { SimpleGrid, useBreakpointValue } from "@chakra-ui/react";
+import React from "react";
+import { SimpleGrid, useBreakpointValue } from "@chakra-ui/react";
 
-// export const TwoColFieldRow = ({
-//   children,
-//   type
-// }: {
-//   children: React.ReactNode;  
-//   type?: "multilang" | undefined
-// }): JSX.Element | null => {
-//   const spacing = useBreakpointValue({base:2, t:6})
+export const TwoColFieldRow = ({
+  children,
+  type
+}: {
+  children: React.ReactNode;  
+  type?: "multilang" | undefined
+}): JSX.Element | null => {
+  const spacing = useBreakpointValue({base:2, md:6})
 
-//   let props = {
-//     columns: {base:1,t:2}, 
-//     spacing: 2,
-//     mt: 4,
-//   }
+  let props = {
+    columns: {base:1,md:2}, 
+    spacing: 2,
+    mt: 4,
+  }
 
-//   if (type && type === "multilang") {
-//     props = {
-//       columns: {base:1,t:2}, 
-//       spacing: spacing ?? 2,
-//       mt: 8,
-//     }
-//   }
+  if (type && type === "multilang") {
+    props = {
+      columns: {base:1, md:2}, 
+      spacing: spacing ?? 2,
+      mt: 8,
+    }
+  }
 
-//   return <SimpleGrid {...props} _first={{mt:0}} sx={{
-//     "> div:nth-of-type(2n)": {
-//       mt:"0"
-//     }
-//   }} w="100%">{children}</SimpleGrid>;
-// };
+  return <SimpleGrid {...props} _first={{mt:0}} sx={{
+    "> div:nth-of-type(2n)": {
+      mt:"0"
+    }
+  }} w="100%">{children}</SimpleGrid>;
+};
 
-// export default TwoColFieldRow;
+export default TwoColFieldRow;

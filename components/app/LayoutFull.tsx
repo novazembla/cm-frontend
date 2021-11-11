@@ -20,11 +20,14 @@ export const LayoutFull = ({ children }: AppProps) => {
   const { isMobile, isTablet } = useIsBreakPoint();
   const [isLoadingSettings, setIsLoadingSettings] = useState(true);
   const [fontsLoaded, setFontsLoaded] = useState(false);
-  
+
   const onResize = debounce(() => {
-    document.documentElement.style.setProperty('--vh', (window.innerHeight * 0.01).toFixed(5) + "px");
+    document.documentElement.style.setProperty(
+      "--vh",
+      (window.innerHeight * 0.01).toFixed(5) + "px"
+    );
   }, 350);
-  
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       if (navigator.userAgent.toLowerCase().indexOf("firefox") > -1) {
@@ -39,17 +42,15 @@ export const LayoutFull = ({ children }: AppProps) => {
           setFontsLoaded(true);
         });
       }
-
-      
     }
   }, []);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    
+
     window.addEventListener("resize", onResize);
     onResize();
-    
+
     const div = document.createElement("div");
     div.style.height = "100vh";
     div.style.width = "1px";
@@ -64,7 +65,7 @@ export const LayoutFull = ({ children }: AppProps) => {
       `${div.offsetHeight - window.innerHeight}px`
     );
     div.remove();
-    
+
     return () => {
       if (typeof window === "undefined") return;
       window.removeEventListener("resize", onResize);
@@ -79,10 +80,6 @@ export const LayoutFull = ({ children }: AppProps) => {
   return (
     <>
       <Head>
-        <link
-          href="https://unpkg.com/maplibre-gl@1.15.2/dist/maplibre-gl.css"
-          rel="stylesheet"
-        />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
       <LoadingBar color="cm.accentLight" loading={isLoadingSettings} />

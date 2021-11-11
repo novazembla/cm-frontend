@@ -316,7 +316,7 @@ export const ModuleComponentLocation = ({
               <Flex justifyContent="flex-end">
                 <Box w="40%">
                   <AspectRatio w="100%" ratio={4 / 3}>
-                    <Box bg={color} filter="li"></Box>
+                    <Box bg={color}></Box>
                   </AspectRatio>
                 </Box>
               </Flex>
