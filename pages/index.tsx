@@ -51,7 +51,7 @@ export const Home = ({ homepage }: { homepage: any }) => {
   const settings = useSettingsContext();
   const config = useConfigContext();
   const cultureMap = useMapContext();
-  
+
   const { isMobile, isTablet, isDesktopAndUp } = useIsBreakPoint();
 
   const containersRef = useRef<any>(null);
@@ -59,7 +59,6 @@ export const Home = ({ homepage }: { homepage: any }) => {
   const currentHightlightIndexRef = useRef<number>(0);
   const highlightsRef = useRef<HTMLDivElement>(null);
   const highlightsCardsContainerRef = useRef<HTMLDivElement>(null);
-  
 
   const [highlights, setHighlights] = useState<any[]>([]);
   const [currentHightlightIndex, setCurrentHightlightIndex] = useState(0);
@@ -88,7 +87,7 @@ export const Home = ({ homepage }: { homepage: any }) => {
         highlightsCardsContainerRef.current.style.width = `${
           containersRef.current?.length * (MOBILE_CARD_WIDTH + 20) +
           window.innerWidth -
-          (MOBILE_CARD_WIDTH + 40)
+          (MOBILE_CARD_WIDTH * 1.05 + 40)
         }px`;
       } else {
         highlightsCardsContainerRef.current.style.width = "";
@@ -100,7 +99,7 @@ export const Home = ({ homepage }: { homepage: any }) => {
         const pB = Math.max(
           0,
           window.innerHeight -
-            (isTablet ? 80 : 100) -
+            (isTablet ? 100 : 120) -
             (document.documentElement.scrollHeight -
               containersRef.current[containersRef.current.length - 1].offsetTop)
         );
@@ -132,10 +131,9 @@ export const Home = ({ homepage }: { homepage: any }) => {
       let newIndex = [...containersRef.current].reduce(
         (acc: number, container: HTMLDivElement, index: number) => {
           if (
-            container.offsetTop <
-              window.scrollY + (isDesktopAndUp ? 120 : 100) &&
-            window.scrollY + (isDesktopAndUp ? 120 : 100) <
-              container.offsetTop + container.offsetHeight
+            container.offsetTop - 20 <= window.scrollY + 100 &&
+            window.scrollY + 100 <
+              container.offsetTop - 20 + container.offsetHeight
           )
             return index;
 
@@ -388,7 +386,7 @@ export const Home = ({ homepage }: { homepage: any }) => {
                           if (highlights?.length && cultureMap) {
                             const scrollLeft = (e.target as any).scrollLeft;
                             let newIndex = Math.floor(
-                              (scrollLeft + (MOBILE_CARD_WIDTH + 20) * 0.5) /
+                              (scrollLeft + (MOBILE_CARD_WIDTH + 20) * 0.25) /
                                 (MOBILE_CARD_WIDTH + 20)
                             );
 
@@ -417,7 +415,6 @@ export const Home = ({ homepage }: { homepage: any }) => {
                       },
                       "@media (min-width: 45em)": {
                         flexDirection: "column",
-                        // w: "auto",
                         overflowY: "hidden",
                       },
                     }}

@@ -289,12 +289,8 @@ export class CultureMap {
     if (!slug) return null;
 
     this.popup.hide();
-
-    if (this.tHelper.i18n?.language === "en") {
-      this.router.push(`/location/${slug}`);
-    } else {
-      this.router.push(`/kartenpunkt/${slug}`);
-    }
+    this.router.push(slug);
+    
   }
 
   setTour( path: any, stops: MapTourType[]) {
@@ -302,7 +298,6 @@ export class CultureMap {
       const run = () => {
         const stopsGeoJSON = {
           features: [
-            {},
             ...stops.reduce((features: any, tourStop: any, index: number) => {
               features.push({
                 type: "Feature",
@@ -313,6 +308,9 @@ export class CultureMap {
                 properties: {
                   id: `loc-${tourStop.id}`,
                   color: tourStop.color,
+                  highlight: !!tourStop.highlight,
+                  title: tourStop.title,
+                  slug: tourStop.slug,
                   strokeColor: "transparent",
                   radius: 16,
                   strokeWidth: 0,
@@ -334,11 +332,26 @@ export class CultureMap {
           ],
           type: "FeatureCollection",
         };
-        console.log(stopsGeoJSON);
         
         this.tour.setTourData(path, stopsGeoJSON);
         this.tour.render();
         };
+      if (!this.ready) {
+        this.onLoadJobs.push(run);
+      } else {
+        run();
+      }
+    }
+  }
+
+  fitToCurrentTourBounds() {
+    if (this.map) {
+      const run = () => {
+        this.popup.hide();
+        this.clusterDetail.hide();
+        this.tour.fitToBounds();
+      };
+
       if (!this.ready) {
         this.onLoadJobs.push(run);
       } else {
@@ -426,7 +439,7 @@ export class CultureMap {
     }
   }
 
-  getCenterOffset(withDrawer?: boolean): [number, number] {
+  getCenterOffset(withDrawer?: boolean, withVerticalScroller?: boolean): [number, number] {
     if (typeof window === "undefined") return [0, 0];
 
     const isMobile = window.matchMedia("(max-width: 44.9999em)").matches;
@@ -441,7 +454,7 @@ export class CultureMap {
     ).matches;
 
     if (isMobile) {
-      return withDrawer ? [window.innerWidth * 0.4, 30] : [0, 30];
+      return withDrawer ? [window.innerWidth * 0.4, 30] : withVerticalScroller ? [0, -75] : [0, 30];
     } else if (isTablet && !isTabletWide) {
       return withDrawer ? [window.innerWidth * 0.4, 30] : [0, 30];
     } else if (isTabletWide) {
@@ -511,7 +524,7 @@ export class CultureMap {
     }
   }
 
-  panTo(lng: number, lat: number, withDrawer?: boolean) {
+  panTo(lng: number, lat: number, withDrawer?: boolean, withVerticalScroller?: boolean) {
     if (this.map) {
       const run = () => {
         if (isNaN(lng) || isNaN(lat)) return;
@@ -522,7 +535,7 @@ export class CultureMap {
             animate: true,
             duration: 1000,
             essential: true,
-            offset: this.getCenterOffset(withDrawer),
+            offset: this.getCenterOffset(withDrawer, withVerticalScroller),
           },
           {
             cmAnimation: true,

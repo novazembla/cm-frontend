@@ -25,9 +25,15 @@ export class MapClusterDetail {
       clusterRadius: 24,
       onClick: (e: any, spiderLeg: any) => {
         if (primaryInput === "mouse") {
-          this.cultureMap.onMapPointNavigate(
-            this.cultureMap.tHelper.getMultilangValue(spiderLeg?.feature?.slug)
-          );
+          const slug = `/${
+            this.cultureMap.tHelper.i18n?.language === "en"
+              ? "location"
+              : "kartenpunkt"
+          }/${this.cultureMap.tHelper.getMultilangValue(
+            spiderLeg?.feature?.slug
+          )}`;
+
+          this.cultureMap.onMapPointNavigate(slug);
         }
       },
       initializeLeg: (spiderLeg: any) => {
@@ -79,7 +85,7 @@ export class MapClusterDetail {
 
   show(coordinates: [number, number], leafFeatures: any) {
     if (!this.spiderfier) return;
-    
+
     const newHash = `${coordinates[0].toFixed(6)}-${coordinates[1].toFixed(6)}`;
     if (this.clusterDetailOpen && this.clusterDetailClusterHash !== newHash) {
       this.spiderfier.unspiderfy();

@@ -115,7 +115,7 @@ export const CardLocation = ({
         </Box>
         <Box
           px={isMobile ? "20px" : "35px"}
-          pt={isMobile ? "0" : "35px"}
+          pt={isMobile ? "12px" : "35px"}
           pb={isMobile ? "0px" : "20px"}
           w={isMobile ? "100%" : "66.66%"}
         >

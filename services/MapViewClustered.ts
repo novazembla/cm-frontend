@@ -18,7 +18,7 @@ export class MapViewClustered {
   setData(data?: any) {
     if (this.cultureMap?.map) {
       if (!this.cultureMap?.map) return;
-      
+
       this.hide();
 
       if (!this.cultureMap.map.getSource("clustered-locations")) {
@@ -74,11 +74,11 @@ export class MapViewClustered {
       this.cultureMap.map.addLayer({
         id: "clusters",
         type: "circle",
-        
+
         source: "clustered-locations",
         filter: ["has", "point_count"],
         layout: {
-          "visibility": "none"
+          visibility: "none",
         },
         paint: {
           // Use step expressions (https://maplibre.org/maplibre-gl-js-docs/style-spec/#expressions-step)
@@ -118,7 +118,7 @@ export class MapViewClustered {
           "text-field": "{point_count_abbreviated}",
           "text-font": ["Berlin Type Bold"],
           "text-size": 13,
-          "visibility": "none"
+          visibility: "none",
         },
         paint: {
           "text-color": "#fff",
@@ -131,7 +131,7 @@ export class MapViewClustered {
         source: "clustered-locations",
         filter: ["!", ["has", "point_count"]],
         layout: {
-          "visibility": "none"
+          visibility: "none",
         },
         paint: {
           "circle-color": ["get", "color"],
@@ -277,12 +277,20 @@ export class MapViewClustered {
         }
         try {
           const titles = JSON.parse(feature?.properties?.title);
-          const slugs = JSON.parse(feature?.properties?.slug);
+
+          const slug = `/${
+            this.cultureMap.tHelper.i18n?.language === "en"
+              ? "location"
+              : "kartenpunkt"
+          }/${this.cultureMap.tHelper.getMultilangValue(
+            JSON.parse(feature?.properties?.slug)
+          )}`;
+
           this.cultureMap.popup.show(
             coordinates,
             this.cultureMap.tHelper.getMultilangValue(titles),
             feature?.properties?.color,
-            this.cultureMap.tHelper.getMultilangValue(slugs)
+            slug
           );
         } catch (err) {}
       };
@@ -341,11 +349,15 @@ export class MapViewClustered {
           this.cultureMap.clusterDetail.hide();
           if (e?.features?.[0]?.properties?.slug) {
             try {
-              this.cultureMap.onMapPointNavigate(
-                this.cultureMap.tHelper.getMultilangValue(
-                  JSON.parse(e?.features?.[0]?.properties?.slug)
-                )
-              );
+              const slug = `/${
+                this.cultureMap.tHelper.i18n?.language === "en"
+                  ? "location"
+                  : "kartenpunkt"
+              }/${this.cultureMap.tHelper.getMultilangValue(
+                JSON.parse(e?.features?.[0]?.properties?.slug)
+              )}`;
+
+              this.cultureMap.onMapPointNavigate(slug);
             } catch (err) {}
           }
         } else {

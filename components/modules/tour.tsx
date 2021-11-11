@@ -97,6 +97,30 @@ const tourQuery = gql`
   }
 `;
 
+const createTourStops = (
+  stops: any,
+  tourSlug: string,
+  newIndex: number,
+  settings: any
+) => {
+  return stops
+    ?.map((ts: any, index: number) => ({
+      number: ts?.number,
+      id: ts?.location.id,
+      lng: ts?.location?.lng,
+      lat: ts?.location?.lat,
+      title: ts?.location?.title,
+      slug: `/tour/${tourSlug}/${ts?.number}`,
+      color: getLocationColors(ts?.location, settings).color,
+      highlight: index === newIndex,
+    }))
+    .sort((a: any, b: any) => {
+      if (a?.number < b?.number) return -1;
+      if (a?.number > b?.number) return 1;
+      return 0;
+    });
+};
+
 export const ModuleComponentTour = ({
   tour,
   ...props
@@ -141,7 +165,7 @@ export const ModuleComponentTour = ({
       }
     };
   }, [router.asPath, cultureMap]);
-  
+
   // useEffect(() => {
   //   if (cultureMap) cultureMap.hideCurrentView();
 
@@ -151,43 +175,160 @@ export const ModuleComponentTour = ({
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, []);
 
+  const onResize = debounce(() => {
+    if (
+      !tourStopsRef.current ||
+      !tourStopsCardsContainerRef.current ||
+      !containersRef.current
+    )
+      return;
+
+    const isMobile = window.matchMedia("(max-width: 44.999em)").matches;
+    const isTablet = window.matchMedia(
+      "(min-width: 45em) and (max-width: 74.999em)"
+    ).matches;
+
+    if (isMobile) {
+      if (containersRef.current?.length) {
+        tourStopsCardsContainerRef.current.style.width = `${
+          containersRef.current?.length * (MOBILE_CARD_WIDTH + 20) +
+          window.innerWidth -
+          (MOBILE_CARD_WIDTH * 1.05 + 40)
+        }px`;
+      } else {
+        tourStopsCardsContainerRef.current.style.width = "";
+      }
+      tourStopsCardsContainerRef.current.style.paddingBottom = "";
+    } else {
+      if (containersRef.current?.length) {
+        tourStopsCardsContainerRef.current.style.paddingBottom = "";
+        const pB = Math.max(
+          0,
+          window.innerHeight -
+            (isTablet ? 100 : 120) -
+            (document.documentElement.scrollHeight -
+              containersRef.current[containersRef.current.length - 1].offsetTop)
+        );
+        if (pB > 0) {
+          tourStopsCardsContainerRef.current.style.paddingBottom = `${pB}px`;
+        } else {
+          tourStopsCardsContainerRef.current.style.paddingBottom = "";
+        }
+      } else {
+        tourStopsCardsContainerRef.current.style.paddingBottom = "";
+      }
+
+      tourStopsCardsContainerRef.current.style.width = "";
+    }
+  }, 350);
+
+  const onScroll = () => {
+    if (
+      isMobile ||
+      !tourStopsRef.current ||
+      !tourStopsCardsContainerRef.current ||
+      !containersRef.current ||
+      !cultureMap ||
+      !parsedTourStopsRef.current
+    )
+      return;
+
+    if (containersRef.current?.length) {
+      let newIndex = [...containersRef.current].reduce(
+        (acc: number, container: HTMLDivElement, index: number) => {
+          if (
+            index > 1 &&
+            container.offsetTop - 20 <= window.scrollY + 100 &&
+            window.scrollY + 100 <
+              container.offsetTop - 20 + container.offsetHeight
+          ) {
+            return index - 2;
+          }
+
+          return acc;
+        },
+        -1
+      );
+
+      if (currentHightlightIndexRef.current !== newIndex) {
+        const stops = createTourStops(
+          tour?.tourStops,
+          getMultilangValue(tour?.slug),
+          newIndex,
+          settings
+        );
+
+        cultureMap.setTour(tour?.path, stops);
+        currentHightlightIndexRef.current = newIndex;
+
+        if (parsedTourStopsRef.current?.[Math.max(newIndex, 0)]) {
+          cultureMap.panTo(
+            parsedTourStopsRef.current?.[Math.max(newIndex, 0)].lng,
+            parsedTourStopsRef.current?.[Math.max(newIndex, 0)].lat,
+            !isMobile
+          );
+        }
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !tourStopsCardsContainerRef.current)
+      return;
+
+    containersRef.current =
+      tourStopsCardsContainerRef.current.querySelectorAll(".cardContainer");
+
+    window.addEventListener("resize", onResize);
+    window.addEventListener("scroll", onScroll);
+    onResize();
+    onScroll();
+    document.addEventListener("DOMContentLoaded", onResize);
+
+    return () => {
+      if (typeof window === "undefined") return;
+      window.removeEventListener("resize", onResize);
+      window.removeEventListener("scroll", onScroll);
+    };
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   useEffect(() => {
     if (typeof window === "undefined") return;
 
     if (tour?.tourStops?.length > 0 && settings && cultureMap) {
       if (tour?.path) {
-        const stops = tour?.tourStops
-          ?.map((ts: any, index: number) => ({
-            number: ts?.number,
-            id: ts?.location.id,
-            lng: ts?.location?.lng,
-            lat: ts?.location?.lat,
-            title: ts?.location?.title,
-            slug: ts?.location?.slug,
-            color: getLocationColors(ts?.location, settings).color,
-          }))
-          .sort((a: any, b: any) => {
-            if (a?.number < b?.number) return -1;
-            if (a?.number > b?.number) return 1;
-            return 0;
-          });
-
-        console.log(stops, tour?.path);
+        const stops = createTourStops(
+          tour?.tourStops,
+          getMultilangValue(tour?.slug),
+          -1,
+          settings
+        );
 
         cultureMap.setTour(tour?.path, stops);
+        cultureMap.fitToCurrentTourBounds();
 
-        cultureMap.panTo(
-          stops[0].lng,
-          stops[0].lat,
-          !window.matchMedia("(max-width: 44.999em)").matches
-        );
+        const isMobile = window.matchMedia("(max-width: 44.999em)").matches;
+        setTimeout(() => {
+          cultureMap.panTo(stops[0].lng, stops[0].lat, !isMobile, isMobile);
+        }, 500);
+
         parsedTourStopsRef.current = stops;
       }
     }
     return () => {
       if (cultureMap) cultureMap.clearHighlights();
     };
-  }, [tour?.tourStops, tour?.path, settings, cultureMap, config]);
+  }, [
+    tour?.tourStops,
+    tour?.path,
+    settings,
+    cultureMap,
+    config,
+    getMultilangValue,
+    tour?.slug,
+  ]);
 
   let meta: any = t("card.meta.tour", "Tour");
   let color = config.colorDark;
@@ -254,26 +395,45 @@ export const ModuleComponentTour = ({
                         if (tour?.tourStops?.length && cultureMap) {
                           const scrollLeft = (e.target as any).scrollLeft;
 
-                          let newIndex = 0;
-                          if (scrollLeft - (MOBILE_CARD_WIDTH + 20) * 2 > 0) {
+                          let newIndex = -1;
+                          if (
+                            scrollLeft - (MOBILE_CARD_WIDTH + 20) * 1.75 >
+                            0
+                          ) {
                             newIndex = Math.floor(
                               (scrollLeft -
-                                (MOBILE_CARD_WIDTH + 20) * 2 +
-                                (MOBILE_CARD_WIDTH + 20) * 0.5) /
+                                (MOBILE_CARD_WIDTH + 20) * 2.5 +
+                                (MOBILE_CARD_WIDTH + 20) * 0.75) /
                                 (MOBILE_CARD_WIDTH + 20)
                             );
                           }
 
-                          if (
-                            currentHightlightIndex !== newIndex &&
-                            parsedTourStopsRef.current?.[newIndex]
-                          ) {
-                            cultureMap.panTo(
-                              parsedTourStopsRef.current[newIndex].lng,
-                              parsedTourStopsRef.current[newIndex].lat,
-                              !isMobile
-                            );
-                            setCurrentHightlightIndex(newIndex);
+                          if (currentHightlightIndex !== newIndex) {
+                            if (
+                              parsedTourStopsRef.current?.[
+                                Math.max(newIndex, 0)
+                              ]
+                            ) {
+                              const stops = createTourStops(
+                                tour?.tourStops,
+                                getMultilangValue(tour?.slug),
+                                newIndex,
+                                settings
+                              );
+
+                              cultureMap.setTour(tour?.path, stops);
+                              cultureMap.panTo(
+                                parsedTourStopsRef.current[
+                                  Math.max(newIndex, 0)
+                                ].lng,
+                                parsedTourStopsRef.current[
+                                  Math.max(newIndex, 0)
+                                ].lat,
+                                !isMobile,
+                                isMobile
+                              );
+                              setCurrentHightlightIndex(newIndex);
+                            }
                           }
                         }
                       }
@@ -312,100 +472,136 @@ export const ModuleComponentTour = ({
                       h={isMobile && fillContainer ? "100%" : undefined}
                       className="svgHover"
                     >
-                      <Flex
-                        flexDirection="column"
-                        alignItems={isMobile ? "flex-end" : "flex-start"}
+                      {
+                        <Flex
+                          flexDirection="column"
+                          alignItems={isMobile ? "flex-end" : "flex-start"}
+                        >
+                          <Box w={isMobile ? "50%" : "100%"} pb="0px">
+                            <AspectRatio
+                              w="100%"
+                              ratio={isMobile ? 3 / 2 : 16 / 9}
+                            >
+                              <Box bg={color}>
+                                {tour?.heroImage && tour?.heroImage.id && (
+                                  <Box
+                                    w="100%"
+                                    h="100%"
+                                    sx={
+                                      isMobile
+                                        ? {
+                                            mixBlendMode: "screen",
+
+                                            "img, picture": {
+                                              filter: " grayscale(1)",
+                                            },
+                                          }
+                                        : {}
+                                    }
+                                  >
+                                    <ApiImage
+                                      id={tour?.heroImage.id}
+                                      alt={tour?.heroImage.alt}
+                                      meta={tour?.heroImage.meta}
+                                      forceAspectRatioPB={66.66}
+                                      status={tour?.heroImage.status}
+                                      sizes="(min-width: 45rem) 700px, 100vw"
+                                      objectFit="cover"
+                                      cropPosition={
+                                        tour?.heroImage?.cropPosition
+                                      }
+                                    />
+                                  </Box>
+                                )}
+                              </Box>
+                            </AspectRatio>
+                          </Box>
+                          {!isMobile && tour?.heroImage.credits !== "" && (
+                            <Text
+                              textStyle="finePrint"
+                              mt="0.5"
+                              px={isMobile ? "20px" : "35px"}
+                            >
+                              <MultiLangValue json={tour?.heroImage.credits} />
+                            </Text>
+                          )}
+                        </Flex>
+                      }
+
+                      <Box
+                        px={isMobile ? "20px" : "35px"}
+                        pt={isMobile ? "12px" : "35px"}
+                        pb={isMobile ? "12px" : "20px"}
+                        w={isMobile ? "100%" : "66.66%"}
                       >
-                        <Box w={isMobile ? "50%" : "100%"} pb="0px">
-                          <AspectRatio
-                            w="100%"
-                            ratio={isMobile ? 3 / 2 : 16 / 9}
-                          >
-                            <Box bg={color}>
-                              {tour?.heroImage && tour?.heroImage.id && (
-                                <Box
-                                  w="100%"
-                                  h="100%"
-                                  sx={
-                                    isMobile
-                                      ? {
-                                          mixBlendMode: "screen",
-
-                                          "img, picture": {
-                                            filter: " grayscale(1)",
-                                          },
-                                        }
-                                      : {}
-                                  }
-                                >
-                                  <ApiImage
-                                    id={tour?.heroImage.id}
-                                    alt={tour?.heroImage.alt}
-                                    meta={tour?.heroImage.meta}
-                                    forceAspectRatioPB={66.66}
-                                    status={tour?.heroImage.status}
-                                    sizes="(min-width: 45rem) 700px, 100vw"
-                                    objectFit="cover"
-                                    cropPosition={tour?.heroImage?.cropPosition}
-                                  />
-                                </Box>
-                              )}
-                            </Box>
-                          </AspectRatio>
-                        </Box>
-                        {!isMobile && tour?.heroImage.credits !== "" && (
-                          <Text
-                            textStyle="finePrint"
-                            mt="0.5"
-                            px={isMobile ? "20px" : "35px"}
-                          >
-                            <MultiLangValue json={tour?.heroImage.credits} />
-                          </Text>
-                        )}
-                      </Flex>
-
-                      {!isMobile && (
-                        <Box px="35px" pt="35px" w="66.66%">
-                          {meta && (
+                        {!isMobile && (
+                          <>
                             <Flex
                               textStyle="categoriesHighlight"
                               color={color}
                               h="35px"
                               alignItems="flex-end"
                             >
-                              {meta}
+                              {t("tour.title.aboutTheTour", "About the tour")}
                             </Flex>
-                          )}
-                          <chakra.h2
-                            mb="0.3em !important"
-                            sx={{
-                              a: {
-                                _hover: {
-                                  color: "#333 !important",
+                            <chakra.h2
+                              mb="0.3em !important"
+                              sx={{
+                                a: {
+                                  _hover: {
+                                    color: "#333 !important",
+                                  },
                                 },
-                              },
-                            }}
-                          >
-                            <NextLink
-                              passHref
-                              href={`${
-                                i18n.language === "en" ? "/en" : ""
-                              }/tour/${getMultilangValue(tour.slug)}/0`}
+                              }}
                             >
-                              <LinkOverlay
-                                textStyle="headline"
-                                textDecoration="none"
-                                minH={isMobile ? "50px" : undefined}
-                                className={
-                                  isMobile ? "clampTwoLines" : "clampFourLines"
-                                }
+                              <NextLink
+                                passHref
+                                href={`${
+                                  i18n.language === "en" ? "/en" : ""
+                                }/tour/${getMultilangValue(tour.slug)}/0`}
                               >
-                                <MultiLangValue json={tour.title} />
-                              </LinkOverlay>
-                            </NextLink>
-                          </chakra.h2>
-                        </Box>
-                      )}
+                                <LinkOverlay
+                                  textStyle="headline"
+                                  textDecoration="none"
+                                  minH={isMobile ? "50px" : undefined}
+                                  className={
+                                    isMobile
+                                      ? "clampTwoLines"
+                                      : "clampFourLines"
+                                  }
+                                >
+                                  <MultiLangValue json={tour.title} />
+                                </LinkOverlay>
+                              </NextLink>
+                            </chakra.h2>
+                          </>
+                        )}
+                        {isMobile && (
+                          <NextLink
+                            passHref
+                            href={`${
+                              i18n.language === "en" ? "/en" : ""
+                            }/tour/${getMultilangValue(tour.slug)}/0`}
+                          >
+                            <LinkOverlay
+                              textStyle="headline"
+                              textDecoration="none"
+                              className={
+                                isMobile ? "clampTwoLines" : "clampFourLines"
+                              }
+                            >
+                              <Flex
+                                textStyle="categoriesHighlight"
+                                color={color}
+                                h={!isMobile ? "35px" : undefined}
+                                alignItems="flex-end"
+                              >
+                                {t("tour.title.aboutTheTour", "About the tour")}
+                              </Flex>
+                            </LinkOverlay>
+                          </NextLink>
+                        )}
+                      </Box>
 
                       <Box
                         pt={isMobile ? "0" : "35px"}
@@ -420,33 +616,14 @@ export const ModuleComponentTour = ({
                             w={isMobile ? "100%" : "85%"}
                             minH={isMobile ? "60px" : undefined}
                           >
-                            {isMobile && (
-                              <NextLink
-                                passHref
-                                href={`${
-                                  i18n.language === "en" ? "/en" : ""
-                                }/tour/${getMultilangValue(tour.slug)}/0`}
-                              >
-                                <LinkOverlay
-                                  textStyle="headline"
-                                  textDecoration="none"
-                                  minH={isMobile ? "50px" : undefined}
-                                  className="clampFourLines"
-                                >
-                                  <Box textStyle="card">
-                                    <TrimmedTextWithBottomEdge
-                                      text={teaser}
-                                      edgeWidth={60}
-                                      numLines={3}
-                                    />
-                                  </Box>
-                                </LinkOverlay>
-                              </NextLink>
-                            )}
-                            {!isMobile && (
-                              <Box className="clampFourLines">
-                                <Box textStyle="intro">xxx{teaser}xxx</Box>
-                              </Box>
+                            {isMobile ? (
+                              <Box fontWeight="bold"><TrimmedTextWithBottomEdge
+                                text={teaser}
+                                edgeWidth={60}
+                                numLines={6}
+                              /></Box>
+                            ) : (
+                              <Box className="clampFourLines">{teaser}</Box>
                             )}
                           </Box>
                           <Box
@@ -502,7 +679,7 @@ export const ModuleComponentTour = ({
                         </Box>
                         <Box
                           px={isMobile ? "20px" : "35px"}
-                          pt={isMobile ? "0" : "35px"}
+                          pt={isMobile ? "12px" : "35px"}
                           pb={isMobile ? "0px" : "20px"}
                           w={isMobile ? "100%" : "66.66%"}
                         >
@@ -532,15 +709,12 @@ export const ModuleComponentTour = ({
                         pb={isMobile ? "20px" : "35px"}
                       >
                         {tour?.tourStops?.length > 0 && (
-                          <Flex>
+                          <Flex alignItems="center" mb="0.25em">
                             <Box
-                              mb="0.5em"
                               color="cm.accentDark"
                               textTransform="uppercase"
                               textStyle="categories"
                               w="100px"
-                              pt="0.2em"
-                              mt="0.3em"
                             >
                               {t("tour.detail.label.stops", "Stops")}
                             </Box>
@@ -550,15 +724,12 @@ export const ModuleComponentTour = ({
                           </Flex>
                         )}
                         {tour?.tourStops?.length > 0 && (
-                          <Flex>
+                          <Flex alignItems="center" mb="0.25em">
                             <Box
-                              mb="0.5em"
                               color="cm.accentDark"
                               textTransform="uppercase"
                               textStyle="categories"
                               w="100px"
-                              pt="0.2em"
-                              mt="0.3em"
                             >
                               {t("tour.detail.label.start", "Start")}
                             </Box>
@@ -568,15 +739,12 @@ export const ModuleComponentTour = ({
                           </Flex>
                         )}
                         {tour?.tourStops?.length > 1 && (
-                          <Flex>
+                          <Flex alignItems="center" mb="0.25em">
                             <Box
-                              mb="0.5em"
                               color="cm.accentDark"
                               textTransform="uppercase"
                               textStyle="categories"
                               w="100px"
-                              pt="0.2em"
-                              mt="0.3em"
                             >
                               {t("tour.detail.label.stop", "Stop")}
                             </Box>
@@ -591,15 +759,12 @@ export const ModuleComponentTour = ({
                           </Flex>
                         )}
                         {tour?.distance && tour?.duration && (
-                          <Flex>
+                          <Flex alignItems="center" mb="0.25em">
                             <Box
-                              mb="0.5em"
                               color="cm.accentDark"
                               textTransform="uppercase"
                               textStyle="categories"
                               w="100px"
-                              pt="0.2em"
-                              mt="0.3em"
                             >
                               {t("tour.detail.label.distance", "Distance")}
                             </Box>

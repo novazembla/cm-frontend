@@ -14,7 +14,7 @@ import {
   TrimmedTextWithBottomEdge,
   SVG,
 } from "~/components/ui";
-import { htmlToTrimmedString } from "~/utils";
+import { htmlToTrimmedString, getLocationColors } from "~/utils";
 import { useAppTranslations, useIsBreakPoint } from "~/hooks";
 import { useConfigContext, useSettingsContext } from "~/provider";
 import NextLink from "next/link";
@@ -35,34 +35,16 @@ export const CardTourStop = ({
   const config = useConfigContext();
 
   let meta: any;
-  let color = config.colorDark;
+
+  const { color, colorDark } = getLocationColors(tourStop?.location, settings);
 
   if (tourStop?.location?.primaryTerms?.length > 0) {
     meta = getMultilangValue(tourStop?.location?.primaryTerms[0]?.name);
-
-    if (
-      settings?.terms &&
-      tourStop?.location?.primaryTerms[0].id in settings?.terms
-    ) {
-      color =
-        settings?.terms[tourStop?.location?.primaryTerms[0].id].colorDark ??
-        settings?.terms[tourStop?.location?.primaryTerms[0].id].color ??
-        color;
-    }
   } else if (tourStop?.location?.terms?.length > 0) {
     meta = getMultilangValue(tourStop?.location?.terms[0]?.name);
-    if (settings?.terms && tourStop?.location?.terms[0].id in settings?.terms) {
-      color =
-        settings?.terms[tourStop?.location?.terms[0].id].colorDark ??
-        settings?.terms[tourStop?.location?.terms[0].id].color ??
-        color;
-    }
   } else {
     meta = t("card.meta.tourStop", "Tour stop");
   }
-
-  let type = "kartenpunkt";
-  if (i18n.language === "en") type = "tourStop";
 
   const description = htmlToTrimmedString(
     getMultilangHtml(tourStop.description) ?? "",
@@ -85,7 +67,11 @@ export const CardTourStop = ({
         flexDirection={isMobile ? "column" : "row-reverse"}
         alignItems={isMobile ? "flex-end" : "flex-start"}
       >
-        <Box w={isMobile ? "50%" : "33.33%"} pb={isMobile ? "0px" : "20px"}>
+        <Box
+          w={isMobile ? "50%" : "33.33%"}
+          pb={isMobile ? "0px" : "20px"}
+          position="relative"
+        >
           <AspectRatio w="100%" ratio={3 / 2}>
             <Box bg={color}>
               {tourStop?.heroImage && tourStop?.heroImage.id && (
@@ -117,10 +103,34 @@ export const CardTourStop = ({
               )}
             </Box>
           </AspectRatio>
+          <Box
+            position="absolute"
+            bottom="0"
+            left="0"
+            bg={color}
+            textStyle="categories"
+            fontWeight="bold"
+            color="#fff"
+            p="0"
+            pl="1px"
+            w="32px"
+            h="32px"
+            borderRadius="30px"
+            border="2px solid #fff"
+            transform={
+              isMobile
+                ? "translateY(12px) translateX(-12px)"
+                : "translateY(-8px) translateX(-16px)"
+            }
+            textAlign="center"
+            lineHeight="29px"
+          >
+            {tourStop?.number}
+          </Box>
         </Box>
         <Box
           px={isMobile ? "20px" : "35px"}
-          pt={isMobile ? "0" : "35px"}
+          pt={isMobile ? "10px" : "35px"}
           pb={isMobile ? "0px" : "20px"}
           w={isMobile ? "100%" : "66.66%"}
         >

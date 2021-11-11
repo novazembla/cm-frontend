@@ -1,4 +1,5 @@
 import { primaryInput } from "detect-it";
+import maplibregl from "maplibre-gl";
 import type { CultureMap } from "./CultureMap";
 
 export type MapTourType = {
@@ -14,10 +15,15 @@ export type MapTourType = {
 export class MapTour {
   cultureMap: CultureMap;
 
+  bounds: maplibregl.LngLatBounds;
   events: Record<string, any> = {};
 
   constructor(cultureMap: CultureMap) {
     this.cultureMap = cultureMap;
+    this.bounds = new maplibregl.LngLatBounds(
+      [this.cultureMap.config.lng, this.cultureMap.config.lat],
+      [this.cultureMap.config.lng, this.cultureMap.config.lat]
+    );
   }
 
   setTourData(path: any, stops: any) {
@@ -41,6 +47,26 @@ export class MapTour {
       } else {
         (this.cultureMap?.map?.getSource("tourStops") as any)?.setData(stops);
       }
+
+      this.bounds = new maplibregl.LngLatBounds(
+        [this.cultureMap.config.lng, this.cultureMap.config.lat],
+        [this.cultureMap.config.lng, this.cultureMap.config.lat]
+      );
+
+      if (stops?.features?.length) {
+        for (let i = 0; i < stops?.features?.length; i++) {
+          if (stops?.features[i]?.geometry?.coordinates) {
+            const coordinates = stops?.features[i]?.geometry?.coordinates ?? [
+              this.cultureMap.config.lng,
+              this.cultureMap.config.lat,
+            ];
+
+            if (coordinates[0] !== 0 && coordinates[1] !== 0) {
+              this.bounds.extend(coordinates);
+            }
+          }
+        }
+      }
     }
   }
 
@@ -62,6 +88,19 @@ export class MapTour {
         paint: {
           "line-color": this.cultureMap.config.colorDark,
           "line-width": 2,
+        },
+      });
+
+      this.cultureMap.map.addLayer({
+        id: "tourStopsHighlight",
+        type: "circle",
+        source: "tourStops",
+        filter: ["==", ["get", "highlight"], true],
+        paint: {
+          "circle-color": "#fff",
+          "circle-radius": 20,
+          "circle-stroke-color": ["get", "color"],
+          "circle-stroke-width": 2,
         },
       });
 
@@ -91,6 +130,8 @@ export class MapTour {
         },
       });
 
+      this.cultureMap.map.moveLayer("tourPath", "tourStopsHighlight");
+
       const showMapPop = (e: any) => {
         const feature = e?.features?.[0];
         if (!feature || !feature?.properties?.title) return;
@@ -102,13 +143,14 @@ export class MapTour {
           coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
         }
         try {
+
           const titles = JSON.parse(feature?.properties?.title);
-          const slugs = JSON.parse(feature?.properties?.slug);
+
           this.cultureMap.popup.show(
             coordinates,
             this.cultureMap.tHelper.getMultilangValue(titles),
             feature?.properties?.color,
-            this.cultureMap.tHelper.getMultilangValue(slugs)
+            feature?.properties?.slug
           );
         } catch (err) {
           console.log(err);
@@ -135,6 +177,7 @@ export class MapTour {
 
       if (primaryInput !== "touch") {
         this.events["mouseenter-tourStops"] = (e: any) => {
+
           if (this.cultureMap.isAnimating) return;
           if (this.cultureMap.map) {
             // Change the cursor style as a UI indicator.
@@ -169,9 +212,7 @@ export class MapTour {
           if (e?.features?.[0]?.properties?.slug) {
             try {
               this.cultureMap.onMapPointNavigate(
-                this.cultureMap.tHelper.getMultilangValue(
-                  JSON.parse(e?.features?.[0]?.properties?.slug)
-                )
+                e?.features?.[0]?.properties?.slug                
               );
             } catch (err) {}
           }
@@ -188,11 +229,28 @@ export class MapTour {
     }
   }
 
+  fitToBounds() {
+    if (this.cultureMap?.map) {
+      this.cultureMap.map?.fitBounds(this.bounds, {
+        maxZoom: this.cultureMap.MAX_BOUNDS_ZOOM,
+        linear: true,
+        padding: this.cultureMap.getBoundsPadding(),
+        animate: false,
+      });
+    }
+  }
+
   hide() {
     if (this.cultureMap?.map) {
       if (this.cultureMap?.map?.getLayer("tourStops"))
         this.cultureMap?.map?.setLayoutProperty(
-          "clustered-locations",
+          "tourStops",
+          "visibility",
+          "none"
+        );
+      if (this.cultureMap?.map?.getLayer("tourStopsHighlight"))
+        this.cultureMap?.map?.setLayoutProperty(
+          "tourStopsHighlight",
           "visibility",
           "none"
         );
@@ -219,6 +277,12 @@ export class MapTour {
           "visibility",
           "visible"
         );
+      if (this.cultureMap?.map?.getLayer("tourStopsHighlight"))
+        this.cultureMap?.map?.setLayoutProperty(
+          "tourStopsHighlight",
+          "visibility",
+          "visible"
+        );
       if (this.cultureMap?.map?.getLayer("tourStopNumbers"))
         this.cultureMap?.map?.setLayoutProperty(
           "tourStopNumbers",
@@ -238,6 +302,9 @@ export class MapTour {
     if (this.cultureMap?.map) {
       if (this.cultureMap?.map?.getLayer("tourStops"))
         this.cultureMap?.map?.removeLayer("tourStops");
+
+      if (this.cultureMap?.map?.getLayer("tourStopsHighlight"))
+        this.cultureMap?.map?.removeLayer("tourStopsHighlight");
 
       if (this.cultureMap?.map?.getLayer("tourStopNumbers"))
         this.cultureMap?.map?.removeLayer("tourStopNumbers");

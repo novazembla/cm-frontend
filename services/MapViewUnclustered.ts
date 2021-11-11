@@ -100,12 +100,20 @@ export class MapViewUnclustered {
         }
         try {
           const titles = JSON.parse(feature?.properties?.title);
-          const slugs = JSON.parse(feature?.properties?.slug);
+          
+          const slug = `/${
+            this.cultureMap.tHelper.i18n?.language === "en"
+              ? "location"
+              : "kartenpunkt"
+          }/${this.cultureMap.tHelper.getMultilangValue(
+            JSON.parse(feature?.properties?.slug)
+          )}`;
+
           this.cultureMap.popup.show(
             coordinates,
             this.cultureMap.tHelper.getMultilangValue(titles),
             feature?.properties?.color,
-            this.cultureMap.tHelper.getMultilangValue(slugs)
+            slug
           );
         } catch (err) {}
       };
@@ -177,11 +185,15 @@ export class MapViewUnclustered {
           this.cultureMap.clusterDetail.hide();
           if (e?.features?.[0]?.properties?.slug) {
             try {
-              this.cultureMap.onMapPointNavigate(
-                this.cultureMap.tHelper.getMultilangValue(
-                  JSON.parse(e?.features?.[0]?.properties?.slug)
-                )
-              );
+              const slug = `/${
+                this.cultureMap.tHelper.i18n?.language === "en"
+                  ? "location"
+                  : "kartenpunkt"
+              }/${this.cultureMap.tHelper.getMultilangValue(
+                JSON.parse(e?.features?.[0]?.properties?.slug)
+              )}`;
+    
+              this.cultureMap.onMapPointNavigate(slug);
             } catch (err) {}
           }
         } else {

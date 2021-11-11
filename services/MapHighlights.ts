@@ -12,7 +12,7 @@ export type MapHighlightType = {
 
 export class MapHighlights {
   cultureMap: CultureMap;
-  
+
   events: Record<string, any> = {};
 
   constructor(cultureMap: CultureMap) {
@@ -29,19 +29,16 @@ export class MapHighlights {
           data: data ?? {},
         });
       } else {
-        (
-          this.cultureMap?.map?.getSource("highlights") as any
-        )?.setData(data ?? {});
+        (this.cultureMap?.map?.getSource("highlights") as any)?.setData(
+          data ?? {}
+        );
       }
     }
   }
 
   render() {
     if (this.cultureMap?.map) {
-      if (
-        !this.cultureMap?.map ||
-        !this.cultureMap.map.getSource("highlights")
-      )
+      if (!this.cultureMap?.map || !this.cultureMap.map.getSource("highlights"))
         return;
 
       this.clear();
@@ -54,10 +51,10 @@ export class MapHighlights {
           "circle-color": ["get", "color"],
           "circle-radius": ["get", "radius"],
           "circle-stroke-color": ["get", "strokeColor"],
-          "circle-stroke-width": ["get", "strokeWidth"],       
+          "circle-stroke-width": ["get", "strokeWidth"],
         },
       });
-     
+
       const showMapPop = (e: any) => {
         const feature = e?.features?.[0];
         if (!feature || !feature?.properties?.title) return;
@@ -70,14 +67,24 @@ export class MapHighlights {
         }
         try {
           const titles = JSON.parse(feature?.properties?.title);
-          const slugs = JSON.parse(feature?.properties?.slug);
+
+          const slug = `/${
+            this.cultureMap.tHelper.i18n?.language === "en"
+              ? "location"
+              : "kartenpunkt"
+          }/${this.cultureMap.tHelper.getMultilangValue(
+            JSON.parse(feature?.properties?.slug)
+          )}`;
+
           this.cultureMap.popup.show(
             coordinates,
             this.cultureMap.tHelper.getMultilangValue(titles),
             feature?.properties?.color,
-            this.cultureMap.tHelper.getMultilangValue(slugs)
+            slug
           );
-        } catch (err) {console.log(err)}
+        } catch (err) {
+          console.log(err);
+        }
       };
 
       this.events["zoom"] = () => {
@@ -100,7 +107,6 @@ export class MapHighlights {
 
       if (primaryInput !== "touch") {
         this.events["mouseenter-highlights"] = (e: any) => {
-
           if (this.cultureMap.isAnimating) return;
           if (this.cultureMap.map) {
             // Change the cursor style as a UI indicator.
@@ -134,11 +140,15 @@ export class MapHighlights {
           this.cultureMap.clusterDetail.hide();
           if (e?.features?.[0]?.properties?.slug) {
             try {
-              this.cultureMap.onMapPointNavigate(
-                this.cultureMap.tHelper.getMultilangValue(
-                  JSON.parse(e?.features?.[0]?.properties?.slug)
-                )
-              );
+              const slug = `/${
+                this.cultureMap.tHelper.i18n?.language === "en"
+                  ? "location"
+                  : "kartenpunkt"
+              }/${this.cultureMap.tHelper.getMultilangValue(
+                JSON.parse(e?.features?.[0]?.properties?.slug)
+              )}`;
+
+              this.cultureMap.onMapPointNavigate(slug);
             } catch (err) {}
           }
         } else {
