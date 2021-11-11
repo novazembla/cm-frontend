@@ -447,7 +447,7 @@ export const ModuleComponentSuggest = () => {
                       hideLabel: false,
                       placeholder: t(
                         "suggestion.field.placeholder.title",
-                        "Please enter the name of the suggestion location"
+                        "Please enter the name of the suggested location"
                       ),
                     }}
                   />

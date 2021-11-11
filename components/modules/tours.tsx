@@ -75,7 +75,7 @@ export const ModuleComponentTours = ({ ...props }) => {
     data?.tours?.totalCount >
     initialQueryState?.pageSize +
       initialQueryState?.pageSize * currentPageIndex;
-
+console.log(data?.tours);
   return (
     <MainContent layerStyle="lightGray">
       <Grid
@@ -96,7 +96,7 @@ export const ModuleComponentTours = ({ ...props }) => {
 
           <Box>
             {error && <ErrorMessage type="dataLoad" />}
-            {data?.tours?.tours?.length &&
+            {data?.tours?.tours?.length > 0 &&
               data?.tours?.tours.map((tour: any) => (
                 <Box key={`tour-${tour.id}`} pb="20px">
                   <CardTour tour={tour} />

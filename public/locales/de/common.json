@@ -3,10 +3,11 @@
     "button": {
       "backToTop": "Nach oben",
       "togggleSearch": "Suche",
-      "toggleMenu": "Menü",
+      "toggleSearch": "Search",
       "zoomIntoMap": "Karte vergrößern",
       "zoomOutOfMap": "Karte verkleinern",
       "findMyLocation": "Mein Standort anzeigen",
+      "toggleMenu": "Menü",
       "suggestLocation": "Kartenpunktvorschlag"
     },
     "title": "Menü"
@@ -18,12 +19,6 @@
   "mainContent": {
     "slideToLeft": "Hauptinhalt ausblenden",
     "slideToRight": "Hauptinhalt einblenden"
-  },
-  "map": {
-    "popup": {
-      "viewLocation": "Kartenpunkt anzeigen",
-      "close": "Schließen"
-    }
   },
   "quicksearch": {
     "title": "Suche",
@@ -98,6 +93,11 @@
     },
     "title": {
       "location": "Kartenpunkt"
+    },
+    "calendar": {
+      "previousMonth": "Vorheriger Monat",
+      "nextMonth": "Nächster Monat",
+      "chooseDay": "Tag auswählen {{dayAndMonth}}"
     }
   },
   "button": {
@@ -113,7 +113,6 @@
       "title": {
         "dateRange": "Zeitraum",
         "eventDateRange": "Zeitraum",
-        "selectDay": "Datum auswählen",
         "eventType": "Veranstaltungsart"
       },
       "eventDateRange": {
@@ -181,16 +180,98 @@
   "suggest": {
     "title": "Kartenpunktvorschlag"
   },
+  "suggestion": {
+    "section": {
+      "about": {
+        "title": "Über den Kartenpunkt",
+        "description": "Bitte beschreiben Sie den Kartenpunkt"
+      },
+      "address": {
+        "title": "Adresse",
+        "description": "Bitte geben Sie die Adresse des vorgeschlagenen Kartenpunktes an. Wir nutzen diese um den Kartpunkt auf der Karte zu lokalisieren."
+      },
+      "contact": {
+        "title": "Kontaktinformation",
+        "description": "Wie kann man die Organisation kontaktieren. Wir werden diese Information öffentlich zugänglich machen."
+      },
+      "online": {
+        "title": "Website(n)",
+        "description": "Kann die Organisation online gefunden werden?"
+      },
+      "taxonomies": {
+        "title": "Die Organisation ist ...",
+        "description": "Bitte geben Sie die Attribute an unter der die Organisation in der Suche gefunden werden soll."
+      },
+      "suggestor": {
+        "title": "Über Sie selbst",
+        "description": "Für den Fall, dass wir Nachfragen haben. Diese Angabgen werden nicht veröffentlicht."
+      }
+    },
+    "field": {
+      "label": {
+        "title": "Name des Kartenpunktes",
+        "description": "Kurzbeschreibung",
+        "street": "Straße",
+        "houseNumber": "Hausnummer",
+        "postcode": "Postleitzahl",
+        "city": "Stadt",
+        "phone": "Telefonnummer",
+        "email": "Emailadresse",
+        "website": "Website",
+        "facebook": "Facebook",
+        "instagram": "Instagram",
+        "twitter": "Twitter",
+        "youtube": "Youtube",
+        "suggestionSubmittersName": "Ihr Name",
+        "suggestionSubmittersEmail": "Ihre Emailadresse",
+        "comments": "Weitere Anmerkungen",
+        "suggestionSubmittersTandCAcceptance": "I accept the terms and conditions TODO:",
+        "ownerOfLocation": "I am legally responsible for the location TODO: "
+      },
+      "placeholder": {
+        "title": "Bitte geben Sie den Namen der Organisation an",
+        "description": "Bitte beschreiben Sie die Organisation",
+        "street1": "Siegfriedstr.",
+        "houseNumber": "11",
+        "postcode": "12345",
+        "phone": "030/1234567",
+        "email": "Ihre Emailaddressse",
+        "website": "https://www.example.com",
+        "suggestionSubmittersName": "Bitte geben Sie Ihren Namen an",
+        "suggestionSubmittersEmail": "Bitte geben Sie Ihre Emailaddressse an",
+        "comments": "Haben Sie weitere Anmerkungen oder Kommentare?"
+      }
+    },
+    "tax": {
+      "title": {
+        "typeOfInstitution": "Einrichtungsart",
+        "targetAudience": "Zielgruppe",
+        "typeOfOrganisation": "Organisationsart"
+      }
+    },
+    "button": {
+      "submit": "Vorschlag abschicken"
+    }
+  },
   "tour": {
+    "title": {
+      "tour": "Tour",
+      "aboutTheTour": "Über die Tour"
+    },
     "detail": {
-      "title": "Tour",
       "facts": "Fakten",
       "label": {
+        "stops": "Stops",
         "start": "Start",
         "stop": "Ende",
         "distance": "Distanz"
       }
     },
+    "tourStop": {
+      "meta": "Tourstop {{number}}"
+    },
+    "backToTour": "Zurück zur Tour",
+    "introduction": "Einleitung",
     "listings": {
       "title": "Touren"
     },
@@ -208,6 +289,9 @@
     "internalServerError": "Ein interner Fehler verhindert leider die Darstellung dieses Inhaltes",
     "pleasetryagain": "Leider konnten wir den von Ihnen angeforderten Inhalt nicht darstellen. Bitte versuchen Sie es erneut."
   },
+  "translation": {
+    "comingSoon": "Wir arbeiten an der deutschen Übersetzung."
+  },
   "translationnotfound": "Übersetzung nicht gefunden",
   "mission": {
     "statement": {
@@ -218,6 +302,12 @@
   "homepage": {
     "title": {
       "highlights": "Highlights"
+    }
+  },
+  "map": {
+    "this": {
+      "popupviewLocation": "View location",
+      "popupclose": "Close popup"
     }
   }
 }

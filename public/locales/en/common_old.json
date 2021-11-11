@@ -127,11 +127,21 @@
   "events": {
     "filter": {
       "title": {
-        "eventCategory": "Type of event"
+        "eventCategory": "Type of event",
+        "selectDay": "Select a date"
       }
     }
   },
   "map": {
-    "title": "Map"
+    "title": "Map",
+    "popup": {
+      "viewLocation": "View location",
+      "close": "Close popup"
+    }
+  },
+  "tour": {
+    "detail": {
+      "title": "Tour"
+    }
   }
 }

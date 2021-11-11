@@ -68,14 +68,7 @@ export const Header = (/* props */) => {
       layerStyle="blurredWhite"
       borderBottom="1px solid"
       borderColor="#660D36"
-      // // TODO: remove
-      // borderColor={chakraToBreakpointArray({
-      //   base: "red",
-      //   md: "blue",
-      //   lg: "cyan",
-      //   xl: "orange",
-      //   "2xl": "green",
-      // })}
+
       ref={headerRef}
       sx={{
         touchAction: "none",
@@ -258,7 +251,7 @@ export const Header = (/* props */) => {
                     zIndex={isMenuOpen ? 2 : 1}
                   >
                     <IconButton
-                      aria-label={t("menu.button.toggleMenu", "Search")}
+                      aria-label={t("menu.button.toggleSearch", "Search")}
                       icon={<SVG type="cross" width="80px" height="80px" />}
                       borderRadius="0"
                       p="0"
@@ -297,7 +290,7 @@ export const Header = (/* props */) => {
                     zIndex={isMenuOpen ? 1 : 2}
                   >
                     <IconButton
-                      aria-label={t("menu.button.toggleMenu", "Search")}
+                      aria-label={t("menu.button.toggleSearch", "Search")}
                       icon={
                         <SVG type="menu-tablet" width="30px" height="30px" />
                       }

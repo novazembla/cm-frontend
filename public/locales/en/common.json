@@ -3,10 +3,11 @@
     "button": {
       "backToTop": "Back to top",
       "togggleSearch": "Search",
-      "toggleMenu": "Menu",
+      "toggleSearch": "Search",
       "zoomIntoMap": "Zoom in",
       "zoomOutOfMap": "Zoom out",
       "findMyLocation": "Find my location",
+      "toggleMenu": "Menu",
       "suggestLocation": "Suggest a new location"
     },
     "title": "Menu"
@@ -18,12 +19,6 @@
   "mainContent": {
     "slideToLeft": "Hide content",
     "slideToRight": "Show content"
-  },
-  "map": {
-    "popup": {
-      "viewLocation": "View location",
-      "close": "Close popup"
-    }
   },
   "quicksearch": {
     "title": "Search",
@@ -98,6 +93,11 @@
     },
     "title": {
       "location": "Location"
+    },
+    "calendar": {
+      "previousMonth": "Previous month",
+      "nextMonth": "Next month",
+      "chooseDay": "Select day {{dayAndMonth}}"
     }
   },
   "button": {
@@ -113,7 +113,6 @@
       "title": {
         "dateRange": "Date (range)",
         "eventDateRange": "Date range",
-        "selectDay": "Select a date",
         "eventType": "Type of event"
       },
       "eventDateRange": {
@@ -181,16 +180,98 @@
   "suggest": {
     "title": "Suggest a location"
   },
+  "suggestion": {
+    "section": {
+      "about": {
+        "title": "About the location",
+        "description": "Please tell us something about the suggested location."
+      },
+      "address": {
+        "title": "Address",
+        "description": "Please enter the address of the location. We will use this information to place the location on the map"
+      },
+      "contact": {
+        "title": "Contact information",
+        "description": "How can people contact the location? This information will be listed on our website."
+      },
+      "online": {
+        "title": "Website(s)",
+        "description": "Can the location be found online?"
+      },
+      "taxonomies": {
+        "title": "The location is ...",
+        "description": "Please indicate the attributes under the location should be found in the search."
+      },
+      "suggestor": {
+        "title": "About yourself",
+        "description": "In case we have further questions please give us your name and email address. We will keep this information private."
+      }
+    },
+    "field": {
+      "label": {
+        "title": "Name of location",
+        "description": "Description",
+        "street": "Street",
+        "houseNumber": "House number",
+        "postcode": "Post code",
+        "city": "City",
+        "phone": "Phone number",
+        "email": "Email address",
+        "website": "Website",
+        "facebook": "Facebook",
+        "instagram": "Instagram",
+        "twitter": "Twitter",
+        "youtube": "Youtube",
+        "suggestionSubmittersName": "Your name",
+        "suggestionSubmittersEmail": "Your email address",
+        "comments": "Further comments",
+        "suggestionSubmittersTandCAcceptance": "I accept the terms and conditions",
+        "ownerOfLocation": "I am legally responsible for the location"
+      },
+      "placeholder": {
+        "title": "Please enter the name of the suggested location",
+        "description": "Please describe the location briefly",
+        "street1": "Siegfriedstr.",
+        "houseNumber": "11",
+        "postcode": "12345",
+        "phone": "030/1234567",
+        "email": "Your email address",
+        "website": "https://www.example.com",
+        "suggestionSubmittersName": "Please enter your name",
+        "suggestionSubmittersEmail": "Please enter your email address",
+        "comments": "Do you have any other notes or comments?"
+      }
+    },
+    "tax": {
+      "title": {
+        "typeOfInstitution": "Type of institution",
+        "targetAudience": "Target audience",
+        "typeOfOrganisation": "Type of organisation"
+      }
+    },
+    "button": {
+      "submit": "Submit suggestion"
+    }
+  },
   "tour": {
+    "title": {
+      "tour": "Tour",
+      "aboutTheTour": "About the tour"
+    },
     "detail": {
-      "title": "Tour",
       "facts": "About the tour",
       "label": {
+        "stops": "Stops",
         "start": "Begin",
         "stop": "End",
         "distance": "Distance"
       }
     },
+    "tourStop": {
+      "meta": "Tour stop {{number}}"
+    },
+    "backToTour": "Back to tour",
+    "introduction": "Introduction",
     "listings": {
       "title": "Tours"
     },
@@ -208,6 +289,9 @@
     "internalServerError": "Oops, an error happened on our server",
     "pleasetryagain": "Please try again"
   },
+  "translation": {
+    "comingSoon": "Please bear with us. We are working on the English translation."
+  },
   "translationnotfound": "Trans. not found",
   "mission": {
     "statement": {
@@ -218,6 +302,12 @@
   "homepage": {
     "title": {
       "highlights": "Highlights"
+    }
+  },
+  "map": {
+    "this": {
+      "popupviewLocation": "View location",
+      "popupclose": "Close popup"
     }
   }
 }

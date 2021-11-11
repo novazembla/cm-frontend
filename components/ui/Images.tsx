@@ -23,8 +23,6 @@ export const Images = ({ images }: { images: any }) => {
           image?.meta?.availableSizes?.original?.height >
           image?.meta?.availableSizes?.original?.width;
 
-        console.log(image.meta);
-
         if (!image?.id) return <></>;
 
         return (

@@ -119,7 +119,6 @@ export const ModuleComponentLocation = ({
   useEffect(() => {
     // As next.js doesn't unmount/remount if only components route changes we 
     // need to rely on router.asPath to trigger location change actions
-    console.log("set highlight null");
     setHighlight(null)    
   }, [router.asPath])
 
@@ -290,7 +289,7 @@ export const ModuleComponentLocation = ({
                           id={location?.heroImage.id}
                           alt={location?.heroImage.alt}
                           meta={location?.heroImage.meta}
-                          forceAspectRatioPB={66.66}
+                          forceAspectRatioPB={56.25}
                           status={location?.heroImage.status}
                           sizes="(min-width: 45rem) 700px, 100vw"
                           cropPosition={location?.heroImage?.cropPosition}

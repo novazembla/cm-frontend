@@ -57,7 +57,7 @@ export class MapPopup {
       arrowElem.className = "arrow";
       arrowElem.setAttribute("href", "#");
       arrowElem.innerText = this?.cultureMap.tHelper.t(
-        "map.this.popupviewLocation",
+        "map.popupviewLocation",
         "View location"
       );
       arrowElem.addEventListener("click", (e: any) => {
@@ -97,7 +97,7 @@ export class MapPopup {
         closeElem.className = "close";
         closeElem.setAttribute("href", "#");
         closeElem.innerText = this?.cultureMap.tHelper.t(
-          "map.this.popupclose",
+          "map.popupclose",
           "Close popup"
         );
         closeElem.addEventListener("click", (e: any) => {

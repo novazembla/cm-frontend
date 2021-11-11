@@ -127,11 +127,21 @@
   "events": {
     "filter": {
       "title": {
-        "eventCategory": "Veranstaltungsart"
+        "eventCategory": "Veranstaltungsart",
+        "selectDay": "Datum auswählen"
       }
     }
   },
   "map": {
-    "title": "Map"
+    "title": "Map",
+    "popup": {
+      "viewLocation": "Kartenpunkt anzeigen",
+      "close": "Schließen"
+    }
+  },
+  "tour": {
+    "detail": {
+      "title": "Tour"
+    }
   }
 }
