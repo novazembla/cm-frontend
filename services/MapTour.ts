@@ -92,19 +92,6 @@ export class MapTour {
       });
 
       this.cultureMap.map.addLayer({
-        id: "tourStopsHighlight",
-        type: "circle",
-        source: "tourStops",
-        filter: ["==", ["get", "highlight"], true],
-        paint: {
-          "circle-color": "#fff",
-          "circle-radius": 20,
-          "circle-stroke-color": ["get", "color"],
-          "circle-stroke-width": 2,
-        },
-      });
-
-      this.cultureMap.map.addLayer({
         id: "tourStops",
         type: "circle",
         source: "tourStops",
@@ -124,13 +111,58 @@ export class MapTour {
           "text-field": "{number}",
           "text-font": ["Berlin Type Bold"],
           "text-size": 13,
+          "text-ignore-placement": true,
+          "text-allow-overlap": false,
         },
         paint: {
           "text-color": "#fff",
         },
       });
 
-      this.cultureMap.map.moveLayer("tourPath", "tourStopsHighlight");
+      this.cultureMap.map.addLayer({
+        id: "tourStopsHighlight",
+        type: "circle",
+        source: "tourStops",
+        filter: ["==", ["get", "highlight"], true],
+        paint: {
+          "circle-color": "#fff",
+          "circle-radius": 20,
+          "circle-stroke-color": ["get", "color"],
+          "circle-stroke-width": 2,
+        },
+      });
+
+      this.cultureMap.map.addLayer({
+        id: "tourStopsHighlightDot",
+        type: "circle",
+        source: "tourStops",
+        filter: ["==", ["get", "highlight"], true],
+        paint: {
+          "circle-color": ["get", "color"],
+          "circle-radius": 16,
+        },
+      });
+
+
+      this.cultureMap.map.addLayer({
+        id: "tourStopsHighlightNumber",
+        type: "symbol",
+        source: "tourStops",
+        filter: ["all", ["has", "number"], ["==", ["get", "highlightNumber"], true]],
+        layout: {
+          "text-field": "{number}",
+          "text-font": ["Berlin Type Bold"],
+          "text-size": 13,
+          "text-ignore-placement": true,
+          "text-allow-overlap": true,
+        },
+        paint: {
+          "text-color": "#fff",
+        },
+      });
+
+      this.cultureMap.map.moveLayer("tourPath", "tourStops");
+      this.cultureMap.map.moveLayer("tourStops", "tourStopNumbers");
 
       const showMapPop = (e: any) => {
         const feature = e?.features?.[0];
@@ -143,7 +175,6 @@ export class MapTour {
           coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
         }
         try {
-
           const titles = JSON.parse(feature?.properties?.title);
 
           this.cultureMap.popup.show(
@@ -177,7 +208,6 @@ export class MapTour {
 
       if (primaryInput !== "touch") {
         this.events["mouseenter-tourStops"] = (e: any) => {
-
           if (this.cultureMap.isAnimating) return;
           if (this.cultureMap.map) {
             // Change the cursor style as a UI indicator.
@@ -212,7 +242,7 @@ export class MapTour {
           if (e?.features?.[0]?.properties?.slug) {
             try {
               this.cultureMap.onMapPointNavigate(
-                e?.features?.[0]?.properties?.slug                
+                e?.features?.[0]?.properties?.slug
               );
             } catch (err) {}
           }
@@ -254,6 +284,18 @@ export class MapTour {
           "visibility",
           "none"
         );
+      if (this.cultureMap?.map?.getLayer("tourStopsHighlightDot"))
+        this.cultureMap?.map?.setLayoutProperty(
+          "tourStopsHighlightDot",
+          "visibility",
+          "none"
+        );
+      if (this.cultureMap?.map?.getLayer("tourStopsHighlightNumber"))
+        this.cultureMap?.map?.setLayoutProperty(
+          "tourStopsHighlightNumber",
+          "visibility",
+          "none"
+        );
       if (this.cultureMap?.map?.getLayer("tourStopNumbers"))
         this.cultureMap?.map?.setLayoutProperty(
           "tourStopNumbers",
@@ -283,6 +325,20 @@ export class MapTour {
           "visibility",
           "visible"
         );
+      if (this.cultureMap?.map?.getLayer("tourStopsHighlightDot"))
+        this.cultureMap?.map?.setLayoutProperty(
+          "tourStopsHighlightDot",
+          "visibility",
+          "visible"
+        );
+
+      if (this.cultureMap?.map?.getLayer("tourStopsHighlightNumber"))
+        this.cultureMap?.map?.setLayoutProperty(
+          "tourStopsHighlightNumber",
+          "visibility",
+          "visible"
+        );
+
       if (this.cultureMap?.map?.getLayer("tourStopNumbers"))
         this.cultureMap?.map?.setLayoutProperty(
           "tourStopNumbers",
@@ -305,6 +361,12 @@ export class MapTour {
 
       if (this.cultureMap?.map?.getLayer("tourStopsHighlight"))
         this.cultureMap?.map?.removeLayer("tourStopsHighlight");
+
+      if (this.cultureMap?.map?.getLayer("tourStopsHighlightDot"))
+        this.cultureMap?.map?.removeLayer("tourStopsHighlightDot");
+
+      if (this.cultureMap?.map?.getLayer("tourStopsHighlightNumber"))
+        this.cultureMap?.map?.removeLayer("tourStopsHighlightNumber");
 
       if (this.cultureMap?.map?.getLayer("tourStopNumbers"))
         this.cultureMap?.map?.removeLayer("tourStopNumbers");

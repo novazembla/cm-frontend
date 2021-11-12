@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "live": "next build",
+    "biuld:live": "NODE_ENV=production next build",
     "start": "next start",
     "lint": "next lint",
     "translate": "i18next './{components,config,hooks,pages,services}/**/*.{ts,tsx}'"

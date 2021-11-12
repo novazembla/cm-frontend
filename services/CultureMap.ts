@@ -324,6 +324,7 @@ export class CultureMap {
                 properties: {
                   id: `loc-number-${tourStop.id}`,
                   number: tourStop?.number,
+                  highlightNumber: !!tourStop.highlight,
                 },
               });
               return features;
