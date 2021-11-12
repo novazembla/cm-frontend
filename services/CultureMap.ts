@@ -290,10 +290,9 @@ export class CultureMap {
 
     this.popup.hide();
     this.router.push(slug);
-    
   }
 
-  setTour( path: any, stops: MapTourType[]) {
+  setTour(path: any, stops: MapTourType[]) {
     if (this.map) {
       const run = () => {
         const stopsGeoJSON = {
@@ -332,10 +331,10 @@ export class CultureMap {
           ],
           type: "FeatureCollection",
         };
-        
+
         this.tour.setTourData(path, stopsGeoJSON);
         this.tour.render();
-        };
+      };
       if (!this.ready) {
         this.onLoadJobs.push(run);
       } else {
@@ -424,8 +423,6 @@ export class CultureMap {
     }
   }
 
-  
-
   clearHighlights() {
     if (this.map) {
       const run = () => {
@@ -439,7 +436,10 @@ export class CultureMap {
     }
   }
 
-  getCenterOffset(withDrawer?: boolean, withVerticalScroller?: boolean): [number, number] {
+  getCenterOffset(
+    withDrawer?: boolean,
+    withVerticalScroller?: boolean
+  ): [number, number] {
     if (typeof window === "undefined") return [0, 0];
 
     const isMobile = window.matchMedia("(max-width: 44.9999em)").matches;
@@ -454,7 +454,11 @@ export class CultureMap {
     ).matches;
 
     if (isMobile) {
-      return withDrawer ? [window.innerWidth * 0.4, 30] : withVerticalScroller ? [0, -75] : [0, 30];
+      return withDrawer
+        ? [window.innerWidth * 0.4, 30]
+        : withVerticalScroller
+        ? [0, -75]
+        : [0, 30];
     } else if (isTablet && !isTabletWide) {
       return withDrawer ? [window.innerWidth * 0.4, 30] : [0, 30];
     } else if (isTabletWide) {
@@ -524,11 +528,16 @@ export class CultureMap {
     }
   }
 
-  panTo(lng: number, lat: number, withDrawer?: boolean, withVerticalScroller?: boolean) {
+  panTo(
+    lng: number,
+    lat: number,
+    withDrawer?: boolean,
+    withVerticalScroller?: boolean
+  ) {
     if (this.map) {
       const run = () => {
         if (isNaN(lng) || isNaN(lat)) return;
-
+        this.map?.stop();
         this.map?.panTo(
           [lng, lat],
           {
