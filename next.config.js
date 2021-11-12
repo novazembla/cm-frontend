@@ -29,10 +29,10 @@ module.exports = withImages({
     scrollRestoration: true,
   },
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
-    config.infrastructureLogging = {
-      appendOnly: true,
-      level: "verbose",
-    };
+    // config.infrastructureLogging = {
+    //   appendOnly: true,
+    //   level: "verbose",
+    // };
     // config.module.rules.push(
     //   {
     //     test: /\.svg$/,
