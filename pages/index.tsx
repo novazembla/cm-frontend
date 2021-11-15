@@ -54,6 +54,7 @@ export const Home = ({ homepage }: { homepage: any }) => {
 
   const { isMobile, isTablet, isDesktopAndUp } = useIsBreakPoint();
 
+  const isMobileRef = useRef<boolean>(false);
   const containersRef = useRef<any>(null);
   const parsedHighlightsRef = useRef<any>(null);
   const currentHightlightIndexRef = useRef<number>(0);
@@ -117,8 +118,9 @@ export const Home = ({ homepage }: { homepage: any }) => {
   }, 350);
 
   const onScroll = () => {
+    
     if (
-      isMobile ||
+      isMobileRef.current ||
       !highlightsRef.current ||
       !highlightsCardsContainerRef.current ||
       !containersRef.current ||
@@ -148,7 +150,8 @@ export const Home = ({ homepage }: { homepage: any }) => {
           cultureMap.panTo(
             parsedHighlightsRef.current?.[newIndex].lng,
             parsedHighlightsRef.current?.[newIndex].lat,
-            !isMobile
+            !isMobileRef.current,
+            isMobileRef.current && !isMSOpen
           );
         }
       }
@@ -161,6 +164,7 @@ export const Home = ({ homepage }: { homepage: any }) => {
     if (typeof window === "undefined" || !highlightsCardsContainerRef.current)
       return;
 
+    isMobileRef.current = window.matchMedia("(max-width: 44.999em)").matches;
     containersRef.current =
       highlightsCardsContainerRef.current.querySelectorAll(".cardContainer");
 
@@ -230,6 +234,8 @@ export const Home = ({ homepage }: { homepage: any }) => {
         []
       );
       if (highlights.length) {
+        cultureMap.showCurrentView();
+
         cultureMap.setHighlights(highlights);
         cultureMap.panTo(
           highlights[0].lng,
@@ -245,7 +251,7 @@ export const Home = ({ homepage }: { homepage: any }) => {
         cultureMap.clearHighlights();
       }
     };
-  }, [homepage?.highlights, settings, cultureMap, config]);
+  }, [homepage?.highlights, settings, cultureMap, config, isMobile]);
 
   if (!homepage) return <></>;
 
@@ -399,7 +405,8 @@ export const Home = ({ homepage }: { homepage: any }) => {
                               cultureMap.panTo(
                                 parsedHighlightsRef.current[newIndex].lng,
                                 parsedHighlightsRef.current[newIndex].lat,
-                                !isMobile
+                                !isMobile,
+                                isMobile && !isMSOpen
                               );
                               setCurrentHightlightIndex(newIndex);
                             }

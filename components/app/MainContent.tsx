@@ -4,16 +4,13 @@ import { useAppTranslations, useIsBreakPoint } from "~/hooks";
 
 import { motion, useAnimation } from "framer-motion";
 import { useRouter } from "next/router";
-// TODO: Scroll state really needed?
 import {
-  useScrollStateContext,
   useMenuButtonContext,
   useQuickSearchContext,
   useMainContentContext,
 } from "~/provider";
 import { SVG } from "~/components/ui";
 
-import { primaryInput } from "detect-it";
 import { debounce } from "lodash";
 
 const MotionBox = motion(Box);
@@ -47,21 +44,16 @@ export const MainContent = ({
     useMainContentContext();
 
   const router = useRouter();
-  const { isMobile, isTablet, isTabletWide, isDesktopAndUp } =
+  const { isMobile, isTabletWide, isDesktopAndUp } =
     useIsBreakPoint();
 
   const [dragLeft, setDragLeft] = useState(0);
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(true);
-  const [isAnimating, setIsAnimating] = useState(false);
-
+  
   const [eventListenerAdded, setEventListenerAdded] = useState(false);
 
   const controls = useAnimation();
-
-  // const [isScrollingObserved, setIsScrollingObserved] = useState(false);
-
-  const scrollState = useScrollStateContext();
 
   const { t } = useAppTranslations();
 
@@ -87,120 +79,6 @@ export const MainContent = ({
     xl: "50px",
     "2xl": "calc(8vw - 55px)",
   });
-
-  //   TODO: REMOVE if (isScrollingObserved || typeof window === undefined) return;
-
-  //   setIsScrollingObserved(true);
-
-  //   console.log("attaching scroll event");
-
-  //   const trackBody = (e: Event) => {
-  //     console.log("tracking boyd scroll", window.scrollY);
-  //     scrollState.set(
-  //       "body",
-  //       router.asPath.replace(/[^a-z]/g, ""),
-  //       window.scrollY
-  //     );
-  //   };
-  //   document.addEventListener("scroll", trackBody);
-
-  //   return () => {
-  //     if (typeof window === undefined) return;
-  //     console.log("removeing scroll event");
-  //     document.removeEventListener("scroll", trackBody);
-  //   };
-
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
-
-  // useEffect(() => {
-  //   if (typeof window === "undefined") return;
-
-  //   // reset
-  //   const container: HTMLDivElement | null = document.querySelector(
-  //     `.animatedMainContent:not(#p-${router.asPath.replace(/[^a-z]/g, "")})`
-  //   );
-
-  //   if (container) {
-  //     const slug = container.getAttribute("id")?.replace("p-", "") ?? "-";
-  //     if (isMobile) {
-  //       console.log(2);
-  //     } else {
-  //       console.log(3, container, slug);
-  //       // annoyinigly the clone of the component by framer motion's animate presence
-  //       // reset the scoll state of the main content's div.
-  //       // we have to reset it
-  //       if (scrollState.get("main", slug) > 0) {
-  //         console.log(4, container);
-
-  //         const mc: HTMLDivElement | null =
-  //           container.querySelector(".mainContent");
-
-  //         if (mc) {
-  //           console.log(slug, scrollState.get("main", slug));
-  //           setTimeout(() => {
-  //             mc.scrollTo({
-  //               top: scrollState.get("main", slug),
-  //               left: 0,
-  //             });
-  //           }, 20);
-  //           setTimeout(() => {
-  //             mc.scrollTo({
-  //               top: scrollState.get("main", slug),
-  //               left: 0,
-  //             });
-  //           }, 20);
-  //         }
-  //       }
-  //     }
-  //   }
-  // }, [router.asPath, isMobile, scrollState]);
-
-  // useEffect(() => {
-  //   if (typeof window === "undefined") return;
-
-  //   console.log("setting current router", router.asPath.replace(/[^a-z]/g, ""));
-
-  //   if (isMobile) {
-  //     if (
-  //       scrollState.get("body", router.asPath.replace(/[^a-z]/g, "")) > 0 &&
-  //       scrollState.isBack
-  //     ) {
-  //       setTimeout(() => {
-  //         window.scrollTo({
-  //           top: scrollState.get("main", router.asPath.replace(/[^a-z]/g, "")),
-  //           left: 0,
-  //         });
-  //       }, 20);
-  //     } else {
-  //       window.scrollTo({
-  //         top: 0,
-  //         left: 0,
-  //       });
-  //       scrollState.set("main", router.asPath.replace(/[^a-z]/g, ""), 0);
-  //     }
-  //   } else {
-  //     if (
-  //       scrollState.get("main", router.asPath.replace(/[^a-z]/g, "")) > 0 &&
-  //       scrollState.isBack
-  //     ) {
-  //       setTimeout(() => {
-  //         mainContentRef.current?.scrollTo({
-  //           top: scrollState.get("main", router.asPath.replace(/[^a-z]/g, "")),
-  //           left: 0,
-  //         });
-  //       }, 20);
-  //     } else {
-  //       mainContentRef.current?.scrollTo({
-  //         top: 0,
-  //         left: 0,
-  //       });
-  //       scrollState.set("main", router.asPath.replace(/[^a-z]/g, ""), 0);
-  //     }
-  //   }
-
-  //   scrollState.setIsBack(false);
-  // }, [router.asPath, isMobile, scrollState]);
 
   const onResize = useCallback(() => {
     let dL = window.innerWidth - 20 - 40;
@@ -276,7 +154,6 @@ export const MainContent = ({
     setIsDrawerOpen(false);
     setMainContentStatus(false);
 
-    setIsAnimating(true);
     isAnimationRunningRef.current = true;
 
     controls.stop();
@@ -290,7 +167,6 @@ export const MainContent = ({
 
     setTimeout(() => {
       panActive.current = false;
-      setIsAnimating(false);
       isAnimationRunningRef.current = false;
     }, 350);
   }, [controls, setMainContentStatus, dragLeft]);
@@ -300,7 +176,6 @@ export const MainContent = ({
 
     setIsDrawerOpen(true);
     setMainContentStatus(true);
-    setIsAnimating(true);
     isAnimationRunningRef.current = true;
 
     controls.stop();
@@ -314,7 +189,6 @@ export const MainContent = ({
     setTimeout(() => {
       panActive.current = false;
       isAnimationRunningRef.current = false;
-      setIsAnimating(false);
     }, 350);
   }, [controls, setMainContentStatus]);
 
@@ -410,7 +284,7 @@ export const MainContent = ({
                   opacity: buttonVisible ? 1 : 0,
                 })}
           >
-            <Box bg="#fff" w="35px" h="55px"  transform="translateX(-4px)">
+            <Box bg="#fff" w="35px" h="55px" transform="translateX(-5px)">
               <IconButton
                 className="svgHover"
                 paddingInlineStart="0"
@@ -433,7 +307,6 @@ export const MainContent = ({
                 p="0"
                 color="cm.accentLight"
                 onClick={toggle}
-                transition="all 0.5s"
                 transform={isDrawerOpen ? "rotate(180deg)" : "rotate(0deg)"}
               />
             </Box>
@@ -546,36 +419,13 @@ export const MainContent = ({
             <Box
               ref={mainContentRef}
               className="mainContent"
-              // TODO: clean up h={
-              //   {
-              //     // md: "calc(100vh - 60px)",
-              //     // xl: "calc(100vh - 80px)",
-              //   }
-              // }
-              // layerStyle={layerStyle}
               minH={
                 isMobile
                   ? isVerticalContent
                     ? undefined
                     : "calc(100vh - 60px)"
                   : "calc(100vh - 80px)"
-              }
-              // overflowY={{
-              //   xl: "auto",
-              // }}
-              // pb={
-              //   !isMobile && primaryInput === "touch"
-              //     ? "var(--locationBarHeight)"
-              //     : undefined
-              // }
-
-              // onScroll={(e: React.UIEvent<HTMLDivElement>) => {
-              //   scrollState.set(
-              //     "main",
-              //     router.asPath.replace(/[^a-z]/g, ""),
-              //     (e.target as any).scrollTop
-              //   );
-              // }}
+              }                          
             >
               {children}
             </Box>

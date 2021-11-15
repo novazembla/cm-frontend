@@ -83,6 +83,7 @@ export const tourQuery = gql`
         location {
           id
           title
+          slug
           description
           lat
           lng
@@ -112,7 +113,7 @@ export const createTourStops = (
       id: ts?.location.id,
       lng: ts?.location?.lng,
       lat: ts?.location?.lat,
-      title: ts?.location?.title,
+      title: ts?.title,
       slug: `/tour/${tourSlug}/${ts?.number}`,
       color: getLocationColors(ts?.location, settings).color,
       highlight: index === newIndex,
@@ -133,6 +134,7 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
   const { t, i18n, getMultilangValue, getMultilangHtml } = useAppTranslations();
   const [fillContainer, setFillContainer] = useState(true);
 
+  const isMobileRef = useRef<boolean>(false);
   const containersRef = useRef<any>(null);
   const parsedTourStopsRef = useRef<any>(null);
   const currentHightlightIndexRef = useRef<number>(-2);
@@ -200,7 +202,7 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
 
   const onScroll = () => {
     if (
-      isMobile ||
+      isMobileRef.current ||
       !tourStopsRef.current ||
       !tourStopsCardsContainerRef.current ||
       !containersRef.current ||
@@ -208,8 +210,6 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
       !parsedTourStopsRef.current
     )
       return;
-
-    console.log("scroll to");
 
     if (containersRef.current?.length) {
       let newIndex = [...containersRef.current].reduce(
@@ -238,19 +238,15 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
           settings
         );
 
-        console.log("setTour");
         cultureMap.setTourStops(stops);
 
         if (parsedTourStopsRef.current?.[Math.max(newIndex, 0)]) {
-          console.log(1);
-          setTimeout(() => {
-            console.log("trigger pan");
-            cultureMap.panTo(
-              parsedTourStopsRef.current?.[Math.max(newIndex, 0)].lng,
-              parsedTourStopsRef.current?.[Math.max(newIndex, 0)].lat,
-              !isMobile
-            );
-          }, 500);
+          console.log("pan1");
+          cultureMap.panTo(
+            parsedTourStopsRef.current?.[Math.max(newIndex, 0)].lng,
+            parsedTourStopsRef.current?.[Math.max(newIndex, 0)].lat,
+            !isMobileRef.current
+          );
         }
 
         currentHightlightIndexRef.current = newIndex;
@@ -261,6 +257,8 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
   useEffect(() => {
     if (typeof window === "undefined" || !tourStopsCardsContainerRef.current)
       return;
+
+    isMobileRef.current = window.matchMedia("(max-width: 44.999em)").matches;
 
     containersRef.current =
       tourStopsCardsContainerRef.current.querySelectorAll(".cardContainer");
@@ -301,6 +299,7 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
 
     if (tour?.tourStops?.length > 0 && settings && cultureMap) {
       if (tour?.path) {
+        console.log("effect 1", isMobileRef.current);
         const stops = createTourStops(
           tour?.tourStops,
           getMultilangValue(tour?.slug),
@@ -310,25 +309,55 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
 
         cultureMap.setTourPath(tour?.path);
 
-        const isMobile = window.matchMedia("(max-width: 44.999em)").matches;
+        if (scrollState.wasBack() && isMobileRef.current) {
+          const scrollLeft = scrollState.get(
+            "vertical",
+            router.asPath.replace(/[^a-z]/g, "")
+          );
+          console.log("get sl", scrollLeft);
+          if (scrollLeft) {
+            setTimeout(() => {
+              tourStopsRef.current?.scrollTo({
+                left: scrollLeft,
+                top: 0,
+              });
+            }, 20);
+          }
+        }
 
         if (
           !scrollState.wasBack() ||
-          (!isMobile && typeof window !== "undefined" && window.scrollY === 0)
+          (!isMobileRef.current &&
+            typeof window !== "undefined" &&
+            window.scrollY === 0)
         ) {
           cultureMap.setTourStops(stops);
 
-          if (!scrollState.wasBack()) cultureMap.fitToCurrentTourBounds();
+          if (!scrollState.wasBack()) {
+            console.log("fit to bounds");
+            cultureMap.fitToCurrentTourBounds();
+          }
         }
 
         setTimeout(() => {
           if (
             !scrollState.wasBack() ||
-            (!isMobile && typeof window !== "undefined" && window.scrollY === 0)
+            (!isMobileRef.current &&
+              typeof window !== "undefined" &&
+              window.scrollY === 0)
           ) {
-            console.log(2);
-
-            cultureMap.panTo(stops[0].lng, stops[0].lat, !isMobile, isMobile);
+            console.log(
+              "pan2",
+              isMobileRef.current,
+              stops[0].lng,
+              stops[0].lat
+            );
+            cultureMap.panTo(
+              stops[0].lng,
+              stops[0].lat,
+              !isMobileRef.current,
+              isMobileRef.current
+            );
           }
         }, 500);
 
@@ -339,6 +368,7 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
       if (cultureMap) cultureMap.clearHighlights();
     };
   }, [
+    router.asPath,
     scrollState,
     scrollState.wasBack,
     tour?.tourStops,
@@ -350,7 +380,6 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
     tour?.slug,
   ]);
 
-  let meta: any = t("card.meta.tour", "Tour");
   let color = config.colorDark;
 
   const teaser = htmlToTrimmedString(getMultilangHtml(tour.teaser) ?? "", 200);
@@ -415,9 +444,10 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
                         if (tour?.tourStops?.length && cultureMap) {
                           const scrollLeft = (e.target as any).scrollLeft;
 
+                          console.log("set", scrollLeft);
                           scrollState.set(
                             "vertical",
-                            router.asPath,
+                            router.asPath.replace(/[^a-z]/g, ""),
                             scrollLeft
                           );
 
@@ -449,7 +479,8 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
                               );
 
                               cultureMap.setTourStops(stops);
-                              console.log(3);
+
+                              console.log("pan3");
                               cultureMap.panTo(
                                 parsedTourStopsRef.current[
                                   Math.max(newIndex, 0)

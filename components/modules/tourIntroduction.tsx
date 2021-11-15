@@ -15,6 +15,7 @@ import {
   IconButton,
   chakra,
   Grid,
+  Button,
 } from "@chakra-ui/react";
 import { useAppTranslations, useIsBreakPoint } from "~/hooks";
 import { useRouter } from "next/router";
@@ -33,6 +34,21 @@ export const ModuleComponentTourIntroduction = ({ tour }: { tour: any }) => {
   const [colorDark, setColorDark] = useState(config.colorDark);
 
   const scrollState = useScrollStateContext();
+
+  const onNavigationButtonClick = () => {
+    if (scrollState.getPreviousPath()) {
+      if (
+        router.asPath.indexOf(scrollState.getPreviousPath()) >
+        -1
+      ) {
+        router.back();
+      } else {
+        router.push(`/tour/${getMultilangValue(tour?.slug)}`);
+      }
+    } else {
+      router.push(`/tour/${getMultilangValue(tour?.slug)}`);
+    }
+  }
 
   useEffect(() => {
     console.log("mount tour stop");
@@ -208,20 +224,7 @@ export const ModuleComponentTourIntroduction = ({ tour }: { tour: any }) => {
                   h={isMobile ? "30px" : "40px"}
                   minW="30px"
                   overflow="hidden"
-                  onClick={() => {
-                    if (scrollState.getPreviousPath()) {
-                      if (
-                        router.asPath.indexOf(scrollState.getPreviousPath()) >
-                        -1
-                      ) {
-                        router.back();
-                      } else {
-                        router.push(`/tour/${getMultilangValue(tour?.slug)}`);
-                      }
-                    } else {
-                      router.push(`/tour/${getMultilangValue(tour?.slug)}`);
-                    }
-                  }}
+                  onClick={onNavigationButtonClick}
                   transition="all 0.3s"
                   _hover={{
                     bg: "transparent",
@@ -252,6 +255,15 @@ export const ModuleComponentTourIntroduction = ({ tour }: { tour: any }) => {
               )}
 
               <MultiLangHtml json={tour.description} />
+
+              <Box textAlign="right" mt="2em">
+                <Button
+                  onClick={onNavigationButtonClick}
+                  variant="ghost"
+                >
+                  {t("tour.button.viewAllTourStops", "View all tour stops")}
+                </Button>
+              </Box>
             </Box>
           </Box>
         </Box>

@@ -5,6 +5,7 @@ import {
   ApiImage,
   SVG,
   Images,
+  CardLocation,
 } from "~/components/ui";
 import { Footer, MainContent } from "~/components/app";
 import { getApolloClient } from "~/services";
@@ -22,6 +23,7 @@ import {
   IconButton,
   chakra,
   Grid,
+  Button,
 } from "@chakra-ui/react";
 import { useAppTranslations, useIsBreakPoint } from "~/hooks";
 import { GetStaticProps } from "next";
@@ -49,6 +51,21 @@ export const ModuleComponentTourStop = ({
 
   const scrollState = useScrollStateContext();
 
+  const onNavigationButtonClick = () => {
+    if (scrollState.getPreviousPath()) {
+      if (
+        router.asPath.indexOf(scrollState.getPreviousPath()) >
+        -1
+      ) {
+        router.back();
+      } else {
+        router.push(`/tour/${getMultilangValue(tour?.slug)}`);
+      }
+    } else {
+      router.push(`/tour/${getMultilangValue(tour?.slug)}`);
+    }
+  }
+  
   useEffect(() => {
     console.log("mount tour stop");
     if (cultureMap) cultureMap.hideCurrentView();
@@ -232,22 +249,7 @@ export const ModuleComponentTourStop = ({
                   h={isMobile ? "30px" : "40px"}
                   minW="30px"
                   overflow="hidden"
-                  onClick={() => {
-                    console.log(scrollState.getPreviousPath());
-
-                    if (scrollState.getPreviousPath()) {
-                      if (
-                        router.asPath.indexOf(scrollState.getPreviousPath()) >
-                        -1
-                      ) {
-                        router.back();
-                      } else {
-                        router.push(`/tour/${getMultilangValue(tour?.slug)}`);
-                      }
-                    } else {
-                      router.push(`/tour/${getMultilangValue(tour?.slug)}`);
-                    }
-                  }}
+                  onClick={onNavigationButtonClick}
                   transition="all 0.3s"
                   _hover={{
                     bg: "transparent",
@@ -283,8 +285,29 @@ export const ModuleComponentTourStop = ({
                 <Images images={tourStop?.images} />
               </Box>
             )}
+
+            <Box textAlign="right" p={{
+                base: "20px",
+                md: "35px",
+              }}>
+              <Button onClick={onNavigationButtonClick} variant="ghost">
+                {t("tour.button.viewAllTourStops", "View all tour stops")}
+              </Button>
+            </Box>
           </Box>
         </Box>
+        {tourStop?.location?.id && (
+          <Box p="20px">
+            <chakra.h3 className="highlight" color="cm.text" pb="0" mb="20px">
+              {t("event.title.location", "Location")}
+            </chakra.h3>
+
+            <CardLocation
+              key={`loc-${tourStop?.location.id}`}
+              location={tourStop?.location}
+            />
+          </Box>
+        )}
         <Footer noBackground />
       </Grid>
     </MainContent>

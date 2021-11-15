@@ -79,7 +79,7 @@ export class MapHighlights {
           this.cultureMap.popup.show(
             coordinates,
             this.cultureMap.tHelper.getMultilangValue(titles),
-            feature?.properties?.color,
+            feature?.properties?.strokeColor ?? feature?.properties?.color,
             slug
           );
         } catch (err) {
@@ -124,7 +124,7 @@ export class MapHighlights {
         this.events["mouseleave-highlights"] = () => {
           if (this.cultureMap.map) {
             this.cultureMap.map.getCanvas().style.cursor = "";
-            this.cultureMap.popup.hide();
+            // this.cultureMap.popup.hide();
           }
         };
 
