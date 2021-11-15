@@ -53,10 +53,7 @@ export const ModuleComponentTourStop = ({
 
   const onNavigationButtonClick = () => {
     if (scrollState.getPreviousPath()) {
-      if (
-        router.asPath.indexOf(scrollState.getPreviousPath()) >
-        -1
-      ) {
+      if (router.asPath.indexOf(scrollState.getPreviousPath()) > -1) {
         router.back();
       } else {
         router.push(`/tour/${getMultilangValue(tour?.slug)}`);
@@ -64,14 +61,12 @@ export const ModuleComponentTourStop = ({
     } else {
       router.push(`/tour/${getMultilangValue(tour?.slug)}`);
     }
-  }
-  
+  };
+
   useEffect(() => {
-    console.log("mount tour stop");
     if (cultureMap) cultureMap.hideCurrentView();
 
     return () => {
-      console.log("unmount tourstop");
       if (cultureMap) cultureMap.clearTour();
     };
   }, [router.asPath, cultureMap]);
@@ -106,11 +101,17 @@ export const ModuleComponentTourStop = ({
           currentStop?.location?.lat
         ) {
           setTimeout(() => {
+            const commingFromTour =
+              scrollState.getPreviousPath() !== "" &&
+              router.asPath.indexOf(scrollState.getPreviousPath()) > -1;
+            
             cultureMap.panTo(
               currentStop?.location?.lng,
               currentStop?.location?.lat,
-              true
+              !commingFromTour,
+              commingFromTour
             );
+
           }, 500);
         }
       }
@@ -132,6 +133,8 @@ export const ModuleComponentTourStop = ({
     config,
     getMultilangValue,
     tour?.slug,
+    router.asPath,
+    scrollState,
   ]);
 
   let meta: any = t("card.meta.tour", "Tour");
@@ -286,10 +289,13 @@ export const ModuleComponentTourStop = ({
               </Box>
             )}
 
-            <Box textAlign="right" p={{
+            <Box
+              textAlign="right"
+              p={{
                 base: "20px",
                 md: "35px",
-              }}>
+              }}
+            >
               <Button onClick={onNavigationButtonClick} variant="ghost">
                 {t("tour.button.viewAllTourStops", "View all tour stops")}
               </Button>

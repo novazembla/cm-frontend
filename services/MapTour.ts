@@ -96,6 +96,10 @@ export class MapTour {
           "line-width": 2,
         },
       });
+
+      if (this.cultureMap?.map?.getLayer("tourStops")) {
+        this.cultureMap.map.moveLayer("tourPath", "tourStops");
+      } 
     }
   }
 

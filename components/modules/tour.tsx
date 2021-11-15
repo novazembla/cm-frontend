@@ -13,7 +13,6 @@ import {
   useMapContext,
   useConfigContext,
   useSettingsContext,
-  useTourContext,
   useScrollStateContext,
 } from "~/provider";
 import {
@@ -143,10 +142,6 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
 
   const scrollState = useScrollStateContext();
 
-  const [currentHightlightIndex, setCurrentHightlightIndex] = useState(0);
-
-  const tourState = useTourContext();
-
   const mobileCardWrapper = isMobile
     ? { flexBasis: "295px", minW: "295px", maxW: "295px" }
     : {};
@@ -228,8 +223,6 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
       );
 
       if (currentHightlightIndexRef.current !== newIndex) {
-        tourState.setStop(newIndex);
-
         const stops = createTourStops(
           tour?.tourStops,
           getMultilangValue(tour?.slug),
@@ -252,6 +245,46 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
     }
   };
 
+  const onVerticalScroll = (scrollLeft: number) => {
+    if (tour?.tourStops?.length && cultureMap) {
+      scrollState.set(
+        "vertical",
+        router.asPath.replace(/[^a-z]/g, ""),
+        scrollLeft
+      );
+
+      let newIndex = -1;
+      if (scrollLeft - (MOBILE_CARD_WIDTH + 20) * 1.75 > 0) {
+        newIndex = Math.floor(
+          (scrollLeft -
+            (MOBILE_CARD_WIDTH + 20) * 2.5 +
+            (MOBILE_CARD_WIDTH + 20) * 0.75) /
+            (MOBILE_CARD_WIDTH + 20)
+        );
+      }
+
+      if (currentHightlightIndexRef.current !== newIndex) {
+        const stops = createTourStops(
+          tour?.tourStops,
+          getMultilangValue(tour?.slug),
+          newIndex,
+          settings
+        );
+
+        cultureMap.setTourStops(stops);
+        if (parsedTourStopsRef.current?.[Math.max(newIndex, 0)]) {
+          cultureMap.panTo(
+            parsedTourStopsRef.current[Math.max(newIndex, 0)].lng,
+            parsedTourStopsRef.current[Math.max(newIndex, 0)].lat,
+            !isMobile,
+            isMobile
+          );
+        }
+        currentHightlightIndexRef.current = newIndex;
+      }
+    }
+  };
+
   useEffect(() => {
     if (typeof window === "undefined" || !tourStopsCardsContainerRef.current)
       return;
@@ -264,20 +297,22 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
     window.addEventListener("resize", onResize);
     window.addEventListener("scroll", onScroll);
     onResize();
-    if (scrollState.wasBack() && isMobileRef.current) {
+    if (isMobileRef.current) {
       const scrollLeft = scrollState.get(
         "vertical",
         router.asPath.replace(/[^a-z]/g, "")
       );
-      if (scrollLeft) {
+      if (scrollState.wasBack() && scrollLeft) {
         onResize();
         tourStopsRef.current?.scrollTo({
           left: scrollLeft,
           top: 0,
         });
+      } else {
+        onVerticalScroll(0);
       }
     }
-    
+
     onScroll();
     document.addEventListener("DOMContentLoaded", onResize);
 
@@ -425,58 +460,8 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
                 onScroll={
                   isMobile
                     ? (e: UIEvent<HTMLDivElement>) => {
-                        if (tour?.tourStops?.length && cultureMap) {
-                          const scrollLeft = (e.target as any).scrollLeft;
-
-                          scrollState.set(
-                            "vertical",
-                            router.asPath.replace(/[^a-z]/g, ""),
-                            scrollLeft
-                          );
-
-                          let newIndex = -1;
-                          if (
-                            scrollLeft - (MOBILE_CARD_WIDTH + 20) * 1.75 >
-                            0
-                          ) {
-                            newIndex = Math.floor(
-                              (scrollLeft -
-                                (MOBILE_CARD_WIDTH + 20) * 2.5 +
-                                (MOBILE_CARD_WIDTH + 20) * 0.75) /
-                                (MOBILE_CARD_WIDTH + 20)
-                            );
-                          }
-
-                          if (currentHightlightIndex !== newIndex) {
-                            tourState.setStop(newIndex);
-                            if (
-                              parsedTourStopsRef.current?.[
-                                Math.max(newIndex, 0)
-                              ]
-                            ) {
-                              const stops = createTourStops(
-                                tour?.tourStops,
-                                getMultilangValue(tour?.slug),
-                                newIndex,
-                                settings
-                              );
-
-                              cultureMap.setTourStops(stops);
-                              
-                              cultureMap.panTo(
-                                parsedTourStopsRef.current[
-                                  Math.max(newIndex, 0)
-                                ].lng,
-                                parsedTourStopsRef.current[
-                                  Math.max(newIndex, 0)
-                                ].lat,
-                                !isMobile,
-                                isMobile
-                              );
-                              setCurrentHightlightIndex(newIndex);
-                            }
-                          }
-                        }
+                        const scrollLeft = (e.target as any).scrollLeft;
+                        onVerticalScroll(scrollLeft);
                       }
                     : undefined
                 }

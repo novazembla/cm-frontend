@@ -55,7 +55,6 @@ export const ScrollStateContextProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  console.log("rerender component");
   const currentPathInMemory = useRef("");
   const previousPathInMemory = useRef("");
   const refIsBack = useRef<boolean>(false);

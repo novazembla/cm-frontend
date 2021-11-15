@@ -7,7 +7,6 @@ import {
   ModuleComponentTourIntroduction,
 } from "~/components/modules";
 import { useRouter } from "next/router";
-import { TourContextProvider } from "~/provider";
 
 const Tour = ({
   tour,
@@ -28,13 +27,13 @@ const Tour = ({
   );
 
   return (
-    <TourContextProvider>
+    <>
       {stop > 0 ? (
         <ModuleComponentTourStop tourStop={tourStop} tour={tour} {...props} />
       ) : (
         <ModuleComponentTourIntroduction tour={tour} {...props} />
       )}
-    </TourContextProvider>
+    </>
   );
 };
 

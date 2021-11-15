@@ -6,12 +6,8 @@ import {
   ModuleComponentTour,
 } from "~/components/modules";
 
-import {
-  TourContextProvider,
-} from "~/provider";
-
 const Tour = ({ location, ...props }: { location: any; props: any }) => {
-  return <TourContextProvider><ModuleComponentTour tour={location} {...props} /></TourContextProvider>;
+  return <ModuleComponentTour tour={location} {...props} />;
 };
 
 export const getStaticPaths: GetStaticPaths = async (context) => {
