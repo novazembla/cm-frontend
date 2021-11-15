@@ -397,8 +397,8 @@ export const MainContent = ({
             borderLeft="none"
             borderColor="cm.accentLight"
             transition="opacity 0.3"
-            w="20px"
-            minW="20px"
+            w="25px"
+            minW="25px"
             h="55px"
             overflow="hidden"
             {...(isMenuOpen || isQuickSearchOpen
@@ -410,7 +410,7 @@ export const MainContent = ({
                   opacity: buttonVisible ? 1 : 0,
                 })}
           >
-            <Box bg="#fff" w="30px" h="55px" transform="translateX(-8px)">
+            <Box bg="#fff" w="35px" h="55px"  transform="translateX(-4px)">
               <IconButton
                 className="svgHover"
                 paddingInlineStart="0"
@@ -429,7 +429,7 @@ export const MainContent = ({
                   bg: "transparent",
                 }}
                 aria-label={toggleLabel}
-                icon={<SVG type="large_chevron" width="20px" height="20px" />}
+                icon={<SVG type="large_chevron" width="24px" height="24px" />}
                 p="0"
                 color="cm.accentLight"
                 onClick={toggle}

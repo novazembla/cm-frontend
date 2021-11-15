@@ -135,7 +135,7 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
 
   const containersRef = useRef<any>(null);
   const parsedTourStopsRef = useRef<any>(null);
-  const currentHightlightIndexRef = useRef<number>(-1);
+  const currentHightlightIndexRef = useRef<number>(-2);
   const tourStopsRef = useRef<HTMLDivElement>(null);
   const tourStopsCardsContainerRef = useRef<HTMLDivElement>(null);
 
@@ -149,37 +149,6 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
   const mobileCardWrapper = isMobile
     ? { flexBasis: "295px", minW: "295px", maxW: "295px" }
     : {};
-
-  useEffect(() => {
-    console.log("mount tour");
-
-    if (cultureMap) cultureMap.hideCurrentView();
-    
-    // As next.js doesn't unmount/remount if only components route changes we
-    // need to rely on router.asPath to trigger in between tour change actions
-    // TODO: this is on mount call back
-    // setTourStop(null)
-    return () => {
-      console.log("unmount tour");
-      if (cultureMap)
-        cultureMap.clearTour();
-      
-    };
-  }, [router.asPath, cultureMap]);
-
-  useWhyDidYouUpdate("tour", {
-    asPath: router.asPath,
-    cultureMap,
-    scrollState,
-  });
-  // useEffect(() => {
-  //   if (cultureMap) cultureMap.hideCurrentView();
-
-  //   return () => {
-  //     if (cultureMap) cultureMap.showCurrentView();
-  //   };
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
 
   const onResize = debounce(() => {
     if (
@@ -274,11 +243,14 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
 
         if (parsedTourStopsRef.current?.[Math.max(newIndex, 0)]) {
           console.log(1);
-          cultureMap.panTo(
-            parsedTourStopsRef.current?.[Math.max(newIndex, 0)].lng,
-            parsedTourStopsRef.current?.[Math.max(newIndex, 0)].lat,
-            !isMobile
-          );
+          setTimeout(() => {
+            console.log("trigger pan");
+            cultureMap.panTo(
+              parsedTourStopsRef.current?.[Math.max(newIndex, 0)].lng,
+              parsedTourStopsRef.current?.[Math.max(newIndex, 0)].lat,
+              !isMobile
+            );
+          }, 500);
         }
 
         currentHightlightIndexRef.current = newIndex;
@@ -309,6 +281,22 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
   }, []);
 
   useEffect(() => {
+    console.log("mount tour");
+
+    if (cultureMap) cultureMap.hideCurrentView();
+    currentHightlightIndexRef.current = -2;
+
+    // As next.js doesn't unmount/remount if only components route changes we
+    // need to rely on router.asPath to trigger in between tour change actions
+    // TODO: this is on mount call back
+    // setTourStop(null)
+    return () => {
+      console.log("unmount tour");
+      if (cultureMap) cultureMap.clearTour();
+    };
+  }, [router.asPath, cultureMap]);
+
+  useEffect(() => {
     if (typeof window === "undefined") return;
 
     if (tour?.tourStops?.length > 0 && settings && cultureMap) {
@@ -321,17 +309,23 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
         );
 
         cultureMap.setTourPath(tour?.path);
-      
-        if (!scrollState.wasBack()) {
-          cultureMap.setTourStops(stops);
-          cultureMap.fitToCurrentTourBounds();
-        }
-        
 
         const isMobile = window.matchMedia("(max-width: 44.999em)").matches;
 
+        if (
+          !scrollState.wasBack() ||
+          (!isMobile && typeof window !== "undefined" && window.scrollY === 0)
+        ) {
+          cultureMap.setTourStops(stops);
+
+          if (!scrollState.wasBack()) cultureMap.fitToCurrentTourBounds();
+        }
+
         setTimeout(() => {
-          if (!scrollState.wasBack()) {
+          if (
+            !scrollState.wasBack() ||
+            (!isMobile && typeof window !== "undefined" && window.scrollY === 0)
+          ) {
             console.log(2);
 
             cultureMap.panTo(stops[0].lng, stops[0].lat, !isMobile, isMobile);

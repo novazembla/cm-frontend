@@ -179,8 +179,11 @@ export class MapTour {
         },
       });
 
-      this.cultureMap.map.moveLayer("tourPath", "tourStops");
-      this.cultureMap.map.moveLayer("tourStops", "tourStopNumbers");
+      this.cultureMap.map.moveLayer("tourStops");
+
+      this.cultureMap.map.moveLayer("tourStopNumbers");
+      this.cultureMap.map.moveLayer("tourStopsHighlightDot");
+      this.cultureMap.map.moveLayer("tourStopsHighlightNumber");
 
       const showMapPop = (e: any) => {
         const feature = e?.features?.[0];
