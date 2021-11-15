@@ -23,14 +23,12 @@ import {
   Text,
   LinkOverlay,
   chakra,
-  Grid,
-  useWhyDidYouUpdate,
+  Grid
 } from "@chakra-ui/react";
 import { htmlToTrimmedString } from "~/utils";
 import { useAppTranslations, useIsBreakPoint } from "~/hooks";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { useRouter } from "next/router";
-import { debounce } from "lodash";
 import { getLocationColors } from "~/utils";
 import NextLink from "next/link";
 
@@ -285,45 +283,7 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
     }
   };
 
-  useEffect(() => {
-    if (typeof window === "undefined" || !tourStopsCardsContainerRef.current)
-      return;
-
-    isMobileRef.current = window.matchMedia("(max-width: 44.999em)").matches;
-
-    containersRef.current =
-      tourStopsCardsContainerRef.current.querySelectorAll(".cardContainer");
-
-    window.addEventListener("resize", onResize);
-    window.addEventListener("scroll", onScroll);
-    onResize();
-    if (isMobileRef.current) {
-      const scrollLeft = scrollState.get(
-        "vertical",
-        router.asPath.replace(/[^a-z]/g, "")
-      );
-      if (scrollState.wasBack() && scrollLeft) {
-        onResize();
-        tourStopsRef.current?.scrollTo({
-          left: scrollLeft,
-          top: 0,
-        });
-      } else {
-        onVerticalScroll(0);
-      }
-    }
-
-    onScroll();
-    document.addEventListener("DOMContentLoaded", onResize);
-
-    return () => {
-      if (typeof window === "undefined") return;
-      window.removeEventListener("resize", onResize);
-      window.removeEventListener("scroll", onScroll);
-    };
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  
 
   useEffect(() => {
     if (cultureMap) cultureMap.hideCurrentView();
@@ -398,6 +358,46 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
     getMultilangValue,
     tour?.slug,
   ]);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !tourStopsCardsContainerRef.current)
+      return;
+
+    isMobileRef.current = window.matchMedia("(max-width: 44.999em)").matches;
+
+    containersRef.current =
+      tourStopsCardsContainerRef.current.querySelectorAll(".cardContainer");
+
+    window.addEventListener("resize", onResize);
+    window.addEventListener("scroll", onScroll);
+    onResize();
+    if (isMobileRef.current) {
+      const scrollLeft = scrollState.get(
+        "vertical",
+        router.asPath.replace(/[^a-z]/g, "")
+      );
+      if (scrollState.wasBack() && scrollLeft) {
+        onResize();
+        tourStopsRef.current?.scrollTo({
+          left: scrollLeft,
+          top: 0,
+        });
+      } else {
+        onVerticalScroll(0);
+      }
+    }
+
+    onScroll();
+    document.addEventListener("DOMContentLoaded", onResize);
+
+    return () => {
+      if (typeof window === "undefined") return;
+      window.removeEventListener("resize", onResize);
+      window.removeEventListener("scroll", onScroll);
+    };
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   let color = config.colorDark;
 

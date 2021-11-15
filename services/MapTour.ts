@@ -83,6 +83,7 @@ export class MapTour {
 
       if (this.cultureMap?.map?.getLayer("tourPath")) return;
 
+      console.log("add path");
       this.cultureMap?.map?.addLayer({
         id: "tourPath",
         type: "line",
@@ -96,10 +97,6 @@ export class MapTour {
           "line-width": 2,
         },
       });
-
-      if (this.cultureMap?.map?.getLayer("tourStops")) {
-        this.cultureMap.map.moveLayer("tourPath", "tourStops");
-      } 
     }
   }
 
@@ -184,7 +181,6 @@ export class MapTour {
       });
 
       this.cultureMap.map.moveLayer("tourStops");
-
       this.cultureMap.map.moveLayer("tourStopNumbers");
       this.cultureMap.map.moveLayer("tourStopsHighlightDot");
       this.cultureMap.map.moveLayer("tourStopsHighlightNumber");

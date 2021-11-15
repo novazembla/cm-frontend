@@ -253,7 +253,7 @@ export const ModuleComponentTourStop = ({
                   minW="30px"
                   overflow="hidden"
                   onClick={onNavigationButtonClick}
-                  transition="all 0.3s"
+                  transition="background-color 0.3s"
                   _hover={{
                     bg: "transparent",
                   }}
