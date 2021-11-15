@@ -15,6 +15,7 @@ import MinusSVG from "~/assets/svg/v2/minus.svg";
 import Accordion1SVG from "~/assets/svg/v2/accordion_level_1.svg";
 import Accordion2SVG from "~/assets/svg/v2/accordion_level_2.svg";
 import ChrevronRightSVG from "~/assets/svg/v2/chevron_right.svg";
+import LargeChrevronSVG from "~/assets/svg/v2/large_chevron.svg";
 
 export const SVG = ({
   type,
@@ -85,6 +86,10 @@ export const SVG = ({
 
     case "chevron_right":
       component = ChrevronRightSVG;
+      break;
+
+    case "large_chevron":
+      component = LargeChrevronSVG;
       break;
   
   }

@@ -1,9 +1,8 @@
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
-import { I18n } from "next-i18next";
 import { NextRouter } from "next/router";
 
-import type { AppConfig, MapPin } from "~/types";
+import type { AppConfig } from "~/types";
 import type { AppTranslationHelper } from "~/hooks";
 
 import { MapPopup } from "./MapPopup";
@@ -47,7 +46,6 @@ export class CultureMap {
   ready = false;
   onLoadJobs: any[] = [];
   currentView = "clustered";
-
   views: Record<string, any> = {};
 
   constructor(
@@ -74,7 +72,7 @@ export class CultureMap {
     this.views["unclustered"] = new MapViewUnclustered(this);
   }
 
-  init(ref: HTMLDivElement) {
+  init(ref: HTMLDivElement, setIsLoaded: Function) {
     this.mapContainerRef = null;
 
     this.map = new maplibregl.Map({
@@ -91,10 +89,14 @@ export class CultureMap {
     const process = () => {
       this.ready = true;
 
+      if (typeof setIsLoaded === "function")
+        setIsLoaded.call(null, true);
+
       if (this.currentView in this.views) {
         this.views[this.currentView].setData();
         setTimeout(() => {
           this.views[this.currentView].render();
+          this.views[this.currentView].hide();
           this.views[this.currentView].fitToBounds();
         }, 100);
       }
@@ -178,6 +180,7 @@ export class CultureMap {
 
         setTimeout(() => {
           this.views[view].render();
+          this.views[view].show();
         }, 100);
 
         this.currentView = view;
@@ -224,12 +227,18 @@ export class CultureMap {
     }
   }
 
-  setCurrentViewData(data?: any) {
+  setCurrentViewData(data?: any, show?: boolean ) {
     if (this.map) {
       const run = () => {
         this.popup.hide();
         this.clusterDetail.hide();
         this.views[this.currentView].setData(data);
+
+        if (show) {
+          setTimeout(() => {
+            this.views[this.currentView].show()
+          }, 100);
+        }
       };
 
       if (!this.ready) {
@@ -253,11 +262,15 @@ export class CultureMap {
               ids.includes(f?.properties?.id)
             ),
           });
+          
         } else {
           this.views[this.currentView].setData({
             type: "FeatureCollection",
             features: [],
           });
+          setTimeout(() => {
+            this.views[this.currentView].show()
+          }, 100);
         }
       };
 
@@ -292,7 +305,7 @@ export class CultureMap {
     this.router.push(slug);
   }
 
-  setTour(path: any, stops: MapTourType[]) {
+  setTourStops(stops: MapTourType[]) {
     if (this.map) {
       const run = () => {
         const stopsGeoJSON = {
@@ -333,8 +346,8 @@ export class CultureMap {
           type: "FeatureCollection",
         };
 
-        this.tour.setTourData(path, stopsGeoJSON);
-        this.tour.render();
+        this.tour.setTourStopsData(stopsGeoJSON);
+        this.tour.renderStops();
       };
       if (!this.ready) {
         this.onLoadJobs.push(run);
@@ -343,6 +356,20 @@ export class CultureMap {
       }
     }
   }
+  setTourPath(path: any) {
+    if (this.map) {
+      const run = () => {
+        this.tour.setTourPathData(path);
+        this.tour.renderPath();
+      };
+      if (!this.ready) {
+        this.onLoadJobs.push(run);
+      } else {
+        run();
+      }
+    }
+  }
+
 
   fitToCurrentTourBounds() {
     if (this.map) {
@@ -458,7 +485,7 @@ export class CultureMap {
       return withDrawer
         ? [window.innerWidth * 0.4, 30]
         : withVerticalScroller
-        ? [0, -75]
+        ? [0, -200]
         : [0, 30];
     } else if (isTablet && !isTabletWide) {
       return withDrawer ? [window.innerWidth * 0.4, 30] : [0, 30];
@@ -545,6 +572,38 @@ export class CultureMap {
             animate: true,
             duration: 1000,
             essential: true,
+            offset: this.getCenterOffset(withDrawer, withVerticalScroller),
+          },
+          {
+            cmAnimation: true,
+          }
+        );
+      };
+
+      if (!this.ready) {
+        this.onLoadJobs.push(run);
+      } else {
+        run();
+      }
+    }
+  }
+
+  moveTo(
+    lng: number,
+    lat: number,
+    withDrawer?: boolean,
+    withVerticalScroller?: boolean
+  ) {
+    if (this.map) {
+      const run = () => {
+        if (isNaN(lng) || isNaN(lat)) return;
+        this.map?.stop();
+        this.map?.panTo(
+          [lng, lat],
+          {
+            animate: false,
+            duration: 0,
+            essential: false,
             offset: this.getCenterOffset(withDrawer, withVerticalScroller),
           },
           {

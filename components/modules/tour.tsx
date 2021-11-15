@@ -2,12 +2,10 @@ import { useEffect, useState, useRef, UIEvent } from "react";
 import { gql } from "@apollo/client";
 import {
   MultiLangValue,
-  MultiLangHtml,
   TrimmedTextWithBottomEdge,
   ApiImage,
   CardTourStop,
   SVG,
-  Images,
 } from "~/components/ui";
 import { Footer, MainContent } from "~/components/app";
 import { getApolloClient } from "~/services";
@@ -15,6 +13,8 @@ import {
   useMapContext,
   useConfigContext,
   useSettingsContext,
+  useTourContext,
+  useScrollStateContext,
 } from "~/provider";
 import {
   Box,
@@ -22,10 +22,10 @@ import {
   AspectRatio,
   LinkBox,
   Text,
-  IconButton,
   LinkOverlay,
   chakra,
   Grid,
+  useWhyDidYouUpdate,
 } from "@chakra-ui/react";
 import { htmlToTrimmedString } from "~/utils";
 import { useAppTranslations, useIsBreakPoint } from "~/hooks";
@@ -37,7 +37,7 @@ import NextLink from "next/link";
 
 const MOBILE_CARD_WIDTH = 275;
 
-const tourQuery = gql`
+export const tourQuery = gql`
   query ($slug: String!) {
     tour(slug: $slug) {
       id
@@ -100,7 +100,7 @@ const tourQuery = gql`
   }
 `;
 
-const createTourStops = (
+export const createTourStops = (
   stops: any,
   tourSlug: string,
   newIndex: number,
@@ -124,13 +124,7 @@ const createTourStops = (
     });
 };
 
-export const ModuleComponentTour = ({
-  tour,
-  ...props
-}: {
-  tour: any;
-  props: any;
-}) => {
+export const ModuleComponentTour = ({ tour }: { tour: any }) => {
   const cultureMap = useMapContext();
   const router = useRouter();
   const { isMobile, isTablet, isDesktopAndUp } = useIsBreakPoint();
@@ -141,12 +135,16 @@ export const ModuleComponentTour = ({
 
   const containersRef = useRef<any>(null);
   const parsedTourStopsRef = useRef<any>(null);
-  const currentHightlightIndexRef = useRef<number>(0);
+  const currentHightlightIndexRef = useRef<number>(-1);
   const tourStopsRef = useRef<HTMLDivElement>(null);
   const tourStopsCardsContainerRef = useRef<HTMLDivElement>(null);
 
-  const [tourCards, setTourCards] = useState<any[]>([]);
+  const scrollState = useScrollStateContext();
+
+  console.log("ST", scrollState.isBack(), scrollState.wasBack());
   const [currentHightlightIndex, setCurrentHightlightIndex] = useState(0);
+
+  const tourState = useTourContext();
 
   const mobileCardWrapper = isMobile
     ? { flexBasis: "295px", minW: "295px", maxW: "295px" }
@@ -154,21 +152,26 @@ export const ModuleComponentTour = ({
 
   useEffect(() => {
     console.log("mount tour");
-    if (cultureMap) cultureMap.hideCurrentView();
 
+    if (cultureMap) cultureMap.hideCurrentView();
+    
     // As next.js doesn't unmount/remount if only components route changes we
     // need to rely on router.asPath to trigger in between tour change actions
     // TODO: this is on mount call back
     // setTourStop(null)
     return () => {
       console.log("unmount tour");
-      if (cultureMap) {
-        cultureMap.showCurrentView();
+      if (cultureMap)
         cultureMap.clearTour();
-      }
+      
     };
   }, [router.asPath, cultureMap]);
 
+  useWhyDidYouUpdate("tour", {
+    asPath: router.asPath,
+    cultureMap,
+    scrollState,
+  });
   // useEffect(() => {
   //   if (cultureMap) cultureMap.hideCurrentView();
 
@@ -207,7 +210,8 @@ export const ModuleComponentTour = ({
         tourStopsCardsContainerRef.current.style.paddingBottom = "";
         const pB = Math.max(
           0,
-          window.innerHeight -
+          5 +
+            window.innerHeight -
             (isTablet ? 100 : 120) -
             (document.documentElement.scrollHeight -
               containersRef.current[containersRef.current.length - 1].offsetTop)
@@ -236,6 +240,8 @@ export const ModuleComponentTour = ({
     )
       return;
 
+    console.log("scroll to");
+
     if (containersRef.current?.length) {
       let newIndex = [...containersRef.current].reduce(
         (acc: number, container: HTMLDivElement, index: number) => {
@@ -254,6 +260,8 @@ export const ModuleComponentTour = ({
       );
 
       if (currentHightlightIndexRef.current !== newIndex) {
+        tourState.setStop(newIndex);
+
         const stops = createTourStops(
           tour?.tourStops,
           getMultilangValue(tour?.slug),
@@ -261,16 +269,19 @@ export const ModuleComponentTour = ({
           settings
         );
 
-        cultureMap.setTour(tour?.path, stops);
-        currentHightlightIndexRef.current = newIndex;
+        console.log("setTour");
+        cultureMap.setTourStops(stops);
 
         if (parsedTourStopsRef.current?.[Math.max(newIndex, 0)]) {
+          console.log(1);
           cultureMap.panTo(
             parsedTourStopsRef.current?.[Math.max(newIndex, 0)].lng,
             parsedTourStopsRef.current?.[Math.max(newIndex, 0)].lat,
             !isMobile
           );
         }
+
+        currentHightlightIndexRef.current = newIndex;
       }
     }
   };
@@ -309,12 +320,22 @@ export const ModuleComponentTour = ({
           settings
         );
 
-        cultureMap.setTour(tour?.path, stops);
-        cultureMap.fitToCurrentTourBounds();
+        cultureMap.setTourPath(tour?.path);
+      
+        if (!scrollState.wasBack()) {
+          cultureMap.setTourStops(stops);
+          cultureMap.fitToCurrentTourBounds();
+        }
+        
 
         const isMobile = window.matchMedia("(max-width: 44.999em)").matches;
+
         setTimeout(() => {
-          cultureMap.panTo(stops[0].lng, stops[0].lat, !isMobile, isMobile);
+          if (!scrollState.wasBack()) {
+            console.log(2);
+
+            cultureMap.panTo(stops[0].lng, stops[0].lat, !isMobile, isMobile);
+          }
         }, 500);
 
         parsedTourStopsRef.current = stops;
@@ -324,6 +345,8 @@ export const ModuleComponentTour = ({
       if (cultureMap) cultureMap.clearHighlights();
     };
   }, [
+    scrollState,
+    scrollState.wasBack,
     tour?.tourStops,
     tour?.path,
     settings,
@@ -398,6 +421,12 @@ export const ModuleComponentTour = ({
                         if (tour?.tourStops?.length && cultureMap) {
                           const scrollLeft = (e.target as any).scrollLeft;
 
+                          scrollState.set(
+                            "vertical",
+                            router.asPath,
+                            scrollLeft
+                          );
+
                           let newIndex = -1;
                           if (
                             scrollLeft - (MOBILE_CARD_WIDTH + 20) * 1.75 >
@@ -412,6 +441,7 @@ export const ModuleComponentTour = ({
                           }
 
                           if (currentHightlightIndex !== newIndex) {
+                            tourState.setStop(newIndex);
                             if (
                               parsedTourStopsRef.current?.[
                                 Math.max(newIndex, 0)
@@ -424,7 +454,8 @@ export const ModuleComponentTour = ({
                                 settings
                               );
 
-                              cultureMap.setTour(tour?.path, stops);
+                              cultureMap.setTourStops(stops);
+                              console.log(3);
                               cultureMap.panTo(
                                 parsedTourStopsRef.current[
                                   Math.max(newIndex, 0)
@@ -452,7 +483,6 @@ export const ModuleComponentTour = ({
                     },
                     "@media (min-width: 45em)": {
                       flexDirection: "column",
-                      // w: "auto",
                       overflowY: "hidden",
                     },
                   }}
@@ -806,487 +836,6 @@ export const ModuleComponentTour = ({
   );
 };
 
-export const ModuleComponentTourStop = ({
-  tour,
-  tourStop,
-  ...props
-}: {
-  tour: any;
-  tourStop: any;
-  props: any;
-}) => {
-  const cultureMap = useMapContext();
-  const router = useRouter();
-  const { isMobile, isTablet, isDesktopAndUp } = useIsBreakPoint();
-  const config = useConfigContext();
-  const settings = useSettingsContext();
-  const { t, i18n, getMultilangValue, getMultilangHtml } = useAppTranslations();
-
-  const [color, setColor] = useState("#333");
-  const [colorDark, setColorDark] = useState(config.colorDark);
-
-  useEffect(() => {
-    console.log("mount tour stop");
-    if (cultureMap) cultureMap.hideCurrentView();
-
-    // As next.js doesn't unmount/remount if only components route changes we
-    // need to rely on router.asPath to trigger in between tour change actions
-    // TODO: this is on mount call back
-    // setTourStop(null)
-    return () => {
-      console.log("unmount tourstop");
-      if (cultureMap) {
-        cultureMap.showCurrentView();
-        cultureMap.clearTour();
-      }
-    };
-  }, [router.asPath, cultureMap]);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    const { color, colorDark } = getLocationColors(
-      tourStop?.location,
-      settings
-    );
-
-    if (tour?.tourStops?.length > 0 && settings && cultureMap) {
-      const currentStop = tour?.tourStops.find(
-        (s: any) => s.number === tourStop?.number
-      );
-
-      if (tour?.path) {
-        const stops = createTourStops(
-          tour?.tourStops,
-          getMultilangValue(tour?.slug),
-          currentStop?.number ? parseInt(currentStop?.number) - 1 : -1,
-          settings
-        );
-
-        cultureMap.setTour(tour?.path, stops);
-
-        if (
-          currentStop &&
-          currentStop?.location?.lng &&
-          currentStop?.location?.lat
-        ) {
-          console.log("currentStop", currentStop);
-          const isMobile = window.matchMedia("(max-width: 44.999em)").matches;
-          cultureMap.panTo(
-            currentStop?.location?.lng,
-            currentStop?.location?.lat,
-            !isMobile,
-            isMobile
-          );
-        }
-      }
-    }
-
-    if (color) setColor(color);
-
-    if (colorDark) setColorDark(colorDark);
-
-    return () => {
-      if (cultureMap) cultureMap.clearHighlights();
-    };
-  }, [
-    tour?.tourStops,
-    tour?.path,
-    tourStop,
-    settings,
-    cultureMap,
-    config,
-    getMultilangValue,
-    tour?.slug,
-  ]);
-
-  let meta: any = t("card.meta.tour", "Tour");
-
-  return (
-    <MainContent layerStyle="lightGray">
-      <Grid
-        w="100%"
-        templateRows="1fr auto"
-        templateColumns="100%"
-        minH={{
-          base: "calc(100vh - 60px)",
-          xl: "calc(100vh - 80px)",
-        }}
-      >
-        <Box px="20px" pt="0.5em">
-          <Box mb="3">
-            <Text className="highlight" color="cm.text" fontWeight="bold">
-              {getMultilangValue(tour?.title)}
-            </Text>
-          </Box>
-
-          <Box bg="#fff" borderRadius="lg" overflow="hidden">
-            {tourStop?.heroImage?.id && (
-              <Box>
-                <AspectRatio w="100%" ratio={16 / 9}>
-                  <Box bg={color}>
-                    {tourStop?.heroImage && tourStop?.heroImage?.id && (
-                      <Box w="100%" h="100%">
-                        <ApiImage
-                          id={tourStop?.heroImage?.id}
-                          alt={tourStop?.heroImage?.alt}
-                          meta={tourStop?.heroImage?.meta}
-                          forceAspectRatioPB={56.25}
-                          status={tourStop?.heroImage?.status}
-                          sizes="(min-width: 45rem) 700px, 100vw"
-                          cropPosition={tourStop?.heroImage?.cropPosition}
-                          objectFit="cover"
-                        />
-                      </Box>
-                    )}
-                  </Box>
-                </AspectRatio>
-                {tourStop?.heroImage?.credits !== "" && (
-                  <Text
-                    textStyle="finePrint"
-                    mt="0.5"
-                    px={isMobile ? "20px" : "35px"}
-                  >
-                    <MultiLangValue json={tourStop?.heroImage?.credits} />
-                  </Text>
-                )}
-              </Box>
-            )}
-            {!tourStop?.heroImage?.id && (
-              <Flex justifyContent="flex-end">
-                <Box w="40%">
-                  <AspectRatio w="100%" ratio={4 / 3}>
-                    <Box bg={color}></Box>
-                  </AspectRatio>
-                </Box>
-              </Flex>
-            )}
-
-            <Box
-              px={isMobile ? "20px" : "35px"}
-              pt={isMobile ? "20px" : "35px"}
-              pb={isMobile ? "20px" : "1em"}
-              w="100%"
-            >
-              {meta && (
-                <Flex
-                  textStyle="categoriesHighlight"
-                  color={colorDark}
-                  alignItems="flex-end"
-                  width="66.66%"
-                >
-                  {t("tour.tourStop.meta", "Tour stop {{number}}", {
-                    number: tourStop?.number,
-                  })}
-                </Flex>
-              )}
-              <Flex justifyContent="space-between">
-                <chakra.h1
-                  mb="0.3em !important"
-                  textStyle="headline"
-                  sx={{
-                    a: {
-                      _hover: {
-                        color: "#333 !important",
-                      },
-                    },
-                  }}
-                  w="90%"
-                >
-                  <MultiLangValue json={tourStop.title} />
-                </chakra.h1>
-                <IconButton
-                  aria-label={t("tour.backToTour", "Back to tour")}
-                  icon={
-                    <SVG
-                      type="cross"
-                      width={isMobile ? "50px" : "80px"}
-                      height={isMobile ? "50px" : "80px"}
-                    />
-                  }
-                  borderRadius="0"
-                  p="0"
-                  className="svgHover"
-                  paddingInlineStart="0"
-                  paddingInlineEnd="0"
-                  padding="0"
-                  bg="transparent"
-                  w={isMobile ? "30px" : "40px"}
-                  h={isMobile ? "30px" : "40px"}
-                  minW="30px"
-                  overflow="hidden"
-                  onClick={() => {
-                    router.push(`/tour/${getMultilangValue(tour?.slug)}`);
-                  }}
-                  transition="all 0.3s"
-                  _hover={{
-                    bg: "transparent",
-                  }}
-                  _active={{
-                    bg: "transparent",
-                  }}
-                  transform={
-                    isMobile ? "translateY(-5px) translateX(5px)" : undefined
-                  }
-                />
-              </Flex>
-            </Box>
-
-            <Box
-              px={{
-                base: "20px",
-                md: "35px",
-              }}
-              pb="1em"
-            >
-              {tourStop.teaser && (
-                <Box textStyle="larger" mb="1em" fontWeight="bold">
-                  <MultiLangHtml json={tourStop.teaser} />
-                </Box>
-              )}
-
-              <MultiLangHtml json={tourStop.description} />
-            </Box>
-
-            {tourStop?.images?.length > 0 && (
-              <Box mt="0.5em">
-                <Images images={tourStop?.images} />
-              </Box>
-            )}
-          </Box>
-        </Box>
-        <Footer noBackground />
-      </Grid>
-    </MainContent>
-  );
-};
-
-export const ModuleComponentTourIntroduction = ({
-  tour,
-  ...props
-}: {
-  tour: any;
-  props: any;
-}) => {
-  const cultureMap = useMapContext();
-  const router = useRouter();
-  const { isMobile, isTablet, isDesktopAndUp } = useIsBreakPoint();
-  const config = useConfigContext();
-  const settings = useSettingsContext();
-  const { t, i18n, getMultilangValue, getMultilangHtml } = useAppTranslations();
-
-  const [color, setColor] = useState("#333");
-  const [colorDark, setColorDark] = useState(config.colorDark);
-
-  useEffect(() => {
-    console.log("mount tour stop");
-    if (cultureMap) cultureMap.hideCurrentView();
-
-    // As next.js doesn't unmount/remount if only components route changes we
-    // need to rely on router.asPath to trigger in between tour change actions
-    // TODO: this is on mount call back
-    // setTourStop(null)
-    return () => {
-      console.log("unmount tourstop");
-      if (cultureMap) {
-        cultureMap.showCurrentView();
-        cultureMap.clearTour();
-      }
-    };
-  }, [router.asPath, cultureMap]);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    if (tour?.tourStops?.length > 0 && settings && cultureMap) {
-      if (tour?.path) {
-        const stops = createTourStops(
-          tour?.tourStops,
-          getMultilangValue(tour?.slug),
-          -1,
-          settings
-        );
-
-        cultureMap.setTour(tour?.path, stops);
-
-        const isMobile = window.matchMedia("(max-width: 44.999em)").matches;
-        cultureMap.panTo(stops[0]?.lng, stops[0]?.lat, !isMobile, isMobile);
-      }
-    }
-
-    if (color) setColor(color);
-
-    if (colorDark) setColorDark(colorDark);
-
-    return () => {
-      if (cultureMap) cultureMap.clearHighlights();
-    };
-  }, [
-    tour?.tourStops,
-    tour?.path,
-    settings,
-    cultureMap,
-    config,
-    getMultilangValue,
-    tour?.slug,
-    color,
-    colorDark,
-  ]);
-
-  let meta: any = t("card.meta.tour", "Tour");
-
-  return (
-    <MainContent layerStyle="lightGray">
-      <Grid
-        w="100%"
-        templateRows="1fr auto"
-        templateColumns="100%"
-        minH={{
-          base: "calc(100vh - 60px)",
-          xl: "calc(100vh - 80px)",
-        }}
-      >
-        <Box px="20px" pt="0.5em">
-          <Box mb="3">
-            <Text className="highlight" color="cm.text" fontWeight="bold">
-              {getMultilangValue(tour?.title)}
-            </Text>
-          </Box>
-
-          <Box bg="#fff" borderRadius="lg" overflow="hidden">
-            {tour?.heroImage?.id && (
-              <Box>
-                <AspectRatio w="100%" ratio={16 / 9}>
-                  <Box bg={color}>
-                    {tour?.heroImage && tour?.heroImage?.id && (
-                      <Box w="100%" h="100%">
-                        <ApiImage
-                          id={tour?.heroImage?.id}
-                          alt={tour?.heroImage?.alt}
-                          meta={tour?.heroImage?.meta}
-                          forceAspectRatioPB={56.25}
-                          status={tour?.heroImage?.status}
-                          sizes="(min-width: 45rem) 700px, 100vw"
-                          cropPosition={tour?.heroImage?.cropPosition}
-                          objectFit="cover"
-                        />
-                      </Box>
-                    )}
-                  </Box>
-                </AspectRatio>
-                {tour?.heroImage?.credits !== "" && (
-                  <Text
-                    textStyle="finePrint"
-                    mt="0.5"
-                    px={isMobile ? "20px" : "35px"}
-                  >
-                    <MultiLangValue json={tour?.heroImage?.credits} />
-                  </Text>
-                )}
-              </Box>
-            )}
-            {!tour?.heroImage?.id && (
-              <Flex justifyContent="flex-end">
-                <Box w="40%">
-                  <AspectRatio w="100%" ratio={4 / 3}>
-                    <Box bg={color}></Box>
-                  </AspectRatio>
-                </Box>
-              </Flex>
-            )}
-
-            <Box
-              px={isMobile ? "20px" : "35px"}
-              pt={isMobile ? "20px" : "35px"}
-              pb={isMobile ? "20px" : "1em"}
-              w="100%"
-            >
-              {meta && (
-                <Flex
-                  textStyle="categoriesHighlight"
-                  color={colorDark}
-                  alignItems="flex-end"
-                  width="66.66%"
-                >
-                  {t("tour.introduction", "Introduction")}
-                </Flex>
-              )}
-
-              <Flex justifyContent="space-between" w="100%">
-                <chakra.h1
-                  mb="0.3em !important"
-                  textStyle="headline"
-                  sx={{
-                    a: {
-                      _hover: {
-                        color: "#333 !important",
-                      },
-                    },
-                  }}
-                  w="90%"
-                >
-                  <MultiLangValue json={tour.title} />
-                </chakra.h1>
-                <IconButton
-                  aria-label={t("tour.backToTour", "Back to tour")}
-                  icon={
-                    <SVG
-                      type="cross"
-                      width={isMobile ? "50px" : "80px"}
-                      height={isMobile ? "50px" : "80px"}
-                    />
-                  }
-                  borderRadius="0"
-                  p="0"
-                  className="svgHover"
-                  paddingInlineStart="0"
-                  paddingInlineEnd="0"
-                  padding="0"
-                  bg="transparent"
-                  w={isMobile ? "30px" : "40px"}
-                  h={isMobile ? "30px" : "40px"}
-                  minW="30px"
-                  overflow="hidden"
-                  onClick={() => {
-                    router.push(`/tour/${getMultilangValue(tour?.slug)}`);
-                  }}
-                  transition="all 0.3s"
-                  _hover={{
-                    bg: "transparent",
-                  }}
-                  _active={{
-                    bg: "transparent",
-                  }}
-                  transform={
-                    isMobile ? "translateY(-3px) translateX(5px)" : "translateY(-22px) translateX(5px)"
-                  }
-                />
-              </Flex>
-            </Box>
-
-            <Box
-              px={{
-                base: "20px",
-                md: "35px",
-              }}
-              pb="1em"
-            >
-              {tour.teaser && (
-                <Box textStyle="larger" mb="1em" fontWeight="bold">
-                  <MultiLangHtml json={tour.teaser} />
-                </Box>
-              )}
-
-              <MultiLangHtml json={tour.description} />
-            </Box>
-          </Box>
-        </Box>
-        <Footer noBackground />
-      </Grid>
-    </MainContent>
-  );
-};
-
 export const ModuleTourGetStaticPaths: GetStaticPaths = () => ({
   paths: [],
   fallback: "blocking",
@@ -1324,55 +873,6 @@ export const ModuleTourGetStaticProps: GetStaticProps = async (context) => {
   return {
     props: {
       tour: data?.tour,
-    },
-    revalidate: 3600,
-  };
-};
-
-// This gets called on every request
-export const ModuleTourStopGetStaticProps: GetStaticProps = async (context) => {
-  const client = getApolloClient();
-
-  const accessToken = (context?.previewData as any)?.accessToken;
-
-  const { data } = await client.query({
-    query: tourQuery,
-    variables: {
-      slug: context?.params?.slug,
-    },
-    ...(context?.preview && accessToken
-      ? {
-          context: {
-            headers: {
-              authorization: `Bearer ${accessToken}`,
-            },
-          },
-        }
-      : {}),
-  });
-
-  const stop = parseInt(
-    context?.params?.stop
-      ? Array.isArray(context?.params?.stop)
-        ? context?.params?.stop[0]
-        : context?.params?.stop
-      : "-1"
-  );
-
-  if (
-    !data?.tour ||
-    !(stop >= 0 && data?.tour && stop <= data?.tour?.tourStops?.length)
-  )
-    return {
-      props: {},
-      notFound: true,
-      revalidate: 240,
-    };
-
-  return {
-    props: {
-      tour: data?.tour,
-      tourStop: data?.tour?.tourStops?.[stop - 1] ?? null,
     },
     revalidate: 3600,
   };

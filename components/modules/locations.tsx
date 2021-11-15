@@ -230,9 +230,7 @@ export const ModuleComponentLocations = ({ ...props }) => {
   const {
     handleSubmit,
     reset,
-    setError,
     watch,
-    formState: { isSubmitting, isDirty },
   } = formMethods;
 
   const onSubmit = async () => {};
@@ -391,15 +389,13 @@ export const ModuleComponentLocations = ({ ...props }) => {
     
     if (urlParams.get("cluster") === "0") {
       setCurrentMapView("unclustered");
-      console.log("setCurrentMapView(unclustered);");
     }
     
     setAccordionDefaultIndex(aDI);
     setIsFiltered(aDI.length > 0);
 
     return () => {
-      console.log("cvd 1");
-      cultureMap?.setCurrentViewData();
+      cultureMap?.setCurrentViewData(undefined, true);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -413,18 +409,14 @@ export const ModuleComponentLocations = ({ ...props }) => {
       cultureMap &&
       cultureMap?.setCurrentViewData
     ) {
-      console.log("f2");
       if (layzLocationIdsQueryResult.data?.locationIds?.ids?.length) {
-        console.log("cvd 2");
         cultureMap?.setFilteredViewData(
           layzLocationIdsQueryResult.data?.locationIds?.ids.map(
             (id: any) => `loc-${id}`
           )
         );
       } else {
-        console.log("cvd 3");
         cultureMap?.setFilteredViewData([]);
-        console.log("f4");
       }
       cultureMap?.fitToCurrentViewBounds();
     }
@@ -596,8 +588,7 @@ export const ModuleComponentLocations = ({ ...props }) => {
         });
         setIsFiltered(true);
       } else {
-        console.log("cvd 4");
-        cultureMap?.setCurrentViewData();
+        cultureMap?.setCurrentViewData(undefined, true);
         setIsFiltered(false);
       }
       setCurrentQueryState(newQueryState);

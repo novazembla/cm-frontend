@@ -1,19 +1,13 @@
-import { useState, useRef } from "react";
-import { gql, useQuery } from "@apollo/client";
-import {
-  MultiLangValue,
-  MultiLangHtml,
-  CardTour,
-  LoadingIcon,
-  ErrorMessage,
-} from "~/components/ui";
+import { useEffect } from "react";
+import { gql } from "@apollo/client";
+import { CardTour } from "~/components/ui";
 import { Footer, MainContent } from "~/components/app";
 import { getApolloClient } from "~/services";
-import { Box, chakra, Grid, Text, Button } from "@chakra-ui/react";
-import { isEmptyHtml } from "~/utils";
-
-import { GetStaticProps, GetStaticPropsContext } from "next";
+import { Box, Grid, Text } from "@chakra-ui/react";
+import { GetStaticProps } from "next";
 import { useAppTranslations } from "~/hooks";
+import { useRouter } from "next/router";
+import { useMapContext } from "~/provider";
 
 const toursQuery = gql`
   query tours($where: JSON, $orderBy: JSON, $pageIndex: Int, $pageSize: Int) {
@@ -57,25 +51,29 @@ const initialQueryState = {
       orderNumber: "asc",
     },
   ],
-  pageSize: 50,
+  pageSize: 100,
   pageIndex: 0,
 };
 
-export const ModuleComponentTours = ({ ...props }) => {
-  const [currentPageIndex, setCurrentPageIndex] = useState(0);
-
+export const ModuleComponentTours = ({
+  tours,
+  totalCount,
+  ...props
+}: {
+  tours: any;
+  totalCount: number;
+  props: any;
+}) => {
   const { t } = useAppTranslations();
+  const router = useRouter();
+  const cultureMap = useMapContext();
 
-  const { data, loading, error, fetchMore } = useQuery(toursQuery, {
-    notifyOnNetworkStatusChange: true,
-    variables: initialQueryState,
-  });
+  useEffect(() => {
+    console.log("mount events");
 
-  const showLoadMore =
-    data?.tours?.totalCount >
-    initialQueryState?.pageSize +
-      initialQueryState?.pageSize * currentPageIndex;
-console.log(data?.tours);
+    if (cultureMap) cultureMap.showCurrentView();
+  }, [router.asPath, cultureMap]);
+
   return (
     <MainContent layerStyle="lightGray">
       <Grid
@@ -84,7 +82,7 @@ console.log(data?.tours);
         templateColumns="100%"
         minH={{
           base: "calc(100vh - 60px)",
-          xl: "calc(100vh - 80px)"
+          xl: "calc(100vh - 80px)",
         }}
       >
         <Box px="20px" pt="0.5em">
@@ -95,52 +93,41 @@ console.log(data?.tours);
           </Box>
 
           <Box>
-            {error && <ErrorMessage type="dataLoad" />}
-            {data?.tours?.tours?.length > 0 &&
-              data?.tours?.tours.map((tour: any) => (
+            {totalCount > 0 &&
+              tours.map((tour: any) => (
                 <Box key={`tour-${tour.id}`} pb="20px">
                   <CardTour tour={tour} />
                 </Box>
               ))}
-
-            {showLoadMore && !loading && !error && (
-              <Box>
-                <Button
-                  onClick={() => {
-                    const nextPageIndex = currentPageIndex + 1;
-                    fetchMore({
-                      variables: {
-                        pageIndex: nextPageIndex,
-                      },
-                      updateQuery: (prev, { fetchMoreResult }) => {
-                        if (!fetchMoreResult) return prev;
-                        return {
-                          ...prev,
-                          tours: {
-                            totalCount: fetchMoreResult.tours?.totalCount,
-                            tours: [
-                              ...prev?.tours?.tours,
-                              ...fetchMoreResult.tours?.tours,
-                            ],
-                          },
-                        };
-                      },
-                    });
-                    setCurrentPageIndex(nextPageIndex);
-                  }}
-                  color="white"
-                  variant="solid"
-                  colorScheme="red"
-                >
-                  Load more (DESIGN)
-                </Button>
-              </Box>
-            )}
-            {loading && <LoadingIcon />}
           </Box>
         </Box>
         <Footer noBackground />
       </Grid>
     </MainContent>
   );
+};
+
+// This gets called on every request
+export const ModuleToursGetStaticProps: GetStaticProps = async (context) => {
+  const client = getApolloClient();
+
+  const { data } = await client.query({
+    query: toursQuery,
+    variables: initialQueryState,
+  });
+
+  if (!data?.tours)
+    return {
+      props: {},
+      notFound: true,
+      revalidate: 240,
+    };
+
+  return {
+    props: {
+      tours: data?.tours?.tours,
+      totalCount: data?.tours?.totalCount,
+    },
+    revalidate: 3600,
+  };
 };

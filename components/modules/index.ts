@@ -6,3 +6,5 @@ export * from "./location";
 export * from "./page";
 export * from "./tours";
 export * from "./tour";
+export * from "./tourStop";
+export * from "./tourIntroduction";

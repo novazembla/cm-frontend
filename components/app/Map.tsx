@@ -36,18 +36,12 @@ export const Map = () => {
   const [mapLoaded, setMapLoaded] = useState(false);
 
   useEffect(() => {
-    if (cultureMapRef.current || !mapContainer.current || !cultureMap) return; //stops map from intializing more than once
+    if (cultureMapRef.current || !mapContainer.current || !cultureMap) return; 
 
-    cultureMap.init(mapContainer.current);
+    cultureMap.init(mapContainer.current, setMapLoaded);
 
     cultureMapRef.current = cultureMap;
-  });
-
-  useEffect(() => {
-    if (cultureMapRef?.current?.loaded) {
-      setMapLoaded(true);
-    }
-  }, [cultureMapRef?.current?.loaded]);
+  }, [setMapLoaded, cultureMap]);
 
   useEffect(() => {
     const onWheel = (e: MouseEvent) => e.preventDefault();

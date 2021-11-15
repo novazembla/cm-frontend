@@ -146,13 +146,14 @@ export const ModuleComponentEvent = ({
   const today = new Date(new Date().setHours(0, 0, 0, 0));
 
   const [highlight, setHighlight] = useState<MapHighlightType | null>(null);
-  
+
   useEffect(() => {
-    // As next.js doesn't unmount/remount if only components route changes we 
-    // need to rely on router.asPath to trigger event change actions
-    // TODO: 
-    setHighlight(null)    
-  }, [router.asPath])
+    console.log("mount events");
+
+    if (cultureMap) cultureMap.showCurrentView();
+
+    setHighlight(null);
+  }, [router.asPath, cultureMap]);
 
   useEffect(() => {
     if (typeof window !== "undefined" && highlight && cultureMap) {
@@ -168,8 +169,12 @@ export const ModuleComponentEvent = ({
 
   useEffect(() => {
     if (event && settings) {
-      if (event?.locations?.length && event?.locations[0]?.lat && event?.locations[0]?.lng) {
-        const {color} = getLocationColors(event?.locations[0], settings);
+      if (
+        event?.locations?.length &&
+        event?.locations[0]?.lat &&
+        event?.locations[0]?.lng
+      ) {
+        const { color } = getLocationColors(event?.locations[0], settings);
         setHighlight({
           id: event?.locations[0].id,
           lng: event?.locations[0].lng,
@@ -179,7 +184,6 @@ export const ModuleComponentEvent = ({
           color,
         });
       }
-      
     }
   }, [event, setHighlight, settings]);
 
@@ -297,8 +301,13 @@ export const ModuleComponentEvent = ({
                   }}
                 />
               </Box>
-              {!isEmptyHtml(getMultilangHtml(event?.description ?? "", true)) && (
-                <MultiLangHtml json={event.description} addMissingTranslationInfo />
+              {!isEmptyHtml(
+                getMultilangHtml(event?.description ?? "", true)
+              ) && (
+                <MultiLangHtml
+                  json={event.description}
+                  addMissingTranslationInfo
+                />
               )}
             </Box>
 

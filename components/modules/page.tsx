@@ -1,9 +1,12 @@
+import { useEffect } from "react";
 import { gql } from "@apollo/client";
 import { MultiLangValue, MultiLangHtml, ApiImage } from "~/components/ui";
 import { Footer, MainContent } from "~/components/app";
 import { getApolloClient } from "~/services";
 import { Box, Text, chakra, Grid } from "@chakra-ui/react";
 import { GetStaticPaths, GetStaticProps } from "next";
+import { useMapContext } from "~/provider";
+import { useRouter } from "next/router";
 
 const pageQuery = gql`
   query ($slug: String!) {
@@ -26,6 +29,16 @@ const pageQuery = gql`
 `;
 
 export const ModuleComponentPage = ({ page }: { page: any }) => {
+  const router = useRouter();
+  const cultureMap = useMapContext();
+
+  useEffect(() => {
+    console.log("mount events");
+
+    if (cultureMap) cultureMap.showCurrentView();
+
+  }, [router.asPath, cultureMap]);
+
   return (
     <MainContent isDrawer layerStyle="pageBg">
       <Grid

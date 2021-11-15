@@ -57,7 +57,6 @@ export class MapViewClustered {
           }
         }
       }
-      this.show();
     }
   }
 
@@ -418,24 +417,27 @@ export class MapViewClustered {
 
   show() {
     if (this.cultureMap?.map) {
-      if (this.cultureMap.map?.getLayer("clusters"))
+      if (this.cultureMap.map?.getLayer("clusters")) {
         this.cultureMap?.map?.setLayoutProperty(
           "clusters",
           "visibility",
           "visible"
         );
-      if (this.cultureMap.map?.getLayer("cluster-count"))
+      }
+      if (this.cultureMap.map?.getLayer("cluster-count")) {
         this.cultureMap?.map?.setLayoutProperty(
           "cluster-count",
           "visibility",
           "visible"
         );
-      if (this.cultureMap.map?.getLayer("clustered-locations"))
+      }
+      if (this.cultureMap.map?.getLayer("clustered-locations")) {
         this.cultureMap?.map?.setLayoutProperty(
           "clustered-locations",
           "visibility",
           "visible"
         );
+      }
     }
   }
 

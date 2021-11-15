@@ -117,10 +117,11 @@ export const ModuleComponentLocation = ({
   const [highlight, setHighlight] = useState<MapHighlightType | null>(null);
   
   useEffect(() => {
+    if (cultureMap) cultureMap.showCurrentView();
     // As next.js doesn't unmount/remount if only components route changes we 
     // need to rely on router.asPath to trigger location change actions
     setHighlight(null)    
-  }, [router.asPath])
+  }, [router.asPath, cultureMap])
 
   useEffect(() => {
     console.log("highlight", highlight, cultureMap);

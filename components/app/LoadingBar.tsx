@@ -18,31 +18,36 @@ export const LoadingBar = ({
   const [barVisible, setBarVisible] = useState(false);
   const { onMenuClose } = useMenuButtonContext();
   const { onQuickSearchClose } = useQuickSearchContext();
-  const { setMainContentStatus } = useMainContentContext();
+  const { setMainContentStatus, mainContentOpen } = useMainContentContext();
   const [initialLoadDone, setInitialLoadDone] = useState(false);
   const router = useRouter();
 
   const scrollState = useScrollStateContext();
 
   const showBar = useCallback(() => {
+    scrollState.setWasBack(scrollState.isBack());
+
     onMenuClose();
     onQuickSearchClose();
+    mainContentOpen();
     setBarVisible(true);
-  }, [onMenuClose, onQuickSearchClose]);
+  }, [onMenuClose, scrollState, onQuickSearchClose, mainContentOpen]);
 
   const hideBar = useCallback(() => {
     setBarVisible(false);
     setMainContentStatus(true);
-  }, [setMainContentStatus]);
+    scrollState.setIsBack(false);
+    scrollState.setCurrentPath(Router.asPath);
+  }, [setMainContentStatus, scrollState]);
 
   useEffect(() => {
-    router.events.on("routeChangeStart", showBar);
-    router.events.on("routeChangeComplete", hideBar);
-    router.events.on("routeChangeError", hideBar);
     router.beforePopState(() => {
       scrollState.setIsBack(true);
       return true;
     });
+    router.events.on("routeChangeStart", showBar);
+    router.events.on("routeChangeComplete", hideBar);
+    router.events.on("routeChangeError", hideBar);
 
     return () => {
       router.events.off("routeChangeStart", showBar);

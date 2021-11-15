@@ -26,7 +26,7 @@ export class MapTour {
     );
   }
 
-  setTourData(path: any, stops: any) {
+  setTourPathData(path: any) {
     if (this.cultureMap?.map) {
       if (!this.cultureMap?.map) return;
 
@@ -38,6 +38,12 @@ export class MapTour {
       } else {
         (this.cultureMap?.map?.getSource("tourPath") as any)?.setData(path);
       }
+    }
+  }
+
+  setTourStopsData(stops: any) {
+    if (this.cultureMap?.map) {
+      if (!this.cultureMap?.map) return;
 
       if (!this.cultureMap.map.getSource("tourStops")) {
         this.cultureMap.map.addSource("tourStops", {
@@ -70,12 +76,12 @@ export class MapTour {
     }
   }
 
-  render() {
+  renderPath() {
     if (this.cultureMap?.map) {
-      if (!this.cultureMap?.map || !this.cultureMap.map.getSource("tourStops"))
+      if (!this.cultureMap?.map || !this.cultureMap.map.getSource("tourPath"))
         return;
 
-      this.clear();
+      if (this.cultureMap?.map?.getLayer("tourPath")) return;
 
       this.cultureMap?.map?.addLayer({
         id: "tourPath",
@@ -90,6 +96,15 @@ export class MapTour {
           "line-width": 2,
         },
       });
+    }
+  }
+
+  renderStops() {
+    if (this.cultureMap?.map) {
+      if (!this.cultureMap?.map || !this.cultureMap.map.getSource("tourStops"))
+        return;
+
+      if (this.cultureMap?.map?.getLayer("tourStops")) return;
 
       this.cultureMap.map.addLayer({
         id: "tourStops",
@@ -143,12 +158,15 @@ export class MapTour {
         },
       });
 
-
       this.cultureMap.map.addLayer({
         id: "tourStopsHighlightNumber",
         type: "symbol",
         source: "tourStops",
-        filter: ["all", ["has", "number"], ["==", ["get", "highlightNumber"], true]],
+        filter: [
+          "all",
+          ["has", "number"],
+          ["==", ["get", "highlightNumber"], true],
+        ],
         layout: {
           "text-field": "{number}",
           "text-font": ["Berlin Type Bold"],
@@ -355,6 +373,19 @@ export class MapTour {
   }
 
   clear() {
+    this.clearPath();
+    this.clearStops();
+  }
+
+  clearPath() {
+    if (this.cultureMap?.map) {
+      if (this.cultureMap?.map?.getLayer("tourPath")) {
+        this.cultureMap?.map?.removeLayer("tourPath");
+      }
+    }
+  }
+
+  clearStops() {
     if (this.cultureMap?.map) {
       if (this.cultureMap?.map?.getLayer("tourStops"))
         this.cultureMap?.map?.removeLayer("tourStops");
@@ -370,9 +401,6 @@ export class MapTour {
 
       if (this.cultureMap?.map?.getLayer("tourStopNumbers"))
         this.cultureMap?.map?.removeLayer("tourStopNumbers");
-
-      if (this.cultureMap?.map?.getLayer("tourPath"))
-        this.cultureMap?.map?.removeLayer("tourPath");
 
       if (Object.keys(this.events).length) {
         Object.keys(this.events).forEach((key) => {

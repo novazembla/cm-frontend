@@ -7,6 +7,7 @@ import {
   ModuleComponentTourIntroduction,
 } from "~/components/modules";
 import { useRouter } from "next/router";
+import { TourContextProvider } from "~/provider";
 
 const Tour = ({
   tour,
@@ -26,13 +27,15 @@ const Tour = ({
       : "-1"
   );
 
-  if (stop > 0) {
-    return (
-      <ModuleComponentTourStop tourStop={tourStop} tour={tour} {...props} />
-    );
-  }
-
-  return <ModuleComponentTourIntroduction tour={tour} {...props} />;
+  return (
+    <TourContextProvider>
+      {stop > 0 ? (
+        <ModuleComponentTourStop tourStop={tourStop} tour={tour} {...props} />
+      ) : (
+        <ModuleComponentTourIntroduction tour={tour} {...props} />
+      )}
+    </TourContextProvider>
+  );
 };
 
 export const getStaticPaths: GetStaticPaths = async (context) => {

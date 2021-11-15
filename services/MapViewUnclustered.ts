@@ -58,8 +58,7 @@ export class MapViewUnclustered {
               );
             }
           }
-        }
-        this.show();
+        }        
       }, 60);
       
     }

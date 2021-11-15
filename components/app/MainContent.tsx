@@ -1,7 +1,7 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { Box, IconButton, useBreakpointValue } from "@chakra-ui/react";
 import { useAppTranslations, useIsBreakPoint } from "~/hooks";
-import { HiChevronRight } from "react-icons/hi";
+
 import { motion, useAnimation } from "framer-motion";
 import { useRouter } from "next/router";
 // TODO: Scroll state really needed?
@@ -11,6 +11,8 @@ import {
   useQuickSearchContext,
   useMainContentContext,
 } from "~/provider";
+import { SVG } from "~/components/ui";
+
 import { primaryInput } from "detect-it";
 import { debounce } from "lodash";
 
@@ -41,7 +43,8 @@ export const MainContent = ({
 
   const { isMenuOpen } = useMenuButtonContext();
   const { isQuickSearchOpen } = useQuickSearchContext();
-  const { setMainContentStatus } = useMainContentContext();
+  const { setMainContentStatus, setMainContentFunctions } =
+    useMainContentContext();
 
   const router = useRouter();
   const { isMobile, isTablet, isTabletWide, isDesktopAndUp } =
@@ -161,7 +164,7 @@ export const MainContent = ({
   //   if (isMobile) {
   //     if (
   //       scrollState.get("body", router.asPath.replace(/[^a-z]/g, "")) > 0 &&
-  //       scrollState.isBack()
+  //       scrollState.isBack
   //     ) {
   //       setTimeout(() => {
   //         window.scrollTo({
@@ -179,7 +182,7 @@ export const MainContent = ({
   //   } else {
   //     if (
   //       scrollState.get("main", router.asPath.replace(/[^a-z]/g, "")) > 0 &&
-  //       scrollState.isBack()
+  //       scrollState.isBack
   //     ) {
   //       setTimeout(() => {
   //         mainContentRef.current?.scrollTo({
@@ -267,7 +270,7 @@ export const MainContent = ({
     onResize();
   }, [router.asPath, onResize]);
 
-  const close = () => {
+  const close = useCallback(() => {
     if (isAnimationRunningRef.current) return;
 
     setIsDrawerOpen(false);
@@ -290,9 +293,9 @@ export const MainContent = ({
       setIsAnimating(false);
       isAnimationRunningRef.current = false;
     }, 350);
-  };
+  }, [controls, setMainContentStatus, dragLeft]);
 
-  const open = () => {
+  const open = useCallback(() => {
     if (isAnimationRunningRef.current) return;
 
     setIsDrawerOpen(true);
@@ -313,7 +316,7 @@ export const MainContent = ({
       isAnimationRunningRef.current = false;
       setIsAnimating(false);
     }, 350);
-  };
+  }, [controls, setMainContentStatus]);
 
   const toggle = () => {
     if (isAnimationRunningRef.current) return;
@@ -324,6 +327,14 @@ export const MainContent = ({
       open();
     }
   };
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    setMainContentFunctions(open, close);
+  }, [router.asPath, setMainContentFunctions, open, close]);
+
+  console;
+  setMainContentFunctions;
 
   let toggleLabel = isDrawerOpen
     ? t("mainContent.slideToLeft", "Hide content")
@@ -362,11 +373,10 @@ export const MainContent = ({
         <motion.div
           style={{
             position: "fixed",
-            top: isMobile ? 60 : 80,
+            top: isDesktopAndUp ? 100 : 80,
             left: contentWidth,
-            marginLeft: -10,
-            height: 40,
-            width: 40,
+            height: 55,
+            width: 20,
             zIndex: 2,
             translateZ: 0,
           }}
@@ -381,13 +391,15 @@ export const MainContent = ({
         >
           <Box
             marginLeft={buttontLeft}
-            borderRadius="5px"
+            borderTopRightRadius="lg"
+            borderBottomRightRadius="lg"
             border="1px solid"
+            borderLeft="none"
             borderColor="cm.accentLight"
             transition="opacity 0.3"
-            w="30px"
-            minW="30px"
-            h="40px"
+            w="20px"
+            minW="20px"
+            h="55px"
             overflow="hidden"
             {...(isMenuOpen || isQuickSearchOpen
               ? {
@@ -398,7 +410,7 @@ export const MainContent = ({
                   opacity: buttonVisible ? 1 : 0,
                 })}
           >
-            <Box bg="#fff" w="30px" h="40px">
+            <Box bg="#fff" w="30px" h="55px" transform="translateX(-8px)">
               <IconButton
                 className="svgHover"
                 paddingInlineStart="0"
@@ -408,7 +420,7 @@ export const MainContent = ({
                 bg="transparent"
                 w="30px"
                 minW="30px"
-                h="40px"
+                h="55px"
                 overflow="hidden"
                 _hover={{
                   bg: "transparent",
@@ -417,7 +429,7 @@ export const MainContent = ({
                   bg: "transparent",
                 }}
                 aria-label={toggleLabel}
-                icon={<HiChevronRight />}
+                icon={<SVG type="large_chevron" width="20px" height="20px" />}
                 p="0"
                 color="cm.accentLight"
                 onClick={toggle}

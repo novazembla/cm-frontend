@@ -181,7 +181,7 @@ export const Home = ({ homepage }: { homepage: any }) => {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-
+    
     if (homepage?.highlights?.length > 0 && settings && cultureMap) {
       const highlights = homepage?.highlights.reduce(
         (hAcc: any, highlight: any) => {
@@ -241,7 +241,9 @@ export const Home = ({ homepage }: { homepage: any }) => {
       }
     }
     return () => {
-      if (cultureMap) cultureMap.clearHighlights();
+      if (cultureMap) { 
+        cultureMap.clearHighlights();
+      }
     };
   }, [homepage?.highlights, settings, cultureMap, config]);
 

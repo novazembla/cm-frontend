@@ -20,8 +20,9 @@ import {
   TwoColFieldRow,
   FormScrollInvalidIntoView,
 } from "~/components/forms";
-import { useSettingsContext } from "~/provider";
+import { useSettingsContext, useMapContext } from "~/provider";
 import { pick } from "lodash";
+import { useRouter } from "next/router";
 
 export const SuggestionSchema = object().shape({
   title: string().required(),
@@ -60,6 +61,16 @@ export const ModuleComponentSuggest = () => {
     useState(SuggestionSchema);
 
   const settings = useSettingsContext();
+
+  const router = useRouter();
+  const cultureMap = useMapContext();
+
+  useEffect(() => {
+    console.log("mount suggest form");
+
+    if (cultureMap) cultureMap.showCurrentView();
+
+  }, [router.asPath, cultureMap]);
 
   const [mutation, mutationResults] = useMutation(locationCreateMutationGQL);
 

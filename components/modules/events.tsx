@@ -29,7 +29,7 @@ import { useForm, FormProvider } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { boolean, object, mixed, number } from "yup";
 
-import { useSettingsContext } from "~/provider";
+import { useSettingsContext, useMapContext } from "~/provider";
 import { getMultilangSortedList } from "~/utils";
 import { useRouter } from "next/router";
 import useCalendar from "@veccu/react-calendar";
@@ -99,6 +99,7 @@ export const EventsFilterSchema = object().shape({});
 
 export const ModuleComponentEvents = ({ ...props }) => {
   const router = useRouter();
+  const cultureMap = useMapContext();
   const resultRef = useRef<HTMLDivElement>(null);
 
   const [currentQueryState, setCurrentQueryState] = useState<any>({
@@ -117,6 +118,13 @@ export const ModuleComponentEvents = ({ ...props }) => {
     defaultWeekStart: 1,
     defaultDate: customDate ?? undefined,
   });
+
+  useEffect(() => {
+    console.log("mount events");
+
+    if (cultureMap) cultureMap.showCurrentView();
+
+  }, [cultureMap]);
 
   useEffect(() => {
     if (settings?.taxonomies?.eventType?.terms) {
