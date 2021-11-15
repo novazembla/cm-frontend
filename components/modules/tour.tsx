@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, UIEvent } from "react";
+import { useEffect, useState, useRef, UIEvent, useCallback } from "react";
 import { gql } from "@apollo/client";
 import {
   MultiLangValue,
@@ -151,7 +151,7 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
     ? { flexBasis: "295px", minW: "295px", maxW: "295px" }
     : {};
 
-  const onResize = debounce(() => {
+  const onResize = useCallback(() => {
     if (
       !tourStopsRef.current ||
       !tourStopsCardsContainerRef.current ||
@@ -197,7 +197,7 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
 
       tourStopsCardsContainerRef.current.style.width = "";
     }
-  }, 350);
+  }, []);
 
   const onScroll = () => {
     if (
@@ -264,6 +264,20 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
     window.addEventListener("resize", onResize);
     window.addEventListener("scroll", onScroll);
     onResize();
+    if (scrollState.wasBack() && isMobileRef.current) {
+      const scrollLeft = scrollState.get(
+        "vertical",
+        router.asPath.replace(/[^a-z]/g, "")
+      );
+      if (scrollLeft) {
+        onResize();
+        tourStopsRef.current?.scrollTo({
+          left: scrollLeft,
+          top: 0,
+        });
+      }
+    }
+    
     onScroll();
     document.addEventListener("DOMContentLoaded", onResize);
 
@@ -303,21 +317,6 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
 
         cultureMap.setTourPath(tour?.path);
 
-        if (scrollState.wasBack() && isMobileRef.current) {
-          const scrollLeft = scrollState.get(
-            "vertical",
-            router.asPath.replace(/[^a-z]/g, "")
-          );
-          if (scrollLeft) {
-            setTimeout(() => {
-              tourStopsRef.current?.scrollTo({
-                left: scrollLeft,
-                top: 0,
-              });
-            }, 500);
-          }
-        }
-
         if (
           !scrollState.wasBack() ||
           (!isMobileRef.current &&
@@ -331,21 +330,20 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
           }
         }
 
-        setTimeout(() => {
-          if (
-            !scrollState.wasBack() ||
-            (!isMobileRef.current &&
-              typeof window !== "undefined" &&
-              window.scrollY === 0)
-          ) {
-            cultureMap.panTo(
-              stops[0].lng,
-              stops[0].lat,
-              !isMobileRef.current,
-              isMobileRef.current
-            );
-          }
-        }, 500);
+        if (
+          !scrollState.wasBack() ||
+          isMobileRef.current ||
+          (!isMobileRef.current &&
+            typeof window !== "undefined" &&
+            window.scrollY === 0)
+        ) {
+          cultureMap.panTo(
+            stops[0].lng,
+            stops[0].lat,
+            !isMobileRef.current,
+            isMobileRef.current
+          );
+        }
 
         parsedTourStopsRef.current = stops;
       }
@@ -464,7 +462,7 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
                               );
 
                               cultureMap.setTourStops(stops);
-
+                              
                               cultureMap.panTo(
                                 parsedTourStopsRef.current[
                                   Math.max(newIndex, 0)
