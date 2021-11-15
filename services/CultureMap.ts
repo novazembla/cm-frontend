@@ -485,7 +485,7 @@ export class CultureMap {
       return withDrawer
         ? [window.innerWidth * 0.4, 30]
         : withVerticalScroller
-        ? [0, -((window.innerHeight / 2) - 100)]
+        ? [0, -(window.innerHeight * 0.25)]
         : [0, 30];
     } else if (isTablet && !isTabletWide) {
       return withDrawer ? [window.innerWidth * 0.4, 30] : [0, 30];

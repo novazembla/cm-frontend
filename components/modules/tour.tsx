@@ -143,7 +143,6 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
 
   const scrollState = useScrollStateContext();
 
-  console.log("ST", scrollState.isBack(), scrollState.wasBack());
   const [currentHightlightIndex, setCurrentHightlightIndex] = useState(0);
 
   const tourState = useTourContext();
@@ -241,7 +240,6 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
         cultureMap.setTourStops(stops);
 
         if (parsedTourStopsRef.current?.[Math.max(newIndex, 0)]) {
-          console.log("pan1");
           cultureMap.panTo(
             parsedTourStopsRef.current?.[Math.max(newIndex, 0)].lng,
             parsedTourStopsRef.current?.[Math.max(newIndex, 0)].lat,
@@ -279,8 +277,6 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
   }, []);
 
   useEffect(() => {
-    console.log("mount tour");
-
     if (cultureMap) cultureMap.hideCurrentView();
     currentHightlightIndexRef.current = -2;
 
@@ -289,7 +285,6 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
     // TODO: this is on mount call back
     // setTourStop(null)
     return () => {
-      console.log("unmount tour");
       if (cultureMap) cultureMap.clearTour();
     };
   }, [router.asPath, cultureMap]);
@@ -299,7 +294,6 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
 
     if (tour?.tourStops?.length > 0 && settings && cultureMap) {
       if (tour?.path) {
-        console.log("effect 1", isMobileRef.current);
         const stops = createTourStops(
           tour?.tourStops,
           getMultilangValue(tour?.slug),
@@ -314,14 +308,13 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
             "vertical",
             router.asPath.replace(/[^a-z]/g, "")
           );
-          console.log("get sl", scrollLeft);
           if (scrollLeft) {
             setTimeout(() => {
               tourStopsRef.current?.scrollTo({
                 left: scrollLeft,
                 top: 0,
               });
-            }, 20);
+            }, 500);
           }
         }
 
@@ -334,7 +327,6 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
           cultureMap.setTourStops(stops);
 
           if (!scrollState.wasBack()) {
-            console.log("fit to bounds");
             cultureMap.fitToCurrentTourBounds();
           }
         }
@@ -346,12 +338,6 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
               typeof window !== "undefined" &&
               window.scrollY === 0)
           ) {
-            console.log(
-              "pan2",
-              isMobileRef.current,
-              stops[0].lng,
-              stops[0].lat
-            );
             cultureMap.panTo(
               stops[0].lng,
               stops[0].lat,
@@ -444,7 +430,6 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
                         if (tour?.tourStops?.length && cultureMap) {
                           const scrollLeft = (e.target as any).scrollLeft;
 
-                          console.log("set", scrollLeft);
                           scrollState.set(
                             "vertical",
                             router.asPath.replace(/[^a-z]/g, ""),
@@ -480,7 +465,6 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
 
                               cultureMap.setTourStops(stops);
 
-                              console.log("pan3");
                               cultureMap.panTo(
                                 parsedTourStopsRef.current[
                                   Math.max(newIndex, 0)
