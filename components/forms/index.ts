@@ -5,7 +5,7 @@ export * from "./FieldRadioGroup";
 
 export * from "./FormNavigationBlock";
 // export * from "./TimeField";
-// export * from "./TextErrorMessage";
+export * from "./TextErrorMessage";
 // export * from "./LocationPicker";
 // export * from "./TextEditor";
 export * from "./FieldInput";

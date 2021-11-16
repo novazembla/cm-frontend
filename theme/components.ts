@@ -167,55 +167,6 @@ export const components = {
         },
       },
     },
-
-    // "parts": [
-    //     "control",
-    //     "icon",
-    //     "container",
-    //     "label"
-    // ],
-    // "sizes": {
-    //     "sm": {
-    //         "control": {
-    //             "h": 3,
-    //             "w": 3
-    //         },
-    //         "label": {
-    //             "fontSize": "sm"
-    //         },
-    //         "icon": {
-    //             "fontSize": "0.45rem"
-    //         }
-    //     },
-    //     "md": {
-    //         "control": {
-    //             "w": 4,
-    //             "h": 4
-    //         },
-    //         "label": {
-    //             "fontSize": "md"
-    //         },
-    //         "icon": {
-    //             "fontSize": "0.625rem"
-    //         }
-    //     },
-    //     "lg": {
-    //         "control": {
-    //             "w": 5,
-    //             "h": 5
-    //         },
-    //         "label": {
-    //             "fontSize": "lg"
-    //         },
-    //         "icon": {
-    //             "fontSize": "0.625rem"
-    //         }
-    //     }
-    // },
-    // "defaultProps": {
-    //     "size": "md",
-    //     "colorScheme": "wine"
-    // }
   },
   Divider: {
     baseStyle: {
@@ -241,7 +192,6 @@ export const components = {
       },
     },
   },
-
   Input: {
     variants: {
       outline: {
@@ -251,6 +201,10 @@ export const components = {
           borderColor: "cm.accentLight",
           _hover: {
             borderColor: "cm.accentLight",
+          },
+          _focus: {
+            borderColor: "#fff",
+            boxShadow: "0 0 3px 3px #E42B20",
           },
           _autofill: {
             bg: "wine.300",
@@ -288,25 +242,27 @@ export const components = {
   Textarea: {
     variants: {
       outline: {
-        field: {
-          bg: "#fff",
-          borderRadius: "4px",
+        bg: "#fff",
+        borderRadius: "4px",
+        borderColor: "cm.accentLight",
+        _hover: {
           borderColor: "cm.accentLight",
+        },
+        _focus: {
+          borderColor: "#fff",
+          boxShadow: "0 0 3px 3px #E42B20",
+        },
+        _autofill: {
+          bg: "wine.300",
+        },
+        _invalid: {
+          _focus: {
+            borderColor: "#fff",
+            boxShadow: "0 0 3px 3px #E42B20",
+          },
           _hover: {
-            borderColor: "cm.accentLight",
-          },
-          _autofill: {
-            bg: "wine.300",
-          },
-          _invalid: {
-            _focus: {
-              borderColor: "#fff",
-              boxShadow: "0 0 3px 3px #E42B20",
-            },
-            _hover: {
-              borderColor: "#fff",
-              boxShadow: "0px 0 3px 3px #E42B20",
-            },
+            borderColor: "#fff",
+            boxShadow: "0px 0 3px 3px #E42B20",
           },
         },
       },
@@ -321,40 +277,6 @@ export const components = {
     },
   },
   Radio: {
-    // parts: ["container", "control", "label"],
-    // sizes: {
-    //   md: {
-    //     control: {
-    //       w: 4,
-    //       h: 4,
-    //     },
-    //     label: {
-    //       fontSize: "md",
-    //     },
-    //   },
-    //   lg: {
-    //     control: {
-    //       w: 5,
-    //       h: 5,
-    //     },
-    //     label: {
-    //       fontSize: "lg",
-    //     },
-    //   },
-    //   sm: {
-    //     control: {
-    //       width: 3,
-    //       height: 3,
-    //     },
-    //     label: {
-    //       fontSize: "sm",
-    //     },
-    //   },
-    // },
-    // defaultProps: {
-    //   size: "md",
-    //   colorScheme: "blue",
-    // },
     baseStyle: {
       icon: {
         diplay: "none",

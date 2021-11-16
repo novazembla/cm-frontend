@@ -177,10 +177,63 @@
     "loadMore": "Weitere Kartenpunkte laden",
     "totalCount_plural_plural": "{{count}} Kartenpunkte gefunden"
   },
-  "suggest": {
-    "title": "Kartenpunktvorschlag"
+  "validation": {
+    "notunique": "Dieser Wert ist nicht einzigartig",
+    "mixed": {
+      "default": "Dieses Feld ist nicht korrekt",
+      "required": "Dieses Feld ist verpflichtend",
+      "oneOf": "Dieses Feld muss einer der folgenden Werte haben: {{values}}",
+      "notOneOf": "Dieses Feld muss einer der folgenden Typen sein: {{values}}",
+      "notType": "Dieses Feld muss vom Typ {{type}} sein",
+      "defined": "Dieses Feld muss gesetzt werden"
+    },
+    "string": {
+      "length": "Dieses Feld muss exakt {{length}} Zeichen lang sein",
+      "min": "Dieses Feld muss mindestens {{min}} Zeichen lang sein",
+      "max": "Dieses Feld darf maximal {{max}} Zeichen lang sein",
+      "matches": "Dieses Feld muss mit folgendem übereinstimmen: \"{{regex}}\"",
+      "email": "Dieses Feld muss eine gültige E-Mail-Adresse sein",
+      "url": "Dieses Feld muss eine gültige URL sein",
+      "uuid": "Dieses Feld muss eine gültige UUID sein",
+      "trim": "Dieses Feld darf kein Leerzeichen am Anfang oder Ende haben",
+      "lowercase": "Dieses Feld muss ein String in Kleinbuchstaben sein",
+      "uppercase": "Dieses Feld muss ein String in Grossbuchstaben sein"
+    },
+    "number": {
+      "min": "Dieses Feld muss größer oder gleich {{min}} sein",
+      "max": "Dieses Feld muss kleiner oder gleich {{max}} sein",
+      "lessThan": "Dieses Feld muss kleiner sein als {{less}}",
+      "moreThan": "Dieses Feld muss grösser sein als {{more}}",
+      "positive": "Dieses Feld muss eine positive Zahl sein",
+      "negative": "Dieses Feld muss eine negative Zahl sein",
+      "integer": "Dieses Feld muss eine ganze Zahl sein",
+      "nolatitude": "Längengrade sind Zahlen zwischen -90.00 und 90.00",
+      "nolongitude": "Breitengrade sind Zahlen zwischen -180.00 und 180.00"
+    },
+    "date": {
+      "min": "Dieses Feld muss später sein als {{min}}",
+      "max": "Dieses Feld muss früher sein als {{max}}"
+    },
+    "boolean": {
+      "isValue": "Dieses Feld muss {{value}} sein"
+    },
+    "object": {
+      "noUnknown": "Dieses Feld hat nicht spezifizierte Schlüssel: {{unknown}}"
+    },
+    "array": {
+      "min": "Dieses Feld muss mindestens {{min}} Elemente enthalten",
+      "max": "Dieses Feld muss weniger oder gleich {{max}} Elemente enthalten",
+      "length": "Dieses muss {{length}} Elemente haben",
+      "minOneItem": "Bitte wähle mindestens ein Element aus"
+    }
   },
   "suggestion": {
+    "tAndC": {
+      "required": "Bitte stimmen Sie unsere Datenschutzrichtlinen zu"
+    },
+    "writeError": "Entschuldigung, wir konnten leider gerade nicht Ihren Kartenpunktvorschlag speichern. Bitte versuchen Sie es noch einmal.",
+    "successfullySubmitted": "Vielen Dank! Ihr Kartenpunktvorschlag wurde gespeichert",
+    "successfullySubmittedReviewInfor": "Wir werden diesen schnellstmöglich veröffentlichen",
     "section": {
       "about": {
         "title": "Über den Kartenpunkt",
@@ -210,7 +263,10 @@
     "field": {
       "label": {
         "title": "Name des Kartenpunktes",
-        "description": "Kurzbeschreibung",
+        "mandatoryDescriptionInEnglish": "Englische Kurzbeschreibung",
+        "mandatoryDescriptionInGerman": "Deutsche Kurzbeschreibung",
+        "otherLanguageDescriptionInGerman": "Deutsche Kurzbeschreibung",
+        "otherLanguageDescriptionInEnglish": "Englische Kurzbeschreibung",
         "street": "Straße",
         "houseNumber": "Hausnummer",
         "postcode": "Postleitzahl",
@@ -231,6 +287,8 @@
       "placeholder": {
         "title": "Bitte geben Sie den Namen der Organisation an",
         "description": "Bitte beschreiben Sie die Organisation",
+        "otherLanguageDescriptionInGerman": "Falls möglich beschreiben Sie bitte den Kartenpunkt auch auf deutsch",
+        "otherLanguageDescriptionInEnglish": "Falls möglich beschreiben Sie bitte den Kartenpunkt auch auf englisch",
         "street1": "Siegfriedstr.",
         "houseNumber": "11",
         "postcode": "12345",
@@ -253,6 +311,9 @@
       "submit": "Vorschlag abschicken"
     }
   },
+  "suggest": {
+    "title": "Kartenpunktvorschlag"
+  },
   "tour": {
     "title": {
       "tour": "Tour",
@@ -267,13 +328,16 @@
         "distance": "Distanz"
       }
     },
-    "tourStop": {
-      "meta": "Tourstop {{number}}"
-    },
-    "backToTour": "Zurück zur Tour",
     "introduction": "Einleitung",
+    "backToTour": "Zurück zur Tour",
+    "button": {
+      "viewAllTourStops": "Tour ansehen"
+    },
     "listings": {
       "title": "Touren"
+    },
+    "tourStop": {
+      "meta": "Tourstop {{number}}"
     },
     "card": {
       "tourStops": "Stops"
@@ -305,9 +369,7 @@
     }
   },
   "map": {
-    "this": {
-      "popupviewLocation": "View location",
-      "popupclose": "Close popup"
-    }
+    "popupviewLocation": "Kartenpunkt ansehen",
+    "popupclose": "Popup schließen"
   }
 }

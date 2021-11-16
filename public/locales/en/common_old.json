@@ -137,11 +137,22 @@
     "popup": {
       "viewLocation": "View location",
       "close": "Close popup"
+    },
+    "this": {
+      "popupviewLocation": "View location",
+      "popupclose": "Close popup"
     }
   },
   "tour": {
     "detail": {
       "title": "Tour"
+    }
+  },
+  "suggestion": {
+    "field": {
+      "label": {
+        "description": "Description"
+      }
     }
   }
 }

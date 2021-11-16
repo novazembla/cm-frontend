@@ -143,7 +143,8 @@ body {
 
   &.mouse {
     height: 70px;
-    .row, .row-space-between {
+    .row,
+    .row-space-between {
       display: none;
     }
   }
@@ -192,7 +193,8 @@ body {
     -webkit-background-size: contain;
     background-size: 175%;
     background-image: url(data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeD0iMHB4IiB5PSIwcHgiCgkgdmlld0JveD0iMCAwIDU1IDU1IiB4bWw6c3BhY2U9InByZXNlcnZlIj4KPHN0eWxlIHR5cGU9InRleHQvY3NzIj4KCS5zdDB7ZmlsbDpub25lO3N0cm9rZTojMDAwMDAwO30KCS5zdDF7ZmlsbDpub25lO3N0cm9rZTojMDAwMDAwO3N0cm9rZS13aWR0aDoxLjU7c3Ryb2tlLWxpbmVjYXA6cm91bmQ7fQo8L3N0eWxlPgo8ZyBpZD0iWCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMS4wNjEgMS4wNjEpIj4KCTxsaW5lIGNsYXNzPSJzdDEiIHgxPSIzNS4yIiB5MT0iMTcuOSIgeDI9IjE3LjUiIHkyPSIzNS42Ii8+Cgk8bGluZSBjbGFzcz0ic3QxIiB4MT0iMzUuMiIgeTE9IjM1LjYiIHgyPSIxNy41IiB5Mj0iMTcuOSIvPgo8L2c+Cjwvc3ZnPgo=);
-    filter: invert(18%) sepia(82%) saturate(4434%) hue-rotate(355deg) brightness(96%) contrast(85%);
+    filter: invert(18%) sepia(82%) saturate(4434%) hue-rotate(355deg)
+      brightness(96%) contrast(85%);
     // &:hover {
     //   filter: invert(13%) sepia(17%) saturate(7488%) hue-rotate(306deg) brightness(99%) contrast(106%);
     // }
@@ -226,6 +228,11 @@ body {
   filter: invert(18%) sepia(82%) saturate(4434%) hue-rotate(355deg)
     brightness(96%) contrast(85%);
   transition: filter 0.3s;
+}
+
+.svg-dark {
+  filter: invert(13%) sepia(17%) saturate(7488%) hue-rotate(306deg)
+    brightness(99%) contrast(106%);
 }
 
 .svgHover {
@@ -283,7 +290,7 @@ body {
   will-change: transform;
 
   opacity: 0;
-  transition: opacity .125s;
+  transition: opacity 0.125s;
   &.fadeIn {
     opacity: 1;
 

@@ -137,11 +137,22 @@
     "popup": {
       "viewLocation": "Kartenpunkt anzeigen",
       "close": "Schließen"
+    },
+    "this": {
+      "popupviewLocation": "View location",
+      "popupclose": "Close popup"
     }
   },
   "tour": {
     "detail": {
       "title": "Tour"
+    }
+  },
+  "suggestion": {
+    "field": {
+      "label": {
+        "description": "Kurzbeschreibung"
+      }
     }
   }
 }

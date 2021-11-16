@@ -1,4 +1,5 @@
 import type { AppConfig } from "~/types";
+import "./translations";
 
 export const appConfigMainNav = [
   {

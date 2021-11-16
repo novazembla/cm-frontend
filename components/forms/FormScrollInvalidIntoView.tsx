@@ -13,7 +13,7 @@ export const FormScrollInvalidIntoView = ({
   } = useFormContext();
 
   const errorString = JSON.stringify(typeof errors === "object" ? Object.keys(errors) : {});
-
+  
   useLayoutEffect(() => {
     if (!window) return;
 
