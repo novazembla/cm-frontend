@@ -122,7 +122,8 @@
   },
   "apiimage": {
     "errormsg": "The image could unfortunately not be processed. Please try uploading again.",
-    "processsing": "Image successfuly uploaded. We are processing it now"
+    "processsing": "Image successfuly uploaded. We are processing it now",
+    "placeholder": "Image"
   },
   "events": {
     "filter": {
@@ -153,6 +154,38 @@
       "label": {
         "description": "Description"
       }
+    }
+  },
+  "form": {
+    "datepicker": {
+      "close": "close"
+    },
+    "image": {
+      "label": {
+        "image": "Image"
+      }
+    }
+  },
+  "settings": {
+    "taxMapping": {
+      "options": {
+        "label": {
+          "typeOfInstitution": "Type of Institution",
+          "typeOfOrganisation": "Type of Organisation",
+          "targetAudience": "Target Audience",
+          "eventType": "Event type"
+        }
+      }
+    }
+  },
+  "editor": {
+    "button": {
+      "save": "Save",
+      "cancel": "Cancel",
+      "unitalic": "Remove italic text format",
+      "italic": "Format text italic",
+      "unbold": "Remove bold text format",
+      "bold": "Format text bold"
     }
   }
 }

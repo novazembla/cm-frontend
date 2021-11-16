@@ -38,6 +38,20 @@
       }
     }
   },
+  "imageuploader": {
+    "filesizebetween": "Dateigrösse zwischen {{minFileSize}} und {{maxFileSize}}",
+    "filesizebelow": "Max. Dateigrösse {{maxFileSize}}",
+    "filesizeabove": "Min. Dateigrösse {{minFileSize}}",
+    "droperror": {
+      "toolarge": "Die ausgewählte Datei ist zu groß.",
+      "toosmall": "Die ausgewählte Datei ist zu klein.",
+      "invalidtype": "Dieses Dateiformat kann nicht verwendet werden."
+    },
+    "pleasedroporclick": "Hier ein Bild mit der Maus fallen lassen, oder klicken Sie, um eine Bild auszuwählen.",
+    "uploading": "Hochladen",
+    "cancelupload": "Upload abbrechen",
+    "error": "Leider konnten wir Ihren Upload nicht abschließen, bitte versuchen Sie es später noch einmal."
+  },
   "ui": {
     "button": {
       "label": {
@@ -47,32 +61,7 @@
     }
   },
   "form": {
-    "datepicker": {
-      "close": "Schließen"
-    },
     "unsavedchanges": "Offenbar haben Sie Änderungen nicht gespeichert. Verlassen ohne zu speichern?"
-  },
-  "settings": {
-    "taxMapping": {
-      "options": {
-        "label": {
-          "typeOfInstitution": "Einrichtungsart",
-          "typeOfOrganisation": "Trägerart",
-          "targetAudience": "Zielgruppe",
-          "eventType": "Veranstaltungsart"
-        }
-      }
-    }
-  },
-  "editor": {
-    "button": {
-      "save": "Speichern",
-      "cancel": "Abbrechen",
-      "unitalic": "Kursivgedrucktes Textformat entfernen",
-      "italic": "Text kursiv formatieren",
-      "unbold": "Fettgedrucktes Textformat entfernen",
-      "bold": "Text fett formatieren"
-    }
   },
   "event": {
     "missingData": {
@@ -178,14 +167,17 @@
     "totalCount_plural_plural": "{{count}} Kartenpunkte gefunden"
   },
   "validation": {
+    "error": {
+      "postcode": "Please provide a valid postcode"
+    },
     "notunique": "Dieser Wert ist nicht einzigartig",
     "mixed": {
       "default": "Dieses Feld ist nicht korrekt",
-      "required": "Dieses Feld ist verpflichtend",
+      "required": "Bitte füllen Sie dieses Feld aus",
       "oneOf": "Dieses Feld muss einer der folgenden Werte haben: {{values}}",
       "notOneOf": "Dieses Feld muss einer der folgenden Typen sein: {{values}}",
       "notType": "Dieses Feld muss vom Typ {{type}} sein",
-      "defined": "Dieses Feld muss gesetzt werden"
+      "defined": "Bitte füllen Sie dieses Feld aus"
     },
     "string": {
       "length": "Dieses Feld muss exakt {{length}} Zeichen lang sein",
@@ -206,9 +198,7 @@
       "moreThan": "Dieses Feld muss grösser sein als {{more}}",
       "positive": "Dieses Feld muss eine positive Zahl sein",
       "negative": "Dieses Feld muss eine negative Zahl sein",
-      "integer": "Dieses Feld muss eine ganze Zahl sein",
-      "nolatitude": "Längengrade sind Zahlen zwischen -90.00 und 90.00",
-      "nolongitude": "Breitengrade sind Zahlen zwischen -180.00 und 180.00"
+      "integer": "Dieses Feld muss eine ganze Zahl sein"
     },
     "date": {
       "min": "Dieses Feld muss später sein als {{min}}",
@@ -223,13 +213,15 @@
     "array": {
       "min": "Dieses Feld muss mindestens {{min}} Elemente enthalten",
       "max": "Dieses Feld muss weniger oder gleich {{max}} Elemente enthalten",
-      "length": "Dieses muss {{length}} Elemente haben",
-      "minOneItem": "Bitte wähle mindestens ein Element aus"
+      "length": "Dieses muss {{length}} Elemente haben"
     }
   },
   "suggestion": {
+    "imageConfirmation": {
+      "required": "Please confirm that the image can be published on our website"
+    },
     "tAndC": {
-      "required": "Bitte stimmen Sie unsere Datenschutzrichtlinen zu"
+      "required": "Bitte stimmen Sie zu"
     },
     "writeError": "Entschuldigung, wir konnten leider Ihren Kartenpunktvorschlag nicht speichern. Bitte versuchen Sie es zu einem späteren Zeitpunkt noch einmal.",
     "successfullySubmitted": "Vielen Dank! Ihr Kartenpunktvorschlag wurde gespeichert",
@@ -246,6 +238,10 @@
       "contact": {
         "title": "Kontaktinformation",
         "description": "Wie kann man die Organisation kontaktieren. Wir werden diese Information öffentlich zugänglich machen."
+      },
+      "image": {
+        "title": "Bild",
+        "description": "Hätten Sie zufällig ein Bild und wären die Urheberrechte ... TODO:"
       },
       "online": {
         "title": "Website(n)",
@@ -273,6 +269,10 @@
         "city": "Stadt",
         "phone": "Telefonnummer",
         "email": "Emailadresse",
+        "suggestionSubmittersImageRightsConfirmation": "I confirm that the uploaded image can be used freely on the website TODO:",
+        "image": "Bild",
+        "alt": "Kurze Bildbeschreibung",
+        "credits": "Urheberrechtsinformation",
         "website": "Website",
         "facebook": "Facebook",
         "instagram": "Instagram",
@@ -294,6 +294,8 @@
         "postcode": "12345",
         "phone": "030/1234567",
         "email": "Ihre Emailaddressse",
+        "alt": "Das Bild zeigt ...",
+        "credits": "Urheberechtsinformation",
         "website": "https://www.example.com",
         "suggestionSubmittersName": "Bitte geben Sie Ihren Namen an",
         "suggestionSubmittersEmail": "Bitte geben Sie Ihre Emailaddressse an",
@@ -344,7 +346,7 @@
     }
   },
   "apiimage": {
-    "placeholder": "Bild"
+    "uploaded": "Bild wird auf dem Server verarbeitet"
   },
   "error": {
     "dataLoad": "Leider konnten wir die benötigten Daten nicht laden. Bitte versuchen Sie es zu einem späteren Zeitpunkt wieder.",

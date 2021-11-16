@@ -148,8 +148,6 @@ export const ModuleComponentEvent = ({
   const [highlight, setHighlight] = useState<MapHighlightType | null>(null);
 
   useEffect(() => {
-    console.log("mount events");
-
     if (cultureMap) cultureMap.showCurrentView();
 
     setHighlight(null);
@@ -157,7 +155,6 @@ export const ModuleComponentEvent = ({
 
   useEffect(() => {
     if (typeof window !== "undefined" && highlight && cultureMap) {
-      console.log("event move to hightligh", highlight);
       cultureMap.setHighlights([highlight]);
       cultureMap.panTo(highlight.lng, highlight.lat, true);
     }

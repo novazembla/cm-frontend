@@ -10,7 +10,7 @@ import { Footer } from "~/components/app";
 import { Box, chakra, Grid, Text, Button } from "@chakra-ui/react";
 import { MainContent } from "~/components/app";
 import { useAppTranslations, useIsBreakPoint } from "~/hooks";
-import { SVG, MultiLangHtml } from "~/components/ui";
+import { SVG, MultiLangHtml, ImageStatusEnum } from "~/components/ui";
 import {
   FieldCheckboxGroup,
   FieldInput,
@@ -20,6 +20,8 @@ import {
   TwoColFieldRow,
   TextErrorMessage,
   FormScrollInvalidIntoView,
+  FormNavigationBlock,
+  FieldImageUploader,
 } from "~/components/forms";
 import { useSettingsContext, useMapContext } from "~/provider";
 import { pick } from "lodash";
@@ -34,6 +36,16 @@ export const SuggestionSchema = object().shape({
   postCode: number().typeError("validation.postcode").required(),
   city: string().required(),
   phone1: string(),
+  alt: mixed().when("heroImage", {
+    is: (value: any) => value && !isNaN(value) && value > 0,
+    then: string().required(),
+    otherwise: string(),
+  }),
+  credits: mixed().when("heroImage", {
+    is: (value: any) => value && !isNaN(value) && value > 0,
+    then: string().required(),
+    otherwise: string(),
+  }),
   email1: string().email(),
   facebook: string().url(),
   twitter: string().url(),
@@ -42,6 +54,16 @@ export const SuggestionSchema = object().shape({
   website: string().url(),
   suggestionSubmittersName: string().required(),
   suggestionSubmittersEmail: string().email().required(),
+
+  // t("suggestion.imageConfirmation.required", "Please confirm that the image can be published on our website")
+  suggestionSubmittersImageRightsConfirmation: mixed().when("heroImage", {
+    is: (value: any) => value && !isNaN(value) && value > 0,
+    then: boolean()
+      .required("suggestion.imageConfirmation.required")
+      .oneOf([true], "suggestion.imageConfirmation.required"),
+    otherwise: boolean(),
+  }),
+
   // t("suggestion.tAndC.required", "Please confirm our terms and conditions")
   suggestionTandC: boolean()
     .required("suggestion.tAndC.required")
@@ -63,7 +85,7 @@ export const ModuleComponentSuggest = () => {
 
   const [hasFormError, setHasFormError] = useState(false);
   const [successfullySubmitted, setSuccessfullySubmitted] = useState(false);
-  const [isNavigatingAway, setIsNavigatingAway] = useState(false);
+  const [activeUploadCounter, setActiveUploadCounter] = useState(0);
 
   const [extendedValidationSchema, setExtendedValidationSchema] =
     useState(SuggestionSchema);
@@ -74,12 +96,10 @@ export const ModuleComponentSuggest = () => {
   const cultureMap = useMapContext();
 
   useEffect(() => {
-    console.log("mount suggest form");
-
     if (cultureMap) cultureMap.showCurrentView();
   }, [router.asPath, cultureMap]);
 
-  const [mutation, mutationResults] = useMutation(locationCreateMutationGQL);
+  const [mutation] = useMutation(locationCreateMutationGQL);
 
   // useEffect(() => {
   //   if (settings?.taxonomies?.typeOfInstitution?.terms) {
@@ -166,40 +186,33 @@ export const ModuleComponentSuggest = () => {
   const {
     handleSubmit,
     reset,
-    setError,
     watch,
-    formState: { isSubmitting, isDirty },
+    formState: { isDirty },
   } = formMethods;
 
   const onSubmit = async (
     newData: yup.InferType<typeof extendedValidationSchema>
   ) => {
     setHasFormError(false);
-    setIsNavigatingAway(false);
     try {
-      // const heroImage =
-      //   newData.heroImage &&
-      //   !isNaN(newData.heroImage) &&
-      //   newData.heroImage > 0
-      //     ? {
-      //         heroImage: {
-      //           connect: {
-      //             id: newData.heroImage,
-      //           },
-      //           update: {
-      //             cropPosition: newData.heroImage_cropPosition
-      //               ? parseInt(newData.heroImage_cropPosition)
-      //               : 0,
-      //             ...multiLangImageMetaRHFormDataToJson(
-      //               newData,
-      //               "heroImage",
-      //               ["alt", "credits"],
-      //               config.activeLanguages
-      //             ),
-      //           },
-      //         },
-      //       }
-      //     : undefined;
+      const heroImage =
+        newData.heroImage && !isNaN(newData.heroImage) && newData.heroImage > 0
+          ? {
+              heroImage: {
+                connect: {
+                  id: newData.heroImage,
+                },
+                update: {
+                  cropPosition: 0,
+                  [`alt_${i18n.language}`]: newData.alt,
+                  [`alt_${i18n.language === "en" ? "de" : "en"}`]: newData.alt,
+                  [`credits_${i18n.language}`]: newData.credits,
+                  [`credits_${i18n.language === "en" ? "de" : "en"}`]:
+                    newData.credits,
+                },
+              },
+            }
+          : undefined;
 
       let terms = [];
 
@@ -283,18 +296,10 @@ export const ModuleComponentSuggest = () => {
               ]),
               suggestionTandC: !!newData.suggestionTandC,
               suggestionIsOwner: !!newData.suggestionIsOwner,
+              suggestionImageRightsConfirmation:
+                !!newData.suggestionSubmittersImageRightsConfirmation,
             },
-            // ...heroImage,
-            // ...fieldImagesRFHFormDataToData(newData),
-            // ...filteredOutputByWhitelist(
-            //   multiLangRHFormDataToJson(
-            //     newData,
-            //     multiLangFields,
-            //     config.activeLanguages
-            //   ),
-            //   [],
-            //   multiLangFields
-            // ),
+            ...heroImage,
           },
         },
       });
@@ -322,18 +327,12 @@ export const ModuleComponentSuggest = () => {
     let resetVars = {};
     if (settings?.taxonomies) {
       if (settings?.taxonomies?.typeOfInstitution?.terms) {
-        const terms = settings?.taxonomies?.typeOfInstitution?.terms?.reduce(
-          (acc: any, t: any) => {
-            if (t._count?.locations > 0) return [...acc, t];
+        setActiveTermsToI(settings?.taxonomies?.typeOfInstitution?.terms);
 
-            return acc;
-          },
-          []
-        );
-        if (terms?.length) {
+        if (settings?.taxonomies?.typeOfInstitution?.terms?.length) {
           resetVars = {
             ...resetVars,
-            ...terms.reduce(
+            ...settings?.taxonomies?.typeOfInstitution?.terms.reduce(
               (acc: any, t: any) => ({
                 ...acc,
                 [`typeOfInstitution_${t.id}`]: false,
@@ -342,24 +341,14 @@ export const ModuleComponentSuggest = () => {
             ),
           };
         }
-        setActiveTermsToI(terms);
       }
       if (settings?.taxonomies?.typeOfOrganisation?.terms) {
-        const terms = settings?.taxonomies?.typeOfOrganisation?.terms?.reduce(
-          (acc: any, t: any) => {
-            if (t._count?.locations > 0) return [...acc, t];
+        setActiveTermsToO(settings?.taxonomies?.typeOfOrganisation?.terms);
 
-            return acc;
-          },
-          []
-        );
-
-        setActiveTermsToO(terms);
-
-        if (terms?.length) {
+        if (settings?.taxonomies?.typeOfOrganisation?.terms?.length) {
           resetVars = {
             ...resetVars,
-            ...terms.reduce(
+            ...settings?.taxonomies?.typeOfOrganisation?.terms.reduce(
               (acc: any, t: any) => ({
                 ...acc,
                 [`typeOfOrganisation_${t.id}`]: false,
@@ -370,24 +359,15 @@ export const ModuleComponentSuggest = () => {
         }
       }
       if (settings?.taxonomies?.targetAudience?.terms) {
-        const terms = settings?.taxonomies?.targetAudience?.terms?.reduce(
-          (acc: any, t: any) => {
-            if (t._count?.locations > 0) return [...acc, t];
+        setActiveTermsTA(settings?.taxonomies?.targetAudience?.terms);
 
-            return acc;
-          },
-          []
-        );
-
-        setActiveTermsTA(terms);
-
-        if (terms?.length) {
+        if (settings?.taxonomies?.targetAudience?.terms?.length) {
           resetVars = {
             ...resetVars,
             s: "",
             cluster: true,
             and: false,
-            ...terms.reduce(
+            ...settings?.taxonomies?.targetAudience?.terms.reduce(
               (acc: any, t: any) => ({
                 ...acc,
                 [`targetAudience_${t.id}`]: false,
@@ -402,10 +382,11 @@ export const ModuleComponentSuggest = () => {
     }
   }, [settings?.taxonomies, reset]);
 
-  // TODO: use is navigating away ...
-
+  const heroImage = watch("heroImage");
+  const suggestionSubmittersImageRightsConfirmation = watch(
+    "suggestionSubmittersImageRightsConfirmation"
+  );
   // t("suggestion.writeError", "We could unfortunately not save your suggestion at the moment. Please try again later.")
-
   return (
     <MainContent isDrawer layerStyle="pageBg">
       <Grid
@@ -430,7 +411,7 @@ export const ModuleComponentSuggest = () => {
                 <Box
                   border="1px solid"
                   borderColor="cm.accentDark"
-                  my="2em"
+                  my="3em"
                   w="70px"
                   h="70px"
                   borderRadius="100px"
@@ -472,6 +453,9 @@ export const ModuleComponentSuggest = () => {
                 </Box>
               )}
               <FormProvider {...formMethods}>
+                <FormNavigationBlock
+                  shouldBlock={isDirty || activeUploadCounter > 0}
+                />
                 <FormScrollInvalidIntoView hasFormError={hasFormError} />
 
                 {hasFormError && (
@@ -591,6 +575,7 @@ export const ModuleComponentSuggest = () => {
                     <chakra.h2 textStyle="formOptions" mb="2px">
                       {t("suggestion.section.address.title", "Address")}
                     </chakra.h2>
+
                     <Text textStyle="formOptions" mb="1em">
                       {t(
                         "suggestion.section.address.description",
@@ -724,7 +709,112 @@ export const ModuleComponentSuggest = () => {
                       />
                     </FieldRow>
                   </Box>
+                  <Box
+                    mb="2em"
+                    pt="0.5em"
+                    borderTop="1px solid"
+                    borderColor="cm.accentDark"
+                  >
+                    <chakra.h2 textStyle="formOptions" mb="2px">
+                      {t("suggestion.section.image.title", "Image")}
+                    </chakra.h2>
+                    <Text textStyle="formOptions" mb="1em">
+                      {t(
+                        "suggestion.section.image.description",
+                        "Would you have an image of the location at hand? TODO: better text"
+                      )}
+                    </Text>
+                    <FieldRow>
+                      <FieldSwitch
+                        name="suggestionSubmittersImageRightsConfirmation"
+                        isRequired={!!heroImage}
+                        label={
+                          <span>
+                            {t(
+                              "suggestion.field.label.suggestionSubmittersImageRightsConfirmation",
+                              "I confirm that the uploaded image can be used freely on the website TODO:"
+                            )}
+                          </span>
+                        }
+                        defaultChecked={false}
+                      />
+                    </FieldRow>
+                    {(suggestionSubmittersImageRightsConfirmation || !!heroImage) && (
+                      <>
+                        <FieldRow>
+                          <FieldImageUploader
+                            name="heroImage"
+                            id="heroImage"
+                            label={t("suggestion.field.label.image", "Image")}
+                            isRequired={!!settings.imageRequired}
+                            route="suggestionImage"
+                            objectFit="contain"
+                            objectPosition="left center"
+                            setActiveUploadCounter={setActiveUploadCounter}
+                            settings={{
+                              minFileSize:
+                                settings?.minFileSize ?? 1024 * 1024 * 0.0977,
+                              maxFileSize:
+                                settings?.maxFileSize ?? 1024 * 1024 * 3,
+                              aspectRatioPB: 25, // % bottom padding
 
+                              image: {
+                                status: ImageStatusEnum.READY,
+                                id: undefined,
+                                meta: undefined,
+                                alt: "",
+                                forceAspectRatioPB: 25,
+                                showPlaceholder: true,
+                                sizes:
+                                  settings?.sizes ??
+                                  "(min-width: 45em) 800px, 95vw",
+                              },
+                            }}
+                          />
+                        </FieldRow>
+                        <FieldRow>
+                          <FieldInput
+                            type="text"
+                            name="alt"
+                            id="alt"
+                            label={t(
+                              "suggestion.field.label.alt",
+                              "Image description"
+                            )}
+                            isRequired={!!heroImage}
+                            isDisabled={!!!heroImage}
+                            settings={{
+                              hideLabel: false,
+                              placeholder: t(
+                                "suggestion.field.placeholder.alt",
+                                "Short description of the image"
+                              ),
+                            }}
+                          />
+                        </FieldRow>
+                        <FieldRow>
+                          <FieldInput
+                            type="text"
+                            name="credits"
+                            id="credits"
+                            label={t(
+                              "suggestion.field.label.credits",
+                              "Image credits"
+                            )}
+                            isRequired={!!heroImage}
+                            isDisabled={!!!heroImage}
+                            settings={{
+                              hideLabel: false,
+                              placeholder: t(
+                                "suggestion.field.placeholder.credits",
+                                "The image credits"
+                              ),
+                            }}
+                          />
+                        </FieldRow>
+                      </>
+                    )}
+                  </Box>
                   <Box
                     mb="2em"
                     pt="0.5em"

@@ -38,6 +38,20 @@
       }
     }
   },
+  "imageuploader": {
+    "filesizebetween": "Size between {{minFileSize}} and {{maxFileSize}}",
+    "filesizebelow": "Size max. {{maxFileSize}}",
+    "filesizeabove": "Size min. {{minFileSize}}",
+    "droperror": {
+      "toolarge": "Chosen file is too large",
+      "toosmall": "Chosen file is too small",
+      "invalidtype": "Type of chosen file is not accepted"
+    },
+    "pleasedroporclick": "Drag & drop an image here, or click to select one",
+    "uploading": "Uploading",
+    "cancelupload": "Cancel upload",
+    "error": "Unfortunately, we could not finish you upload please try again later"
+  },
   "ui": {
     "button": {
       "label": {
@@ -47,32 +61,7 @@
     }
   },
   "form": {
-    "datepicker": {
-      "close": "close"
-    },
     "unsavedchanges": "It looks like you've unsaved changes. Leave without saving?"
-  },
-  "settings": {
-    "taxMapping": {
-      "options": {
-        "label": {
-          "typeOfInstitution": "Type of Institution",
-          "typeOfOrganisation": "Type of Organisation",
-          "targetAudience": "Target Audience",
-          "eventType": "Event type"
-        }
-      }
-    }
-  },
-  "editor": {
-    "button": {
-      "save": "Save",
-      "cancel": "Cancel",
-      "unitalic": "Remove italic text format",
-      "italic": "Format text italic",
-      "unbold": "Remove bold text format",
-      "bold": "Format text bold"
-    }
   },
   "event": {
     "missingData": {
@@ -228,6 +217,9 @@
     }
   },
   "suggestion": {
+    "imageConfirmation": {
+      "required": "Please confirm that the image can be published on our website"
+    },
     "tAndC": {
       "required": "Please confirm our terms and conditions"
     },
@@ -246,6 +238,10 @@
       "contact": {
         "title": "Contact information",
         "description": "How can people contact the location? This information will be listed on our website."
+      },
+      "image": {
+        "title": "Image",
+        "description": "Would you have an image of the location at hand? TODO: better text"
       },
       "online": {
         "title": "Website(s)",
@@ -273,6 +269,10 @@
         "city": "City",
         "phone": "Phone number",
         "email": "Email address",
+        "suggestionSubmittersImageRightsConfirmation": "I confirm that the uploaded image can be used freely on the website TODO:",
+        "image": "Image",
+        "alt": "Image description",
+        "credits": "Image credits",
         "website": "Website",
         "facebook": "Facebook",
         "instagram": "Instagram",
@@ -294,6 +294,8 @@
         "postcode": "12345",
         "phone": "030/1234567",
         "email": "Your email address",
+        "alt": "Short description of the image",
+        "credits": "The image credits",
         "website": "https://www.example.com",
         "suggestionSubmittersName": "Please enter your name",
         "suggestionSubmittersEmail": "Please enter your email address",
@@ -344,7 +346,7 @@
     }
   },
   "apiimage": {
-    "placeholder": "Image"
+    "uploaded": "Processing image"
   },
   "error": {
     "dataLoad": "Oops, something went wrong and we could not load the required data. Please try again later!",

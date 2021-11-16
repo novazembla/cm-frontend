@@ -108,41 +108,41 @@ export {}
 //             w={{ base: "100%", t: "100%" }}
 //             maxW={{ base: "350px", t: "100%" }}
 //           >
-//             <FieldImageUploader
-//               name={`${name}`}
-//               id={`${id}`}
-//               label={t("form.image.label.image", "Image")}
-//               isRequired={!!settings.imageRequired}
-//               deleteButtonGQL={deleteButtonGQL}
-//               connectWith={connectWith}
-//               onDelete={() => {
-//                 if (!config.activeLanguages) return;
+            // <FieldImageUploader
+            //   name={`${name}`}
+            //   id={`${id}`}
+            //   label={t("form.image.label.image", "Image")}
+            //   isRequired={!!settings.imageRequired}
+            //   deleteButtonGQL={deleteButtonGQL}
+            //   connectWith={connectWith}
+            //   onDelete={() => {
+            //     if (!config.activeLanguages) return;
 
-//                 config.activeLanguages.forEach((lang) => {
-//                   setValue(`${name}`, "");
-//                   setValue(`${name}_alt_${lang}`, "");
-//                   setValue(`${name}_credits_${lang}`, "");
-//                 });
-//               }}
-//               objectFit="cover"
-//               objectPosition={mappedCropPosition}
-//               setActiveUploadCounter={setActiveUploadCounter}
-//               settings={{
-//                 minFileSize: settings?.minFileSize ?? 1024 * 1024 * 0.0977,
-//                 maxFileSize: settings?.maxFileSize ?? 1024 * 1024 * 3,
-//                 aspectRatioPB: settings?.aspectRatio ?? 75, // % bottom padding
+            //     config.activeLanguages.forEach((lang) => {
+            //       setValue(`${name}`, "");
+            //       setValue(`${name}_alt_${lang}`, "");
+            //       setValue(`${name}_credits_${lang}`, "");
+            //     });
+            //   }}
+            //   objectFit="cover"
+            //   objectPosition={mappedCropPosition}
+            //   setActiveUploadCounter={setActiveUploadCounter}
+            //   settings={{
+            //     minFileSize: settings?.minFileSize ?? 1024 * 1024 * 0.0977,
+            //     maxFileSize: settings?.maxFileSize ?? 1024 * 1024 * 3,
+            //     aspectRatioPB: settings?.aspectRatio ?? 75, // % bottom padding
 
-//                 image: {
-//                   status: currentImage?.status,
-//                   id: currentImage?.id,
-//                   meta: currentImage?.meta,
-//                   alt: label,
-//                   forceAspectRatioPB: settings?.aspectRatio ?? 75,
-//                   showPlaceholder: true,
-//                   sizes: settings?.sizes ?? "(min-width: 45em) 20v, 95vw",
-//                 },
-//               }}
-//             />
+            //     image: {
+            //       status: currentImage?.status,
+            //       id: currentImage?.id,
+            //       meta: currentImage?.meta,
+            //       alt: label,
+            //       forceAspectRatioPB: settings?.aspectRatio ?? 75,
+            //       showPlaceholder: true,
+            //       sizes: settings?.sizes ?? "(min-width: 45em) 20vw, 95vw",
+            //     },
+            //   }}
+            // />
 //           </Box>
 //         </Box>
 //         <Box>

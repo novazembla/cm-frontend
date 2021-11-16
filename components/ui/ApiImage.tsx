@@ -50,6 +50,7 @@ export type ApiImageProps = {
   id: number | undefined;
   alt: string;
   objectFit?: string;
+  objectPosition?: string;
   meta?: ApiImageMetaInformation;
   status: ImageStatusEnum;
   cropPosition?: ImageCropPosition;
@@ -67,6 +68,7 @@ export const ApiImage = ({
   meta,
   status,
   objectFit,
+  objectPosition,
   useImageAspectRatioPB,
   forceAspectRatioPB,
   placeholder,
@@ -82,24 +84,24 @@ export const ApiImage = ({
   let content;
   let imageAspectRatioPB;
 
-  let objectPosition = "center center";
+  let finalObjectPosition = objectPosition ?? "center center";
   
   if (cropPosition) {
     switch (cropPosition) {
       case ImageCropPosition.BOTTOM:
-        objectPosition = "center bottom";
+        finalObjectPosition = "center bottom";
         break;
 
       case ImageCropPosition.TOP:
-        objectPosition = "center top";
+        finalObjectPosition = "center top";
         break;
 
       case ImageCropPosition.LEFT:
-        objectPosition = "left center";
+        finalObjectPosition = "left center";
         break;
 
       case ImageCropPosition.RIGHT:
-        objectPosition = "right center";
+        finalObjectPosition = "right center";
         break;
     }
   }
@@ -154,7 +156,7 @@ export const ApiImage = ({
             )}
             <chakra.img
               objectPosition={
-                objectFit && objectFit !== "none" ? objectPosition : "none"
+                objectFit && objectFit !== "none" ? finalObjectPosition : "none"
               }
               objectFit={
                 objectFit && objectFit !== "none" ? objectFit : ("none" as any)
@@ -178,17 +180,17 @@ export const ApiImage = ({
         justifyContent="center"
         alignItems="center"
         fontSize="lg"
-        color="gray.800"
-        border="2px solid"
-        bg="gray.100"
-        borderColor="gray.100"
-        minH="200"
+        color="#333"
+        border="1px solid"
+        bg="#fff"
+        borderColor="cm.accentLight"
         h="100%"
         p="4"
         textAlign="center"
+        borderRadius="md"
+        display="flex !important"
       >
-        {" "}
-        {placeholder ?? t("apiimage.placeholder", "Image")}
+        {placeholder ?? t("apiimage.uploaded", "Processing image")}
       </Flex>
     );
 

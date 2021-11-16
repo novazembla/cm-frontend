@@ -120,10 +120,7 @@ export const ModuleComponentEvents = ({ ...props }) => {
   });
 
   useEffect(() => {
-    console.log("mount events");
-
     if (cultureMap) cultureMap.showCurrentView();
-
   }, [cultureMap]);
 
   useEffect(() => {

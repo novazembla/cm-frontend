@@ -33,10 +33,7 @@ export const ModuleComponentPage = ({ page }: { page: any }) => {
   const cultureMap = useMapContext();
 
   useEffect(() => {
-    console.log("mount events");
-
     if (cultureMap) cultureMap.showCurrentView();
-
   }, [router.asPath, cultureMap]);
 
   return (

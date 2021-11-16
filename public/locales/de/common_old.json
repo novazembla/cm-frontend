@@ -122,7 +122,8 @@
   },
   "apiimage": {
     "errormsg": "The image could unfortunately not be processed. Please try uploading again.",
-    "processsing": "Image successfuly uploaded. We are processing it now"
+    "processsing": "Image successfuly uploaded. We are processing it now",
+    "placeholder": "Bild"
   },
   "events": {
     "filter": {
@@ -153,6 +154,47 @@
       "label": {
         "description": "Kurzbeschreibung"
       }
+    }
+  },
+  "form": {
+    "datepicker": {
+      "close": "Schließen"
+    },
+    "image": {
+      "label": {
+        "image": "Bild"
+      }
+    }
+  },
+  "settings": {
+    "taxMapping": {
+      "options": {
+        "label": {
+          "typeOfInstitution": "Einrichtungsart",
+          "typeOfOrganisation": "Trägerart",
+          "targetAudience": "Zielgruppe",
+          "eventType": "Veranstaltungsart"
+        }
+      }
+    }
+  },
+  "editor": {
+    "button": {
+      "save": "Speichern",
+      "cancel": "Abbrechen",
+      "unitalic": "Kursivgedrucktes Textformat entfernen",
+      "italic": "Text kursiv formatieren",
+      "unbold": "Fettgedrucktes Textformat entfernen",
+      "bold": "Text fett formatieren"
+    }
+  },
+  "validation": {
+    "number": {
+      "nolatitude": "Längengrade sind Zahlen zwischen -90.00 und 90.00",
+      "nolongitude": "Breitengrade sind Zahlen zwischen -180.00 und 180.00"
+    },
+    "array": {
+      "minOneItem": "Bitte wähle mindestens ein Element aus"
     }
   }
 }
