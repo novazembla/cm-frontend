@@ -311,8 +311,14 @@ export const components = {
       track: {
         bg: "gray.400",
         _invalid: {
-          bg: "red.400",
+          bg: "cm.accentLights",
         },
+        _checked: {
+          bg: "cm.accentDark",
+        },
+        _focus: {
+          boxShadow: "0 0 3px 3px #E42B20",
+        }
       },
     },
   },

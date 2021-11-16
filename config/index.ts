@@ -14,8 +14,8 @@ export const appConfigMainNav = [
   },
   {
     path: {
-      de: "/seite/ueber-uns",
-      en: "/page/about-us",
+      de: "/seite/ueber-die-kulturkarte",
+      en: "/page/about",
     },
     title: {
       de: "Über die Kulturkarte",
@@ -77,7 +77,7 @@ export const appConfigFooterNav = [
   },
   {
     path: {
-      de: "/seite/datenschutz",
+      de: "/seite/datenschutzinformation",
       en: "/page/privacy-information",
     },
     title: {

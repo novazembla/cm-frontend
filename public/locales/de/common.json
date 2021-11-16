@@ -231,7 +231,7 @@
     "tAndC": {
       "required": "Bitte stimmen Sie unsere Datenschutzrichtlinen zu"
     },
-    "writeError": "Entschuldigung, wir konnten leider gerade nicht Ihren Kartenpunktvorschlag speichern. Bitte versuchen Sie es noch einmal.",
+    "writeError": "Entschuldigung, wir konnten leider Ihren Kartenpunktvorschlag nicht speichern. Bitte versuchen Sie es zu einem späteren Zeitpunkt noch einmal.",
     "successfullySubmitted": "Vielen Dank! Ihr Kartenpunktvorschlag wurde gespeichert",
     "successfullySubmittedReviewInfor": "Wir werden diesen schnellstmöglich veröffentlichen",
     "section": {

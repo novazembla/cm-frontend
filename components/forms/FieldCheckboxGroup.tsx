@@ -43,6 +43,8 @@ export const FieldCheckboxGroup = ({
 
   if (!options || options.length === 0) return <></>;
 
+  console.log(errors);
+  
   const flattenedErrors = flattenErrors(errors);
 
   return (

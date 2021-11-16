@@ -81,82 +81,82 @@ export const ModuleComponentSuggest = () => {
 
   const [mutation, mutationResults] = useMutation(locationCreateMutationGQL);
 
-  useEffect(() => {
-    if (settings?.taxonomies?.typeOfInstitution?.terms) {
-      const keysToI = settings?.taxonomies?.typeOfInstitution?.terms?.reduce(
-        (acc: any, t: any) => {
-          if (t._count?.locations > 0)
-            return [...acc, `typeOfInstitution_${t.id}`];
-          return acc;
-        },
-        []
-      );
+  // useEffect(() => {
+  //   if (settings?.taxonomies?.typeOfInstitution?.terms) {
+  //     const keysToI = settings?.taxonomies?.typeOfInstitution?.terms?.reduce(
+  //       (acc: any, t: any) => {
+  //         if (t._count?.locations > 0)
+  //           return [...acc, `typeOfInstitution_${t.id}`];
+  //         return acc;
+  //       },
+  //       []
+  //     );
 
-      const keysTA = settings?.taxonomies?.targetAudience?.terms?.reduce(
-        (acc: any, t: any) => {
-          if (t._count?.locations > 0)
-            return [...acc, `targetAudience_${t.id}`];
-          return acc;
-        },
-        []
-      );
+  //     const keysTA = settings?.taxonomies?.targetAudience?.terms?.reduce(
+  //       (acc: any, t: any) => {
+  //         if (t._count?.locations > 0)
+  //           return [...acc, `targetAudience_${t.id}`];
+  //         return acc;
+  //       },
+  //       []
+  //     );
 
-      const keysToO = settings?.taxonomies?.typeOfOrganisation?.terms?.reduce(
-        (acc: any, t: any) => {
-          if (t._count?.locations > 0)
-            return [...acc, `typeOfOrganisation_${t.id}`];
-          return acc;
-        },
-        []
-      );
+  //     const keysToO = settings?.taxonomies?.typeOfOrganisation?.terms?.reduce(
+  //       (acc: any, t: any) => {
+  //         if (t._count?.locations > 0)
+  //           return [...acc, `typeOfOrganisation_${t.id}`];
+  //         return acc;
+  //       },
+  //       []
+  //     );
 
-      setExtendedValidationSchema(
-        SuggestionSchema.concat(
-          object().shape({
-            ...(keysToI?.length > 0
-              ? {
-                  typeOfInstitution: mixed().when(keysToI, {
-                    is: (...args: any[]) => {
-                      return !!args.find((a) => a);
-                    },
-                    then: boolean(),
-                    otherwise: number()
-                      .typeError("validation.array.minOneItem")
-                      .required(),
-                  }),
-                }
-              : {}),
-            ...(keysTA?.length > 0
-              ? {
-                  targetAudience: mixed().when(keysTA, {
-                    is: (...args: any[]) => {
-                      return !!args.find((a) => a);
-                    },
-                    then: boolean(),
-                    otherwise: number()
-                      .typeError("validation.array.minOneItem")
-                      .required(),
-                  }),
-                }
-              : {}),
-            ...(keysToO?.length > 0
-              ? {
-                  typeOfOrganisation: mixed().when(keysToO, {
-                    is: (...args: any[]) => {
-                      return !!args.find((a) => a);
-                    },
-                    then: boolean(),
-                    otherwise: number()
-                      .typeError("validation.array.minOneItem")
-                      .required(),
-                  }),
-                }
-              : {}),
-          })
-        )
-      );
-    }
-  }, [settings]);
+  //     setExtendedValidationSchema(
+  //       SuggestionSchema.concat(
+  //         object().shape({
+  //           ...(keysToI?.length > 0
+  //             ? {
+  //                 typeOfInstitution: mixed().when(keysToI, {
+  //                   is: (...args: any[]) => {
+  //                     return !!args.find((a) => a);
+  //                   },
+  //                   then: boolean(),
+  //                   otherwise: number()
+  //                     .typeError("validation.array.minOneItem")
+  //                     .required(),
+  //                 }),
+  //               }
+  //             : {}),
+  //           ...(keysTA?.length > 0
+  //             ? {
+  //                 targetAudience: mixed().when(keysTA, {
+  //                   is: (...args: any[]) => {
+  //                     return !!args.find((a) => a);
+  //                   },
+  //                   then: boolean(),
+  //                   otherwise: number()
+  //                     .typeError("validation.array.minOneItem")
+  //                     .required(),
+  //                 }),
+  //               }
+  //             : {}),
+  //           ...(keysToO?.length > 0
+  //             ? {
+  //                 typeOfOrganisation: mixed().when(keysToO, {
+  //                   is: (...args: any[]) => {
+  //                     return !!args.find((a) => a);
+  //                   },
+  //                   then: boolean(),
+  //                   otherwise: number()
+  //                     .typeError("validation.array.minOneItem")
+  //                     .required(),
+  //                 }),
+  //               }
+  //             : {}),
+  //         })
+  //       )
+  //     );
+  //   }
+  // }, [settings]);
 
   const formMethods = useForm<any>({
     mode: "onTouched",
@@ -260,7 +260,8 @@ export const ModuleComponentSuggest = () => {
             address: {
               co: "",
               street2: "",
-              ...pick(newData, ["street1", "houseNumber", "city", "postCode"]),
+              postCode: newData.postCode ? `${newData.postCode}` : "",
+              ...pick(newData, ["street1", "houseNumber", "city"]),
             },
             contactInfo: {
               email2: "",
@@ -449,14 +450,14 @@ export const ModuleComponentSuggest = () => {
                 textStyle="larger"
                 fontWeight="bold"
                 mb="1em"
-                textAlign={isMobile ? "center" : undefined}
+                textAlign="center"
               >
                 {t(
                   "suggestion.successfullySubmitted",
                   "Thank you! Your suggestion has been successfully submitted"
                 )}
               </Box>
-              <Box mb="1em" textAlign={isMobile ? "center" : undefined}>
+              <Box mb="1em" textAlign="center">
                 {t(
                   "suggestion.successfullySubmittedReviewInfor",
                   "We will review it manually and put your suggestion online as fast as possible"
