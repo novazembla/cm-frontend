@@ -7,6 +7,9 @@ import { Box, Text, chakra, Grid } from "@chakra-ui/react";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { useMapContext } from "~/provider";
 import { useRouter } from "next/router";
+import { getSeoAppTitle, getSeoImage } from "~/utils";
+import NextHeadSeo from "next-head-seo";
+import { useAppTranslations } from "~/hooks";
 
 const pageQuery = gql`
   query ($slug: String!) {
@@ -31,13 +34,24 @@ const pageQuery = gql`
 export const ModuleComponentPage = ({ page }: { page: any }) => {
   const router = useRouter();
   const cultureMap = useMapContext();
-
+  const { getMultilangValue, i18n, t } = useAppTranslations();
   useEffect(() => {
     if (cultureMap) cultureMap.showCurrentView();
   }, [router.asPath, cultureMap]);
 
   return (
     <MainContent isDrawer layerStyle="pageBg">
+      <NextHeadSeo
+        canonical={`${i18n.language === "en" ? "/en" : ""}/${getMultilangValue(
+          page?.slug
+        )}`}
+        title={`${getMultilangValue(page?.title)} - ${getSeoAppTitle(t)}`}
+        description={getMultilangValue(page?.teaser)}
+        og={{
+          image: getSeoImage(page?.heroImage),
+        }}
+      />
+
       <Grid
         w="100%"
         templateRows="1fr auto"
@@ -60,7 +74,7 @@ export const ModuleComponentPage = ({ page }: { page: any }) => {
                 <Box bg="#333">
                   <ApiImage
                     id={page.heroImage.id}
-                    alt={page.heroImage.alt}
+                    alt={getMultilangValue(page?.heroImage.alt)}
                     meta={page.heroImage.meta}
                     forceAspectRatioPB={75}
                     status={page.heroImage.status}

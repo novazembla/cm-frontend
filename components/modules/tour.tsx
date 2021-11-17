@@ -23,9 +23,10 @@ import {
   Text,
   LinkOverlay,
   chakra,
-  Grid
+  Grid,
 } from "@chakra-ui/react";
-import { htmlToTrimmedString } from "~/utils";
+import { htmlToTrimmedString, getSeoAppTitle, getSeoImage } from "~/utils";
+import NextHeadSeo from "next-head-seo";
 import { useAppTranslations, useIsBreakPoint } from "~/hooks";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { useRouter } from "next/router";
@@ -283,8 +284,6 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
     }
   };
 
-  
-
   useEffect(() => {
     if (cultureMap) cultureMap.hideCurrentView();
     currentHightlightIndexRef.current = -2;
@@ -408,6 +407,16 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
       isDrawer={isTablet || isDesktopAndUp}
       isVerticalContent={!isTablet && !isDesktopAndUp}
     >
+      <NextHeadSeo
+        canonical={`${
+          i18n.language === "en" ? "/en" : ""
+        }/tour/${getMultilangValue(tour?.slug)}`}
+        title={`${getMultilangValue(tour?.title)} - ${getSeoAppTitle(t)}`}
+        description={getMultilangValue(tour?.teaser)}
+        og={{
+          image: getSeoImage(tour?.heroImage),
+        }}
+      />
       {tour?.tourStops?.length > 0 && (
         <Box
           layerStyle="lightGray"
@@ -526,7 +535,7 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
                                   >
                                     <ApiImage
                                       id={tour?.heroImage?.id}
-                                      alt={tour?.heroImage?.alt}
+                                      alt={getMultilangValue(tour?.heroImage.alt)}
                                       meta={tour?.heroImage?.meta}
                                       forceAspectRatioPB={
                                         isMobile ? 66.66 : 56.25

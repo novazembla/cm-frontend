@@ -5,18 +5,18 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 
 import { Header, Map, QuickSearch, MobileNav } from ".";
-import { useIsBreakPoint } from "~/hooks";
+import { useAppTranslations, useIsBreakPoint } from "~/hooks";
 import { AppProps } from "~/types";
 import { LoadingBar } from ".";
 import { useSettingsContext } from "~/provider";
 import { debounce } from "lodash";
+import NextHeadSeo from "next-head-seo";
 
 // TODO: SEO Tags, inclusive featured image/cards ...
 
 export const LayoutFull = ({ children }: AppProps) => {
-  const router = useRouter();
   const settings = useSettingsContext();
-
+  const { t } = useAppTranslations();
   const { isMobile, isTablet } = useIsBreakPoint();
   const [isLoadingSettings, setIsLoadingSettings] = useState(true);
   const [fontsLoaded, setFontsLoaded] = useState(false);
@@ -82,6 +82,24 @@ export const LayoutFull = ({ children }: AppProps) => {
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
+      <NextHeadSeo
+        title={`${t("logo.culturemap1", "CULTUREMAP")} ${t(
+          "logo.culturemap2",
+          "Lichtenberg"
+        )}`}
+        og={{
+          image: "https://example.com/default-og.png", // TOOD: default image
+          type: "article",
+          siteName: `${t("logo.culturemap1", "CULTUREMAP")} ${t(
+            "logo.culturemap2",
+            "Lichtenberg"
+          )}`,
+        }}
+        twitter={{
+          card: "summary",
+        }}
+      />
+
       <LoadingBar color="cm.accentLight" loading={isLoadingSettings} />
       <Map />
       {!isLoadingSettings && fontsLoaded && <Header />}

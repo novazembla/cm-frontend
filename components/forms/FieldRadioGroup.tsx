@@ -6,6 +6,7 @@ import {
   FormControl,
   RadioGroup,
   chakra,
+  VisuallyHidden
 } from "@chakra-ui/react";
 import { useFormContext, Controller } from "react-hook-form";
 import { MultiLangValue } from "~/components/ui";
@@ -50,42 +51,49 @@ export const FieldRadioGroup = ({
       isInvalid={flattenedErrors[name]?.message}
       isRequired={isRequired}
     >
-      <Flex flexWrap="wrap" flexDirection="column">
-        <Controller
-          key={name}
-          control={control}
-          name={name}
-          defaultValue={defaultValue}
-          render={({ field: { onChange, onBlur, value, ref } }) => {
-            return (
-              <RadioGroup
-                defaultValue={defaultValue ?? ""}
-                onChange={onChange}
-                onBlur={onBlur}
-              >
-                {options.map((option, index) => (
-                  <Radio
-                    key={`${name}_${option.id}`}
-                    value={option.id}
-                    pr="6"
-                    mb="2"
-                    sx={{
-                      svg: {
-                        display: "none",
-                      },
-                    }}
-                  >
-                    <chakra.span textStyle="formOptions"><MultiLangValue json={option.label} /></chakra.span>
-                  </Radio>
-                ))}
-              </RadioGroup>
-            );
-          }}
-        />
-      </Flex>
-      <Box transform="translateY(-10px)">
-        <FieldErrorMessage error={flattenedErrors[name]?.message} />
-      </Box>
+      <chakra.fieldset>
+        <VisuallyHidden>
+          <legend>{label}</legend>
+        </VisuallyHidden>
+        <Flex flexWrap="wrap" flexDirection="column">
+          <Controller
+            key={name}
+            control={control}
+            name={name}
+            defaultValue={defaultValue}
+            render={({ field: { onChange, onBlur, value, ref } }) => {
+              return (
+                <RadioGroup
+                  defaultValue={defaultValue ?? ""}
+                  onChange={onChange}
+                  onBlur={onBlur}
+                >
+                  {options.map((option, index) => (
+                    <Radio
+                      key={`${name}_${option.id}`}
+                      value={option.id}
+                      pr="6"
+                      mb="2"
+                      sx={{
+                        svg: {
+                          display: "none",
+                        },
+                      }}
+                    >
+                      <chakra.span textStyle="formOptions">
+                        <MultiLangValue json={option.label} />
+                      </chakra.span>
+                    </Radio>
+                  ))}
+                </RadioGroup>
+              );
+            }}
+          />
+        </Flex>
+        <Box transform="translateY(-10px)">
+          <FieldErrorMessage error={flattenedErrors[name]?.message} />
+        </Box>
+      </chakra.fieldset>
     </FormControl>
   );
 };

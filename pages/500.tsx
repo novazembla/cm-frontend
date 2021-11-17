@@ -5,12 +5,20 @@ import { GetStaticProps } from "next";
 import { Grid, Box, Heading, Text } from "@chakra-ui/react";
 import { Footer, MainContent } from "~/components/app";
 import { useAppTranslations } from "~/hooks";
+import { getSeoAppTitle } from "~/utils";
+import NextHeadSeo from "next-head-seo";
 
 export default function Page500() {
   const { t } = useAppTranslations();
 
   return (
     <MainContent isDrawer layerStyle="pageBg">
+      <NextHeadSeo
+        title={`${t(
+          "error.internalServerError",
+          "Oops, an error happened on our server"
+        )} - ${getSeoAppTitle(t)}`}
+      />
       <Grid
         w="100%"
         templateRows="1fr auto"

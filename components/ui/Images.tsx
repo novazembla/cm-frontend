@@ -1,8 +1,11 @@
 import React from "react";
 import { Box, AspectRatio, Text, SimpleGrid } from "@chakra-ui/react";
 import { MultiLangValue, ApiImage, ImageCropPosition } from "~/components/ui";
+import { useAppTranslations } from "~/hooks";
 
 export const Images = ({ images }: { images: any }) => {
+  const { getMultilangValue } = useAppTranslations();
+
   if (!images && images?.length === 0) return <></>;
 
   return (
@@ -33,7 +36,7 @@ export const Images = ({ images }: { images: any }) => {
           >
             <ApiImage
               id={image.id}
-              alt={image.alt}
+              alt={getMultilangValue(image.alt)}
               meta={image.meta}
               status={image.status}
               sizes="(min-width: 45rem) 700px, 100vw"

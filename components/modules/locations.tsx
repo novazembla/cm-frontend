@@ -26,7 +26,8 @@ import { boolean, object, mixed, number } from "yup";
 
 import { MainContent } from "~/components/app";
 import { useSettingsContext, useMapContext } from "~/provider";
-import { getMultilangSortedList } from "~/utils";
+import { getMultilangSortedList, getSeoAppTitle, getSeoImage } from "~/utils";
+import NextHeadSeo from "next-head-seo";
 import { useRouter } from "next/router";
 
 // @ts-ignore
@@ -227,11 +228,7 @@ export const ModuleComponentLocations = ({ ...props }) => {
     resolver: yupResolver(extendedValidationSchema),
   });
 
-  const {
-    handleSubmit,
-    reset,
-    watch,
-  } = formMethods;
+  const { handleSubmit, reset, watch } = formMethods;
 
   const onSubmit = async () => {};
 
@@ -386,7 +383,7 @@ export const ModuleComponentLocations = ({ ...props }) => {
     if (urlParams.get("too")) aDI.push(3);
     if (urlParams.get("and") === "1" || urlParams.get("cluster") === "0")
       aDI.push(4);
-    
+
     if (urlParams.get("cluster") === "0") {
       setCurrentMapView("unclustered");
       cultureMap?.setView("unclustered");
@@ -434,7 +431,7 @@ export const ModuleComponentLocations = ({ ...props }) => {
   const watchVariables = JSON.stringify(watch());
   useEffect(() => {
     const allVars = watch();
-    
+
     let where: any = [];
     let termsWhere: any = [];
     let allTerms: any[] = [];
@@ -459,7 +456,7 @@ export const ModuleComponentLocations = ({ ...props }) => {
                 },
               },
             },
-          })), 
+          })),
         ];
       }
     }
@@ -714,6 +711,11 @@ export const ModuleComponentLocations = ({ ...props }) => {
 
   return (
     <MainContent layerStyle="lightGray">
+      <NextHeadSeo
+        canonical={`${i18n.language === "en" ? "/en/map" : "/karte"}`}
+        title={`${t("locations.title", "Map")} - ${getSeoAppTitle(t)}`}
+      />
+
       <Grid
         w="100%"
         templateRows="1fr auto"

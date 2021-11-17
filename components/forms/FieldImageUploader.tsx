@@ -332,7 +332,7 @@ export const FieldImageUploader = ({
         isInvalid={flattenedErrors[name]?.message || isDragReject}
         {...{ isRequired, isDisabled }}
       >
-        <FormLabel htmlFor={id} mb="0.5">
+        <FormLabel htmlFor={`${id}_dropzone`} mb="0.5">
           {label}
         </FormLabel>
 
@@ -354,7 +354,7 @@ export const FieldImageUploader = ({
 
         {!showImage && (
           <>
-            <input name={`${name}_dropzone`} {...getInputProps()} />
+            <input name={`${name}_dropzone`} id={`${name}_dropzone`} {...getInputProps()} />
 
             <Box
               position="relative"
@@ -448,6 +448,7 @@ export const FieldImageUploader = ({
         <input
           {...{ valid: !flattenedErrors[name]?.message ? "valid" : undefined }}
           type="hidden"
+          aria-hidden="true"
           defaultValue={currentImage?.id}
           {...register(name, {
             required: isRequired,

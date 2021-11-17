@@ -25,7 +25,13 @@ import {
 } from "@chakra-ui/react";
 import type { MapHighlightType } from "~/services/MapHighlights";
 
-import { isEmptyHtml, getLocationColors } from "~/utils";
+import {
+  isEmptyHtml,
+  getLocationColors,
+  getSeoAppTitle,
+  getSeoImage,
+} from "~/utils";
+import NextHeadSeo from "next-head-seo";
 import { useIsBreakPoint, useAppTranslations } from "~/hooks";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { MainContent } from "~/components/app";
@@ -109,19 +115,19 @@ export const ModuleComponentLocation = ({
   const { isMobile } = useIsBreakPoint();
   const config = useConfigContext();
   const settings = useSettingsContext();
-  const { t, getMultilangValue, getMultilangHtml } = useAppTranslations();
+  const { t, getMultilangValue, getMultilangHtml, i18n } = useAppTranslations();
   const [color, setColor] = useState("#333");
   const [colorDark, setColorDark] = useState(config.colorDark);
   const [meta, setMeta] = useState("");
 
   const [highlight, setHighlight] = useState<MapHighlightType | null>(null);
-  
+
   useEffect(() => {
     if (cultureMap) cultureMap.showCurrentView();
-    // As next.js doesn't unmount/remount if only components route changes we 
+    // As next.js doesn't unmount/remount if only components route changes we
     // need to rely on router.asPath to trigger location change actions
-    setHighlight(null)    
-  }, [router.asPath, cultureMap])
+    setHighlight(null);
+  }, [router.asPath, cultureMap]);
 
   useEffect(() => {
     console.log("highlight", highlight, cultureMap);
@@ -263,6 +269,17 @@ export const ModuleComponentLocation = ({
 
   return (
     <MainContent layerStyle="lightGray">
+      <NextHeadSeo
+        canonical={`${
+          i18n.language === "en" ? "/en" : ""
+        }/tour/${getMultilangValue(location?.slug)}`}
+        title={`${getMultilangValue(location?.title)} - ${getSeoAppTitle(t)}`}
+        description={getMultilangValue(location?.teaser)}
+        og={{
+          image: getSeoImage(location?.heroImage),
+        }}
+      />
+
       <Grid
         w="100%"
         templateRows="1fr auto"
@@ -383,7 +400,10 @@ export const ModuleComponentLocation = ({
                 }}
                 pb="2em"
               >
-                <MultiLangHtml json={location.description}  addMissingTranslationInfo/>
+                <MultiLangHtml
+                  json={location.description}
+                  addMissingTranslationInfo
+                />
               </Box>
             )}
 
@@ -405,7 +425,10 @@ export const ModuleComponentLocation = ({
                   {t("location.title.offers", "Offering the following")}:
                 </Box>
                 <Box textStyle="card">
-                  <MultiLangHtml json={location.offers}  addMissingTranslationInfo/>
+                  <MultiLangHtml
+                    json={location.offers}
+                    addMissingTranslationInfo
+                  />
                 </Box>
               </Box>
             )}
@@ -537,7 +560,11 @@ export const ModuleComponentLocation = ({
               )}
             </SimpleGrid>
 
-            {location?.images?.length > 0 && <Box mt="0.5em"><Images images={location?.images} /></Box>}
+            {location?.images?.length > 0 && (
+              <Box mt="0.5em">
+                <Images images={location?.images} />
+              </Box>
+            )}
           </Box>
 
           {location.events && location.events.length > 0 && (

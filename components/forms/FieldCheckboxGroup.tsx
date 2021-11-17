@@ -4,7 +4,6 @@ import {
   Box,
   Flex,
   FormControl,
-  RequiredIndicator,
   chakra,
   VisuallyHidden,
 } from "@chakra-ui/react";
@@ -21,7 +20,6 @@ export const FieldCheckboxGroup = ({
   id,
   label,
   name,
-  type, // TODO: allow for radio boxes ...
   options,
   defaultValues,
   isRequired,
@@ -51,6 +49,10 @@ export const FieldCheckboxGroup = ({
       isInvalid={flattenedErrors[name]?.message}
       {...{ isRequired, isDisabled }}
     >
+      <chakra.fieldset>
+        <VisuallyHidden>
+          <legend>{label}</legend>
+        </VisuallyHidden>
         <Flex flexWrap="wrap">
           {options.map((option, index) => (
             <Controller
@@ -74,12 +76,14 @@ export const FieldCheckboxGroup = ({
                     mb="2"
                     maxW={{ base: "50%", t: "33.33%", d: "25%" }}
                     sx={{
-                      'svg': {
-                        display: "none"
-                      }
+                      svg: {
+                        display: "none",
+                      },
                     }}
                   >
-                    <chakra.span textStyle="formOptions"><MultiLangValue json={option.label} /></chakra.span>
+                    <chakra.span textStyle="formOptions">
+                      <MultiLangValue json={option.label} />
+                    </chakra.span>
                   </Checkbox>
                 );
               }}
@@ -89,6 +93,7 @@ export const FieldCheckboxGroup = ({
         <Box transform="translateY(-10px)">
           <FieldErrorMessage error={flattenedErrors[name]?.message} />
         </Box>
+      </chakra.fieldset>
     </FormControl>
   );
 };

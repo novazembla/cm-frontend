@@ -30,7 +30,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { boolean, object, mixed, number } from "yup";
 
 import { useSettingsContext, useMapContext } from "~/provider";
-import { getMultilangSortedList } from "~/utils";
+import { getMultilangSortedList,
+  getSeoAppTitle
+} from "~/utils";
+import NextHeadSeo from "next-head-seo";
 import { useRouter } from "next/router";
 import useCalendar from "@veccu/react-calendar";
 
@@ -537,6 +540,10 @@ export const ModuleComponentEvents = ({ ...props }) => {
   const today = new Date(new Date().setHours(0, 0, 0, 0));
   return (
     <MainContent layerStyle="pageBg">
+      <NextHeadSeo
+        canonical={`${i18n.language === "en" ? "/en/events" : "/veranstaltungen"}`}
+        title={`${t("locations.title", "Map")} - ${getSeoAppTitle(t)}`}
+      />
       <Grid
         w="100%"
         templateRows="1fr auto"

@@ -20,10 +20,16 @@ import {
   Collapse,
   Link,
 } from "@chakra-ui/react";
-import { isEmptyHtml, getLocationColors } from "~/utils";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { useAppTranslations, useIsBreakPoint } from "~/hooks";
 import { useRouter } from "next/router";
+import {
+  isEmptyHtml,
+  getLocationColors,
+  getSeoAppTitle,
+  getSeoImage,
+} from "~/utils";
+import NextHeadSeo from "next-head-seo";
 
 const eventQuery = gql`
   query ($slug: String!) {
@@ -242,6 +248,16 @@ export const ModuleComponentEvent = ({
 
   return (
     <MainContent layerStyle="pageBg">
+      <NextHeadSeo
+        canonical={`${
+          i18n.language === "en" ? "/en" : ""
+        }/tour/${getMultilangValue(event?.slug)}`}
+        title={`${getMultilangValue(event?.title)} - ${getSeoAppTitle(t)}`}
+        description={getMultilangValue(event?.teaser)}
+        og={{
+          image: getSeoImage(event?.heroImage),
+        }}
+      />
       <Grid
         w="100%"
         templateRows="1fr auto"
@@ -264,7 +280,7 @@ export const ModuleComponentEvent = ({
                 <Box bg="#333">
                   <ApiImage
                     id={event.heroImage.id}
-                    alt={event.heroImage.alt}
+                    alt={getMultilangValue(event?.heroImage.alt)}
                     meta={event.heroImage.meta}
                     status={event.heroImage.status}
                     useImageAspectRatioPB

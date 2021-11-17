@@ -3,7 +3,6 @@ import {
   Box,
   chakra,
   Flex,
-  Img,
   AspectRatio,
   LinkBox,
   LinkOverlay,
@@ -16,7 +15,7 @@ import {
 } from "~/components/ui";
 import { htmlToTrimmedString } from "~/utils";
 import { useAppTranslations, useIsBreakPoint } from "~/hooks";
-import { useConfigContext, useSettingsContext } from "~/provider";
+import { useConfigContext } from "~/provider";
 import NextLink from "next/link";
 
 export const CardEvent = ({
@@ -27,8 +26,7 @@ export const CardEvent = ({
   fillContainer?: boolean;
 }) => {
   const { t, i18n, getMultilangValue, getMultilangHtml } = useAppTranslations();
-  const settings = useSettingsContext();
-  const { isMobile, isTablet, isDesktopAndUp } = useIsBreakPoint();
+  const { isMobile } = useIsBreakPoint();
 
   const config = useConfigContext();
 
@@ -108,7 +106,7 @@ export const CardEvent = ({
                   >
                     <ApiImage
                       id={event?.heroImage.id}
-                      alt={event?.heroImage.alt}
+                      alt=""
                       meta={event?.heroImage.meta}
                       forceAspectRatioPB={66.66}
                       status={event?.heroImage.status}

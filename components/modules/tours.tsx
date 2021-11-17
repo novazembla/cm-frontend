@@ -3,11 +3,13 @@ import { gql } from "@apollo/client";
 import { CardTour } from "~/components/ui";
 import { Footer, MainContent } from "~/components/app";
 import { getApolloClient } from "~/services";
-import { Box, Grid, Text } from "@chakra-ui/react";
+import { Box, Grid, chakra } from "@chakra-ui/react";
 import { GetStaticProps } from "next";
 import { useAppTranslations } from "~/hooks";
 import { useRouter } from "next/router";
 import { useMapContext } from "~/provider";
+import { getSeoAppTitle } from "~/utils";
+import NextHeadSeo from "next-head-seo";
 
 const toursQuery = gql`
   query tours($where: JSON, $orderBy: JSON, $pageIndex: Int, $pageSize: Int) {
@@ -64,18 +66,20 @@ export const ModuleComponentTours = ({
   totalCount: number;
   props: any;
 }) => {
-  const { t } = useAppTranslations();
+  const { t, i18n } = useAppTranslations();
   const router = useRouter();
   const cultureMap = useMapContext();
 
   useEffect(() => {
-    console.log("mount events");
-
     if (cultureMap) cultureMap.showCurrentView();
   }, [router.asPath, cultureMap]);
 
   return (
     <MainContent layerStyle="lightGray">
+      <NextHeadSeo
+        canonical={`${i18n.language === "en" ? "/en/tours" : "/touren"}`}
+        title={`${t("tour.listings.title", "Tours")} - ${getSeoAppTitle(t)}`}
+      />
       <Grid
         w="100%"
         templateRows="1fr auto"
@@ -87,9 +91,9 @@ export const ModuleComponentTours = ({
       >
         <Box px="20px" pt="0.5em">
           <Box mb="3">
-            <Text className="highlight" color="cm.text" fontWeight="bold">
+            <chakra.h1 className="highlight" color="cm.text" fontWeight="bold">
               {t("tour.listings.title", "Tours")}
-            </Text>
+            </chakra.h1>
           </Box>
 
           <Box>

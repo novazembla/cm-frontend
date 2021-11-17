@@ -33,6 +33,7 @@ import {
   useConfigContext,
 } from "~/provider";
 import { debounce } from "lodash";
+import NextHeadSeo from "next-head-seo";
 
 const homepageQuery = gql`
   query {
@@ -259,6 +260,9 @@ export const Home = ({ homepage }: { homepage: any }) => {
       isDrawer={isTablet || isDesktopAndUp}
       isVerticalContent={!isTablet && !isDesktopAndUp}
     >
+      <NextHeadSeo
+        description={getMultilangValue(homepage?.missionStatement)}
+      />
       <Box>
         {homepage?.missionStatement && (
           <Collapse in={isMSOpen}>

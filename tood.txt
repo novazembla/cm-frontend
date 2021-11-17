@@ -1,0 +1,4 @@
+- favicon
+- map styling
+- default seo image
+- wording suggest form

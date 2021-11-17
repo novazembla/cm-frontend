@@ -3,12 +3,16 @@ import {
   Box,
   chakra,
   Flex,
-  Img,
   AspectRatio,
   LinkBox,
   LinkOverlay,
 } from "@chakra-ui/react";
-import { MultiLangValue, ApiImage, TrimmedTextWithBottomEdge, SVG } from "~/components/ui";
+import {
+  MultiLangValue,
+  ApiImage,
+  TrimmedTextWithBottomEdge,
+  SVG,
+} from "~/components/ui";
 import { htmlToTrimmedString } from "~/utils";
 import { useAppTranslations, useIsBreakPoint } from "~/hooks";
 import { useConfigContext, useSettingsContext } from "~/provider";
@@ -24,7 +28,7 @@ export const CardLocation = ({
 }) => {
   const { t, i18n, getMultilangValue, getMultilangHtml } = useAppTranslations();
   const settings = useSettingsContext();
-  const { isMobile, isTablet, isDesktopAndUp } = useIsBreakPoint();
+  const { isMobile } = useIsBreakPoint();
 
   const config = useConfigContext();
 
@@ -64,6 +68,8 @@ export const CardLocation = ({
     200
   );
 
+  console.log(location?.heroImage);
+
   return (
     <LinkBox
       as="article"
@@ -97,7 +103,7 @@ export const CardLocation = ({
                 >
                   <ApiImage
                     id={location?.heroImage.id}
-                    alt={location?.heroImage.alt}
+                    alt=""
                     meta={location?.heroImage.meta}
                     forceAspectRatioPB={66.66}
                     status={location?.heroImage.status}
@@ -149,7 +155,7 @@ export const CardLocation = ({
                 textStyle="headline"
                 textDecoration="none"
                 minH={isMobile ? "50px" : undefined}
-                className={isMobile ? "clampTwoLines" : "clampThreeLines"}                
+                className={isMobile ? "clampTwoLines" : "clampThreeLines"}
               >
                 <MultiLangValue json={location.title} />
               </LinkOverlay>
@@ -190,10 +196,8 @@ export const CardLocation = ({
             <SVG
               type="arrow-right"
               width={isMobile ? "30px" : "40px"}
-              height={isMobile ? "17px" : "22px"}      
+              height={isMobile ? "17px" : "22px"}
             />
-              
-              
           </Box>
         </Flex>
       </Box>

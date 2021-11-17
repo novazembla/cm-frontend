@@ -28,9 +28,10 @@ import {
 import { useAppTranslations, useIsBreakPoint } from "~/hooks";
 import { GetStaticProps } from "next";
 import { useRouter } from "next/router";
-import { getLocationColors } from "~/utils";
+import { getLocationColors, getSeoAppTitle, getSeoImage } from "~/utils";
 
 import { tourQuery, createTourStops } from ".";
+import NextHeadSeo from "next-head-seo";
 
 export const ModuleComponentTourStop = ({
   tour,
@@ -44,7 +45,7 @@ export const ModuleComponentTourStop = ({
   const { isMobile } = useIsBreakPoint();
   const config = useConfigContext();
   const settings = useSettingsContext();
-  const { t, getMultilangValue } = useAppTranslations();
+  const { t, i18n, getMultilangValue } = useAppTranslations();
 
   const [color, setColor] = useState("#333");
   const [colorDark, setColorDark] = useState(config.colorDark);
@@ -104,14 +105,13 @@ export const ModuleComponentTourStop = ({
             const commingFromTour =
               scrollState.getPreviousPath() !== "" &&
               router.asPath.indexOf(scrollState.getPreviousPath()) > -1;
-            
+
             cultureMap.panTo(
               currentStop?.location?.lng,
               currentStop?.location?.lat,
               !commingFromTour,
               commingFromTour
             );
-
           }, 500);
         }
       }
@@ -139,8 +139,22 @@ export const ModuleComponentTourStop = ({
 
   let meta: any = t("card.meta.tour", "Tour");
 
+  
+
   return (
     <MainContent layerStyle="lightGray">
+      <NextHeadSeo
+        canonical={`${
+          i18n.language === "en" ? "/en" : ""
+        }/tour/${getMultilangValue(tour?.slug)}/${tourStop?.number}`}
+        title={`${tourStop?.number} - ${getMultilangValue(tourStop?.title)} - ${getMultilangValue(
+          tour?.title
+        )} - ${getSeoAppTitle(t)}`}
+        description={getMultilangValue(tourStop?.teaser)}
+        og={{
+          image: getSeoImage(tourStop?.heroImage),
+        }}
+      />
       <Grid
         w="100%"
         templateRows="1fr auto"
@@ -166,7 +180,7 @@ export const ModuleComponentTourStop = ({
                       <Box w="100%" h="100%">
                         <ApiImage
                           id={tourStop?.heroImage?.id}
-                          alt={tourStop?.heroImage?.alt}
+                          alt={getMultilangValue(tourStop?.heroImage.alt)}
                           meta={tourStop?.heroImage?.meta}
                           forceAspectRatioPB={56.25}
                           status={tourStop?.heroImage?.status}

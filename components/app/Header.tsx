@@ -1,5 +1,5 @@
 import { useRef, useEffect } from "react";
-import { Flex, Box, IconButton } from "@chakra-ui/react";
+import { Flex, Box, IconButton, chakra } from "@chakra-ui/react";
 
 import { useAppTranslations, useIsBreakPoint } from "~/hooks";
 

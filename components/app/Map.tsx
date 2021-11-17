@@ -68,6 +68,7 @@ export const Map = () => {
         h="100vh"
         w="100vw"
         ref={buttonContainer}
+        ariaHidden="true"
       >
         <Box ref={mapContainer} className="map" w="100%" h="100%" />
       </Box>
@@ -85,6 +86,7 @@ export const Map = () => {
               : 1
             : 0
         }
+        ariaHidden="true"
       >
         <Flex
           direction="column"

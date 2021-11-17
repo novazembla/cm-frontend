@@ -30,13 +30,13 @@ export const CardTourStop = ({
 }) => {
   const { t, i18n, getMultilangValue, getMultilangHtml } = useAppTranslations();
   const settings = useSettingsContext();
-  const { isMobile, isTablet, isDesktopAndUp } = useIsBreakPoint();
+  const { isMobile } = useIsBreakPoint();
 
   const config = useConfigContext();
 
   let meta: any;
 
-  const { color, colorDark } = getLocationColors(tourStop?.location, settings);
+  const { color } = getLocationColors(tourStop?.location, settings);
 
   if (tourStop?.location?.primaryTerms?.length > 0) {
     meta = getMultilangValue(tourStop?.location?.primaryTerms[0]?.name);
@@ -88,7 +88,7 @@ export const CardTourStop = ({
                 >
                   <ApiImage
                     id={tourStop?.heroImage.id}
-                    alt={tourStop?.heroImage.alt}
+                    alt=""
                     meta={tourStop?.heroImage.meta}
                     forceAspectRatioPB={66.66}
                     status={tourStop?.heroImage.status}

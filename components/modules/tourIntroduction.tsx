@@ -19,7 +19,8 @@ import {
 } from "@chakra-ui/react";
 import { useAppTranslations, useIsBreakPoint } from "~/hooks";
 import { useRouter } from "next/router";
-
+import { getSeoAppTitle, getSeoImage } from "~/utils";
+import NextHeadSeo from "next-head-seo";
 import { createTourStops } from ".";
 
 export const ModuleComponentTourIntroduction = ({ tour }: { tour: any }) => {
@@ -28,7 +29,7 @@ export const ModuleComponentTourIntroduction = ({ tour }: { tour: any }) => {
   const { isMobile } = useIsBreakPoint();
   const config = useConfigContext();
   const settings = useSettingsContext();
-  const { t, getMultilangValue } = useAppTranslations();
+  const { t, getMultilangValue, i18n } = useAppTranslations();
 
   const [color, setColor] = useState("#333");
   const [colorDark, setColorDark] = useState(config.colorDark);
@@ -37,10 +38,7 @@ export const ModuleComponentTourIntroduction = ({ tour }: { tour: any }) => {
 
   const onNavigationButtonClick = () => {
     if (scrollState.getPreviousPath()) {
-      if (
-        router.asPath.indexOf(scrollState.getPreviousPath()) >
-        -1
-      ) {
+      if (router.asPath.indexOf(scrollState.getPreviousPath()) > -1) {
         router.back();
       } else {
         router.push(`/tour/${getMultilangValue(tour?.slug)}`);
@@ -48,11 +46,11 @@ export const ModuleComponentTourIntroduction = ({ tour }: { tour: any }) => {
     } else {
       router.push(`/tour/${getMultilangValue(tour?.slug)}`);
     }
-  }
+  };
 
   useEffect(() => {
     console.log("mount tour stop");
-    
+
     if (cultureMap) cultureMap.hideCurrentView();
 
     // As next.js doesn't unmount/remount if only components route changes we
@@ -61,9 +59,7 @@ export const ModuleComponentTourIntroduction = ({ tour }: { tour: any }) => {
     // setTourStop(null)
     return () => {
       console.log("unmount tourstop");
-      if (cultureMap)
-        cultureMap.clearTour();
-      
+      if (cultureMap) cultureMap.clearTour();
     };
   }, [router.asPath, cultureMap]);
 
@@ -114,6 +110,18 @@ export const ModuleComponentTourIntroduction = ({ tour }: { tour: any }) => {
 
   return (
     <MainContent layerStyle="lightGray">
+      <NextHeadSeo
+        canonical={`${
+          i18n.language === "en" ? "/en" : ""
+        }/tour/${getMultilangValue(tour?.slug)}/0`}
+        title={`${t("tour.introduction", "Introduction")} - ${getMultilangValue(
+          tour?.title
+        )} - ${getSeoAppTitle(t)}`}
+        description={getMultilangValue(tour?.teaser)}
+        og={{
+          image: getSeoImage(tour?.heroImage),
+        }}
+      />
       <Grid
         w="100%"
         templateRows="1fr auto"
@@ -139,7 +147,7 @@ export const ModuleComponentTourIntroduction = ({ tour }: { tour: any }) => {
                       <Box w="100%" h="100%">
                         <ApiImage
                           id={tour?.heroImage?.id}
-                          alt={tour?.heroImage?.alt}
+                          alt={getMultilangValue(tour?.heroImage.alt)}
                           meta={tour?.heroImage?.meta}
                           forceAspectRatioPB={56.25}
                           status={tour?.heroImage?.status}
@@ -257,10 +265,7 @@ export const ModuleComponentTourIntroduction = ({ tour }: { tour: any }) => {
               <MultiLangHtml json={tour.description} />
 
               <Box textAlign="right" mt="2em">
-                <Button
-                  onClick={onNavigationButtonClick}
-                  variant="ghost"
-                >
+                <Button onClick={onNavigationButtonClick} variant="ghost">
                   {t("tour.button.viewAllTourStops", "View all tour stops")}
                 </Button>
               </Box>

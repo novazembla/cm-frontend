@@ -3,7 +3,13 @@ import { useForm, FormProvider } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import type * as yup from "yup";
 import { boolean, object, mixed, number, string } from "yup";
-import { getMultilangSortedList, isEmptyHtml, convertToHtml } from "~/utils";
+import {
+  getMultilangSortedList,
+  isEmptyHtml,
+  convertToHtml,
+  getSeoAppTitle,
+} from "~/utils";
+import NextHeadSeo from "next-head-seo";
 import { useMutation, gql } from "@apollo/client";
 
 import { Footer } from "~/components/app";
@@ -389,6 +395,16 @@ export const ModuleComponentSuggest = () => {
   // t("suggestion.writeError", "We could unfortunately not save your suggestion at the moment. Please try again later.")
   return (
     <MainContent isDrawer layerStyle="pageBg">
+      <NextHeadSeo
+        canonical={`${
+          i18n.language === "en"
+            ? "/en/suggest-a-location"
+            : "/kartenpunktvorschlag"
+        }`}
+        title={`${t("suggest.title", "Suggest a location")} - ${getSeoAppTitle(
+          t
+        )}`}
+      />
       <Grid
         w="100%"
         templateRows="1fr auto"
@@ -739,7 +755,8 @@ export const ModuleComponentSuggest = () => {
                         defaultChecked={false}
                       />
                     </FieldRow>
-                    {(suggestionSubmittersImageRightsConfirmation || !!heroImage) && (
+                    {(suggestionSubmittersImageRightsConfirmation ||
+                      !!heroImage) && (
                       <>
                         <FieldRow>
                           <FieldImageUploader

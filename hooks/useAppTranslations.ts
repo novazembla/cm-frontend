@@ -26,10 +26,13 @@ export const useAppTranslations = (): AppTranslationHelper => {
         : undefined;
 
       let value =
-        json[i18n.language] ??
+        json?.[i18n.language] ??
         defVal ??
         i18n.t("translationnotfound", "Trans. not found");
 
+      if (typeof value === "string" && value.trim() === "") {
+        if (typeof defVal === "string" && defVal.trim() !== "") return defVal;
+      }
       return value;
     },
     [i18n, config]

@@ -24,6 +24,7 @@
     "maplibre-gl": "^1.15.2",
     "maplibregl-spiderfier": "^1.0.11",
     "next": "11.1.2",
+    "next-head-seo": "^0.1.2",
     "next-i18next": "^8.6.0",
     "next-images": "^1.8.2",
     "nth-check": ">=2.0.1",
