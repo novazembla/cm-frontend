@@ -31,6 +31,9 @@ export const LoadingBar = ({
     onQuickSearchClose();
     mainContentOpen();
     setBarVisible(true);
+    if (typeof document !== "undefined") {
+      document.body.setAttribute('tabIndex', '-1');
+    }
   }, [onMenuClose, scrollState, onQuickSearchClose, mainContentOpen]);
 
   const hideBar = useCallback(() => {
@@ -38,6 +41,10 @@ export const LoadingBar = ({
     setMainContentStatus(true);
     scrollState.setIsBack(false);
     scrollState.setCurrentPath(Router.asPath);
+    if (typeof document !== "undefined") {
+      document.body.removeAttribute('tabIndex');
+      document.body.focus();
+    }
   }, [setMainContentStatus, scrollState]);
 
   useEffect(() => {

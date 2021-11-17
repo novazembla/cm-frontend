@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from "react";
-import { Box, IconButton, useBreakpointValue } from "@chakra-ui/react";
+import { Box, IconButton, useBreakpointValue, chakra } from "@chakra-ui/react";
 import { useAppTranslations, useIsBreakPoint } from "~/hooks";
 
 import { motion, useAnimation } from "framer-motion";
@@ -416,7 +416,7 @@ export const MainContent = ({
             pt={isVerticalContent ? 0 : contentPaddingTop}
             h="100%"
           >
-            <Box
+            <chakra.main
               ref={mainContentRef}
               className="mainContent"
               minH={
@@ -428,7 +428,7 @@ export const MainContent = ({
               }                          
             >
               {children}
-            </Box>
+            </chakra.main>
           </Box>
         </Box>
       </MotionBox>

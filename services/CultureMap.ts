@@ -91,10 +91,13 @@ export class CultureMap {
 
       if (typeof setIsLoaded === "function")
         setIsLoaded.call(null, true);
+      
+      console.log("CM: Process")
 
       if (this.currentView in this.views) {
         this.views[this.currentView].setData();
         setTimeout(() => {
+          console.log("CM: Process timeout")
           this.views[this.currentView].render();
           this.views[this.currentView].hide();
           this.views[this.currentView].fitToBounds();
@@ -102,10 +105,12 @@ export class CultureMap {
       }
 
       setTimeout(() => {
-        this.onLoadJobs.map((f) => {
+        console.log("CM: onLoadJobs", this.onLoadJobs)
+        this.onLoadJobs.forEach((f) => {
+          console.log(f)
           if (typeof f === "function") f.call();
         });
-      }, 1000);
+      }, 500);
     };
 
     const maybeProcess = () => {
@@ -213,11 +218,13 @@ export class CultureMap {
   }
 
   showCurrentView() {
+    console.log("showCurrentView");
     if (this.map) {
       const run = () => {
+        console.log("showCurrentView run");
         this.popup.hide();
         this.clusterDetail.hide();
-        this.views[this.currentView].show();
+        this.views[this.currentView].show();        
       };
       if (!this.ready) {
         this.onLoadJobs.push(run);

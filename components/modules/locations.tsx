@@ -389,8 +389,10 @@ export const ModuleComponentLocations = ({ ...props }) => {
     
     if (urlParams.get("cluster") === "0") {
       setCurrentMapView("unclustered");
+      cultureMap?.setView("unclustered");
     }
-    
+    cultureMap?.showCurrentView();
+
     setAccordionDefaultIndex(aDI);
     setIsFiltered(aDI.length > 0);
 

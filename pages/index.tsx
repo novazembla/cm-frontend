@@ -118,7 +118,6 @@ export const Home = ({ homepage }: { homepage: any }) => {
   }, 350);
 
   const onScroll = () => {
-    
     if (
       isMobileRef.current ||
       !highlightsRef.current ||
@@ -185,7 +184,7 @@ export const Home = ({ homepage }: { homepage: any }) => {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    
+
     if (homepage?.highlights?.length > 0 && settings && cultureMap) {
       const highlights = homepage?.highlights.reduce(
         (hAcc: any, highlight: any) => {
@@ -233,9 +232,9 @@ export const Home = ({ homepage }: { homepage: any }) => {
         },
         []
       );
-      if (highlights.length) {
-        cultureMap.showCurrentView();
+      cultureMap.showCurrentView();
 
+      if (highlights.length) {
         cultureMap.setHighlights(highlights);
         cultureMap.panTo(
           highlights[0].lng,
@@ -247,7 +246,7 @@ export const Home = ({ homepage }: { homepage: any }) => {
       }
     }
     return () => {
-      if (cultureMap) { 
+      if (cultureMap) {
         cultureMap.clearHighlights();
       }
     };
@@ -369,7 +368,7 @@ export const Home = ({ homepage }: { homepage: any }) => {
               }}
             >
               <Box>
-                <chakra.h3
+                <chakra.h1
                   className="highlight"
                   color="cm.text"
                   mt="0.5em"
@@ -379,7 +378,7 @@ export const Home = ({ homepage }: { homepage: any }) => {
                   fontWeight="bold"
                 >
                   {t("homepage.title.highlights", "Highlights")}
-                </chakra.h3>
+                </chakra.h1>
 
                 <Box
                   overflowY={isMobile ? "auto" : "hidden"}
