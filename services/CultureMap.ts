@@ -492,6 +492,8 @@ export class CultureMap {
               properties: {
                 id: `userlocation-dot`,
                 color: "#333",
+                strokeColor: "transparent",
+                strokeWidth: 0,
                 radius: 16,
               },
             },

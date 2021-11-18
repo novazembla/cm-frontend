@@ -27,6 +27,7 @@ export const Map = () => {
   const cultureMap = useMapContext();
 
   const mapContainer = useRef<HTMLDivElement>(null);
+  const geolocationButton = useRef<HTMLButtonElement>(null);
   const buttonContainer = useRef<HTMLDivElement>(null);
   const cultureMapRef = useRef<CultureMap>();
 
@@ -74,10 +75,11 @@ export const Map = () => {
   };
 
   const geolocationUpdate = (position: GeolocationPosition) => {
+    console.log(position);
     if (position?.coords?.longitude && position?.coords?.latitude) {
       cultureMap?.setUserLocation(
-        position?.coords?.longitude,
-        position?.coords?.latitude
+        position?.coords?.latitude,
+        position?.coords?.longitude
       );
     }
   };
@@ -92,7 +94,7 @@ export const Map = () => {
       cultureMap?.clearUserLocation();
     } else {
       setGeolocationActive(true);
-
+      cultureMap?.setUserLocation(52.52559, 13.493659);
       if (geoLocationWatchIdRef.current !== 0) {
         if ("geolocation" in navigator)
           navigator.geolocation.clearWatch(geoLocationWatchIdRef.current);
@@ -106,6 +108,9 @@ export const Map = () => {
         );
       }
     }
+    geolocationButton.current?.blur();
+
+    console.log(geolocationButton.current);
   };
 
   return (
@@ -328,6 +333,7 @@ export const Map = () => {
               }}
             >
               <IconButton
+                ref={geolocationButton}
                 variant="outline"
                 aria-label={t("menu.button.findMyLocation", "Find my location")}
                 icon={
