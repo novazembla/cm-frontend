@@ -18,8 +18,6 @@ export class CultureMap {
   POPUP_OFFSET_MOUSE = [0, -25] as [number, number];
   POPUP_OFFSET_TOUCH = [53, 27] as [number, number];
 
-  MAP_MIN_ZOOM = 9;
-  MAP_MAX_ZOOM = 19;
   MAX_BOUNDS_ZOOM = 14;
   ZOOM_LEVEL_HIDE_ADJUSTOR = 0.5;
 
@@ -83,10 +81,20 @@ export class CultureMap {
       style: this.config.mapStyleJsonUrl,
       center: [this.config.lng, this.config.lat],
       zoom: this.config.zoom,
-      minZoom: this.MAP_MIN_ZOOM,
-      maxZoom: this.MAP_MAX_ZOOM,
+      maxBounds: this.config.bounds,
+      minZoom: this.config.minZoom,
+      maxZoom: this.config.maxZoom,
     });
 
+    console.log({
+      container: ref,
+      style: this.config.mapStyleJsonUrl,
+      center: [this.config.lng, this.config.lat],
+      zoom: this.config.zoom,
+      bounds: this.config.bounds,
+      minZoom: this.config.minZoom,
+      maxZoom: this.config.maxZoom,
+    })
     this.clusterDetail.init();
 
     const process = () => {
@@ -130,9 +138,9 @@ export class CultureMap {
       this.map.on("moveend", (e) => {
         if (!this.map) return;
         this.isAnimating = false;
-        if (this.map.getZoom() > this.MAP_MAX_ZOOM - 1) {
+        if (this.map.getZoom() > this.config.maxZoom - 1) {
           this.map.zoomTo(
-            this.MAP_MAX_ZOOM - 1.1,
+            this.config.maxZoom - 1.1,
             {},
             {
               cmAnimation: true,

@@ -9,6 +9,7 @@ import {
   useMenuButtonContext,
   useQuickSearchContext,
   useMainContentContext,
+  useConfigContext,
 } from "~/provider";
 
 import { Box, IconButton, Flex } from "@chakra-ui/react";
@@ -25,6 +26,7 @@ export const Map = () => {
   const { t } = useAppTranslations();
 
   const cultureMap = useMapContext();
+  const config = useConfigContext();
 
   const mapContainer = useRef<HTMLDivElement>(null);
   const geolocationButton = useRef<HTMLButtonElement>(null);
@@ -67,37 +69,65 @@ export const Map = () => {
   const geoLocationWatchIdRef = useRef(0);
 
   const [geolocationActive, setGeolocationActive] = useState(false);
+  const [geolocationFirstPosition, setGeolocationFirstPosition] =
+    useState(false);
 
   const geolocationError = (err: GeolocationPositionError) => {
-    console.log(err);
     setGeolocationActive(false);
+    setGeolocationFirstPosition(false);
     cultureMap?.clearUserLocation();
   };
 
   const geolocationUpdate = (position: GeolocationPosition) => {
-    console.log(position);
     if (position?.coords?.longitude && position?.coords?.latitude) {
-      cultureMap?.setUserLocation(
-        position?.coords?.latitude,
-        position?.coords?.longitude
-      );
+      if (
+        position?.coords?.longitude >= config.bounds[0][0] &&
+        position?.coords?.longitude <= config.bounds[1][0] &&
+        position?.coords?.latitude >= config.bounds[0][1] &&
+        position?.coords?.latitude <= config.bounds[1][1]
+      ) {
+        cultureMap?.setUserLocation(
+          position?.coords?.latitude,
+          position?.coords?.longitude
+        );
+        if (geolocationFirstPosition) {
+          cultureMap?.panTo(
+            position?.coords?.latitude,
+            position?.coords?.longitude
+          );
+          setGeolocationFirstPosition(true);
+        }
+      } else {
+        setGeolocationActive(false);
+        setGeolocationFirstPosition(false);
+        cultureMap?.clearUserLocation();
+        if (geoLocationWatchIdRef.current !== 0) {
+          if ("geolocation" in navigator)
+            navigator.geolocation.clearWatch(geoLocationWatchIdRef.current);
+          geoLocationWatchIdRef.current = 0;
+        }
+      }
     }
   };
 
   const geolocationToggle = () => {
+    cultureMap?.panTo(0, 0);
     if (geolocationActive) {
       if (geoLocationWatchIdRef.current !== 0) {
         if ("geolocation" in navigator)
           navigator.geolocation.clearWatch(geoLocationWatchIdRef.current);
+        geoLocationWatchIdRef.current = 0;
       }
       setGeolocationActive(false);
+      setGeolocationFirstPosition(false);
       cultureMap?.clearUserLocation();
     } else {
       setGeolocationActive(true);
-      cultureMap?.setUserLocation(52.52559, 13.493659);
+      setGeolocationFirstPosition(false);
       if (geoLocationWatchIdRef.current !== 0) {
         if ("geolocation" in navigator)
           navigator.geolocation.clearWatch(geoLocationWatchIdRef.current);
+        geoLocationWatchIdRef.current = 0;
       }
 
       if ("geolocation" in navigator) {
@@ -109,8 +139,6 @@ export const Map = () => {
       }
     }
     geolocationButton.current?.blur();
-
-    console.log(geolocationButton.current);
   };
 
   return (

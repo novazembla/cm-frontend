@@ -7,6 +7,9 @@ export interface AppConfig {
   colorDark: string;
   lat: number;
   lng: number;
+  minZoom: number;
+  maxZoom: number;
+  bounds: [[number, number], [number, number]],
   zoom: number;
   contactEmail: string;
   apiURL: string;
