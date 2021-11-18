@@ -38,6 +38,7 @@ export const MobileNav = () => {
               width: isTablet ? (isTabletWide ? "66.66vw" : "80vw") : "100vw",
               zIndex: 1100,
             }}
+            id="menu"
           >
             <RemoveScroll>
               <Box
@@ -142,7 +143,7 @@ export const MobileNav = () => {
                 >
                   <IconButton
                     variant="outline"
-                    aria-label={t("menu.button.toggleMenu", "Menu")}
+                    aria-label={t("menu.button.closeSearch", "Close search")}
                     icon={<SVG type="cross" width="52px" height="52px" />}
                     borderRadius="100"
                     p="0"
@@ -155,6 +156,10 @@ export const MobileNav = () => {
                       onQuickSearchToggle();
                     }}
                     pointerEvents={isQuickSearchOpen ? undefined : "none"}
+                    tabIndex={isQuickSearchOpen ? 2 : -1}
+                    aria-controls="search"
+                    aria-haspopup="true"
+                    aria-expanded="true"
                   />
                 </Box>
               </motion.div>
@@ -173,16 +178,20 @@ export const MobileNav = () => {
                 >
                   <IconButton
                     variant="outline"
-                    aria-label={t("menu.button.togggleSearch", "Search")}
+                    aria-label={t("menu.button.openSearch", "Open search")}
                     borderRadius="48px"
                     icon={<SVG type="search" width="48px" height="48px" />}
                     w="48px"
                     h="48px"
                     border="none"
                     pointerEvents={isQuickSearchOpen ? "none" : undefined}
+                    tabIndex={isQuickSearchOpen ? -1 : 2}
                     onClick={() => {
                       onQuickSearchToggle();
                     }}
+                    aria-controls="search"
+                    aria-haspopup="true"
+                    aria-expanded="false"
                   />
                 </Box>
               </motion.div>
@@ -206,7 +215,7 @@ export const MobileNav = () => {
               >
                 <IconButton
                   variant="outline"
-                  aria-label={t("menu.button.toggleMenu", "Menu")}
+                  aria-label={t("menu.button.closeMenu", "Close menu")}
                   icon={<SVG type="cross" width="58px" height="58px" />}
                   borderRadius="100"
                   p="0"
@@ -219,6 +228,11 @@ export const MobileNav = () => {
                     onMenuToggle();
                   }}
                   pointerEvents={isMenuOpen ? undefined : "none"}
+                  tabIndex={isMenuOpen ? 1 : -1}
+
+                  aria-controls="menu"
+                  aria-haspopup="true"
+                  aria-expanded="true"
                 />
               </Box>
             </motion.div>
@@ -237,7 +251,7 @@ export const MobileNav = () => {
               >
                 <IconButton
                   variant="outline"
-                  aria-label={t("menu.button.toggleMenu", "Menu")}
+                  aria-label={t("menu.button.closeMenu", "Open menu")}
                   icon={<SVG type="menu-mobile" width="64px" height="64px" />}
                   borderRadius="100"
                   p="0"
@@ -253,6 +267,10 @@ export const MobileNav = () => {
                     onMenuToggle();
                   }}
                   pointerEvents={isMenuOpen ? "none" : undefined}
+                  tabIndex={isMenuOpen ? -1 : 1}
+                  aria-controls="menu"
+                  aria-haspopup="true"
+                  aria-expanded="false"
                 />
               </Box>
             </motion.div>
@@ -281,6 +299,7 @@ export const MobileNav = () => {
                 }
               }}
               pointerEvents={isMenuOpen ? "none" : undefined}
+              tabIndex={isMenuOpen ? -1 : 3}
             />
           </motion.div>
         </Flex>

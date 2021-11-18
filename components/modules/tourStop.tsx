@@ -139,17 +139,15 @@ export const ModuleComponentTourStop = ({
 
   let meta: any = t("card.meta.tour", "Tour");
 
-  
-
   return (
     <MainContent layerStyle="lightGray">
       <NextHeadSeo
         canonical={`${
           i18n.language === "en" ? "/en" : ""
         }/tour/${getMultilangValue(tour?.slug)}/${tourStop?.number}`}
-        title={`${tourStop?.number} - ${getMultilangValue(tourStop?.title)} - ${getMultilangValue(
-          tour?.title
-        )} - ${getSeoAppTitle(t)}`}
+        title={`${tourStop?.number} - ${getMultilangValue(
+          tourStop?.title
+        )} - ${getMultilangValue(tour?.title)} - ${getSeoAppTitle(t)}`}
         description={getMultilangValue(tourStop?.teaser)}
         og={{
           image: getSeoImage(tourStop?.heroImage),
@@ -164,170 +162,172 @@ export const ModuleComponentTourStop = ({
           xl: "calc(100vh - 80px)",
         }}
       >
-        <Box px="20px" pt="0.5em">
-          <Box mb="3">
-            <Text className="highlight" color="cm.text" fontWeight="bold">
-              {getMultilangValue(tour?.title)}
-            </Text>
-          </Box>
+        <Box>
+          <Box px="20px" pt="0.5em">
+            <Box mb="3">
+              <Text className="highlight" color="cm.text" fontWeight="bold">
+                {getMultilangValue(tour?.title)}
+              </Text>
+            </Box>
 
-          <Box bg="#fff" borderRadius="lg" overflow="hidden">
-            {tourStop?.heroImage?.id && (
-              <Box>
-                <AspectRatio w="100%" ratio={16 / 9}>
-                  <Box bg={color}>
-                    {tourStop?.heroImage && tourStop?.heroImage?.id && (
-                      <Box w="100%" h="100%">
-                        <ApiImage
-                          id={tourStop?.heroImage?.id}
-                          alt={getMultilangValue(tourStop?.heroImage.alt)}
-                          meta={tourStop?.heroImage?.meta}
-                          forceAspectRatioPB={56.25}
-                          status={tourStop?.heroImage?.status}
-                          sizes="(min-width: 45rem) 700px, 100vw"
-                          cropPosition={tourStop?.heroImage?.cropPosition}
-                          objectFit="cover"
-                        />
-                      </Box>
-                    )}
-                  </Box>
-                </AspectRatio>
-                {tourStop?.heroImage?.credits !== "" && (
-                  <Text
-                    textStyle="finePrint"
-                    mt="0.5"
-                    px={isMobile ? "20px" : "35px"}
-                  >
-                    <MultiLangValue json={tourStop?.heroImage?.credits} />
-                  </Text>
-                )}
-              </Box>
-            )}
-            {!tourStop?.heroImage?.id && (
-              <Flex justifyContent="flex-end">
-                <Box w="40%">
-                  <AspectRatio w="100%" ratio={4 / 3}>
-                    <Box bg={color}></Box>
+            <Box bg="#fff" borderRadius="lg" overflow="hidden">
+              {tourStop?.heroImage?.id && (
+                <Box>
+                  <AspectRatio w="100%" ratio={16 / 9}>
+                    <Box bg={color}>
+                      {tourStop?.heroImage && tourStop?.heroImage?.id && (
+                        <Box w="100%" h="100%">
+                          <ApiImage
+                            id={tourStop?.heroImage?.id}
+                            alt={getMultilangValue(tourStop?.heroImage.alt)}
+                            meta={tourStop?.heroImage?.meta}
+                            forceAspectRatioPB={56.25}
+                            status={tourStop?.heroImage?.status}
+                            sizes="(min-width: 45rem) 700px, 100vw"
+                            cropPosition={tourStop?.heroImage?.cropPosition}
+                            objectFit="cover"
+                          />
+                        </Box>
+                      )}
+                    </Box>
                   </AspectRatio>
+                  {tourStop?.heroImage?.credits !== "" && (
+                    <Text
+                      textStyle="finePrint"
+                      mt="0.5"
+                      px={isMobile ? "20px" : "35px"}
+                    >
+                      <MultiLangValue json={tourStop?.heroImage?.credits} />
+                    </Text>
+                  )}
                 </Box>
-              </Flex>
-            )}
-
-            <Box
-              px={isMobile ? "20px" : "35px"}
-              pt={isMobile ? "20px" : "35px"}
-              pb={isMobile ? "20px" : "1em"}
-              w="100%"
-            >
-              {meta && (
-                <Flex
-                  textStyle="categoriesHighlight"
-                  color={colorDark}
-                  alignItems="flex-end"
-                  width="66.66%"
-                >
-                  {t("tour.tourStop.meta", "Tour stop {{number}}", {
-                    number: tourStop?.number,
-                  })}
+              )}
+              {!tourStop?.heroImage?.id && (
+                <Flex justifyContent="flex-end">
+                  <Box w="40%">
+                    <AspectRatio w="100%" ratio={4 / 3}>
+                      <Box bg={color}></Box>
+                    </AspectRatio>
+                  </Box>
                 </Flex>
               )}
-              <Flex justifyContent="space-between">
-                <chakra.h1
-                  mb="0.3em !important"
-                  textStyle="headline"
-                  sx={{
-                    a: {
-                      _hover: {
-                        color: "#333 !important",
-                      },
-                    },
-                  }}
-                  w="90%"
-                >
-                  <MultiLangValue json={tourStop.title} />
-                </chakra.h1>
-                <IconButton
-                  aria-label={t("tour.backToTour", "Back to tour")}
-                  icon={
-                    <SVG
-                      type="cross"
-                      width={isMobile ? "50px" : "80px"}
-                      height={isMobile ? "50px" : "80px"}
-                    />
-                  }
-                  borderRadius="0"
-                  p="0"
-                  className="svgHover"
-                  paddingInlineStart="0"
-                  paddingInlineEnd="0"
-                  padding="0"
-                  bg="transparent"
-                  w={isMobile ? "30px" : "40px"}
-                  h={isMobile ? "30px" : "40px"}
-                  minW="30px"
-                  overflow="hidden"
-                  onClick={onNavigationButtonClick}
-                  transition="background-color 0.3s"
-                  _hover={{
-                    bg: "transparent",
-                  }}
-                  _active={{
-                    bg: "transparent",
-                  }}
-                  transform={
-                    isMobile ? "translateY(-5px) translateX(5px)" : undefined
-                  }
-                />
-              </Flex>
-            </Box>
 
-            <Box
-              px={{
-                base: "20px",
-                md: "35px",
-              }}
-              pb="1em"
-            >
-              {tourStop.teaser && (
-                <Box textStyle="larger" mb="1em" fontWeight="bold">
-                  <MultiLangHtml json={tourStop.teaser} />
+              <Box
+                px={isMobile ? "20px" : "35px"}
+                pt={isMobile ? "20px" : "35px"}
+                pb={isMobile ? "20px" : "1em"}
+                w="100%"
+              >
+                {meta && (
+                  <Flex
+                    textStyle="categoriesHighlight"
+                    color={colorDark}
+                    alignItems="flex-end"
+                    width="66.66%"
+                  >
+                    {t("tour.tourStop.meta", "Tour stop {{number}}", {
+                      number: tourStop?.number,
+                    })}
+                  </Flex>
+                )}
+                <Flex justifyContent="space-between">
+                  <chakra.h1
+                    mb="0.3em !important"
+                    textStyle="headline"
+                    sx={{
+                      a: {
+                        _hover: {
+                          color: "#333 !important",
+                        },
+                      },
+                    }}
+                    w="90%"
+                  >
+                    <MultiLangValue json={tourStop.title} />
+                  </chakra.h1>
+                  <IconButton
+                    aria-label={t("tour.backToTour", "Back to tour")}
+                    icon={
+                      <SVG
+                        type="cross"
+                        width={isMobile ? "50px" : "80px"}
+                        height={isMobile ? "50px" : "80px"}
+                      />
+                    }
+                    borderRadius="0"
+                    p="0"
+                    className="svgHover"
+                    paddingInlineStart="0"
+                    paddingInlineEnd="0"
+                    padding="0"
+                    bg="transparent"
+                    w={isMobile ? "30px" : "40px"}
+                    h={isMobile ? "30px" : "40px"}
+                    minW="30px"
+                    overflow="hidden"
+                    onClick={onNavigationButtonClick}
+                    transition="background-color 0.3s"
+                    _hover={{
+                      bg: "transparent",
+                    }}
+                    _active={{
+                      bg: "transparent",
+                    }}
+                    transform={
+                      isMobile ? "translateY(-5px) translateX(5px)" : undefined
+                    }
+                  />
+                </Flex>
+              </Box>
+
+              <Box
+                px={{
+                  base: "20px",
+                  md: "35px",
+                }}
+                pb="1em"
+              >
+                {tourStop.teaser && (
+                  <Box textStyle="larger" mb="1em" fontWeight="bold">
+                    <MultiLangHtml json={tourStop.teaser} />
+                  </Box>
+                )}
+
+                <MultiLangHtml json={tourStop.description} />
+              </Box>
+
+              {tourStop?.images?.length > 0 && (
+                <Box mt="0.5em">
+                  <Images images={tourStop?.images} />
                 </Box>
               )}
 
-              <MultiLangHtml json={tourStop.description} />
-            </Box>
-
-            {tourStop?.images?.length > 0 && (
-              <Box mt="0.5em">
-                <Images images={tourStop?.images} />
+              <Box
+                textAlign="right"
+                p={{
+                  base: "20px",
+                  md: "35px",
+                }}
+              >
+                <Button onClick={onNavigationButtonClick} variant="ghost">
+                  {t("tour.button.viewAllTourStops", "View all tour stops")}
+                </Button>
               </Box>
-            )}
-
-            <Box
-              textAlign="right"
-              p={{
-                base: "20px",
-                md: "35px",
-              }}
-            >
-              <Button onClick={onNavigationButtonClick} variant="ghost">
-                {t("tour.button.viewAllTourStops", "View all tour stops")}
-              </Button>
             </Box>
           </Box>
-        </Box>
-        {tourStop?.location?.id && (
-          <Box p="20px">
-            <chakra.h3 className="highlight" color="cm.text" pb="0" mb="20px">
-              {t("event.title.location", "Location")}
-            </chakra.h3>
+          {tourStop?.location?.id && (
+            <Box p="20px">
+              <chakra.h3 className="highlight" color="cm.text" pb="0" mb="20px">
+                {t("event.title.location", "Location")}
+              </chakra.h3>
 
-            <CardLocation
-              key={`loc-${tourStop?.location.id}`}
-              location={tourStop?.location}
-            />
-          </Box>
-        )}
+              <CardLocation
+                key={`loc-${tourStop?.location.id}`}
+                location={tourStop?.location}
+              />
+            </Box>
+          )}
+        </Box>
         <Footer noBackground />
       </Grid>
     </MainContent>

@@ -43,9 +43,16 @@ export const LoadingBar = ({
     scrollState.setCurrentPath(Router.asPath);
     if (typeof document !== "undefined") {
       document.body.removeAttribute('tabIndex');
+      document.body.classList.remove('tabbed');
       document.body.focus();
     }
   }, [setMainContentStatus, scrollState]);
+
+  const tabPressed = (e: KeyboardEvent) => {
+    if (e.key === "Tab") {
+      document.body.classList.add('tabbed');
+    }
+  }
 
   useEffect(() => {
     router.beforePopState(() => {
@@ -56,10 +63,18 @@ export const LoadingBar = ({
     router.events.on("routeChangeComplete", hideBar);
     router.events.on("routeChangeError", hideBar);
 
+    if (typeof document !== "undefined") {
+      document.body.addEventListener('keyup', tabPressed);
+    }
+
     return () => {
       router.events.off("routeChangeStart", showBar);
       router.events.off("routeChangeComplete", hideBar);
       router.events.off("routeChangeError", hideBar);
+
+      if (typeof document !== "undefined") {
+        document.body.removeEventListener('keyup', tabPressed);
+      }
     };
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

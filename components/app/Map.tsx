@@ -15,6 +15,12 @@ import { Box, IconButton, Flex } from "@chakra-ui/react";
 import { SVG } from "~/components/ui";
 import type { CultureMap } from "~/services/CultureMap";
 
+const userGeoLocationOptions = {
+  enableHighAccuracy: true,
+  maximumAge: 30000,
+  timeout: 27000,
+};
+
 export const Map = () => {
   const { t } = useAppTranslations();
 
@@ -36,7 +42,7 @@ export const Map = () => {
   const [mapLoaded, setMapLoaded] = useState(false);
 
   useEffect(() => {
-    if (cultureMapRef.current || !mapContainer.current || !cultureMap) return; 
+    if (cultureMapRef.current || !mapContainer.current || !cultureMap) return;
 
     cultureMap.init(mapContainer.current, setMapLoaded);
 
@@ -57,6 +63,51 @@ export const Map = () => {
     };
   }, []);
 
+  const geoLocationWatchIdRef = useRef(0);
+
+  const [geolocationActive, setGeolocationActive] = useState(false);
+
+  const geolocationError = (err: GeolocationPositionError) => {
+    console.log(err);
+    setGeolocationActive(false);
+    cultureMap?.clearUserLocation();
+  };
+
+  const geolocationUpdate = (position: GeolocationPosition) => {
+    if (position?.coords?.longitude && position?.coords?.latitude) {
+      cultureMap?.setUserLocation(
+        position?.coords?.longitude,
+        position?.coords?.latitude
+      );
+    }
+  };
+
+  const geolocationToggle = () => {
+    if (geolocationActive) {
+      if (geoLocationWatchIdRef.current !== 0) {
+        if ("geolocation" in navigator)
+          navigator.geolocation.clearWatch(geoLocationWatchIdRef.current);
+      }
+      setGeolocationActive(false);
+      cultureMap?.clearUserLocation();
+    } else {
+      setGeolocationActive(true);
+
+      if (geoLocationWatchIdRef.current !== 0) {
+        if ("geolocation" in navigator)
+          navigator.geolocation.clearWatch(geoLocationWatchIdRef.current);
+      }
+
+      if ("geolocation" in navigator) {
+        geoLocationWatchIdRef.current = navigator.geolocation.watchPosition(
+          geolocationUpdate,
+          geolocationError,
+          userGeoLocationOptions
+        );
+      }
+    }
+  };
+
   return (
     <>
       <Box
@@ -68,7 +119,7 @@ export const Map = () => {
         h="100vh"
         w="100vw"
         ref={buttonContainer}
-        ariaHidden="true"
+        aria-hidden="true"
       >
         <Box ref={mapContainer} className="map" w="100%" h="100%" />
       </Box>
@@ -86,7 +137,7 @@ export const Map = () => {
               : 1
             : 0
         }
-        ariaHidden="true"
+        aria-hidden="true"
       >
         <Flex
           direction="column"
@@ -125,7 +176,7 @@ export const Map = () => {
                 >
                   <IconButton
                     variant="outline"
-                    aria-label={t("menu.button.togggleSearch", "Search")}
+                    aria-label={t("menu.button.openSearch", "Open search")}
                     icon={
                       <SVG
                         type="cross"
@@ -144,6 +195,9 @@ export const Map = () => {
                       onQuickSearchToggle();
                     }}
                     pointerEvents={isQuickSearchOpen ? undefined : "none"}
+                    aria-controls="search"
+                    aria-haspopup="true"
+                    aria-expanded="true"
                   />
                 </Box>
               </motion.div>
@@ -165,7 +219,7 @@ export const Map = () => {
                 >
                   <IconButton
                     variant="outline"
-                    aria-label={t("menu.button.togggleSearch", "Search")}
+                    aria-label={t("menu.button.closeSearch", "Close search")}
                     icon={
                       <SVG
                         type="search"
@@ -187,6 +241,9 @@ export const Map = () => {
                       onQuickSearchToggle();
                     }}
                     pointerEvents={isQuickSearchOpen ? "none" : undefined}
+                    aria-controls="search"
+                    aria-haspopup="true"
+                    aria-expanded="true"
                   />
                 </Box>
               </motion.div>
@@ -287,9 +344,12 @@ export const Map = () => {
                 w={buttonDiameter}
                 h={buttonDiameter}
                 bg="transparent"
-                onClick={() => {
-                  alert("Fehlt! TODO:");
-                }}
+                sx={
+                  geolocationActive
+                    ? { shadow: "0 0px 3px 1px #E42B20", bg: "white" }
+                    : {}
+                }
+                onClick={geolocationToggle}
               />
             </Box>
           )}

@@ -31,6 +31,9 @@ export const InlineLanguageButtons = () => {
                   textStyle="navigation"
                   textDecoration="none !important"
                   _hover={{ color: "cm.accentDark" }}
+                  _focus={{
+                    
+                  }}
                 >
                   {lang}
                 </Link>

@@ -83,7 +83,6 @@ export class MapTour {
 
       if (this.cultureMap?.map?.getLayer("tourPath")) return;
 
-      console.log("add path");
       this.cultureMap?.map?.addLayer({
         id: "tourPath",
         type: "line",

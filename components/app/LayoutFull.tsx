@@ -102,13 +102,16 @@ export const LayoutFull = ({ children }: AppProps) => {
 
       <LoadingBar color="cm.accentLight" loading={isLoadingSettings} />
       <Map />
-      {!isLoadingSettings && fontsLoaded && <Header />}
-
-      {!isLoadingSettings && fontsLoaded && children}
 
       {!isLoadingSettings && fontsLoaded && (isMobile || isTablet) && (
         <MobileNav />
       )}
+      
+      {!isLoadingSettings && fontsLoaded && <Header />}
+
+      {!isLoadingSettings && fontsLoaded && children}
+
+      
       {!isLoadingSettings && fontsLoaded && <QuickSearch />}
     </>
   );

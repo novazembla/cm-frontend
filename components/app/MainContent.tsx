@@ -412,6 +412,7 @@ export const MainContent = ({
           }
         >
           <Box
+            
             className="content"
             pt={isVerticalContent ? 0 : contentPaddingTop}
             h="100%"
@@ -419,6 +420,7 @@ export const MainContent = ({
             <chakra.main
               ref={mainContentRef}
               className="mainContent"
+              id="content"
               minH={
                 isMobile
                   ? isVerticalContent

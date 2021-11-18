@@ -10,6 +10,7 @@ import axios, { AxiosResponse } from "axios";
 import { MapViewClustered } from "./MapViewClustered";
 import { MapViewUnclustered } from "./MapViewUnclustered";
 import { MapClusterDetail } from "./MapClusterDetail";
+import { MapUserLocation } from "./MapUserLocation";
 import { MapHighlights, MapHighlightType } from "./MapHighlights";
 import { MapTour, MapTourType } from "./MapTour";
 
@@ -26,6 +27,7 @@ export class CultureMap {
   clickBlock = false;
 
   highlights: MapHighlights;
+  userLocation: MapUserLocation;
 
   router: NextRouter;
   map: maplibregl.Map | null;
@@ -66,6 +68,7 @@ export class CultureMap {
     this.popup = new MapPopup(this);
     this.clusterDetail = new MapClusterDetail(this);
     this.highlights = new MapHighlights(this);
+    this.userLocation = new MapUserLocation(this);
     this.tour = new MapTour(this);
 
     this.views["clustered"] = new MapViewClustered(this);
@@ -89,9 +92,8 @@ export class CultureMap {
     const process = () => {
       this.ready = true;
 
-      if (typeof setIsLoaded === "function")
-        setIsLoaded.call(null, true);
-      
+      if (typeof setIsLoaded === "function") setIsLoaded.call(null, true);
+
       if (this.currentView in this.views) {
         this.views[this.currentView].setData();
         setTimeout(() => {
@@ -217,7 +219,7 @@ export class CultureMap {
       const run = () => {
         this.popup.hide();
         this.clusterDetail.hide();
-        this.views[this.currentView].show();        
+        this.views[this.currentView].show();
       };
       if (!this.ready) {
         this.onLoadJobs.push(run);
@@ -227,7 +229,7 @@ export class CultureMap {
     }
   }
 
-  setCurrentViewData(data?: any, show?: boolean ) {
+  setCurrentViewData(data?: any, show?: boolean) {
     if (this.map) {
       const run = () => {
         this.popup.hide();
@@ -236,7 +238,7 @@ export class CultureMap {
 
         if (show) {
           setTimeout(() => {
-            this.views[this.currentView].show()
+            this.views[this.currentView].show();
           }, 100);
         }
       };
@@ -262,14 +264,13 @@ export class CultureMap {
               ids.includes(f?.properties?.id)
             ),
           });
-          
         } else {
           this.views[this.currentView].setData({
             type: "FeatureCollection",
             features: [],
           });
           setTimeout(() => {
-            this.views[this.currentView].show()
+            this.views[this.currentView].show();
           }, 100);
         }
       };
@@ -370,7 +371,6 @@ export class CultureMap {
     }
   }
 
-
   fitToCurrentTourBounds() {
     if (this.map) {
       const run = () => {
@@ -455,6 +455,65 @@ export class CultureMap {
     if (this.map) {
       const run = () => {
         this.highlights.clear();
+      };
+      if (!this.ready) {
+        this.onLoadJobs.push(run);
+      } else {
+        run();
+      }
+    }
+  }
+
+  setUserLocation(lat: number, lng: number) {
+    if (this.map) {
+      const run = () => {
+        const data = {
+          features: [
+            {
+              type: "Feature",
+              geometry: {
+                coordinates: [lng ?? 0.0, lat ?? 0.0],
+                type: "Point",
+              },
+              properties: {
+                id: `userlocation-bg`,
+                color: "#fff",
+                strokeColor: "#333",
+                radius: 20,
+                strokeWidth: 2,
+              },
+            },
+            {
+              type: "Feature",
+              geometry: {
+                coordinates: [lng ?? 0.0, lat ?? 0.0],
+                type: "Point",
+              },
+              properties: {
+                id: `userlocation-dot`,
+                color: "#333",
+                radius: 16,
+              },
+            },
+          ],
+          type: "FeatureCollection",
+        };
+
+        this.userLocation.setData(data);
+        this.userLocation.render();
+      };
+      if (!this.ready) {
+        this.onLoadJobs.push(run);
+      } else {
+        run();
+      }
+    }
+  }
+
+  clearUserLocation() {
+    if (this.map) {
+      const run = () => {
+        this.userLocation.clear();
       };
       if (!this.ready) {
         this.onLoadJobs.push(run);

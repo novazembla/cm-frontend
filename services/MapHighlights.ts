@@ -124,7 +124,7 @@ export class MapHighlights {
         this.events["mouseleave-highlights"] = () => {
           if (this.cultureMap.map) {
             this.cultureMap.map.getCanvas().style.cursor = "";
-            // this.cultureMap.popup.hide();
+            this.cultureMap.popup.hide();
           }
         };
 
@@ -168,7 +168,7 @@ export class MapHighlights {
     if (this.cultureMap?.map) {
       if (this.cultureMap?.map?.getLayer("highlights"))
         this.cultureMap?.map?.setLayoutProperty(
-          "clustered-locations",
+          "highlights",
           "visibility",
           "none"
         );

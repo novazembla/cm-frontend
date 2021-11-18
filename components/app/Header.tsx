@@ -136,7 +136,9 @@ export const Header = (/* props */) => {
             ))}
           </Box>
         )}
+        <chakra.a href="#content">
 
+        </chakra.a>
         <Flex
           w={{
             base: "40px",
@@ -164,7 +166,7 @@ export const Header = (/* props */) => {
                       overflow="hidden"
                     >
                       <IconButton
-                        aria-label={t("menu.button.togggleSearch", "Search")}
+                        aria-label={t("menu.button.openSearch", "Open search")}
                         icon={<SVG type="cross" width="80px" height="80px" />}
                         borderRadius="0"
                         p="0"
@@ -205,7 +207,7 @@ export const Header = (/* props */) => {
                       overflow="hidden"
                     >
                       <IconButton
-                        aria-label={t("menu.button.togggleSearch", "Search")}
+                        aria-label={t("menu.button.closeSearch", "Close search")}
                         icon={<SVG type="search" width="64px" height="62px" />}
                         borderRadius="0"
                         p="0"

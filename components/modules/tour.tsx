@@ -137,6 +137,7 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
   const parsedTourStopsRef = useRef<any>(null);
   const currentHightlightIndexRef = useRef<number>(-2);
   const tourStopsRef = useRef<HTMLDivElement>(null);
+  const footerRef = useRef<HTMLDivElement>(null);
   const tourStopsCardsContainerRef = useRef<HTMLDivElement>(null);
 
   const scrollState = useScrollStateContext();
@@ -149,7 +150,8 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
     if (
       !tourStopsRef.current ||
       !tourStopsCardsContainerRef.current ||
-      !containersRef.current
+      !containersRef.current ||
+      !footerRef.current
     )
       return;
 
@@ -176,9 +178,10 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
           0,
           5 +
             window.innerHeight -
-            (isTablet ? 100 : 120) -
-            (document.documentElement.scrollHeight -
-              containersRef.current[containersRef.current.length - 1].offsetTop)
+            (isTablet ? 120 : 140) -
+            containersRef.current[containersRef.current.length - 1]
+              .offsetHeight -
+            footerRef.current.offsetHeight
         );
         if (pB > 0) {
           tourStopsCardsContainerRef.current.style.paddingBottom = `${pB}px`;
@@ -376,7 +379,6 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
         router.asPath.replace(/[^a-z]/g, "")
       );
       if (scrollState.wasBack() && scrollLeft) {
-        onResize();
         tourStopsRef.current?.scrollTo({
           left: scrollLeft,
           top: 0,
@@ -385,6 +387,8 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
         onVerticalScroll(0);
       }
     }
+
+    setTimeout(onResize, 100);
 
     onScroll();
     document.addEventListener("DOMContentLoaded", onResize);
@@ -535,7 +539,9 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
                                   >
                                     <ApiImage
                                       id={tour?.heroImage?.id}
-                                      alt={getMultilangValue(tour?.heroImage.alt)}
+                                      alt={getMultilangValue(
+                                        tour?.heroImage.alt
+                                      )}
                                       meta={tour?.heroImage?.meta}
                                       forceAspectRatioPB={
                                         isMobile ? 66.66 : 56.25
@@ -829,7 +835,9 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
                 </Flex>
               </Box>
             </Box>
-            <Footer noBackground />
+            <Box ref={footerRef}>
+              <Footer noBackground />
+            </Box>
           </Grid>
         </Box>
       )}

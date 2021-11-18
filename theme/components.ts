@@ -274,6 +274,9 @@ export const components = {
       _hover: {
         color: "wine.800",
       },
+      _focus: {
+        boxShadow: "none",
+      }
     },
   },
   Radio: {

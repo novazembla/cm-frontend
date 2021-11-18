@@ -60,6 +60,7 @@ export const Home = ({ homepage }: { homepage: any }) => {
   const parsedHighlightsRef = useRef<any>(null);
   const currentHightlightIndexRef = useRef<number>(0);
   const highlightsRef = useRef<HTMLDivElement>(null);
+  const footerRef = useRef<HTMLDivElement>(null);
   const highlightsCardsContainerRef = useRef<HTMLDivElement>(null);
 
   const [highlights, setHighlights] = useState<any[]>([]);
@@ -75,7 +76,8 @@ export const Home = ({ homepage }: { homepage: any }) => {
     if (
       !highlightsRef.current ||
       !highlightsCardsContainerRef.current ||
-      !containersRef.current
+      !containersRef.current || 
+      !footerRef?.current
     )
       return;
 
@@ -100,10 +102,12 @@ export const Home = ({ homepage }: { homepage: any }) => {
         highlightsCardsContainerRef.current.style.paddingBottom = "";
         const pB = Math.max(
           0,
-          window.innerHeight -
-            (isTablet ? 100 : 120) -
-            (document.documentElement.scrollHeight -
-              containersRef.current[containersRef.current.length - 1].offsetTop)
+          5 +
+            window.innerHeight -
+            (isTablet ? 120 : 140) -
+            containersRef.current[containersRef.current.length - 1]
+              .offsetHeight -
+            footerRef.current.offsetHeight
         );
         if (pB > 0) {
           highlightsCardsContainerRef.current.style.paddingBottom = `${pB}px`;
@@ -173,6 +177,8 @@ export const Home = ({ homepage }: { homepage: any }) => {
     onResize();
     onScroll();
     document.addEventListener("DOMContentLoaded", onResize);
+
+    setTimeout(onResize, 100);
 
     return () => {
       if (typeof window === "undefined") return;
@@ -485,7 +491,9 @@ export const Home = ({ homepage }: { homepage: any }) => {
                   </Flex>
                 </Box>
               </Box>
-              <Footer noBackground />
+              <Box ref={footerRef}>
+                <Footer noBackground />
+              </Box>
             </Grid>
           </Box>
         )}

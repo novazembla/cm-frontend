@@ -68,8 +68,6 @@ export const CardLocation = ({
     200
   );
 
-  console.log(location?.heroImage);
-
   return (
     <LinkBox
       as="article"

@@ -152,6 +152,10 @@ const themeConfig = {
       },
       ".translationMissing": {
         color: "#999"
+      },
+      ".tabbed a:focus": {
+        outline: "solid 2px #E42B20",
+        outlineOffset: "5 px"
       }
     },
   },

@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, ChangeEvent } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import { RemoveScroll } from "react-remove-scroll";
 
 import {
@@ -15,10 +15,9 @@ import {
 } from "@chakra-ui/react";
 import { motion, AnimatePresence } from "framer-motion";
 
-import { useConfigContext, useQuickSearchContext } from "~/provider";
+import { useQuickSearchContext } from "~/provider";
 import { useIsBreakPoint, useAppTranslations } from "~/hooks";
 
-import { useRouter } from "next/router";
 import { useLazyQuery, gql } from "@apollo/client";
 import { useForm, Controller } from "react-hook-form";
 import { useMapContext } from "~/provider";
@@ -80,12 +79,10 @@ export const SearchFormSchema = object().shape({
 // https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/inputmode
 
 export const QuickSearch = () => {
-  const { t, i18n, getMultilangValue } = useAppTranslations();
-  const config = useConfigContext();
-  const router = useRouter();
-
-  const { isQuickSearchOpen, onQuickSearchToggle } = useQuickSearchContext();
-  const { isMobile, isTablet, isTabletWide, isDesktopAndUp } =
+  const { t, i18n } = useAppTranslations();
+  
+  const { isQuickSearchOpen } = useQuickSearchContext();
+  const { isTablet, isTabletWide, isDesktopAndUp } =
     useIsBreakPoint();
 
   const [isActiveSearch, setIsActiveSearch] = useState(false);
@@ -100,11 +97,9 @@ export const QuickSearch = () => {
 
   const {
     handleSubmit,
-    getValues,
     reset,
     control,
-    setValue,
-    formState: { isSubmitting, isValid, isDirty, errors },
+    formState: { isValid, isDirty, errors },
   } = useForm({
     mode: "onChange",
     resolver: yupResolver(SearchFormSchema),
@@ -122,7 +117,7 @@ export const QuickSearch = () => {
           },
         });
       } else {
-        // TODO: is is possible to show results in map for QS? 
+        // TODO: is it possible to show results in map for QS? 
         // if (cultureMap) cultureMap.clear();
         // setQuickSearchResultInContext({});
       }
@@ -149,86 +144,6 @@ export const QuickSearch = () => {
       setIsActiveSearch(true);
     }
   }, [loading, isActiveSearch]);
-
-  // useEffect(() => {
-  //   console.log(loading, data?.quickSearch, quickSearchResult, searchingForTerm);
-
-  //   if (loading && searchingForTerm) {
-
-  //     setSearchingForTerm(false);
-  //     console.log(1);
-
-  //   }
-
-  //   if (!loading && data?.quickSearch && !quickSearchResult) {
-
-  //   }
-  // }, [
-  //   data?.quickSearch,
-  //   loading,
-  //   searchingForTerm,
-  //   quickSearchResult,
-  // ]);
-
-  // const searchResult = useMemo(() => {
-  //   if (currentSearchTerm.length < 3) return [];
-
-  //   if (error || !data?.quickSearch || data?.quickSearch.length === 0)
-  //     return [];
-
-  //   return data.quickSearch;
-  // }, [currentSearchTerm, data, error]);
-
-  // useEffect(() => {
-  //   if (!loading) {
-  //     // TODO: can events be shown?
-  //     const pins = searchResult.reduce((acc: any, result: any) => {
-  //       if (result.module !== "location") return acc;
-
-  //       return [
-  //         ...acc,
-  //         ...result.items.map((item: any) => ({
-  //           id: item.id,
-  //           type: "location",
-  //           lat: item.geopoint.lat,
-  //           lng: item.geopoint.lng,
-  //         })),
-  //       ];
-  //     }, []);
-
-  //     if (cultureMap) {
-  //       cultureMap.clear();
-  //       cultureMap.addMarkers(pins);
-  //     }
-
-  //     console.log(
-  //       searchResult,
-  //       searchResult.reduce(
-  //         (acc: any, result: any) => ({
-  //           ...acc,
-  //           [result.module]: {
-  //             totalCount: result.totalCount,
-  //             items: result.items,
-  //           },
-  //         }),
-  //         {}
-  //       )
-  //     );
-
-  //     // setQuickSearchResultInContext(
-  //     //   searchResult.reduce(
-  //     //     (acc: any, result: any) => ({
-  //     //       ...acc,
-  //     //       [result.module]: {
-  //     //         totalCount: result.totalCount,
-  //     //         items: result.items,
-  //     //       },
-  //     //     }),
-  //     //     {}
-  //     //   )
-  //     // );
-  //   }
-  // }, [loading, searchResult, cultureMap]);
 
   const onSubmit = async (newData: yup.InferType<typeof SearchFormSchema>) => {
     setSearchTerm(newData.search);
@@ -278,6 +193,7 @@ export const QuickSearch = () => {
             left: contentLeft,
             zIndex: 1100,
           }}
+          id="search"
         >
           <RemoveScroll>
             <Flex
@@ -343,14 +259,14 @@ export const QuickSearch = () => {
                               required: true,
                             }}
                             render={({
-                              field: { onChange, onBlur, value, name, ref },
-                              fieldState: {
-                                invalid,
-                                isTouched,
-                                isDirty,
-                                error,
-                              },
-                              formState,
+                              field: { onChange, onBlur, ref },
+                              // fieldState: {
+                              //   invalid,
+                              //   isTouched,
+                              //   isDirty,
+                              //   error,
+                              // },
+                              // formState,
                             }) => (
                               <Input
                                 pl="2"
