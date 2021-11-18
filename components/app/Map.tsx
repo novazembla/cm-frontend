@@ -111,7 +111,6 @@ export const Map = () => {
   };
 
   const geolocationToggle = () => {
-    cultureMap?.panTo(0, 0);
     if (geolocationActive) {
       if (geoLocationWatchIdRef.current !== 0) {
         if ("geolocation" in navigator)
