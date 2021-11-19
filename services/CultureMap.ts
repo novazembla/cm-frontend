@@ -86,15 +86,6 @@ export class CultureMap {
       maxZoom: this.config.maxZoom,
     });
 
-    console.log({
-      container: ref,
-      style: this.config.mapStyleJsonUrl,
-      center: [this.config.lng, this.config.lat],
-      zoom: this.config.zoom,
-      bounds: this.config.bounds,
-      minZoom: this.config.minZoom,
-      maxZoom: this.config.maxZoom,
-    })
     this.clusterDetail.init();
 
     const process = () => {
@@ -472,44 +463,10 @@ export class CultureMap {
     }
   }
 
-  setUserLocation(lat: number, lng: number) {
+  setUserLocation(lng: number, lat: number) {
     if (this.map) {
       const run = () => {
-        const data = {
-          features: [
-            {
-              type: "Feature",
-              geometry: {
-                coordinates: [lng ?? 0.0, lat ?? 0.0],
-                type: "Point",
-              },
-              properties: {
-                id: `userlocation-bg`,
-                color: "#fff",
-                strokeColor: "#333",
-                radius: 20,
-                strokeWidth: 2,
-              },
-            },
-            {
-              type: "Feature",
-              geometry: {
-                coordinates: [lng ?? 0.0, lat ?? 0.0],
-                type: "Point",
-              },
-              properties: {
-                id: `userlocation-dot`,
-                color: "#333",
-                strokeColor: "transparent",
-                strokeWidth: 0,
-                radius: 16,
-              },
-            },
-          ],
-          type: "FeatureCollection",
-        };
-
-        this.userLocation.setData(data);
+        this.userLocation.setData(lng, lat);
         this.userLocation.render();
       };
       if (!this.ready) {

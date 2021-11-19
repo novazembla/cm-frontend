@@ -139,6 +139,8 @@ export const ModuleComponentTourStop = ({
 
   let meta: any = t("card.meta.tour", "Tour");
 
+  console.log(tour);
+  
   return (
     <MainContent layerStyle="lightGray">
       <NextHeadSeo

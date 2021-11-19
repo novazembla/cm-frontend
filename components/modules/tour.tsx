@@ -93,6 +93,14 @@ export const tourQuery = gql`
             id
             name
           }
+          heroImage {
+            id
+            status
+            meta
+            alt
+            credits
+            cropPosition
+          }
         }
       }
     }

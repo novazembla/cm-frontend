@@ -1,78 +1,51 @@
+import maplibregl from "maplibre-gl";
 import type { CultureMap } from "./CultureMap";
 
 export class MapUserLocation {
   cultureMap: CultureMap;
 
   events: Record<string, any> = {};
+  lat: number | null = null;
+  lng: number | null = null;
+
+  marker: maplibregl.Marker | null = null;
 
   constructor(cultureMap: CultureMap) {
     this.cultureMap = cultureMap;
   }
 
-  setData(data?: any) {
-    if (this.cultureMap?.map) {
-      if (!this.cultureMap?.map) return;
-
-      if (!this.cultureMap.map.getSource("userlocation")) {
-        this.cultureMap.map.addSource("userlocation", {
-          type: "geojson",
-          data: data ?? {},
-        });
-      } else {
-        (this.cultureMap?.map?.getSource("userlocation") as any)?.setData(
-          data ?? {}
-        );
-      }
-    }
+  setData(lng: number, lat: number) {
+    this.lat = lat;
+    this.lng = lng;
   }
 
   render() {
-    if (this.cultureMap?.map) {
-      if (!this.cultureMap?.map || !this.cultureMap.map.getSource("userlocation"))
-        return;
-
+    if (this.cultureMap?.map && this.lat !== null && this.lng !== null) {
       this.clear();
 
-      this.cultureMap?.map?.addLayer({
-        id: "userlocation",
-        type: "circle",
-        source: "userlocation",
-        paint: {
-          "circle-color": ["get", "color"],
-          "circle-radius": ["get", "radius"],
-          "circle-stroke-color": ["get", "strokeColor"],
-          "circle-stroke-width": ["get", "strokeWidth"],
-        },
-      });
-    }
-  }
+      const el = document.createElement("div");
+      el.className = "userlocation";
 
-  hide() {
-    if (this.cultureMap?.map) {
-      if (this.cultureMap?.map?.getLayer("UserLocation"))
-        this.cultureMap?.map?.setLayoutProperty(
-          "userlocation",
-          "visibility",
-          "none"
-        );
-    }
-  }
+      const dot = document.createElement("div");
+      dot.className = "dot";
 
-  show() {
-    if (this.cultureMap?.map) {
-      if (this.cultureMap?.map?.getLayer("UserLocation"))
-        this.cultureMap?.map?.setLayoutProperty(
-          "userlocation",
-          "visibility",
-          "visible"
-        );
+      const dot2 = document.createElement("div");
+      dot2.className = "dotdot";
+      dot.appendChild(dot2);
+      
+      el.appendChild(dot);
+
+      this.marker = new maplibregl.Marker(el)
+        .setLngLat([this.lng, this.lat])
+        .addTo(this.cultureMap?.map);
     }
   }
 
   clear() {
-    if (this.cultureMap?.map) {
-      if (this.cultureMap?.map?.getLayer("userlocation"))
-        this.cultureMap?.map?.removeLayer("userlocation");
+    if (this.cultureMap?.map && this.marker) {
+      this.marker.remove();
+      this.lat = null;
+      this.lng = null;
     }
   }
 }

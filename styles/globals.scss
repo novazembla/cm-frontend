@@ -329,3 +329,21 @@ body {
 // }
 
 // .spider-leg-container:hover .spider-leg-line { background: linear-gradient(rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 28%, #fff 33%, #fff); }
+
+.userlocation .dot {
+  border: 2px solid #333;
+  background-color: #fff;
+  height: 44px;
+  width: 44px;
+  border-radius: 44px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.userlocation .dotdot {
+  background-color: #333;
+  height: 32px;
+  width: 32px;
+  border-radius: 34px;
+}
