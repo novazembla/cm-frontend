@@ -7,7 +7,7 @@ import { Box, Grid, chakra } from "@chakra-ui/react";
 import { GetStaticProps } from "next";
 import { useAppTranslations } from "~/hooks";
 import { useRouter } from "next/router";
-import { useMapContext } from "~/provider";
+import { useConfigContext, useMapContext } from "~/provider";
 import { getSeoAppTitle } from "~/utils";
 import NextHeadSeo from "next-head-seo";
 
@@ -69,7 +69,8 @@ export const ModuleComponentTours = ({
   const { t, i18n } = useAppTranslations();
   const router = useRouter();
   const cultureMap = useMapContext();
-
+  const config = useConfigContext();
+  
   useEffect(() => {
     if (cultureMap) cultureMap.showCurrentView();
   }, [router.asPath, cultureMap]);
@@ -77,7 +78,7 @@ export const ModuleComponentTours = ({
   return (
     <MainContent layerStyle="lightGray">
       <NextHeadSeo
-        canonical={`${i18n.language === "en" ? "/en/tours" : "/touren"}`}
+        canonical={`${config.baseUrl}${i18n.language === "en" ? "/en/tours" : "/touren"}`}
         title={`${t("tour.listings.title", "Tours")} - ${getSeoAppTitle(t)}`}
       />
       <Grid

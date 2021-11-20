@@ -420,7 +420,7 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
       isVerticalContent={!isTablet && !isDesktopAndUp}
     >
       <NextHeadSeo
-        canonical={`${
+        canonical={`${config.baseUrl}${
           i18n.language === "en" ? "/en" : ""
         }/tour/${getMultilangValue(tour?.slug)}`}
         title={`${getMultilangValue(tour?.title)} - ${getSeoAppTitle(t)}`}

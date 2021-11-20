@@ -10,7 +10,7 @@ import { Footer, MainContent } from "~/components/app";
 import { getApolloClient } from "~/services";
 import type { MapHighlightType } from "~/services/MapHighlights";
 
-import { useMapContext, useSettingsContext } from "~/provider";
+import { useConfigContext, useMapContext, useSettingsContext } from "~/provider";
 import {
   Box,
   SimpleGrid,
@@ -140,7 +140,8 @@ export const ModuleComponentEvent = ({
   const router = useRouter();
   const cultureMap = useMapContext();
   const settings = useSettingsContext();
-
+  const config = useConfigContext();
+  
   const { t, getMultilangValue, i18n, getMultilangHtml } = useAppTranslations();
   const { isMobile } = useIsBreakPoint();
 
@@ -249,7 +250,7 @@ export const ModuleComponentEvent = ({
   return (
     <MainContent layerStyle="pageBg">
       <NextHeadSeo
-        canonical={`${
+        canonical={`${config.baseUrl}${
           i18n.language === "en" ? "/en" : ""
         }/tour/${getMultilangValue(event?.slug)}`}
         title={`${getMultilangValue(event?.title)} - ${getSeoAppTitle(t)}`}

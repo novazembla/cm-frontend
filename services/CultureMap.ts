@@ -84,8 +84,11 @@ export class CultureMap {
       maxBounds: this.config.bounds,
       minZoom: this.config.minZoom,
       maxZoom: this.config.maxZoom,
+      attributionControl: false,
     });
-
+    this.map.addControl(new maplibregl.AttributionControl({
+      customAttribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="nofollow noreferrer">OpenStreetMap contributors</a>'
+      }), 'bottom-right');
     this.clusterDetail.init();
 
     const process = () => {
@@ -144,7 +147,7 @@ export class CultureMap {
     });
 
     const client = axios.create({
-      baseURL: this.config.apiURL,
+      baseURL: this.config.apiUrl,
     });
 
     client

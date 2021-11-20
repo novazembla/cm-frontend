@@ -1,6 +1,8 @@
+import { useEffect } from "react";
 import { Flex, IconButton, Box, Grid, chakra } from "@chakra-ui/react";
 import { motion, AnimatePresence } from "framer-motion";
 import { RemoveScroll } from "react-remove-scroll";
+import FocusLock from "react-focus-lock";
 
 import {
   useMenuButtonContext,
@@ -16,10 +18,30 @@ export const MobileNav = () => {
   const config = useConfigContext();
   const router = useRouter();
 
-  const { onMenuToggle, isMenuOpen } = useMenuButtonContext();
+  const { onMenuToggle, isMenuOpen, onMenuClose } = useMenuButtonContext();
   const { isQuickSearchOpen, onQuickSearchToggle } = useQuickSearchContext();
   const { isMobile, isTablet, isTabletWide, isDesktopAndUp } =
     useIsBreakPoint();
+
+  useEffect(() => {
+    const menuEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        if (isMenuOpen) onMenuClose();
+      }
+    };
+
+    if (typeof document !== "undefined") {
+      document.body.addEventListener("keyup", menuEscape);
+    }
+
+    return () => {
+      if (typeof document !== "undefined") {
+        document.body.removeEventListener("keyup", menuEscape);
+      }
+    };
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isMenuOpen]);
 
   return (
     <>
@@ -41,66 +63,115 @@ export const MobileNav = () => {
             id="menu"
           >
             <RemoveScroll>
-              <Box
-                h="calc(var(--vh) * 100)"
-                layerStyle="pageBg"
-                w="100%"
-                overflowY="auto"
-                pt="60px"
-                pb={{
-                  base: "80px",
-                  md: "45px",
-                }}
-              >
-                <Flex
-                  overflow="hidden"
-                  minH="100%"
-                  alignItems={isTablet ? "flex-start" : "flex-end"}
+              <FocusLock>
+                <Box
+                  h="calc(var(--vh) * 100)"
+                  layerStyle="pageBg"
+                  w="100%"
+                  overflowY="auto"
+                  pt="60px"
+                  pb={{
+                    base: "80px",
+                    md: "45px",
+                  }}
+                  id="menu"
                 >
-                  <Flex w="100%" minH="100%" h="100%">
-                    <Flex
-                      sx={{
-                        a: {
-                          display: "inline-block",
-                          marginBottom: "0.3em",
-                          _last: {
-                            marginBottom: 0,
+                  <Flex
+                    overflow="hidden"
+                    minH="100%"
+                    alignItems={isTablet ? "flex-start" : "flex-end"}
+                  >
+                    <Flex w="100%" minH="100%" h="100%">
+                      <Flex
+                        sx={{
+                          a: {
+                            display: "inline-block",
+                            marginBottom: "0.3em",
+                            _last: {
+                              marginBottom: 0,
+                            },
+                            pb: "3px",
+                            mt: "0.5em",
+                            borderBottom: "1px solid #ff0",
+                            borderColor: "cm.accentLight",
                           },
-                          pb: "3px",
-                          mt: "0.5em",
-                          borderBottom: "1px solid #ff0",
-                          borderColor: "cm.accentLight",
-                        },
-                      }}
-                      direction={{
-                        base: "column",
-                      }}
-                      textStyle="headline"
-                      fontWeight="bold"
-                      layerStyle="page"
-                    >
-                      {isTablet && (
-                        <Box layerStyle="headingPullOut" mb="3">
-                          <chakra.h1
-                            className="highlight"
-                            color="cm.text"
-                            fontWeight="bold"
-                          >
-                            {t("menu.title", "Menu")}
-                          </chakra.h1>
-                        </Box>
-                      )}
-                      {config.nav.main.map((link: any, index: number) => (
-                        <chakra.span key={`nav-link-${index}`}>
-                          <ActiveLink href={getMultilangValue(link.path)}>
-                            <MultiLangValue json={link.title} />
-                          </ActiveLink>
-                        </chakra.span>
-                      ))}
+                        }}
+                        direction={{
+                          base: "column",
+                        }}
+                        textStyle="headline"
+                        fontWeight="bold"
+                        layerStyle="page"
+                        position="relative"
+                        w="100%"
+                      >
+                        {isTablet && (
+                          <>
+                            <Box layerStyle="headingPullOut" mb="3">
+                              <chakra.h1
+                                className="highlight"
+                                color="cm.text"
+                                fontWeight="bold"
+                              >
+                                {t("menu.title", "Menu")}
+                              </chakra.h1>
+                            </Box>
+                          </>
+                        )}
+                        {config.nav.main.map((link: any, index: number) => (
+                          <chakra.span key={`nav-link-${index}`}>
+                            <ActiveLink href={getMultilangValue(link.path)}>
+                              <MultiLangValue json={link.title} />
+                            </ActiveLink>
+                          </chakra.span>
+                        ))}
+
+                          <IconButton
+                            aria-label={t("menu.button.closeMenu", "Close menu")}
+                            icon={
+                              <SVG type="cross" width="60px" height="60px" />
+                            }
+                            position="absolute"
+                            top="20px"
+                            right="20px"
+                            borderRadius="0"
+                            p="0"
+                            className="svgHover tabbedVisible"
+                            paddingInlineStart="0"
+                            paddingInlineEnd="0"
+                            padding="0"
+                            bg="transparent"
+                            w="30px"
+                            h="30px"
+                            minW="30px"
+                            overflow="hidden"
+                            onClick={() => {
+                              onMenuClose();
+                            }}
+                            transition="background-color 0.3s"
+                            _hover={{
+                              bg: "transparent",
+                            }}
+                            _active={{
+                              bg: "transparent",
+                            }}
+                            _focus={{
+                              bg: "transparent",
+                              outline: "solid 2px #E42B20",
+                              outlineOffset: "5px",
+                            }}
+                            transform={
+                              isMobile
+                                ? "translateY(-5px) translateX(5px)"
+                                : undefined
+                            }
+                          />
+                     
+                      </Flex>
                     </Flex>
                   </Flex>
-                </Flex>
-              </Box>
+                </Box>
+              </FocusLock>
             </RemoveScroll>
           </motion.div>
         )}
@@ -118,10 +189,89 @@ export const MobileNav = () => {
           alignItems="center"
           px="10%"
           sx={{
-            touchAction: "none"
+            touchAction: "none",
           }}
         >
-          <Box position="relative" w="48px" h="48px">
+          
+          <Box position="relative" w="52px" h="52px" order={2}>
+            <motion.div
+              animate={{ opacity: isMenuOpen ? 1 : 0 }}
+              initial={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <Box
+                position="absolute"
+                top="0"
+                left="0"
+                w="52px"
+                h="52px"
+                zIndex={isMenuOpen ? 2 : 1}
+                bg="#fff"
+                borderRadius="70"
+              >
+                <IconButton
+                  variant="outline"
+                  aria-label={t("menu.button.closeMenu", "Close menu")}
+                  icon={<SVG type="cross" width="58px" height="58px" />}
+                  borderRadius="100"
+                  p="0"
+                  paddingInlineStart="0"
+                  paddingInlineEnd="0"
+                  w="52px"
+                  h="52px"
+                  border="none"
+                  onClick={() => {
+                    onMenuToggle();
+                  }}
+                  pointerEvents={isMenuOpen ? undefined : "none"}
+                  tabIndex={isMenuOpen ? undefined : -1}
+                  aria-controls="menu"
+                  aria-haspopup="true"
+                  aria-expanded="true"
+                />
+              </Box>
+            </motion.div>
+            <motion.div
+              animate={{ opacity: isMenuOpen ? 0 : 1 }}
+              initial={{ opacity: 1 }}
+              transition={{ duration: 0.3 }}
+            >
+              <Box
+                position="absolute"
+                top="0"
+                left="0"
+                w="52px"
+                h="52px"
+                zIndex={isMenuOpen ? 1 : 2}
+              >
+                <IconButton
+                  variant="outline"
+                  aria-label={t("menu.button.openMenu", "Open menu")}
+                  icon={<SVG type="menu-mobile" width="64px" height="64px" />}
+                  borderRadius="100"
+                  p="0"
+                  paddingInlineStart="0"
+                  paddingInlineEnd="0"
+                  w="52px"
+                  h="52px"
+                  border="none"
+                  onClick={() => {
+                    if (!isMenuOpen && isQuickSearchOpen) {
+                      onQuickSearchToggle();
+                    }
+                    onMenuToggle();
+                  }}
+                  pointerEvents={isMenuOpen ? "none" : undefined}
+                  tabIndex={isMenuOpen ? -1 : undefined}
+                  aria-controls="menu"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                />
+              </Box>
+            </motion.div>
+          </Box>
+
+          <Box position="relative" w="48px" h="48px" order={1}>
             <motion.div
               animate={{ opacity: isMenuOpen ? 0 : 1 }}
               transition={{ duration: 0.3 }}
@@ -156,7 +306,7 @@ export const MobileNav = () => {
                       onQuickSearchToggle();
                     }}
                     pointerEvents={isQuickSearchOpen ? undefined : "none"}
-                    tabIndex={isQuickSearchOpen ? 2 : -1}
+                    tabIndex={isQuickSearchOpen ? undefined : -1}
                     aria-controls="search"
                     aria-haspopup="true"
                     aria-expanded="true"
@@ -185,7 +335,7 @@ export const MobileNav = () => {
                     h="48px"
                     border="none"
                     pointerEvents={isQuickSearchOpen ? "none" : undefined}
-                    tabIndex={isQuickSearchOpen ? -1 : 2}
+                    tabIndex={isQuickSearchOpen ? -1 : undefined}
                     onClick={() => {
                       onQuickSearchToggle();
                     }}
@@ -197,88 +347,13 @@ export const MobileNav = () => {
               </motion.div>
             </motion.div>
           </Box>
-          <Box position="relative" w="52px" h="52px">
-            <motion.div
-              animate={{ opacity: isMenuOpen ? 1 : 0 }}
-              initial={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              <Box
-                position="absolute"
-                top="0"
-                left="0"
-                w="52px"
-                h="52px"
-                zIndex={isMenuOpen ? 2 : 1}
-                bg="#fff"
-                borderRadius="70"
-              >
-                <IconButton
-                  variant="outline"
-                  aria-label={t("menu.button.closeMenu", "Close menu")}
-                  icon={<SVG type="cross" width="58px" height="58px" />}
-                  borderRadius="100"
-                  p="0"
-                  paddingInlineStart="0"
-                  paddingInlineEnd="0"
-                  w="52px"
-                  h="52px"
-                  border="none"
-                  onClick={() => {
-                    onMenuToggle();
-                  }}
-                  pointerEvents={isMenuOpen ? undefined : "none"}
-                  tabIndex={isMenuOpen ? 1 : -1}
-
-                  aria-controls="menu"
-                  aria-haspopup="true"
-                  aria-expanded="true"
-                />
-              </Box>
-            </motion.div>
-            <motion.div
-              animate={{ opacity: isMenuOpen ? 0 : 1 }}
-              initial={{ opacity: 1 }}
-              transition={{ duration: 0.3 }}
-            >
-              <Box
-                position="absolute"
-                top="0"
-                left="0"
-                w="52px"
-                h="52px"
-                zIndex={isMenuOpen ? 1 : 2}
-              >
-                <IconButton
-                  variant="outline"
-                  aria-label={t("menu.button.closeMenu", "Open menu")}
-                  icon={<SVG type="menu-mobile" width="64px" height="64px" />}
-                  borderRadius="100"
-                  p="0"
-                  paddingInlineStart="0"
-                  paddingInlineEnd="0"
-                  w="52px"
-                  h="52px"
-                  border="none"
-                  onClick={() => {
-                    if (!isMenuOpen && isQuickSearchOpen) {
-                      onQuickSearchToggle();
-                    }
-                    onMenuToggle();
-                  }}
-                  pointerEvents={isMenuOpen ? "none" : undefined}
-                  tabIndex={isMenuOpen ? -1 : 1}
-                  aria-controls="menu"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                />
-              </Box>
-            </motion.div>
-          </Box>
 
           <motion.div
             animate={{ opacity: isMenuOpen ? 0 : 1 }}
             transition={{ duration: 0.3 }}
+            style={{
+              order: 3
+            }}
           >
             <IconButton
               variant="outline"
@@ -299,7 +374,7 @@ export const MobileNav = () => {
                 }
               }}
               pointerEvents={isMenuOpen ? "none" : undefined}
-              tabIndex={isMenuOpen ? -1 : 3}
+              tabIndex={isMenuOpen ? -1 : undefined}
             />
           </motion.div>
         </Flex>

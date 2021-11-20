@@ -187,7 +187,7 @@ export const FieldImageUploader = ({
         await axios
           .request({
             method: "post",
-            url: `${config.apiURL}/${route}`,
+            url: `${config.apiUrl}/${route}`,
             cancelToken,
             withCredentials: true,
             data: formData,
@@ -429,6 +429,11 @@ export const FieldImageUploader = ({
                         "Cancel upload"
                       )}
                       title={t("imageuploader.cancelupload", "Cancel upload")}
+                      className="svgHover tabbedFocus"
+                      _focus={{
+                        bg: "transparent",
+                        boxShadow: "none",
+                      }}
                     />
                   </>
                 )}

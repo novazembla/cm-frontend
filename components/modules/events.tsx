@@ -29,10 +29,12 @@ import { useForm, FormProvider } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { boolean, object, mixed, number } from "yup";
 
-import { useSettingsContext, useMapContext } from "~/provider";
-import { getMultilangSortedList,
-  getSeoAppTitle
-} from "~/utils";
+import {
+  useSettingsContext,
+  useMapContext,
+  useConfigContext,
+} from "~/provider";
+import { getMultilangSortedList, getSeoAppTitle } from "~/utils";
 import NextHeadSeo from "next-head-seo";
 import { useRouter } from "next/router";
 import useCalendar from "@veccu/react-calendar";
@@ -104,6 +106,7 @@ export const ModuleComponentEvents = ({ ...props }) => {
   const router = useRouter();
   const cultureMap = useMapContext();
   const resultRef = useRef<HTMLDivElement>(null);
+  const config = useConfigContext();
 
   const [currentQueryState, setCurrentQueryState] = useState<any>({
     where: initialQueryState.where,
@@ -178,7 +181,6 @@ export const ModuleComponentEvents = ({ ...props }) => {
 
   const { handleSubmit, reset, getValues, setValue, watch } = formMethods;
 
- 
   const onSubmit = async () => {};
 
   const [activeTermsET, setActiveTermsET] = useState([]);
@@ -529,7 +531,11 @@ export const ModuleComponentEvents = ({ ...props }) => {
     });
 
   useEffect(() => {
-    if (!loading && data?.events?.totalCount !== "undefined" && currentPageIndex === 0) {
+    if (
+      !loading &&
+      data?.events?.totalCount !== "undefined" &&
+      currentPageIndex === 0
+    ) {
       resultRef?.current?.scrollIntoView({
         block: "center",
         behavior: "smooth",
@@ -541,7 +547,9 @@ export const ModuleComponentEvents = ({ ...props }) => {
   return (
     <MainContent layerStyle="pageBg">
       <NextHeadSeo
-        canonical={`${i18n.language === "en" ? "/en/events" : "/veranstaltungen"}`}
+        canonical={`${config.baseUrl}${
+          i18n.language === "en" ? "/en/events" : "/veranstaltungen"
+        }`}
         title={`${t("locations.title", "Map")} - ${getSeoAppTitle(t)}`}
       />
       <Grid
@@ -569,7 +577,7 @@ export const ModuleComponentEvents = ({ ...props }) => {
                   defaultIndex={accordionDefaultIndex}
                 >
                   <AccordionItem>
-                    <AccordionButton>
+                    <AccordionButton className="tabbedFocus">
                       <Box
                         flex="1"
                         textAlign="left"
@@ -649,6 +657,7 @@ export const ModuleComponentEvents = ({ ...props }) => {
                                 "event.calendar.previousMonth",
                                 "Previous month"
                               )}
+                              className="tabbedFocus"
                               icon={<ChevronLeftIcon />}
                               onClick={navigation.toPrev}
                               variant="unstyled"
@@ -674,6 +683,7 @@ export const ModuleComponentEvents = ({ ...props }) => {
                                 "event.calendar.nextMonth",
                                 "Next month"
                               )}
+                              className="tabbedFocus"
                               icon={<ChevronRightIcon />}
                               onClick={navigation.toNext}
                               color="cm.accentLight"
@@ -736,6 +746,7 @@ export const ModuleComponentEvents = ({ ...props }) => {
                                                 h="30px"
                                                 border="1px solid"
                                                 lineHeight="30px"
+                                                
                                                 borderColor="transparent"
                                                 borderRadius="20"
                                                 textStyle="calendar"
@@ -760,7 +771,6 @@ export const ModuleComponentEvents = ({ ...props }) => {
                                           >
                                             <Button
                                               variant="unstyled"
-                                              tabIndex={-1}
                                               w="30px"
                                               h="30px"
                                               minW="30px"
@@ -768,9 +778,8 @@ export const ModuleComponentEvents = ({ ...props }) => {
                                               border="1px solid"
                                               fontSize={{
                                                 base: "13px",
-                                                md: "17px"
+                                                md: "17px",
                                               }}
-                                              
                                               lineHeight="24px"
                                               borderColor={
                                                 value.valueOf() ===
@@ -784,6 +793,7 @@ export const ModuleComponentEvents = ({ ...props }) => {
                                               borderRadius="20"
                                               fontWeight="normal"
                                               transition="all 0.3s"
+                                              className="tabbedFocus"
                                               _hover={{
                                                 bg: "transparent",
                                                 color: "cm.text",
@@ -842,7 +852,7 @@ export const ModuleComponentEvents = ({ ...props }) => {
                   {activeTermsET?.length > 0 && (
                     <AccordionItem>
                       <h2>
-                        <AccordionButton>
+                        <AccordionButton className="tabbedFocus">
                           <Box
                             flex="1"
                             textAlign="left"
@@ -915,25 +925,29 @@ export const ModuleComponentEvents = ({ ...props }) => {
               </Box>
             )}
 
-            {data?.events?.totalCount > data?.events?.events?.length && !loading && !error && (
-              <Box textAlign="center" mt="2em">
-                <Button
-                  onClick={() => {
-
-                    const nextPageIndex = Math.floor(data?.events?.events?.length/initialQueryState?.pageSize);
-                    fetchMore({
-                      variables: {
-                        pageIndex: nextPageIndex,
-                      },
-                    });
-                    setCurrentPageIndex(nextPageIndex);
-                  }}
-                  variant="ghost"
-                >
-                  {t("events.loadMore", "Load more events")}
-                </Button>
-              </Box>
-            )}
+            {data?.events?.totalCount > data?.events?.events?.length &&
+              !loading &&
+              !error && (
+                <Box textAlign="center" mt="2em">
+                  <Button
+                    onClick={() => {
+                      const nextPageIndex = Math.floor(
+                        data?.events?.events?.length /
+                          initialQueryState?.pageSize
+                      );
+                      fetchMore({
+                        variables: {
+                          pageIndex: nextPageIndex,
+                        },
+                      });
+                      setCurrentPageIndex(nextPageIndex);
+                    }}
+                    variant="ghost"
+                  >
+                    {t("events.loadMore", "Load more events")}
+                  </Button>
+                </Box>
+              )}
 
             {loading && currentPageIndex > 0 && <LoadingIcon />}
           </Box>

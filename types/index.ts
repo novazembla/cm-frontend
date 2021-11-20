@@ -12,8 +12,9 @@ export interface AppConfig {
   bounds: [[number, number], [number, number]],
   zoom: number;
   contactEmail: string;
-  apiURL: string;
-  apiGraphQLURL: string;
+  apiUrl: string;
+  baseUrl: string;
+  apiGraphQLUrl: string;
   mapStyleJsonUrl: string;
   defaultLanguage: string;
   activeLanguages: string[];

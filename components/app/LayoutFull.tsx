@@ -1,8 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 
-import { motion, AnimatePresence } from "framer-motion";
 import Head from "next/head";
-import { useRouter } from "next/router";
 
 import { Header, Map, QuickSearch, MobileNav } from ".";
 import { useAppTranslations, useIsBreakPoint } from "~/hooks";
@@ -11,6 +9,8 @@ import { LoadingBar } from ".";
 import { useSettingsContext } from "~/provider";
 import { debounce } from "lodash";
 import NextHeadSeo from "next-head-seo";
+
+import { chakra } from "@chakra-ui/react";
 
 // TODO: SEO Tags, inclusive featured image/cards ...
 
@@ -81,6 +81,7 @@ export const LayoutFull = ({ children }: AppProps) => {
     <>
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="theme-color" content="#fff" />
       </Head>
       <NextHeadSeo
         title={`${t("logo.culturemap1", "CULTUREMAP")} ${t(
@@ -99,19 +100,19 @@ export const LayoutFull = ({ children }: AppProps) => {
           card: "summary",
         }}
       />
-
+      <chakra.a href="#content" className="skipToContent">
+        {t("header.skipToContent", "Skip to content")}
+      </chakra.a>
       <LoadingBar color="cm.accentLight" loading={isLoadingSettings} />
-      <Map />
-
       {!isLoadingSettings && fontsLoaded && (isMobile || isTablet) && (
         <MobileNav />
       )}
-      
       {!isLoadingSettings && fontsLoaded && <Header />}
+
+      <Map />
 
       {!isLoadingSettings && fontsLoaded && children}
 
-      
       {!isLoadingSettings && fontsLoaded && <QuickSearch />}
     </>
   );

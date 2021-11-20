@@ -396,7 +396,7 @@ export const ModuleComponentSuggest = () => {
   return (
     <MainContent isDrawer layerStyle="pageBg">
       <NextHeadSeo
-        canonical={`${
+        canonical={`${config.baseUrl}${
           i18n.language === "en"
             ? "/en/suggest-a-location"
             : "/kartenpunktvorschlag"

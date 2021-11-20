@@ -142,25 +142,13 @@ export const Map = () => {
 
   return (
     <>
-      <Box
-        className="map-wrap"
-        position="fixed"
-        zIndex="1"
-        left="0"
-        top="0"
-        h="100vh"
-        w="100vw"
-        ref={buttonContainer}
-        aria-hidden="true"
-      >
-        <Box ref={mapContainer} className="map" w="100%" h="100%" />
-      </Box>
+      
 
       <Box
         position="fixed"
         right={isTabletWide || isDesktopAndUp ? "20px" : "10px"}
         top={isDesktopAndUp ? "100px" : isTabletWide ? "80px" : "70px"}
-        zIndex="1"
+        zIndex="2"
         transition="opacity 0.3s"
         opacity={
           mapLoaded
@@ -227,6 +215,7 @@ export const Map = () => {
                       onQuickSearchToggle();
                     }}
                     pointerEvents={isQuickSearchOpen ? undefined : "none"}
+                    tabIndex={isQuickSearchOpen ? undefined : -1}
                     aria-controls="search"
                     aria-haspopup="true"
                     aria-expanded="true"
@@ -273,6 +262,7 @@ export const Map = () => {
                       onQuickSearchToggle();
                     }}
                     pointerEvents={isQuickSearchOpen ? "none" : undefined}
+                    tabIndex={isQuickSearchOpen ? -1 : undefined }
                     aria-controls="search"
                     aria-haspopup="true"
                     aria-expanded="true"
@@ -387,6 +377,20 @@ export const Map = () => {
             </Box>
           )}
         </Flex>
+      </Box>
+      <Box
+        className="map-wrap"
+        position="fixed"
+        zIndex="1"
+        left="0"
+        top="0"
+        h="100vh"
+        w="100vw"
+        ref={buttonContainer}
+        aria-hidden="true"
+        tabIndex={-1}
+      >
+        <Box ref={mapContainer} className="map" w="100%" h="100%" tabIndex={-1}/>
       </Box>
     </>
   );

@@ -28,7 +28,19 @@ export const MenuButtonContextProvider = ({
     <MenuButtonContext.Provider
       value={{
         isMenuOpen,
-        onMenuToggle: () => onMenuToggle(!isMenuOpen),
+        onMenuToggle: () => {
+          onMenuToggle(!isMenuOpen)
+
+          if (!isMenuOpen) {
+            if (typeof document !== "undefined") {
+              setTimeout(() => {
+                (document.querySelector("#menu") as any)?.focus();
+                console.log(document.querySelector("#menu"));
+              }, 200);
+            }
+          }
+          
+        },
         onMenuClose: () => onMenuToggle(false),
         onMenuOpen: () => onMenuToggle(true),
       }}

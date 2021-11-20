@@ -111,7 +111,7 @@ export const ModuleComponentTourIntroduction = ({ tour }: { tour: any }) => {
   return (
     <MainContent layerStyle="lightGray">
       <NextHeadSeo
-        canonical={`${
+        canonical={`${config.baseUrl}${
           i18n.language === "en" ? "/en" : ""
         }/tour/${getMultilangValue(tour?.slug)}/0`}
         title={`${t("tour.introduction", "Introduction")} - ${getMultilangValue(

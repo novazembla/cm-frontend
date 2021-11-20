@@ -280,8 +280,8 @@ export const Home = ({ homepage }: { homepage: any }) => {
               top="60px"
               zIndex="2"
             >
-              <Box>
-                <Box className={isMobile ? "clampThreeLines" : undefined}>
+              <Box px={!isMobile ? "10px":0}>
+                <Box textStyle={!isMobile?"larger":undefined} className={isMobile ? "clampThreeLines" : undefined}>
                   <b>
                     <MultiLangHtml json={homepage?.missionStatement} />
                   </b>
@@ -297,17 +297,9 @@ export const Home = ({ homepage }: { homepage: any }) => {
                       href={`/page/${getMultilangValue(
                         homepage?.missionStatementPage?.slug
                       )}/`}
+                      passHref
                     >
-                      <IconButton
-                        as={Link}
-                        variant="solid"
-                        icon={
-                          <SVG
-                            type="arrow-right"
-                            width={isMobile ? "30px" : "40px"}
-                            height={isMobile ? "17px" : "22px"}
-                          />
-                        }
+                      <chakra.a
                         w={isMobile ? "30px" : "40px"}
                         h={isMobile ? "17px" : "22px"}
                         p="0"
@@ -316,16 +308,24 @@ export const Home = ({ homepage }: { homepage: any }) => {
                         className="svgHover"
                         minW="0"
                         display="inline-block"
-                        aria-label={t(
+                        title={t(
                           "mission.statement.read",
                           "read mission statement"
                         )}
-                      />
+                      ><SVG
+                      type="arrow-right"
+                      width={isMobile ? "30px" : "40px"}
+                      height={isMobile ? "17px" : "22px"}
+                    /></chakra.a>
                     </NextLink>
                   )}
                   {isMobile && (
                     <IconButton
                       icon={<SVG type="cross" width="200%" height="200%" />}
+                      
+                      w={isMobile ? "30px" : "40px"}
+                      h={isMobile ? "30px" : "40px"}
+                      minW="30px"
                       borderRadius="0"
                       p="0"
                       className="svgHover"
@@ -333,9 +333,6 @@ export const Home = ({ homepage }: { homepage: any }) => {
                       paddingInlineEnd="0"
                       padding="0"
                       bg="transparent"
-                      w={isMobile ? "30px" : "40px"}
-                      h={isMobile ? "30px" : "40px"}
-                      minW="30px"
                       overflow="hidden"
                       transition="all 0.3s"
                       _hover={{
@@ -380,6 +377,7 @@ export const Home = ({ homepage }: { homepage: any }) => {
               <Box>
                 <chakra.h1
                   className="highlight"
+                  id="highlights"
                   color="cm.text"
                   mt="0.5em"
                   px="20px"
@@ -392,6 +390,9 @@ export const Home = ({ homepage }: { homepage: any }) => {
 
                 <Box
                   overflowY={isMobile ? "auto" : "hidden"}
+                  tabIndex={isMobile ? 0 : undefined}
+                  role="group"
+                  aria-labelledby="highlights"
                   w="100%"
                   pl="20px"
                   pb="20px"

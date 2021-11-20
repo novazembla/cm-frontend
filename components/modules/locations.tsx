@@ -751,7 +751,10 @@ export const ModuleComponentLocations = ({ ...props }) => {
                   >
                     <AccordionItem>
                       <h2>
-                        <AccordionButton pt="0">
+                        <AccordionButton
+                          pt="0"
+                          className="tabbedFocus"
+                        >
                           <Box
                             flex="1"
                             textAlign="left"
@@ -788,7 +791,7 @@ export const ModuleComponentLocations = ({ ...props }) => {
                     {activeTermsToI?.length > 0 && (
                       <AccordionItem>
                         <h2>
-                          <AccordionButton pt="0">
+                          <AccordionButton pt="0" className="tabbedFocus">
                             <Box
                               flex="1"
                               textAlign="left"
@@ -831,7 +834,7 @@ export const ModuleComponentLocations = ({ ...props }) => {
                     {activeTermsTA?.length > 0 && (
                       <AccordionItem>
                         <h2>
-                          <AccordionButton pt="0">
+                          <AccordionButton pt="0" className="tabbedFocus">
                             <Box
                               flex="1"
                               textAlign="left"
@@ -874,7 +877,7 @@ export const ModuleComponentLocations = ({ ...props }) => {
                     {activeTermsToO?.length > 0 && (
                       <AccordionItem>
                         <h2>
-                          <AccordionButton pt="0">
+                          <AccordionButton pt="0" className="tabbedFocus">
                             <Box
                               flex="1"
                               textAlign="left"
@@ -917,7 +920,7 @@ export const ModuleComponentLocations = ({ ...props }) => {
 
                     <AccordionItem>
                       <h2>
-                        <AccordionButton pt="0">
+                        <AccordionButton pt="0" className="tabbedFocus">
                           <Box
                             flex="1"
                             textAlign="left"

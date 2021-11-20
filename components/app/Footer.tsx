@@ -64,15 +64,24 @@ export const Footer = ({
             mb="1.5"
             variant="unstyled"
             aria-label={t("menu.button.backToTop", "Back to top")}
-            icon={<SVG type="arrow-up" width={isMobile ? "17px": "22px"} height={isMobile ? "30px": "40px"} />}
+            icon={
+              <SVG
+                type="arrow-up"
+                width={isMobile ? "17px" : "22px"}
+                height={isMobile ? "30px" : "40px"}
+              />
+            }
             borderRadius="0"
             p="0"
-            className="svgHover"
+            className="svgHover tabbedFocus"
             paddingInlineStart="0"
             paddingInlineEnd="0"
-            h="30px"
+            h="40px"
+            w="20px"
+            minW="20px"
             padding="0"
             bg="transparent"
+            
             onClick={() => {
               if (window) {
                 // TODO: this should also work for the maincontent!

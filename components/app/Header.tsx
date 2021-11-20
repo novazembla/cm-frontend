@@ -136,9 +136,6 @@ export const Header = (/* props */) => {
             ))}
           </Box>
         )}
-        <chakra.a href="#content">
-
-        </chakra.a>
         <Flex
           w={{
             base: "40px",
@@ -163,14 +160,14 @@ export const Header = (/* props */) => {
                       w="40px"
                       h="40px"
                       zIndex={isQuickSearchOpen ? 2 : 1}
-                      overflow="hidden"
+                      
                     >
                       <IconButton
-                        aria-label={t("menu.button.openSearch", "Open search")}
+                        aria-label={t("menu.button.closeSearch", "Close search")}
                         icon={<SVG type="cross" width="80px" height="80px" />}
                         borderRadius="0"
                         p="0"
-                        className="svgHover"
+                        className="svgHover tabbedFocus"
                         paddingInlineStart="0"
                         paddingInlineEnd="0"
                         padding="0"
@@ -182,12 +179,17 @@ export const Header = (/* props */) => {
                           onQuickSearchToggle();
                         }}
                         pointerEvents={isQuickSearchOpen ? undefined : "none"}
+                        tabIndex={isQuickSearchOpen ? undefined : -1}
                         transition="all 0.3s"
                         _hover={{
                           bg: "transparent",
                         }}
                         _active={{
                           bg: "transparent",
+                        }}
+                        _focus={{
+                          bg: "transparent",
+                          boxShadow: "none",
                         }}
                       />
                     </Box>
@@ -204,14 +206,13 @@ export const Header = (/* props */) => {
                       h="40px"
                       zIndex={isQuickSearchOpen ? 1 : 2}
                       initial={{ opacity: 1 }}
-                      overflow="hidden"
                     >
                       <IconButton
-                        aria-label={t("menu.button.closeSearch", "Close search")}
+                        aria-label={t("menu.button.openSearch", "Open search")}
                         icon={<SVG type="search" width="64px" height="62px" />}
                         borderRadius="0"
                         p="0"
-                        className="svgHover"
+                        className="svgHover tabbedFocus"
                         paddingInlineStart="0"
                         paddingInlineEnd="0"
                         padding="0"
@@ -226,12 +227,17 @@ export const Header = (/* props */) => {
                           onQuickSearchToggle();
                         }}
                         pointerEvents={isQuickSearchOpen ? "none" : undefined}
+                        tabIndex={isQuickSearchOpen ? -1 : undefined}
                         transition="all 0.3s"
                         _hover={{
                           bg: "transparent",
                         }}
                         _active={{
                           bg: "transparent",
+                        }}
+                        _focus={{
+                          bg: "transparent",
+                          boxShadow: "none",
                         }}
                       />
                     </Box>
@@ -253,11 +259,11 @@ export const Header = (/* props */) => {
                     zIndex={isMenuOpen ? 2 : 1}
                   >
                     <IconButton
-                      aria-label={t("menu.button.toggleSearch", "Search")}
+                      aria-label={t("menu.button.closeMenu", "Close menu")}
                       icon={<SVG type="cross" width="80px" height="80px" />}
                       borderRadius="0"
                       p="0"
-                      className="svgHover"
+                      className="svgHover tabbedFocus"
                       paddingInlineStart="0"
                       paddingInlineEnd="0"
                       padding="0"
@@ -268,12 +274,17 @@ export const Header = (/* props */) => {
                         onMenuToggle();
                       }}
                       pointerEvents={isMenuOpen ? undefined : "none"}
+                      tabIndex={isMenuOpen ? undefined : -1}
                       transition="all 0.3s"
                       _hover={{
                         bg: "transparent",
                       }}
                       _active={{
                         bg: "transparent",
+                      }}
+                      _focus={{
+                        bg: "transparent",
+                        boxShadow: "none",
                       }}
                     />
                   </Box>
@@ -292,13 +303,13 @@ export const Header = (/* props */) => {
                     zIndex={isMenuOpen ? 1 : 2}
                   >
                     <IconButton
-                      aria-label={t("menu.button.toggleSearch", "Search")}
+                      aria-label={t("menu.button.openMenu", "Open menu")}
                       icon={
                         <SVG type="menu-tablet" width="30px" height="30px" />
                       }
                       borderRadius="0"
                       p="0"
-                      className="svgHover"
+                      className="svgHover tabbedFocus"
                       paddingInlineStart="0"
                       paddingInlineEnd="0"
                       padding="0"
@@ -312,12 +323,17 @@ export const Header = (/* props */) => {
                         onMenuToggle();
                       }}
                       pointerEvents={isMenuOpen ? "none" : undefined}
+                      tabIndex={isMenuOpen ?  -1 : undefined}
                       transition="all 0.3s"
                       _hover={{
                         bg: "transparent",
                       }}
                       _active={{
                         bg: "transparent",
+                      }}
+                      _focus={{
+                        bg: "transparent",
+                        boxShadow: "none",
                       }}
                     />
                   </Box>

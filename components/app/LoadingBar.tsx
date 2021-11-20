@@ -32,7 +32,7 @@ export const LoadingBar = ({
     mainContentOpen();
     setBarVisible(true);
     if (typeof document !== "undefined") {
-      document.body.setAttribute('tabIndex', '-1');
+      document.body.setAttribute('tabindex', '-1');
     }
   }, [onMenuClose, scrollState, onQuickSearchClose, mainContentOpen]);
 
@@ -42,7 +42,7 @@ export const LoadingBar = ({
     scrollState.setIsBack(false);
     scrollState.setCurrentPath(Router.asPath);
     if (typeof document !== "undefined") {
-      document.body.removeAttribute('tabIndex');
+      document.body.removeAttribute('tabindex');
       document.body.classList.remove('tabbed');
       document.body.focus();
     }
@@ -65,6 +65,7 @@ export const LoadingBar = ({
 
     if (typeof document !== "undefined") {
       document.body.addEventListener('keyup', tabPressed);
+      document.addEventListener('keyup', function() {console.log(document.activeElement)}) // TODO: remove
     }
 
     return () => {

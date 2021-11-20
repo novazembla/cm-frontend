@@ -3,4 +3,3 @@
 - default seo image
 - wording suggest form
 - cookie popup
-- my location point

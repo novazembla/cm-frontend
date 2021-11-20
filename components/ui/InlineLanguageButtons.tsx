@@ -7,7 +7,7 @@ import { useAppTranslations } from "~/hooks";
 
 export const InlineLanguageButtons = () => {
   const config = useConfigContext();
-  const { i18n } = useAppTranslations();
+  const { i18n , t} = useAppTranslations();
 
   const router = useRouter();
 
@@ -19,21 +19,24 @@ export const InlineLanguageButtons = () => {
             if (lang === i18n.language) return acc;
 
             acc.push(
-              <NextLink
-                key={lang}
-                href={router.asPath}
-                locale={lang}
-                passHref
-              >
+              <NextLink key={lang} href={router.asPath} locale={lang} passHref>
                 <Link
                   textTransform="uppercase"
                   color="cm.accentLight"
                   textStyle="navigation"
                   textDecoration="none !important"
                   _hover={{ color: "cm.accentDark" }}
-                  _focus={{
-                    
-                  }}
+                  title={
+                    i18n.language === "de"
+                      ? t(
+                          "language.changeToEnglish",
+                          "Change to English version"
+                        )
+                      : t(
+                          "language.changeToGerman",
+                          "Zur deutschen Version wechseln"
+                        )
+                  }
                 >
                   {lang}
                 </Link>

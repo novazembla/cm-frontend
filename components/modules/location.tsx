@@ -270,7 +270,7 @@ export const ModuleComponentLocation = ({
   return (
     <MainContent layerStyle="lightGray">
       <NextHeadSeo
-        canonical={`${
+        canonical={`${config.baseUrl}${
           i18n.language === "en" ? "/en" : ""
         }/tour/${getMultilangValue(location?.slug)}`}
         title={`${getMultilangValue(location?.title)} - ${getSeoAppTitle(t)}`}

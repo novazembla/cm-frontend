@@ -5,7 +5,7 @@ import { Footer, MainContent } from "~/components/app";
 import { getApolloClient } from "~/services";
 import { Box, Text, chakra, Grid } from "@chakra-ui/react";
 import { GetStaticPaths, GetStaticProps } from "next";
-import { useMapContext } from "~/provider";
+import { useConfigContext, useMapContext } from "~/provider";
 import { useRouter } from "next/router";
 import { getSeoAppTitle, getSeoImage } from "~/utils";
 import NextHeadSeo from "next-head-seo";
@@ -34,6 +34,7 @@ const pageQuery = gql`
 export const ModuleComponentPage = ({ page }: { page: any }) => {
   const router = useRouter();
   const cultureMap = useMapContext();
+  const config = useConfigContext();
   const { getMultilangValue, i18n, t } = useAppTranslations();
   useEffect(() => {
     if (cultureMap) cultureMap.showCurrentView();
@@ -42,7 +43,7 @@ export const ModuleComponentPage = ({ page }: { page: any }) => {
   return (
     <MainContent isDrawer layerStyle="pageBg">
       <NextHeadSeo
-        canonical={`${i18n.language === "en" ? "/en" : ""}/${getMultilangValue(
+        canonical={`${config.baseUrl}${i18n.language === "en" ? "/en" : ""}/${getMultilangValue(
           page?.slug
         )}`}
         title={`${getMultilangValue(page?.title)} - ${getSeoAppTitle(t)}`}

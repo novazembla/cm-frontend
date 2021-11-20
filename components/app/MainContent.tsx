@@ -1,3 +1,4 @@
+
 import { useState, useRef, useCallback, useEffect } from "react";
 import { Box, IconButton, useBreakpointValue, chakra } from "@chakra-ui/react";
 import { useAppTranslations, useIsBreakPoint } from "~/hooks";
@@ -44,13 +45,12 @@ export const MainContent = ({
     useMainContentContext();
 
   const router = useRouter();
-  const { isMobile, isTabletWide, isDesktopAndUp } =
-    useIsBreakPoint();
+  const { isMobile, isTabletWide, isDesktopAndUp } = useIsBreakPoint();
 
   const [dragLeft, setDragLeft] = useState(0);
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(true);
-  
+
   const [eventListenerAdded, setEventListenerAdded] = useState(false);
 
   const controls = useAnimation();
@@ -302,12 +302,16 @@ export const MainContent = ({
                 _active={{
                   bg: "transparent",
                 }}
+                _focus={{
+                  bg: "#999",
+                }}
                 aria-label={toggleLabel}
                 icon={<SVG type="large_chevron" width="24px" height="24px" />}
                 p="0"
                 color="cm.accentLight"
                 onClick={toggle}
                 transform={isDrawerOpen ? "rotate(180deg)" : "rotate(0deg)"}
+                tabIndex={isMenuOpen || isQuickSearchOpen ? -1 : undefined}
               />
             </Box>
           </Box>
@@ -412,7 +416,6 @@ export const MainContent = ({
           }
         >
           <Box
-            
             className="content"
             pt={isVerticalContent ? 0 : contentPaddingTop}
             h="100%"
@@ -427,7 +430,7 @@ export const MainContent = ({
                     ? undefined
                     : "calc(100vh - 60px)"
                   : "calc(100vh - 80px)"
-              }                          
+              }
             >
               {children}
             </chakra.main>

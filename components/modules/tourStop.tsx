@@ -144,7 +144,7 @@ export const ModuleComponentTourStop = ({
   return (
     <MainContent layerStyle="lightGray">
       <NextHeadSeo
-        canonical={`${
+        canonical={`${config.baseUrl}${
           i18n.language === "en" ? "/en" : ""
         }/tour/${getMultilangValue(tour?.slug)}/${tourStop?.number}`}
         title={`${tourStop?.number} - ${getMultilangValue(
