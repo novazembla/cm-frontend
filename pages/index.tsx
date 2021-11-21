@@ -76,7 +76,7 @@ export const Home = ({ homepage }: { homepage: any }) => {
     if (
       !highlightsRef.current ||
       !highlightsCardsContainerRef.current ||
-      !containersRef.current || 
+      !containersRef.current ||
       !footerRef?.current
     )
       return;
@@ -280,8 +280,11 @@ export const Home = ({ homepage }: { homepage: any }) => {
               top="60px"
               zIndex="2"
             >
-              <Box px={!isMobile ? "10px":0}>
-                <Box textStyle={!isMobile?"larger":undefined} className={isMobile ? "clampThreeLines" : undefined}>
+              <Box px={!isMobile ? "10px" : 0}>
+                <Box
+                  textStyle={!isMobile ? "larger" : undefined}
+                  className={isMobile ? "clampThreeLines" : undefined}
+                >
                   <b>
                     <MultiLangHtml json={homepage?.missionStatement} />
                   </b>
@@ -312,17 +315,18 @@ export const Home = ({ homepage }: { homepage: any }) => {
                           "mission.statement.read",
                           "read mission statement"
                         )}
-                      ><SVG
-                      type="arrow-right"
-                      width={isMobile ? "30px" : "40px"}
-                      height={isMobile ? "17px" : "22px"}
-                    /></chakra.a>
+                      >
+                        <SVG
+                          type="arrow-right"
+                          width={isMobile ? "30px" : "40px"}
+                          height={isMobile ? "17px" : "22px"}
+                        />
+                      </chakra.a>
                     </NextLink>
                   )}
                   {isMobile && (
                     <IconButton
                       icon={<SVG type="cross" width="200%" height="200%" />}
-                      
                       w={isMobile ? "30px" : "40px"}
                       h={isMobile ? "30px" : "40px"}
                       minW="30px"
@@ -390,6 +394,11 @@ export const Home = ({ homepage }: { homepage: any }) => {
 
                 <Box
                   overflowY={isMobile ? "auto" : "hidden"}
+                  sx={{
+                    scrollSnapType: "x mandatory",
+
+                    scrollBehavior: "smooth",
+                  }}
                   tabIndex={isMobile ? 0 : undefined}
                   role="group"
                   aria-labelledby="highlights"

@@ -29,7 +29,7 @@ import {
   FormNavigationBlock,
   FieldImageUploader,
 } from "~/components/forms";
-import { useSettingsContext, useMapContext } from "~/provider";
+import { useSettingsContext, useMapContext, useConfigContext } from "~/provider";
 import { pick } from "lodash";
 import { useRouter } from "next/router";
 
@@ -87,6 +87,8 @@ export const locationCreateMutationGQL = gql`
 export const ModuleComponentSuggest = () => {
   const { t, i18n, getMultilangValue } = useAppTranslations();
 
+  const config = useConfigContext();
+  
   const { isMobile } = useIsBreakPoint();
 
   const [hasFormError, setHasFormError] = useState(false);

@@ -2,12 +2,13 @@
   "menu": {
     "button": {
       "backToTop": "Back to top",
-      "togggleSearch": "Search",
-      "toggleSearch": "Search",
+      "closeSearch": "Close search",
+      "openSearch": "Open search",
+      "closeMenu": "Close menu",
+      "openMenu": "Open menu",
       "zoomIntoMap": "Zoom in",
       "zoomOutOfMap": "Zoom out",
       "findMyLocation": "Find my location",
-      "toggleMenu": "Menu",
       "suggestLocation": "Suggest a new location"
     },
     "title": "Menu"
@@ -15,6 +16,9 @@
   "logo": {
     "culturemap1": "CULTUREMAP",
     "culturemap2": "Lichtenberg"
+  },
+  "header": {
+    "skipToContent": "Skip to content"
   },
   "mainContent": {
     "slideToLeft": "Hide content",
@@ -37,6 +41,12 @@
         "singPage": "page"
       }
     }
+  },
+  "trackingPopup": {
+    "title": "Usage statistics",
+    "desc": "To be able to improve our services we'd like to anonymously record the individual pages you're visiting.",
+    "buttonNo": "No, thanks",
+    "buttonYes": "Okay"
   },
   "imageuploader": {
     "filesizebetween": "Size between {{minFileSize}} and {{maxFileSize}}",
@@ -115,6 +125,26 @@
     },
     "loadMore": "Load more events"
   },
+  "locations": {
+    "title": "Map",
+    "totalCount": "{{count}} Kartenpunkt gefunden",
+    "totalCount_plural": "{{count}} Kartenpunkte gefunden",
+    "totalCountPlural": "{{count}} Kartenpunkte gefunden",
+    "totalCountPlural_plural": "{{count}} Kartenpunkte gefunden",
+    "filter": {
+      "title": {
+        "keyword": "Search by keyword",
+        "typeOfInstitution": "Type of institution",
+        "targetAudience": "Target audience",
+        "typeOfOrganisation": "Type of organisation",
+        "settings": "Other settings"
+      },
+      "andRelationship": "Locations must match all the given terms",
+      "clusterResult": "Cluster result on map"
+    },
+    "loadMore": "Load more locations",
+    "totalCount_plural_plural": "{{count}} locations found"
+  },
   "page": {
     "title": "Events"
   },
@@ -145,26 +175,6 @@
       "targetAudience": "Target Audience",
       "typeOfOrganisation": "Type of Organisation"
     }
-  },
-  "locations": {
-    "totalCount": "{{count}} Kartenpunkt gefunden",
-    "totalCount_plural": "{{count}} Kartenpunkte gefunden",
-    "totalCountPlural": "{{count}} Kartenpunkte gefunden",
-    "totalCountPlural_plural": "{{count}} Kartenpunkte gefunden",
-    "title": "Map",
-    "filter": {
-      "title": {
-        "keyword": "Search by keyword",
-        "typeOfInstitution": "Type of institution",
-        "targetAudience": "Target audience",
-        "typeOfOrganisation": "Type of organisation",
-        "settings": "Other settings"
-      },
-      "andRelationship": "Locations must match all the given terms",
-      "clusterResult": "Cluster result on map"
-    },
-    "loadMore": "Load more locations",
-    "totalCount_plural_plural": "{{count}} locations found"
   },
   "validation": {
     "error": {
@@ -354,6 +364,10 @@
     "pleaseReloadInAFewMoments": "Please try again",
     "internalServerError": "Oops, an error happened on our server",
     "pleasetryagain": "Please try again"
+  },
+  "language": {
+    "changeToEnglish": "Change to English version",
+    "changeToGerman": "Zur deutschen Version wechseln"
   },
   "translation": {
     "comingSoon": "Please bear with us. We are working on the English translation."

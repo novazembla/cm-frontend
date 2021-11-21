@@ -32,7 +32,7 @@ export const LoadingBar = ({
     mainContentOpen();
     setBarVisible(true);
     if (typeof document !== "undefined") {
-      document.body.setAttribute('tabindex', '-1');
+      document.body.setAttribute("tabindex", "-1");
     }
   }, [onMenuClose, scrollState, onQuickSearchClose, mainContentOpen]);
 
@@ -42,17 +42,17 @@ export const LoadingBar = ({
     scrollState.setIsBack(false);
     scrollState.setCurrentPath(Router.asPath);
     if (typeof document !== "undefined") {
-      document.body.removeAttribute('tabindex');
-      document.body.classList.remove('tabbed');
+      document.body.removeAttribute("tabindex");
+      document.body.classList.remove("tabbed");
       document.body.focus();
     }
   }, [setMainContentStatus, scrollState]);
 
   const tabPressed = (e: KeyboardEvent) => {
     if (e.key === "Tab") {
-      document.body.classList.add('tabbed');
+      document.body.classList.add("tabbed");
     }
-  }
+  };
 
   useEffect(() => {
     router.beforePopState(() => {
@@ -64,8 +64,7 @@ export const LoadingBar = ({
     router.events.on("routeChangeError", hideBar);
 
     if (typeof document !== "undefined") {
-      document.body.addEventListener('keyup', tabPressed);
-      document.addEventListener('keyup', function() {console.log(document.activeElement)}) // TODO: remove
+      document.body.addEventListener("keyup", tabPressed);
     }
 
     return () => {
@@ -74,7 +73,7 @@ export const LoadingBar = ({
       router.events.off("routeChangeError", hideBar);
 
       if (typeof document !== "undefined") {
-        document.body.removeEventListener('keyup', tabPressed);
+        document.body.removeEventListener("keyup", tabPressed);
       }
     };
 

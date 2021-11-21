@@ -2,12 +2,13 @@
   "menu": {
     "button": {
       "backToTop": "Nach oben",
-      "togggleSearch": "Suche",
-      "toggleSearch": "Search",
+      "closeSearch": "Suchfenster schließen",
+      "openSearch": "Suchfenster öffnen",
+      "closeMenu": "Menü aneigen",
+      "openMenu": "Menü schließen",
       "zoomIntoMap": "Karte vergrößern",
       "zoomOutOfMap": "Karte verkleinern",
       "findMyLocation": "Mein Standort anzeigen",
-      "toggleMenu": "Menü",
       "suggestLocation": "Kartenpunktvorschlag"
     },
     "title": "Menü"
@@ -15,6 +16,9 @@
   "logo": {
     "culturemap1": "KULTURKARTE",
     "culturemap2": "Lichtenberg"
+  },
+  "header": {
+    "skipToContent": "Zum Inhalt springen"
   },
   "mainContent": {
     "slideToLeft": "Hauptinhalt ausblenden",
@@ -37,6 +41,12 @@
         "singPage": "Seite"
       }
     }
+  },
+  "trackingPopup": {
+    "title": "Nutzungsverlauf",
+    "desc": "Um unser Angebot kontinuierlich verbessern zu können würden wir gerne die einzelnen Seiten die Sie besuchen aufzeichnen.",
+    "buttonNo": "Nein, danke",
+    "buttonYes": "Ja, gerne"
   },
   "imageuploader": {
     "filesizebetween": "Dateigrösse zwischen {{minFileSize}} und {{maxFileSize}}",
@@ -115,6 +125,26 @@
     },
     "loadMore": "Weitere Veranstaltungen anzeigen"
   },
+  "locations": {
+    "title": "Kulturkarte",
+    "totalCount": "{{count}} Kartenpunkt gefunden",
+    "totalCount_plural": "{{count}} Kartenpunkte gefunden",
+    "totalCountPlural": "{{count}} Kartenpunkte gefunden",
+    "totalCountPlural_plural": "{{count}} Kartenpunkte gefunden",
+    "filter": {
+      "title": {
+        "keyword": "Nach Stichwort suchen",
+        "typeOfInstitution": "Einrichtungsart",
+        "targetAudience": "Zielgruppe",
+        "typeOfOrganisation": "Organisationsart",
+        "settings": "Weitere Einstellungen"
+      },
+      "andRelationship": "Alle gewählten Begriffe müssen zugewiesen sein",
+      "clusterResult": "Naheliegende Kartenpunkte Grupieren"
+    },
+    "loadMore": "Weitere Kartenpunkte laden",
+    "totalCount_plural_plural": "{{count}} Kartenpunkte gefunden"
+  },
   "page": {
     "title": "Veranstaltungen"
   },
@@ -145,26 +175,6 @@
       "targetAudience": "Zielgruppe",
       "typeOfOrganisation": "Trägerart"
     }
-  },
-  "locations": {
-    "totalCount": "{{count}} Kartenpunkt gefunden",
-    "totalCount_plural": "{{count}} Kartenpunkte gefunden",
-    "totalCountPlural": "{{count}} Kartenpunkte gefunden",
-    "totalCountPlural_plural": "{{count}} Kartenpunkte gefunden",
-    "title": "Kulturkarte",
-    "filter": {
-      "title": {
-        "keyword": "Nach Stichwort suchen",
-        "typeOfInstitution": "Einrichtungsart",
-        "targetAudience": "Zielgruppe",
-        "typeOfOrganisation": "Organisationsart",
-        "settings": "Weitere Einstellungen"
-      },
-      "andRelationship": "Alle gewählten Begriffe müssen zugewiesen sein",
-      "clusterResult": "Naheliegende Kartenpunkte Grupieren"
-    },
-    "loadMore": "Weitere Kartenpunkte laden",
-    "totalCount_plural_plural": "{{count}} Kartenpunkte gefunden"
   },
   "validation": {
     "error": {
@@ -354,6 +364,10 @@
     "pleaseReloadInAFewMoments": "Leider konnten wir die angforderte Seite nicht laden. Bitte versuchen Sie es zu einem späteren Zeitpunkt wieder.",
     "internalServerError": "Ein interner Fehler verhindert leider die Darstellung dieses Inhaltes",
     "pleasetryagain": "Leider konnten wir den von Ihnen angeforderten Inhalt nicht darstellen. Bitte versuchen Sie es erneut."
+  },
+  "language": {
+    "changeToEnglish": "Change to English version",
+    "changeToGerman": "Zur deutschen Version wechseln"
   },
   "translation": {
     "comingSoon": "Wir arbeiten an der deutschen Übersetzung."

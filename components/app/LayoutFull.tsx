@@ -12,7 +12,7 @@ import NextHeadSeo from "next-head-seo";
 
 import { chakra } from "@chakra-ui/react";
 
-// TODO: SEO Tags, inclusive featured image/cards ...
+import { UserTracking } from ".";
 
 export const LayoutFull = ({ children }: AppProps) => {
   const settings = useSettingsContext();
@@ -34,6 +34,10 @@ export const LayoutFull = ({ children }: AppProps) => {
         document.documentElement.style.setProperty(
           "--chakra-colors-blur-blurredGray",
           "rgba(180,180,180,0.95)"
+        );
+        document.documentElement.style.setProperty(
+          "--chakra-colors-blur-blurredWhite",
+          "rgba(255,255,255,0.95)"
         );
       }
 
@@ -83,6 +87,7 @@ export const LayoutFull = ({ children }: AppProps) => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="theme-color" content="#fff" />
       </Head>
+      <UserTracking />
       <NextHeadSeo
         title={`${t("logo.culturemap1", "CULTUREMAP")} ${t(
           "logo.culturemap2",

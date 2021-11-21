@@ -107,4 +107,6 @@ export const appConfig: AppConfig = {
     main: appConfigMainNav,
     footer: appConfigFooterNav,
   },
+  umamiId: "4d9a4d52-7c60-49dc-b531-1ff7d7c8147c",
+  umamiUrl: "https://umami.bzl.hs-example.de/umami.js",
 };

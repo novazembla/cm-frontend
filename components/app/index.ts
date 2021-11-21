@@ -8,3 +8,4 @@ export * from "./MobileNav";
 export * from "./QuickSearch";
 export * from "./Logo";
 export * from "./MainContent";
+export * from "./UserTracking";

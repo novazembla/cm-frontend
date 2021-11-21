@@ -89,7 +89,12 @@
   },
   "menu": {
     "close": "Menü schließen",
-    "open": "Menü öffnen"
+    "open": "Menü öffnen",
+    "button": {
+      "togggleSearch": "Suche",
+      "toggleSearch": "Search",
+      "toggleMenu": "Menü"
+    }
   },
   "header": {
     "logo": "Kulturkarte Lichtenberg"

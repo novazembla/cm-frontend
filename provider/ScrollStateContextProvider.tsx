@@ -8,8 +8,6 @@ import React, {
 
 type ScrollContextScopes = "body" | "main" | "vertical";
 
-
-
 export type ScrollContext = {
   get: (scope: ScrollContextScopes, key: string) => number;
   set: (scope: ScrollContextScopes, key: string, x: number) => void;
@@ -71,37 +69,27 @@ export const ScrollStateContextProvider = ({
     []
   );
 
-  const setIsBack = useCallback(
-    (state: boolean) => {
-      refIsBack.current = state;
-    },
-    []
-  );
+  const setIsBack = useCallback((state: boolean) => {
+    refIsBack.current = state;
+  }, []);
 
-  const setWasBack = useCallback(
-    (state: boolean) => {
-      refWasBack.current = state;
-    },
-    []
-  );
+  const setWasBack = useCallback((state: boolean) => {
+    refWasBack.current = state;
+  }, []);
 
-  const isBack = useCallback(
-    () => {
-      return refIsBack.current;
-    },
-    []
-  );
+  const isBack = useCallback(() => {
+    return refIsBack.current;
+  }, []);
 
-  const wasBack = useCallback(
-    () => {
-      return refWasBack.current;
-    },
-    []
-  );
+  const wasBack = useCallback(() => {
+    return refWasBack.current;
+  }, []);
 
   const setCurrentPath = useCallback((path: string) => {
-    previousPathInMemory.current = `${currentPathInMemory.current}`;
-    currentPathInMemory.current = `${path}`;
+    if (path && currentPathInMemory.current !== path) {
+      previousPathInMemory.current = `${currentPathInMemory.current}`;
+      currentPathInMemory.current = `${path}`;
+    }
   }, []);
 
   const getPreviousPath = useCallback(() => previousPathInMemory.current, []);

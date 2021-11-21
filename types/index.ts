@@ -19,6 +19,8 @@ export interface AppConfig {
   defaultLanguage: string;
   activeLanguages: string[];
   nav: Record<string, any[]>;
+  umamiId: string;
+  umamiUrl: string;
 }
 
 export interface MapPin {

@@ -89,7 +89,12 @@
   },
   "menu": {
     "close": "Close menu",
-    "open": "Open menu"
+    "open": "Open menu",
+    "button": {
+      "togggleSearch": "Search",
+      "toggleSearch": "Search",
+      "toggleMenu": "Menu"
+    }
   },
   "header": {
     "logo": "CultureMap Lichtenberg"
