@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, UIEvent } from "react";
+import { useEffect, useState, useRef, UIEvent, useCallback } from "react";
 
 import { GetStaticProps } from "next";
 import NextLink from "next/link";
@@ -59,7 +59,6 @@ export const Home = ({ homepage }: { homepage: any }) => {
   const containersRef = useRef<any>(null);
   const parsedHighlightsRef = useRef<any>(null);
   const currentHightlightIndexRef = useRef<number>(0);
-  const highlightsRef = useRef<HTMLDivElement>(null);
   const footerRef = useRef<HTMLDivElement>(null);
   const highlightsCardsContainerRef = useRef<HTMLDivElement>(null);
 
@@ -72,9 +71,8 @@ export const Home = ({ homepage }: { homepage: any }) => {
     ? { flexBasis: "295px", minW: "295px", maxW: "295px" }
     : {};
 
-  const onResize = debounce(() => {
+  const onResize = useCallback(() => {
     if (
-      !highlightsRef.current ||
       !highlightsCardsContainerRef.current ||
       !containersRef.current ||
       !footerRef?.current
@@ -88,18 +86,25 @@ export const Home = ({ homepage }: { homepage: any }) => {
 
     if (isMobile) {
       if (containersRef.current?.length) {
-        highlightsCardsContainerRef.current.style.width = `${
-          containersRef.current?.length * (MOBILE_CARD_WIDTH + 20) +
+        containersRef.current[
+          containersRef.current?.length - 1
+        ].style.marginRight = "";
+
+        containersRef.current[
+          containersRef.current?.length - 1
+        ].style.marginRight = `${
           window.innerWidth -
-          (MOBILE_CARD_WIDTH * 1.05 + 40)
+          containersRef.current[containersRef.current?.length - 1].offsetWidth -
+          20
         }px`;
-      } else {
-        highlightsCardsContainerRef.current.style.width = "";
       }
       highlightsCardsContainerRef.current.style.paddingBottom = "";
     } else {
       if (containersRef.current?.length) {
         highlightsCardsContainerRef.current.style.paddingBottom = "";
+        containersRef.current[
+          containersRef.current?.length - 1
+        ].style.marginRight = "";
         const pB = Math.max(
           0,
           5 +
@@ -117,15 +122,13 @@ export const Home = ({ homepage }: { homepage: any }) => {
       } else {
         highlightsCardsContainerRef.current.style.paddingBottom = "";
       }
-
-      highlightsCardsContainerRef.current.style.width = "";
     }
-  }, 350);
+  }, []);
+  const onResizeDebounced = debounce(onResize, 350);
 
   const onScroll = () => {
     if (
       isMobileRef.current ||
-      !highlightsRef.current ||
       !highlightsCardsContainerRef.current ||
       !containersRef.current ||
       !cultureMap ||
@@ -172,17 +175,16 @@ export const Home = ({ homepage }: { homepage: any }) => {
     containersRef.current =
       highlightsCardsContainerRef.current.querySelectorAll(".cardContainer");
 
-    window.addEventListener("resize", onResize);
+    window.addEventListener("resize", onResizeDebounced);
     window.addEventListener("scroll", onScroll);
     onResize();
     onScroll();
     document.addEventListener("DOMContentLoaded", onResize);
-
-    setTimeout(onResize, 100);
+    setTimeout(onResize, 350);
 
     return () => {
       if (typeof window === "undefined") return;
-      window.removeEventListener("resize", onResize);
+      window.removeEventListener("resize", onResizeDebounced);
       window.removeEventListener("scroll", onScroll);
     };
 
@@ -332,7 +334,11 @@ export const Home = ({ homepage }: { homepage: any }) => {
                       minW="30px"
                       borderRadius="0"
                       p="0"
-                      className="svgHover"
+                      className="svgHover tabbedFocus"
+                      _focus={{
+                        bg: "transparent",
+                        boxShadow: "none",
+                      }}
                       paddingInlineStart="0"
                       paddingInlineEnd="0"
                       padding="0"
@@ -393,60 +399,54 @@ export const Home = ({ homepage }: { homepage: any }) => {
                 </chakra.h1>
 
                 <Box
-                  overflowY={isMobile ? "auto" : "hidden"}
-                  sx={{
-                    scrollSnapType: "x mandatory",
-
-                    scrollBehavior: "smooth",
-                  }}
-                  tabIndex={isMobile ? 0 : undefined}
-                  role="group"
-                  aria-labelledby="highlights"
                   w="100%"
-                  pl="20px"
+                  pl={isMobile ? "0px" : "20px"}
                   pb="20px"
                   mb={isMobile ? "40px" : "0px"}
-                  ref={highlightsRef}
-                  onScroll={
-                    isMobile
-                      ? (e: UIEvent<HTMLDivElement>) => {
-                          if (highlights?.length && cultureMap) {
-                            const scrollLeft = (e.target as any).scrollLeft;
-                            let newIndex = Math.floor(
-                              (scrollLeft + (MOBILE_CARD_WIDTH + 20) * 0.25) /
-                                (MOBILE_CARD_WIDTH + 20)
-                            );
-
-                            if (
-                              currentHightlightIndex !== newIndex &&
-                              parsedHighlightsRef.current?.[newIndex]
-                            ) {
-                              cultureMap.panTo(
-                                parsedHighlightsRef.current[newIndex].lng,
-                                parsedHighlightsRef.current[newIndex].lat,
-                                !isMobile,
-                                isMobile && !isMSOpen
-                              );
-                              setCurrentHightlightIndex(newIndex);
-                            }
-                          }
-                        }
-                      : undefined
-                  }
                 >
                   <Flex
-                    flexDirection={isMobile ? "row" : "column"}
                     className="cardsContainer"
-                    sx={{
-                      "@media (max-width: 44.9999em)": {
-                        flexDirection: "row",
-                      },
-                      "@media (min-width: 45em)": {
-                        flexDirection: "column",
-                        overflowY: "hidden",
-                      },
+                    flexDirection={{
+                      base: "row",
+                      md: "column",
                     }}
+                    sx={{
+                      scrollSnapType: "x mandatory",
+
+                      scrollBehavior: "smooth",
+                    }}
+                    w="100%"
+                    tabIndex={isMobile ? 0 : undefined}
+                    role="group"
+                    aria-labelledby="highlights"
+                    overflowY={isMobile ? "auto" : "hidden"}
                     ref={highlightsCardsContainerRef}
+                    onScroll={
+                      isMobile
+                        ? (e: UIEvent<HTMLDivElement>) => {
+                            if (highlights?.length && cultureMap) {
+                              const scrollLeft = (e.target as any).scrollLeft;
+                              let newIndex = Math.floor(
+                                (scrollLeft + (MOBILE_CARD_WIDTH + 20) * 0.25) /
+                                  (MOBILE_CARD_WIDTH + 20)
+                              );
+
+                              if (
+                                currentHightlightIndex !== newIndex &&
+                                parsedHighlightsRef.current?.[newIndex]
+                              ) {
+                                cultureMap.panTo(
+                                  parsedHighlightsRef.current[newIndex].lng,
+                                  parsedHighlightsRef.current[newIndex].lat,
+                                  !isMobile,
+                                  isMobile && !isMSOpen
+                                );
+                                setCurrentHightlightIndex(newIndex);
+                              }
+                            }
+                          }
+                        : undefined
+                    }
                   >
                     {homepage?.highlights.map((h: any) => {
                       if (h.type === "location") {
@@ -454,7 +454,6 @@ export const Home = ({ homepage }: { homepage: any }) => {
                           <Box
                             key={`hb-${h.id}`}
                             {...mobileCardWrapper}
-                            pr="20px"
                             className="cardContainer"
                           >
                             <CardLocation
@@ -469,7 +468,6 @@ export const Home = ({ homepage }: { homepage: any }) => {
                           <Box
                             key={`hb-${h.id}`}
                             {...mobileCardWrapper}
-                            pr="20px"
                             className="cardContainer"
                           >
                             <CardEvent
@@ -484,7 +482,6 @@ export const Home = ({ homepage }: { homepage: any }) => {
                           <Box
                             key={`hb-${h.id}`}
                             {...mobileCardWrapper}
-                            pr="20px"
                             className="cardContainer"
                           >
                             <CardTour

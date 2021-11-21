@@ -156,7 +156,7 @@ const themeConfig = {
       ".tabbed a:focus": {
         outline: "solid 2px #E42B20",
         outlineOffset: "5px"
-      }
+      },
     },
   },
   colors: {
@@ -226,6 +226,8 @@ const themeConfig = {
     },
     blurredLightGray: {
       bg: "var(--chakra-colors-blur-blurredGray)",
+      backdropFilter: "blur(20px)",
+      backgroundBlendMode: "lighten",
     },
     blurredWhite: {
       bg: "var(--chakra-colors-blur-blurredWhite)",

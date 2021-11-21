@@ -139,8 +139,6 @@ export const ModuleComponentTourStop = ({
 
   let meta: any = t("card.meta.tour", "Tour");
 
-  console.log(tour);
-  
   return (
     <MainContent layerStyle="lightGray">
       <NextHeadSeo
@@ -258,7 +256,11 @@ export const ModuleComponentTourStop = ({
                     }
                     borderRadius="0"
                     p="0"
-                    className="svgHover"
+                    className="svgHover tabbedFocus"
+                    _focus={{
+                      bg: "transparent",
+                      boxShadow: "none",
+                    }}
                     paddingInlineStart="0"
                     paddingInlineEnd="0"
                     padding="0"

@@ -223,7 +223,11 @@ export const ModuleComponentTourIntroduction = ({ tour }: { tour: any }) => {
                   }
                   borderRadius="0"
                   p="0"
-                  className="svgHover"
+                  className="svgHover tabbedFocus"
+                  _focus={{
+                    bg: "transparent",
+                    boxShadow: "none",
+                  }}
                   paddingInlineStart="0"
                   paddingInlineEnd="0"
                   padding="0"

@@ -110,7 +110,7 @@ export const UserTracking = () => {
   return (
     <>
       {showPopup && (
-        <FocusLock>
+        <FocusLock autoFocus={false}>
           <chakra.aside
             bg="rgba(255,255,255,0.75)"
             backdropFilter="blur(30px)"

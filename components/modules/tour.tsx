@@ -32,6 +32,7 @@ import { GetStaticPaths, GetStaticProps } from "next";
 import { useRouter } from "next/router";
 import { getLocationColors } from "~/utils";
 import NextLink from "next/link";
+import { debounce } from "lodash";
 
 const MOBILE_CARD_WIDTH = 275;
 
@@ -144,7 +145,6 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
   const containersRef = useRef<any>(null);
   const parsedTourStopsRef = useRef<any>(null);
   const currentHightlightIndexRef = useRef<number>(-2);
-  const tourStopsRef = useRef<HTMLDivElement>(null);
   const footerRef = useRef<HTMLDivElement>(null);
   const tourStopsCardsContainerRef = useRef<HTMLDivElement>(null);
 
@@ -156,7 +156,6 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
 
   const onResize = useCallback(() => {
     if (
-      !tourStopsRef.current ||
       !tourStopsCardsContainerRef.current ||
       !containersRef.current ||
       !footerRef.current
@@ -170,18 +169,25 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
 
     if (isMobile) {
       if (containersRef.current?.length) {
-        tourStopsCardsContainerRef.current.style.width = `${
-          containersRef.current?.length * (MOBILE_CARD_WIDTH + 20) +
+        containersRef.current[
+          containersRef.current?.length - 1
+        ].style.marginRight = "";
+
+        containersRef.current[
+          containersRef.current?.length - 1
+        ].style.marginRight = `${
           window.innerWidth -
-          (MOBILE_CARD_WIDTH * 1.05 + 40)
+          containersRef.current[containersRef.current?.length - 1].offsetWidth -
+          20
         }px`;
-      } else {
-        tourStopsCardsContainerRef.current.style.width = "";
       }
       tourStopsCardsContainerRef.current.style.paddingBottom = "";
     } else {
       if (containersRef.current?.length) {
         tourStopsCardsContainerRef.current.style.paddingBottom = "";
+        containersRef.current[
+          containersRef.current?.length - 1
+        ].style.marginRight = "";
         const pB = Math.max(
           0,
           5 +
@@ -199,15 +205,13 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
       } else {
         tourStopsCardsContainerRef.current.style.paddingBottom = "";
       }
-
-      tourStopsCardsContainerRef.current.style.width = "";
     }
   }, []);
+  const onResizeDebounced = debounce(onResize, 350);
 
   const onScroll = () => {
     if (
       isMobileRef.current ||
-      !tourStopsRef.current ||
       !tourStopsCardsContainerRef.current ||
       !containersRef.current ||
       !cultureMap ||
@@ -256,6 +260,7 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
   };
 
   const onVerticalScroll = (scrollLeft: number) => {
+    
     if (tour?.tourStops?.length && cultureMap) {
       scrollState.set(
         "vertical",
@@ -378,32 +383,41 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
     containersRef.current =
       tourStopsCardsContainerRef.current.querySelectorAll(".cardContainer");
 
-    window.addEventListener("resize", onResize);
+    window.addEventListener("resize", onResizeDebounced);
     window.addEventListener("scroll", onScroll);
     onResize();
-    if (isMobileRef.current) {
-      const scrollLeft = scrollState.get(
-        "vertical",
-        router.asPath.replace(/[^a-z]/g, "")
-      );
-      if (scrollState.wasBack() && scrollLeft) {
-        tourStopsRef.current?.scrollTo({
-          left: scrollLeft,
-          top: 0,
-        });
-      } else {
-        onVerticalScroll(0);
-      }
-    }
 
-    setTimeout(onResize, 100);
-
-    onScroll();
     document.addEventListener("DOMContentLoaded", onResize);
+
+    setTimeout(() => {
+      onResize();
+      onScroll();
+      if (isMobileRef.current) {
+        const scrollLeft = scrollState.get(
+          "vertical",
+          router.asPath.replace(/[^a-z]/g, "")
+        );
+        if (scrollState.wasBack() && scrollLeft) {
+          tourStopsCardsContainerRef.current?.scrollTo({
+            left: scrollLeft,
+            top: 0,
+            behavior: "auto",
+          });
+        } else {
+          onVerticalScroll(0);
+          
+        }
+
+        setTimeout(() => {
+          if (tourStopsCardsContainerRef.current)
+            tourStopsCardsContainerRef.current.style.scrollBehavior = "smooth"; 
+        }, 60)  
+      }
+    }, 100);
 
     return () => {
       if (typeof window === "undefined") return;
-      window.removeEventListener("resize", onResize);
+      window.removeEventListener("resize", onResizeDebounced);
       window.removeEventListener("scroll", onScroll);
     };
 
@@ -465,6 +479,7 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
                 whiteSpace="nowrap"
                 textOverflow="ellipsis"
                 overflow="hidden"
+                id="title"
               >
                 {isMobile
                   ? getMultilangValue(tour?.title)
@@ -472,39 +487,36 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
               </chakra.h3>
 
               <Box
-                overflowY={isMobile ? "auto" : "hidden"}
                 w="100%"
-                pl="20px"
+                pl={isMobile ? "0px" : "20px"}
                 pb="20px"
                 mb={isMobile ? "40px" : "0px"}
-                ref={tourStopsRef}
-                onScroll={
-                  isMobile
-                    ? (e: UIEvent<HTMLDivElement>) => {
-                        const scrollLeft = (e.target as any).scrollLeft;
-                        onVerticalScroll(scrollLeft);
-                      }
-                    : undefined
-                }
               >
                 <Flex
+                  overflowY={isMobile ? "auto" : "hidden"}
                   flexDirection={isMobile ? "row" : "column"}
                   className="cardsContainer"
                   sx={{
-                    "@media (max-width: 44.9999em)": {
-                      flexDirection: "row",
-                    },
-                    "@media (min-width: 45em)": {
-                      flexDirection: "column",
-                      overflowY: "hidden",
-                    },
+                    scrollSnapType: "x mandatory",
+                    scrollBehavior: "auto",
                   }}
+                  w="100%"
+                  tabIndex={isMobile ? 0 : undefined}
+                  role="group"
+                  aria-labelledby="title"
                   ref={tourStopsCardsContainerRef}
+                  onScroll={
+                    isMobile
+                      ? (e: UIEvent<HTMLDivElement>) => {
+                          const scrollLeft = (e.target as any).scrollLeft;
+                          onVerticalScroll(scrollLeft);
+                        }
+                      : undefined
+                  }
                 >
                   <Box
                     key={`ts-intro`}
                     {...mobileCardWrapper}
-                    pr="20px"
                     className="cardContainer"
                   >
                     <LinkBox
@@ -703,7 +715,6 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
                   <Box
                     key={`ts-facts`}
                     {...mobileCardWrapper}
-                    pr="20px"
                     className="cardContainer"
                   >
                     <Box
@@ -834,7 +845,6 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
                       <Box
                         key={`ts-${tourStop.number}`}
                         {...mobileCardWrapper}
-                        pr="20px"
                         className="cardContainer"
                       >
                         <CardTourStop tourStop={tourStop} tour={tour} />
