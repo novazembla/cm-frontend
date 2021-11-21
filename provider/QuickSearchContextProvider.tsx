@@ -34,12 +34,8 @@ export const QuickSearchContextProvider = ({
     Record<string, QuickSearchResult>
   >({});
 
-  const hasQuickSearchResults = Object.keys(quickSearchResult).length > 0;
-
   const setQuickSearchResult = (result: Record<string, QuickSearchResult>) => {
     if (JSON.stringify(result) !== JSON.stringify(quickSearchResult)) {
-      console.log("setQuickSearchResultInContext");
-      // if (Object.keys(result).length != )
       setQuickSearchResultState(result);
     }
   };

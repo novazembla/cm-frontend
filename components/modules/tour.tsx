@@ -142,6 +142,7 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
   const [fillContainer, setFillContainer] = useState(true);
 
   const isMobileRef = useRef<boolean>(false);
+  const observeVScrollPositionRef = useRef<boolean>(false);
   const containersRef = useRef<any>(null);
   const parsedTourStopsRef = useRef<any>(null);
   const currentHightlightIndexRef = useRef<number>(-2);
@@ -163,6 +164,8 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
       return;
 
     const isMobile = window.matchMedia("(max-width: 44.999em)").matches;
+    isMobileRef.current = isMobile;
+
     const isTablet = window.matchMedia(
       "(min-width: 45em) and (max-width: 74.999em)"
     ).matches;
@@ -181,6 +184,7 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
           20
         }px`;
       }
+
       tourStopsCardsContainerRef.current.style.paddingBottom = "";
     } else {
       if (containersRef.current?.length) {
@@ -197,6 +201,7 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
               .offsetHeight -
             footerRef.current.offsetHeight
         );
+
         if (pB > 0) {
           tourStopsCardsContainerRef.current.style.paddingBottom = `${pB}px`;
         } else {
@@ -260,8 +265,9 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
   };
 
   const onVerticalScroll = (scrollLeft: number) => {
-    
     if (tour?.tourStops?.length && cultureMap) {
+      if (!observeVScrollPositionRef.current) return;
+
       scrollState.set(
         "vertical",
         router.asPath.replace(/[^a-z]/g, ""),
@@ -291,8 +297,8 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
           cultureMap.panTo(
             parsedTourStopsRef.current[Math.max(newIndex, 0)].lng,
             parsedTourStopsRef.current[Math.max(newIndex, 0)].lat,
-            !isMobile,
-            isMobile
+            !isMobileRef.current,
+            isMobileRef.current
           );
         }
         currentHightlightIndexRef.current = newIndex;
@@ -301,13 +307,48 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
   };
 
   useEffect(() => {
+    observeVScrollPositionRef.current = false;
+
+    if (typeof window === "undefined" || !tourStopsCardsContainerRef.current)
+      return;
+
+    containersRef.current =
+      tourStopsCardsContainerRef.current.querySelectorAll(".cardContainer");
+
+    window.addEventListener("resize", onResizeDebounced);
+    window.addEventListener("scroll", onScroll);
+
+    onResize();
+
+    const triggerOnResize = () => {
+      onResize();
+    };
+    document.addEventListener("DOMContentLoaded", triggerOnResize);
+
+    // if (isMobileRef.current) {
+
+    setTimeout(() => {
+      onResize();
+      onScroll();
+    }, 100);
+
+    return () => {
+      if (typeof window === "undefined") return;
+      window.removeEventListener("resize", onResizeDebounced);
+      window.removeEventListener("scroll", onScroll);
+      document.removeEventListener("DOMContentLoaded", triggerOnResize);
+    };
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
     if (cultureMap) cultureMap.hideCurrentView();
     currentHightlightIndexRef.current = -2;
 
     // As next.js doesn't unmount/remount if only components route changes we
     // need to rely on router.asPath to trigger in between tour change actions
-    // TODO: this is on mount call back
-    // setTourStop(null)
+
     return () => {
       if (cultureMap) cultureMap.clearTour();
     };
@@ -341,8 +382,7 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
         }
 
         if (
-          !scrollState.wasBack() ||
-          isMobileRef.current ||
+          (!scrollState.wasBack() && isMobileRef.current) ||
           (!isMobileRef.current &&
             typeof window !== "undefined" &&
             window.scrollY === 0)
@@ -353,6 +393,7 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
             !isMobileRef.current,
             isMobileRef.current
           );
+          scrollState.set("vertical", router.asPath.replace(/[^a-z]/g, ""), 0);
         }
 
         parsedTourStopsRef.current = stops;
@@ -364,7 +405,6 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
   }, [
     router.asPath,
     scrollState,
-    scrollState.wasBack,
     tour?.tourStops,
     tour?.path,
     settings,
@@ -375,54 +415,33 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
   ]);
 
   useEffect(() => {
-    if (typeof window === "undefined" || !tourStopsCardsContainerRef.current)
-      return;
-
-    isMobileRef.current = window.matchMedia("(max-width: 44.999em)").matches;
-
-    containersRef.current =
-      tourStopsCardsContainerRef.current.querySelectorAll(".cardContainer");
-
-    window.addEventListener("resize", onResizeDebounced);
-    window.addEventListener("scroll", onScroll);
-    onResize();
-
-    document.addEventListener("DOMContentLoaded", onResize);
-
     setTimeout(() => {
-      onResize();
-      onScroll();
-      if (isMobileRef.current) {
-        const scrollLeft = scrollState.get(
-          "vertical",
-          router.asPath.replace(/[^a-z]/g, "")
-        );
-        if (scrollState.wasBack() && scrollLeft) {
-          tourStopsCardsContainerRef.current?.scrollTo({
-            left: scrollLeft,
-            top: 0,
-            behavior: "auto",
-          });
-        } else {
-          onVerticalScroll(0);
-          
-        }
+      const scrollLeft = scrollState.get(
+        "vertical",
+        router.asPath.replace(/[^a-z]/g, "")
+      );
 
-        setTimeout(() => {
-          if (tourStopsCardsContainerRef.current)
-            tourStopsCardsContainerRef.current.style.scrollBehavior = "smooth"; 
-        }, 60)  
+      if (scrollState.wasBack() && scrollLeft) {
+        observeVScrollPositionRef.current = true;
+        tourStopsCardsContainerRef.current?.scrollTo({
+          left: scrollLeft,
+          top: 0,
+          behavior: "auto",
+        });
+      } else {
+        observeVScrollPositionRef.current = true;
+        tourStopsCardsContainerRef.current?.scrollTo({
+          left: 0,
+          top: 0,
+          behavior: "auto",
+        });
       }
-    }, 100);
-
-    return () => {
-      if (typeof window === "undefined") return;
-      window.removeEventListener("resize", onResizeDebounced);
-      window.removeEventListener("scroll", onScroll);
-    };
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+      setTimeout(() => {
+        if (tourStopsCardsContainerRef.current)
+          tourStopsCardsContainerRef.current.style.scrollBehavior = "smooth";
+      }, 100);
+    }, 60);
+  }, [router.asPath, scrollState]);
 
   let color = config.colorDark;
 
@@ -846,6 +865,29 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
                         key={`ts-${tourStop.number}`}
                         {...mobileCardWrapper}
                         className="cardContainer"
+                        onClick={(e) => {
+                          let container;
+                          let parent: any = (e.target as any).parentNode;
+                          let count = 20;
+                          while (!container) {
+                            if (!parent) break;
+                            if (parent.classList.contains("cardContainer")) {
+                              container = parent;
+                              break;
+                            }
+                            parent = parent?.parentNode;
+                            count -= 1;
+                            if (count === 0) break;
+                          }
+
+                          if (container) {
+                            scrollState.set(
+                              "vertical",
+                              router.asPath.replace(/[^a-z]/g, ""),
+                              container.offsetLeft
+                            );
+                          }
+                        }}
                       >
                         <CardTourStop tourStop={tourStop} tour={tour} />
                       </Box>

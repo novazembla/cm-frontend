@@ -54,7 +54,6 @@ export const MainContentContextProvider = ({
   }, []);
 
   const mainContentClose = useCallback(() => {
-    console.log("close");
     if (refClose.current && typeof refClose.current === "function")
       refClose.current.call(null);
   }, []);

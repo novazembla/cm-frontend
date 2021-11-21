@@ -84,7 +84,6 @@ export const Footer = ({
             
             onClick={() => {
               if (window) {
-                // TODO: this should also work for the maincontent!
                 window.scrollTo({
                   top: 0,
                   behavior: "smooth",

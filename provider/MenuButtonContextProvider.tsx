@@ -35,7 +35,6 @@ export const MenuButtonContextProvider = ({
             if (typeof document !== "undefined") {
               setTimeout(() => {
                 (document.querySelector("#menu") as any)?.focus();
-                console.log(document.querySelector("#menu"));
               }, 200);
             }
           }

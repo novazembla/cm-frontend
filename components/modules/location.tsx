@@ -130,10 +130,7 @@ export const ModuleComponentLocation = ({
   }, [router.asPath, cultureMap]);
 
   useEffect(() => {
-    console.log("highlight", highlight, cultureMap);
-
     if (typeof window !== "undefined" && highlight && cultureMap) {
-      console.log("move to hightligh", highlight);
       cultureMap.setHighlights([highlight]);
       cultureMap.panTo(highlight.lng, highlight.lat, true);
     }
@@ -158,7 +155,6 @@ export const ModuleComponentLocation = ({
       }
 
       if (!highlight) {
-        console.log("setHighlight", location?.title?.de);
         setHighlight({
           id: location.id,
           lng: location?.lng,

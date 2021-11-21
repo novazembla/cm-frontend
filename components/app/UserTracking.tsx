@@ -22,7 +22,6 @@ export const UserTracking = () => {
 
   const trackView = useCallback((url: any) => {
     if ((window as any)?.umami && trackUserRef.current) {
-      console.log("TV", url);
       (window as any).umami.trackView(url);
     } else {
       const trackUser = Cookies.get(COOKIE_NAME);

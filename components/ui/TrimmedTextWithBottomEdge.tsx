@@ -43,12 +43,7 @@ export const TrimmedTextWithBottomEdge = ({
     }
 
     if (count === 0) {
-
-      // TODO: REMOVE! 
-      console.log("ran out of count: ", span.current.innerText, span.current.getClientRects(), numLines);
-
       span.current.innerText = text;
-      console.log("ran out of count: ", span.current.innerText, span.current.getClientRects(), numLines);
     }
     setOut(newOut);
   }, 350);
