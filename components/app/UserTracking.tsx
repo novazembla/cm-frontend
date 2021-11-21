@@ -76,21 +76,23 @@ export const UserTracking = () => {
     if (typeof window === "undefined") return;
 
     if (trackUser && !scriptAdded) {
-      var script = document.createElement("script");
-      script.src = config.umamiUrl;
-      script.async = true;
-      script.setAttribute("data-website-id", config.umamiId);
-      script.setAttribute("data-auto-track", "false");
+      if (config.umamiId && config.umamiUrl) {
+        var script = document.createElement("script");
+        script.src = config.umamiUrl;
+        script.async = true;
+        script.setAttribute("data-website-id", config.umamiId);
+        script.setAttribute("data-auto-track", "false");
 
-      script.onload = () => {
-        trackView(
-          `${
-            router.defaultLocale !== router.locale ? `/${router.locale}` : ""
-          }${router.asPath}`
-        );
-      };
+        script.onload = () => {
+          trackView(
+            `${
+              router.defaultLocale !== router.locale ? `/${router.locale}` : ""
+            }${router.asPath}`
+          );
+        };
 
-      document.head.appendChild(script);
+        document.head.appendChild(script);
+      }
 
       setScriptAdded(true);
     }
@@ -135,7 +137,7 @@ export const UserTracking = () => {
             }}
             h={{
               base: "calc(100% - 160px)",
-              md:"auto"
+              md: "auto",
             }}
             zIndex="1000"
             transition="opacity 0.5s"
@@ -144,7 +146,7 @@ export const UserTracking = () => {
             <Flex
               p={{
                 base: "20px",
-                md:"35px"
+                md: "35px",
               }}
               flexDirection={{
                 base: "column",
@@ -155,7 +157,7 @@ export const UserTracking = () => {
                 md: "space-between",
               }}
               alignItems={{
-                md:"center"
+                md: "center",
               }}
               h="100%"
               maxW="1000px"
@@ -168,7 +170,7 @@ export const UserTracking = () => {
                 }}
                 pr={{
                   base: "0",
-                  md:"35px"
+                  md: "35px",
                 }}
               >
                 <chakra.h2 id="cpopup_label" textStyle="larger">
@@ -183,10 +185,12 @@ export const UserTracking = () => {
                   </p>
                 </Box>
               </Box>
-              <Box my={{
+              <Box
+                my={{
                   base: "2em",
                   md: "1em",
-                }}>
+                }}
+              >
                 <Flex flexDirection="column">
                   <Button
                     onClick={() => {
