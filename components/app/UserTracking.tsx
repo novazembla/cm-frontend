@@ -111,9 +111,7 @@ export const UserTracking = () => {
       {showPopup && (
         <FocusLock autoFocus={false}>
           <chakra.aside
-            bg="rgba(255,255,255,0.75)"
-            backdropFilter="blur(30px)"
-            backgroundBlendMode="screen"
+            layerStyle="blurredWhite"
             role="alertdialog"
             aria-modal="true"
             aria-labelledby="cpopup_label"
