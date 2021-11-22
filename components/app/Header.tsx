@@ -114,7 +114,10 @@ export const Header = (/* props */) => {
                 a: {
                   textTransform: "uppercase",
                   marginTop: "0.4em",
-                  marginLeft: "1.8em",
+                  marginLeft: {
+                    base: "1.8em",
+                    "2xl": "2.5em",
+                  },
                   display: "inline-block",
                   whiteSpace: "nowrap",
                   _hover: {

@@ -395,6 +395,7 @@ export const ModuleComponentLocations = ({ ...props }) => {
 
     return () => {
       cultureMap?.setCurrentViewData(undefined, true);
+      cultureMap?.showCurrentView();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -418,6 +419,7 @@ export const ModuleComponentLocations = ({ ...props }) => {
         cultureMap?.setFilteredViewData([]);
       }
       cultureMap?.fitToCurrentViewBounds();
+      cultureMap?.showCurrentView();
     }
   }, [
     layzLocationIdsQueryResult.loading,
@@ -588,6 +590,7 @@ export const ModuleComponentLocations = ({ ...props }) => {
         setIsFiltered(true);
       } else {
         cultureMap?.setCurrentViewData(undefined, true);
+        cultureMap?.showCurrentView();
         setIsFiltered(false);
       }
       setCurrentQueryState(newQueryState);

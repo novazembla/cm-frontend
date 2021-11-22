@@ -100,7 +100,6 @@ export class CultureMap {
         this.views[this.currentView].setData();
         setTimeout(() => {
           this.views[this.currentView].render();
-          this.views[this.currentView].hide();
           this.views[this.currentView].fitToBounds();
         }, 100);
       }
