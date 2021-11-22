@@ -43,9 +43,9 @@ export const ModuleComponentPage = ({ page }: { page: any }) => {
   return (
     <MainContent isDrawer layerStyle="pageBg">
       <NextHeadSeo
-        canonical={`${config.baseUrl}${i18n.language === "en" ? "/en" : ""}/${getMultilangValue(
-          page?.slug
-        )}`}
+        canonical={`${config.baseUrl}${
+          i18n.language === "en" ? "/en" : ""
+        }/${getMultilangValue(page?.slug)}`}
         title={`${getMultilangValue(page?.title)} - ${getSeoAppTitle(t)}`}
         description={getMultilangValue(page?.teaser)}
         og={{
@@ -75,9 +75,9 @@ export const ModuleComponentPage = ({ page }: { page: any }) => {
                 <Box bg="#333">
                   <ApiImage
                     id={page.heroImage.id}
+                    useImageAspectRatioPB
                     alt={getMultilangValue(page?.heroImage.alt)}
                     meta={page.heroImage.meta}
-                    forceAspectRatioPB={75}
                     status={page.heroImage.status}
                     sizes="(min-width: 45rem) 700px, 100vw"
                   />

@@ -337,7 +337,8 @@
         "stops": "Stops",
         "start": "Start",
         "stop": "Ende",
-        "distance": "Distanz"
+        "distance": "Distanz",
+        "duration": "Dauer"
       }
     },
     "introduction": "Einleitung",

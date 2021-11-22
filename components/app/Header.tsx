@@ -68,7 +68,6 @@ export const Header = (/* props */) => {
       layerStyle="blurredWhite"
       borderBottom="1px solid"
       borderColor="#660D36"
-
       ref={headerRef}
       sx={{
         touchAction: "none",
@@ -98,43 +97,47 @@ export const Header = (/* props */) => {
         <Logo />
 
         {isDesktopAndUp && (
-          <Box
-            sx={{
-              a: {
-                textTransform: "uppercase",
-                marginTop: "0.4em",
-                marginLeft: "1em",
-                display: "inline-block",
-                whiteSpace: "nowrap",
-                _hover: {
-                  color: "cm.accentDark",
-                },
-                _first: {
-                  marginLeft: {
-                    xl: "25%",
-                    "2xl": 0
+          <Flex
+            flexGrow={10}
+            justifyContent="flex-end"
+          >
+            <Flex
+              justifyContent="flex-end"
+              textStyle="navigation"
+              textAlign="right"
+              pl={{
+                base: "2em",
+                xl: "0%",
+                "2xl": "0",
+              }}
+              sx={{
+                a: {
+                  textTransform: "uppercase",
+                  marginTop: "0.4em",
+                  marginLeft: "1.8em",
+                  display: "inline-block",
+                  whiteSpace: "nowrap",
+                  _hover: {
+                    color: "cm.accentDark",
                   },
                 },
-                
-              },
-            }}
-            textStyle="navigation"
-            textAlign="right"
-            pl={{
-              base: "2em",
-              "2xl": "0",
-            }}
-            flexGrow={10}
-          >
-            {config.nav.main.map((link: any, index: number) => (
-              <ActiveLink
-                key={`nav-link-${index}`}
-                href={getMultilangValue(link.path)}
-              >
-                <MultiLangValue json={link.title} />
-              </ActiveLink>
-            ))}
-          </Box>
+                "@media (max-width:1360px)": {
+                  maxW: "450px",
+                },
+              }}
+              flexWrap="wrap"
+            >
+              {" "}
+              {config.nav.main.map((link: any, index: number) => (
+                <ActiveLink
+                  key={`nav-link-${index}`}
+                  href={getMultilangValue(link.path)}
+                >
+                  <MultiLangValue json={link.title} />
+                </ActiveLink>
+              ))}
+            </Flex>
+          </Flex>
         )}
         <Flex
           w={{
@@ -160,10 +163,12 @@ export const Header = (/* props */) => {
                       w="40px"
                       h="40px"
                       zIndex={isQuickSearchOpen ? 2 : 1}
-                      
                     >
                       <IconButton
-                        aria-label={t("menu.button.closeSearch", "Close search")}
+                        aria-label={t(
+                          "menu.button.closeSearch",
+                          "Close search"
+                        )}
                         icon={<SVG type="cross" width="80px" height="80px" />}
                         borderRadius="0"
                         p="0"
@@ -323,7 +328,7 @@ export const Header = (/* props */) => {
                         onMenuToggle();
                       }}
                       pointerEvents={isMenuOpen ? "none" : undefined}
-                      tabIndex={isMenuOpen ?  -1 : undefined}
+                      tabIndex={isMenuOpen ? -1 : undefined}
                       transition="all 0.3s"
                       _hover={{
                         bg: "transparent",

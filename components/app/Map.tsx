@@ -158,6 +158,7 @@ export const Map = () => {
             : 0
         }
         aria-hidden="true"
+        role="presentation"
       >
         <Flex
           direction="column"
@@ -389,6 +390,7 @@ export const Map = () => {
         ref={buttonContainer}
         aria-hidden="true"
         tabIndex={-1}
+        role="presentation"
       >
         <Box ref={mapContainer} className="map" w="100%" h="100%" tabIndex={-1}/>
       </Box>

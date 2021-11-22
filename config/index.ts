@@ -14,32 +14,12 @@ export const appConfigMainNav = [
   },
   {
     path: {
-      de: "/seite/ueber-die-kulturkarte",
-      en: "/page/about",
+      de: "/veranstaltungen",
+      en: "/events",
     },
     title: {
-      de: "Über die Kulturkarte",
-      en: "About the Map",
-    },
-  },
-  {
-    path: {
-      de: "/seite/nutzungshinweise",
-      en: "/page/usage-guidance",
-    },
-    title: {
-      de: "Nutzungshinweise",
-      en: "How to use the map",
-    },
-  },
-  {
-    path: {
-      de: "/kartenpunktvorschlag",
-      en: "/suggest-a-location",
-    },
-    title: {
-      de: "Kartenpunkt vorschlagen",
-      en: "Suggest a location",
+      de: "Veranstaltungen",
+      en: "Events",
     },
   },
   {
@@ -54,17 +34,38 @@ export const appConfigMainNav = [
   },
   {
     path: {
-      de: "/veranstaltungen",
-      en: "/events",
+      de: "/kartenpunktvorschlag",
+      en: "/suggest-a-location",
     },
     title: {
-      de: "Veranstaltungen",
-      en: "Events",
+      de: "Ort vorschlagen",
+      en: "Suggest a location",
+    },
+  },
+  {
+    path: {
+      de: "/seite/ueber-die-kulturkarte",
+      en: "/page/about",
+    },
+    title: {
+      de: "Über die Karte",
+      en: "About the Map",
     },
   },
 ];
 
 export const appConfigFooterNav = [
+  
+  {
+    path: {
+      de: "/seite/nutzungshinweise",
+      en: "/page/usage-guidance",
+    },
+    title: {
+      de: "Nutzungshinweise",
+      en: "How to use the map",
+    },
+  },
   {
     path: {
       de: "/seite/impressum",

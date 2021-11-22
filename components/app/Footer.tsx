@@ -1,7 +1,7 @@
 import React from "react";
 import { ActiveLink } from "~/components/ui";
 
-import { Flex, IconButton, Link, Box } from "@chakra-ui/react";
+import { Flex, IconButton, chakra, Box } from "@chakra-ui/react";
 
 import { useConfigContext } from "~/provider";
 import { MultiLangValue, SVG } from "../ui";
@@ -81,7 +81,6 @@ export const Footer = ({
             minW="20px"
             padding="0"
             bg="transparent"
-            
             onClick={() => {
               if (window) {
                 window.scrollTo({
@@ -149,6 +148,35 @@ export const Footer = ({
           </Box>
         </Flex>
       </Flex>
+      <Box w="50%" mt={isMobile ? "3em" : "5em"}>
+        <chakra.a
+          className="svgHover tabbedFocus"
+          href="https://www.berlin.de/ba-lichtenberg/"
+          display="inline-block"
+          w="100%"
+          h="0"
+          pb="20%"
+          position="relative"
+          target="_blank"
+          rel="noreffer nofollow"
+        >
+          <chakra.span
+            display="block"
+            w="100%"
+            h="100%"
+            position="absolute"
+            top="0"
+            left="0"
+          >
+            <SVG
+              className="svg black"
+              type="ba_lichtenberg"
+              width="100%"
+              height="100%"
+            />
+          </chakra.span>
+        </chakra.a>
+      </Box>
     </Box>
   );
 };

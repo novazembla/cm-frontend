@@ -16,6 +16,7 @@ import Accordion1SVG from "~/assets/svg/v2/accordion_level_1.svg";
 import Accordion2SVG from "~/assets/svg/v2/accordion_level_2.svg";
 import ChrevronRightSVG from "~/assets/svg/v2/chevron_right.svg";
 import LargeChrevronSVG from "~/assets/svg/v2/large_chevron.svg";
+import BALichtenberg from "~/assets/svg/logo_ba_lichtenberg.svg";
 
 export const SVG = ({
   type,
@@ -38,6 +39,9 @@ export const SVG = ({
     case "arrow-up":
       component = ArrowUpSVG;
       break;
+    case "ba_lichtenberg":
+      component = BALichtenberg;
+      break;
 
     case "search":
       component = SearchSVG;
@@ -58,7 +62,6 @@ export const SVG = ({
     case "suggestion":
       component = SuggestionSVG;
       break;
-
 
     case "location":
       component = WhereAmISVG;
@@ -91,7 +94,6 @@ export const SVG = ({
     case "large_chevron":
       component = LargeChrevronSVG;
       break;
-  
   }
 
   return (
@@ -99,7 +101,7 @@ export const SVG = ({
       className={className}
       w={width}
       h={height}
-      flexShrink={0} 
+      flexShrink={0}
       backgroundPosition={position}
       backgroundRepeat="no-repeat"
       backgroundSize={size}

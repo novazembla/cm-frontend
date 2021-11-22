@@ -228,6 +228,10 @@ body {
   filter: invert(18%) sepia(82%) saturate(4434%) hue-rotate(355deg)
     brightness(96%) contrast(85%);
   transition: filter 0.3s;
+
+  &.black {
+    filter: none;
+  }
 }
 
 .svg-dark {
@@ -239,6 +243,10 @@ body {
   &:hover .svg {
     filter: invert(13%) sepia(17%) saturate(7488%) hue-rotate(306deg)
       brightness(99%) contrast(106%);
+
+    &.black {
+      filter: invert(33%) ;
+    }
   }
 }
 

@@ -39,12 +39,8 @@ import NextHeadSeo from "next-head-seo";
 import { useRouter } from "next/router";
 import useCalendar from "@veccu/react-calendar";
 
-// @ts-ignore
-//import VirtualScroller from "virtual-scroller/react";
-// https://bvaughn.github.io/react-virtualized/#/components/Masonry
-// TODO use react-virtualized
-
 const ONE_DAY = 1000 * 60 * 60 * 24;
+const LOOK_DAYS_AHEAD = 100; // how many days should the calendar look ahead.
 
 const padTo2Digits = (num: number) => {
   return num.toString().padStart(2, "0");
@@ -90,7 +86,17 @@ const eventsQuery = gql`
 `;
 
 const initialQueryState = {
-  where: {},
+  where: {
+    dates: {
+      some: {
+        date: {
+          lt: new Date(
+            new Date().setHours(0, 0, 0, 0) + ONE_DAY * LOOK_DAYS_AHEAD
+          ),
+        },
+      },
+    },
+  },
   orderBy: [
     {
       firstEventDate: "asc",
@@ -172,6 +178,18 @@ export const ModuleComponentEvents = ({ ...props }) => {
         },
       ],
     },
+  });
+
+  console.log({
+    ...initialQueryState,
+    orderBy: [
+      {
+        firstEventDate: "asc",
+      },
+      {
+        [`title_${i18n.language}`]: "asc",
+      },
+    ],
   });
 
   const formMethods = useForm<any>({
@@ -414,6 +432,17 @@ export const ModuleComponentEvents = ({ ...props }) => {
       ...currentQueryState,
     };
 
+    where.push({
+      dates: {
+        some: {
+          date: {
+            lt: new Date(
+              new Date().setHours(0, 0, 0, 0) + ONE_DAY * LOOK_DAYS_AHEAD
+            ),
+          },
+        },
+      },
+    });
     if (where?.length) {
       newQueryState = {
         ...newQueryState,
@@ -421,11 +450,11 @@ export const ModuleComponentEvents = ({ ...props }) => {
           AND: where,
         },
       };
-    } else {
-      newQueryState = {
-        ...newQueryState,
-        where: {},
-      };
+    // } else {
+    //   newQueryState = {
+    //     ...newQueryState,
+    //     where: {},
+    //   };
     }
 
     if (JSON.stringify(currentQueryState) !== JSON.stringify(newQueryState)) {
@@ -746,7 +775,6 @@ export const ModuleComponentEvents = ({ ...props }) => {
                                                 h="30px"
                                                 border="1px solid"
                                                 lineHeight="30px"
-                                                
                                                 borderColor="transparent"
                                                 borderRadius="20"
                                                 textStyle="calendar"

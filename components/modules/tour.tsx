@@ -149,6 +149,8 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
   const footerRef = useRef<HTMLDivElement>(null);
   const tourStopsCardsContainerRef = useRef<HTMLDivElement>(null);
 
+  const [opacity, setOpacity] = useState(0);
+
   const scrollState = useScrollStateContext();
 
   const mobileCardWrapper = isMobile
@@ -421,25 +423,22 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
         router.asPath.replace(/[^a-z]/g, "")
       );
 
-      if (scrollState.wasBack() && scrollLeft) {
-        observeVScrollPositionRef.current = true;
-        tourStopsCardsContainerRef.current?.scrollTo({
-          left: scrollLeft,
-          top: 0,
-          behavior: "auto",
-        });
-      } else {
-        observeVScrollPositionRef.current = true;
-        tourStopsCardsContainerRef.current?.scrollTo({
-          left: 0,
-          top: 0,
-          behavior: "auto",
-        });
-      }
+      observeVScrollPositionRef.current = true;
+      tourStopsCardsContainerRef.current?.scrollTo({
+        left: scrollState.wasBack() && scrollLeft ? scrollLeft : 0,
+        top: 0,
+        behavior: "auto",
+      });
+
+      if (!scrollState.wasBack())
+        setOpacity(1)
+
       setTimeout(() => {
         if (tourStopsCardsContainerRef.current)
           tourStopsCardsContainerRef.current.style.scrollBehavior = "smooth";
-      }, 100);
+
+        setOpacity(1)
+      }, 200);
     }, 60);
   }, [router.asPath, scrollState]);
 
@@ -473,6 +472,7 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
             },
           }}
           w="100%"
+          opacity={opacity}
         >
           <Grid
             w="100%"
@@ -797,6 +797,7 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
                               textTransform="uppercase"
                               textStyle="categories"
                               w="100px"
+                              flexShrink={0}
                             >
                               {t("tour.detail.label.stops", "Stops")}
                             </Box>
@@ -805,13 +806,14 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
                             </Box>
                           </Flex>
                         )}
-                        {tour?.tourStops?.length > 0 && (
+                        {!isMobile && tour?.tourStops?.length > 0 && (
                           <Flex alignItems="center" mb="0.25em">
                             <Box
                               color="cm.accentDark"
                               textTransform="uppercase"
                               textStyle="categories"
                               w="100px"
+                              flexShrink={0}
                             >
                               {t("tour.detail.label.start", "Start")}
                             </Box>
@@ -820,13 +822,14 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
                             </Box>
                           </Flex>
                         )}
-                        {tour?.tourStops?.length > 1 && (
+                        {!isMobile && tour?.tourStops?.length > 1 && (
                           <Flex alignItems="center" mb="0.25em">
                             <Box
                               color="cm.accentDark"
                               textTransform="uppercase"
                               textStyle="categories"
                               w="100px"
+                              flexShrink={0}
                             >
                               {t("tour.detail.label.stop", "Stop")}
                             </Box>
@@ -840,18 +843,34 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
                             </Box>
                           </Flex>
                         )}
-                        {tour?.distance && tour?.duration && (
+                        {tour?.distance && (
                           <Flex alignItems="center" mb="0.25em">
                             <Box
                               color="cm.accentDark"
                               textTransform="uppercase"
                               textStyle="categories"
                               w="100px"
+                              flexShrink={0}
                             >
                               {t("tour.detail.label.distance", "Distance")}
                             </Box>
                             <Box textStyle="card">
-                              <MultiLangValue json={tour?.distance} /> |{" "}
+                              <MultiLangValue json={tour?.distance} />
+                            </Box>
+                          </Flex>
+                        )}
+                        {tour?.duration && (
+                          <Flex alignItems="center" mb="0.25em">
+                            <Box
+                              color="cm.accentDark"
+                              textTransform="uppercase"
+                              textStyle="categories"
+                              w="100px"
+                              flexShrink={0}
+                            >
+                              {t("tour.detail.label.duration", "Duration")}
+                            </Box>
+                            <Box textStyle="card">
                               <MultiLangValue json={tour?.duration} />
                             </Box>
                           </Flex>
