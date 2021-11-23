@@ -95,7 +95,7 @@ export const Header = (/* props */) => {
           xl: "3",
         }}
       >
-        <Logo />
+        <Logo layout="full"/>
 
         {isDesktopAndUp && (
           <Flex

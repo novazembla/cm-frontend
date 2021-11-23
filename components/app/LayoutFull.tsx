@@ -29,6 +29,7 @@ export const LayoutFull = ({ children }: AppProps) => {
   }, 350);
 
   useEffect(() => {
+    let mounted = true;
     if (typeof window !== "undefined") {
       if (navigator.userAgent.toLowerCase().indexOf("firefox") > -1) {
         document.documentElement.style.setProperty(
@@ -43,9 +44,13 @@ export const LayoutFull = ({ children }: AppProps) => {
 
       if ("fonts" in document) {
         document.fonts.ready.then(() => {
-          setFontsLoaded(true);
+          if (mounted) setFontsLoaded(true);
         });
       }
+    }
+
+    return () => {
+      mounted = false;
     }
   }, []);
 

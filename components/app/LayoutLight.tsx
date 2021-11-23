@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 
 import Head from "next/head";
-
-import { Map } from ".";
+import { Box } from "@chakra-ui/react";
+import { Map, Logo } from ".";
 import { useAppTranslations } from "~/hooks";
 import { AppProps } from "~/types";
 import { LoadingBarLight } from ".";
@@ -27,6 +27,7 @@ export const LayoutLight = ({ children }: AppProps) => {
   }, 350);
 
   useEffect(() => {
+    let mounted = true;
     if (typeof window !== "undefined") {
       if (navigator.userAgent.toLowerCase().indexOf("firefox") > -1) {
         document.documentElement.style.setProperty(
@@ -41,10 +42,13 @@ export const LayoutLight = ({ children }: AppProps) => {
 
       if ("fonts" in document) {
         document.fonts.ready.then(() => {
-          setFontsLoaded(true);
+          if (mounted) setFontsLoaded(true);
         });
       }
     }
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   useEffect(() => {
@@ -104,9 +108,11 @@ export const LayoutLight = ({ children }: AppProps) => {
         }}
       />
       <LoadingBarLight color="cm.accentLight" loading={isLoadingSettings} />
-      {/* <Map layout="light" /> */}
-
-      {/* {!isLoadingSettings && fontsLoaded && children} */}
+      <Map layout="light" />
+      <Box position="fixed" top="10px" left="10px" zIndex="20">
+        <Logo layout="light" />
+      </Box>
+      {!isLoadingSettings && fontsLoaded && children}
     </>
   );
 };

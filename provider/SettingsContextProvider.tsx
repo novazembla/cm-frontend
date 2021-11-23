@@ -21,7 +21,7 @@ const settingsQuery = gql`
       centerOfGravity
       mapJsonUrl
       taxMapping
-      suggestionsIntro,
+      suggestionsIntro
       suggestionsTandCInfo
       taxonomies {
         id
@@ -93,6 +93,7 @@ export const SettingsContextProvider = ({
   const [settings, setSettings] = useState(null);
 
   useEffect(() => {
+    let mounted = true;
     const getSettings = async () => {
       const client = getApolloClient();
 
@@ -101,13 +102,17 @@ export const SettingsContextProvider = ({
       });
 
       if (data?.frontendSettings) {
-        setSettings(parseSettings(data?.frontendSettings));
+        if (mounted) setSettings(parseSettings(data?.frontendSettings));
       }
     };
 
     if (!settings) {
       getSettings();
     }
+
+    return () => {
+      mounted = false;
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

@@ -22,7 +22,7 @@ const userGeoLocationOptions = {
   timeout: 27000,
 };
 
-export const Map = ({layout}: {layout: string;}) => {
+export const Map = ({ layout }: { layout: string }) => {
   const { t } = useAppTranslations();
 
   const cultureMap = useMapContext();
@@ -45,11 +45,21 @@ export const Map = ({layout}: {layout: string;}) => {
   const [mapLoaded, setMapLoaded] = useState(false);
 
   useEffect(() => {
+    let mounted = true;
     if (cultureMapRef.current || !mapContainer.current || !cultureMap) return;
 
-    cultureMap.init(mapContainer.current, setMapLoaded, layout === "light");
+    cultureMap.init(
+      mapContainer.current,
+      (state: boolean) => {
+        if (mounted) setMapLoaded(state);
+      },
+      layout === "light"
+    );
 
     cultureMapRef.current = cultureMap;
+    return () => {
+      mounted = false;
+    };
   }, [setMapLoaded, cultureMap, layout]);
 
   useEffect(() => {
@@ -140,23 +150,27 @@ export const Map = ({layout}: {layout: string;}) => {
     geolocationButton.current?.blur();
   };
 
+  const buttonVisible = mapLoaded
+    ? layout === "light" || (isMainContentOpen && !(isTablet || isDesktopAndUp))
+    : false;
   return (
     <>
-      
-
       <Box
         position="fixed"
         right={isTabletWide || isDesktopAndUp ? "20px" : "10px"}
-        top={layout === "light" ? "20px" : isDesktopAndUp ? "100px" : isTabletWide ? "80px" : "70px"}
+        top={
+          layout === "light"
+            ? isTabletWide || isDesktopAndUp ? "20px" : "10px"
+            : isDesktopAndUp
+            ? "100px"
+            : isTabletWide
+            ? "80px"
+            : "70px"
+        }
         zIndex="2"
         transition="opacity 0.3s"
-        opacity={
-          mapLoaded
-            ? isMainContentOpen && !(isTablet || isDesktopAndUp)
-              ? 0
-              : 1
-            : 0
-        }
+        opacity={buttonVisible ? 1 : 0}
+        pointerEvents={buttonVisible ? undefined : "none"}
         aria-hidden="true"
         role="presentation"
       >
@@ -263,7 +277,7 @@ export const Map = ({layout}: {layout: string;}) => {
                       onQuickSearchToggle();
                     }}
                     pointerEvents={isQuickSearchOpen ? "none" : undefined}
-                    tabIndex={isQuickSearchOpen ? -1 : undefined }
+                    tabIndex={isQuickSearchOpen ? -1 : undefined}
                     aria-controls="search"
                     aria-haspopup="true"
                     aria-expanded="true"
@@ -392,7 +406,13 @@ export const Map = ({layout}: {layout: string;}) => {
         tabIndex={-1}
         role="presentation"
       >
-        <Box ref={mapContainer} className="map" w="100%" h="100%" tabIndex={-1}/>
+        <Box
+          ref={mapContainer}
+          className="map"
+          w="100%"
+          h="100%"
+          tabIndex={-1}
+        />
       </Box>
     </>
   );
