@@ -1,5 +1,6 @@
 export * from "./events";
 export * from "./locations";
+export * from "./locationsEmbed";
 export * from "./event";
 export * from "./suggest";
 export * from "./location";

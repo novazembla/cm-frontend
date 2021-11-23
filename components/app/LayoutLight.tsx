@@ -1,23 +1,21 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 
 import Head from "next/head";
 
-import { Header, Map, QuickSearch, MobileNav } from ".";
-import { useAppTranslations, useIsBreakPoint } from "~/hooks";
+import { Map } from ".";
+import { useAppTranslations } from "~/hooks";
 import { AppProps } from "~/types";
-import { LoadingBar } from ".";
+import { LoadingBarLight } from ".";
 import { useSettingsContext } from "~/provider";
 import { debounce } from "lodash";
 import NextHeadSeo from "next-head-seo";
 
-import { chakra } from "@chakra-ui/react";
-
+// TODO: UserTracking Embed coded?
 import { UserTracking } from ".";
 
-export const LayoutFull = ({ children }: AppProps) => {
+export const LayoutLight = ({ children }: AppProps) => {
   const settings = useSettingsContext();
   const { t } = useAppTranslations();
-  const { isMobile, isTablet } = useIsBreakPoint();
   const [isLoadingSettings, setIsLoadingSettings] = useState(true);
   const [fontsLoaded, setFontsLoaded] = useState(false);
 
@@ -105,21 +103,11 @@ export const LayoutFull = ({ children }: AppProps) => {
           card: "summary",
         }}
       />
-      <chakra.a href="#content" className="skipToContent">
-        {t("header.skipToContent", "Skip to content")}
-      </chakra.a>
-      <LoadingBar color="cm.accentLight" loading={isLoadingSettings} />
-      {!isLoadingSettings && fontsLoaded && (isMobile || isTablet) && (
-        <MobileNav />
-      )}
-      {!isLoadingSettings && fontsLoaded && <Header />}
+      <LoadingBarLight color="cm.accentLight" loading={isLoadingSettings} />
+      {/* <Map layout="light" /> */}
 
-      <Map layout="full"/>
-
-      {!isLoadingSettings && fontsLoaded && children}
-
-      {!isLoadingSettings && fontsLoaded && <QuickSearch />}
+      {/* {!isLoadingSettings && fontsLoaded && children} */}
     </>
   );
 };
-export default LayoutFull;
+export default LayoutLight;

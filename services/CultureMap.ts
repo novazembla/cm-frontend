@@ -40,6 +40,7 @@ export class CultureMap {
   overlayZoomLevel: number;
   geoJsonAllData: any = null;
 
+  isEmbed = false;
   loaded = false;
   styleLoaded = false;
   baseDataLoaded = false;
@@ -73,8 +74,9 @@ export class CultureMap {
     this.views["unclustered"] = new MapViewUnclustered(this);
   }
 
-  init(ref: HTMLDivElement, setIsLoaded: Function) {
+  init(ref: HTMLDivElement, setIsLoaded: Function, isEmbed: boolean) {
     this.mapContainerRef = null;
+    this.isEmbed = isEmbed;
 
     this.map = new maplibregl.Map({
       container: ref,
@@ -221,6 +223,7 @@ export class CultureMap {
         this.popup.hide();
         this.clusterDetail.hide();
         this.views[this.currentView].show();
+        console.log(this.currentView, "show");
       };
       if (!this.ready) {
         this.onLoadJobs.push(run);

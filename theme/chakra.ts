@@ -228,11 +228,13 @@ const themeConfig = {
       bg: "var(--chakra-colors-blur-blurredGray)",
       backdropFilter: "blur(20px)",
       backgroundBlendMode: "lighten",
+      backgroundAttachmend: "fixed",
     },
     blurredWhite: {
       bg: "var(--chakra-colors-blur-blurredWhite)",
       backdropFilter: "blur(20px)",
       backgroundBlendMode: "lighten",
+      backgroundAttachmend: "fixed",
     },
     pageContainerWhite: {
       bg: "white",

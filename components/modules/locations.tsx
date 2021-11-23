@@ -35,7 +35,7 @@ import { useRouter } from "next/router";
 // https://bvaughn.github.io/react-virtualized/#/components/Masonry
 // TODO use react-virtualized
 
-const locationsQuery = gql`
+export const locationsQuery = gql`
   query locations(
     $where: JSON
     $orderBy: JSON
@@ -76,7 +76,7 @@ const locationsQuery = gql`
   }
 `;
 
-const locationsIdsQuery = gql`
+export const locationsIdsQuery = gql`
   query locationsIds($where: JSON) {
     locationIds(where: $where) {
       ids
@@ -84,7 +84,7 @@ const locationsIdsQuery = gql`
   }
 `;
 
-const initialQueryState = {
+export const locationsInitialQueryState = {
   where: {},
   orderBy: [
     {
@@ -97,7 +97,7 @@ const initialQueryState = {
 
 export const LocationsFilterSchema = object().shape({});
 
-export const ModuleComponentLocations = ({ ...props }) => {
+export const ModuleComponentLocations = () => {
   const { t, i18n, getMultilangValue } = useAppTranslations();
   const resultRef = useRef<HTMLDivElement>(null);
   const cultureMap = useMapContext();
@@ -107,7 +107,7 @@ export const ModuleComponentLocations = ({ ...props }) => {
   const [currentMapView, setCurrentMapView] = useState("clustered");
 
   const [currentQueryState, setCurrentQueryState] = useState<any>({
-    where: initialQueryState.where,
+    where: locationsInitialQueryState.where,
     orderBy: [
       {
         [`title_${i18n.language}`]: "asc",
@@ -204,7 +204,7 @@ export const ModuleComponentLocations = ({ ...props }) => {
     {
       notifyOnNetworkStatusChange: true,
       variables: {
-        ...initialQueryState,
+        ...locationsInitialQueryState,
         orderBy: [
           {
             [`title_${i18n.language}`]: "asc",
@@ -218,7 +218,7 @@ export const ModuleComponentLocations = ({ ...props }) => {
     locationsIdsQuery,
     {
       variables: {
-        where: initialQueryState.where,
+        where: locationsInitialQueryState.where,
       },
     }
   );
@@ -578,7 +578,7 @@ export const ModuleComponentLocations = ({ ...props }) => {
       refetch({
         ...newQueryState,
         pageIndex: 0,
-        pageSize: initialQueryState.pageSize,
+        pageSize: locationsInitialQueryState.pageSize,
       });
 
       if (where.length > 0) {
@@ -754,10 +754,7 @@ export const ModuleComponentLocations = ({ ...props }) => {
                   >
                     <AccordionItem>
                       <h2>
-                        <AccordionButton
-                          pt="0"
-                          className="tabbedFocus"
-                        >
+                        <AccordionButton pt="0" className="tabbedFocus">
                           <Box
                             flex="1"
                             textAlign="left"
@@ -1029,7 +1026,7 @@ export const ModuleComponentLocations = ({ ...props }) => {
                     onClick={() => {
                       const nextPageIndex = Math.floor(
                         data?.locations?.locations?.length /
-                          initialQueryState?.pageSize
+                          locationsInitialQueryState?.pageSize
                       );
                       fetchMore({
                         variables: {

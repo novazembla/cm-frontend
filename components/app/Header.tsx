@@ -68,6 +68,7 @@ export const Header = (/* props */) => {
       layerStyle="blurredWhite"
       borderBottom="1px solid"
       borderColor="#660D36"
+      transform="translate3d(0,0,0)"
       ref={headerRef}
       sx={{
         touchAction: "none",

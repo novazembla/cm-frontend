@@ -22,7 +22,7 @@ const userGeoLocationOptions = {
   timeout: 27000,
 };
 
-export const Map = () => {
+export const Map = ({layout}: {layout: string;}) => {
   const { t } = useAppTranslations();
 
   const cultureMap = useMapContext();
@@ -47,10 +47,10 @@ export const Map = () => {
   useEffect(() => {
     if (cultureMapRef.current || !mapContainer.current || !cultureMap) return;
 
-    cultureMap.init(mapContainer.current, setMapLoaded);
+    cultureMap.init(mapContainer.current, setMapLoaded, layout === "light");
 
     cultureMapRef.current = cultureMap;
-  }, [setMapLoaded, cultureMap]);
+  }, [setMapLoaded, cultureMap, layout]);
 
   useEffect(() => {
     const onWheel = (e: MouseEvent) => e.preventDefault();
@@ -147,7 +147,7 @@ export const Map = () => {
       <Box
         position="fixed"
         right={isTabletWide || isDesktopAndUp ? "20px" : "10px"}
-        top={isDesktopAndUp ? "100px" : isTabletWide ? "80px" : "70px"}
+        top={layout === "light" ? "20px" : isDesktopAndUp ? "100px" : isTabletWide ? "80px" : "70px"}
         zIndex="2"
         transition="opacity 0.3s"
         opacity={
@@ -170,7 +170,7 @@ export const Map = () => {
             },
           }}
         >
-          {(isTabletWide || isDesktopAndUp) && (
+          {(isTabletWide || isDesktopAndUp) && layout !== "light" && (
             <Box
               position="relative"
               mb={buttonSpacing}

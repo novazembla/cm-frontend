@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 import { GetStaticProps } from "next";
@@ -7,9 +8,15 @@ import { Footer, MainContent } from "~/components/app";
 import { useAppTranslations } from "~/hooks";
 import { getSeoAppTitle } from "~/utils";
 import NextHeadSeo from "next-head-seo";
+import { useMapContext } from "~/provider";
 
 export default function Page404() {
   const { t } = useAppTranslations();
+  const cultureMap = useMapContext();
+
+  useEffect(() => {
+    if (cultureMap) cultureMap.showCurrentView();
+  }, [cultureMap]);
 
   return (
     <MainContent isDrawer layerStyle="pageBg">

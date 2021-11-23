@@ -180,18 +180,6 @@ export const ModuleComponentEvents = ({ ...props }) => {
     },
   });
 
-  console.log({
-    ...initialQueryState,
-    orderBy: [
-      {
-        firstEventDate: "asc",
-      },
-      {
-        [`title_${i18n.language}`]: "asc",
-      },
-    ],
-  });
-
   const formMethods = useForm<any>({
     mode: "onTouched",
     resolver: yupResolver(extendedValidationSchema),
