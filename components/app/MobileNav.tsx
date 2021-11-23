@@ -56,9 +56,7 @@ export const MobileNav = () => {
               position: "fixed",
               top: 0,
               left: 0,
-              height: "100%",
-              minHeight:"stretch",
-              //height: "calc(var(--vh) * 100)",
+              height: "calc(var(--vh) * 100)",
               width: isTablet ? (isTabletWide ? "66.66vw" : "80vw") : "100vw",
               zIndex: 1100,
             }}
@@ -67,8 +65,7 @@ export const MobileNav = () => {
             <RemoveScroll>
               <FocusLock>
                 <Box
-                  //h="calc(var(--vh) * 100)"
-                  h="stretch"
+                  h="calc(var(--vh) * 100)"
                   layerStyle="pageBg"
                   w="100%"
                   overflowY="auto"

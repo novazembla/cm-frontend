@@ -59,6 +59,7 @@ export const QuickSearchItem = ({
           textDecorationColor="none"
           padding="0 !important"
           pl={isMobile ? "0": "8% !important"}
+          transition="none"
         >
           <chakra.span display="block" pr="2">
             <chakra.span  className="clampTwoLines" fontWeight="bold"><MultiLangValue json={item.title} /></chakra.span>

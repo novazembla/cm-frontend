@@ -17,41 +17,13 @@
   --vh: 1vh;
 }
 
-
 html,
 body {
   padding: 0;
   margin: 0;
-  //height: 100%;
+  height: stretch;
   -ms-overflow-style: -ms-autohiding-scrollbar;
 }
-
-html {
-  min-height: -webkit-fill-available; 
-  min-height: -moz-available; 
-}
-
-body {
-  min-height: 100vh;
-  min-height: -webkit-fill-available; 
-  min-height: -moz-available; 
-}
-
-// TOOD:
-// ::-webkit-scrollbar {
-//   width: 15px;               /* width of the entire scrollbar */
-// }
-
-// ::-webkit-scrollbar-track {
-//   background: transparent;        /* color of the tracking area */
-// }
-
-// ::-webkit-scrollbar-thumb {
-//   width: 11px;
-//   background-color: #333;    /* color of the scroll thumb */
-//   border-radius: 20px;       /* roundness of the scroll thumb */
-//   border: 3px solid #333;  /* creates padding around scroll thumb */
-// }
 
 .clampTwoLines {
   overflow: hidden;
