@@ -148,7 +148,7 @@ export const Footer = ({
           </Box>
         </Flex>
       </Flex>
-      <Box w="50%" mt={isMobile ? "3em" : "5em"}>
+      <Box w={isMobile ? "66.66%" : "50%"} mt={isMobile ? "3em" : "5em"}>
         <chakra.a
           className="svgHover tabbedFocus"
           href="https://www.berlin.de/ba-lichtenberg/"

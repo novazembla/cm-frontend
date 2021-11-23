@@ -220,14 +220,13 @@ export const MainContent = ({
         <Box
           onClick={() => {
             if (isAnimationRunningRef.current || panActive.current) return;
-
             close();
           }}
           onTouchStart={() => {
             if (isAnimationRunningRef.current || panActive.current) return;
             close();
           }}
-          bg="#f0f"
+          bg="transparent"
           position="fixed"
           w="34vw"
           top="0"
