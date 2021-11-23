@@ -56,7 +56,8 @@ export const MobileNav = () => {
               position: "fixed",
               top: 0,
               left: 0,
-              height: "calc(var(--vh) * 100)",
+              height: "100%",
+              //height: "calc(var(--vh) * 100)",
               width: isTablet ? (isTabletWide ? "66.66vw" : "80vw") : "100vw",
               zIndex: 1100,
             }}
@@ -65,7 +66,9 @@ export const MobileNav = () => {
             <RemoveScroll>
               <FocusLock>
                 <Box
-                  h="calc(var(--vh) * 100)"
+                  //h="calc(var(--vh) * 100)"
+                  h="100%"
+                  minH="100%"
                   layerStyle="pageBg"
                   w="100%"
                   overflowY="auto"
@@ -126,47 +129,44 @@ export const MobileNav = () => {
                           </chakra.span>
                         ))}
 
-                          <IconButton
-                            aria-label={t("menu.button.closeMenu", "Close menu")}
-                            icon={
-                              <SVG type="cross" width="60px" height="60px" />
-                            }
-                            position="absolute"
-                            top="20px"
-                            right="20px"
-                            borderRadius="0"
-                            p="0"
-                            className="svgHover tabbedVisible"
-                            paddingInlineStart="0"
-                            paddingInlineEnd="0"
-                            padding="0"
-                            bg="transparent"
-                            w="30px"
-                            h="30px"
-                            minW="30px"
-                            overflow="hidden"
-                            onClick={() => {
-                              onMenuClose();
-                            }}
-                            transition="background-color 0.3s"
-                            _hover={{
-                              bg: "transparent",
-                            }}
-                            _active={{
-                              bg: "transparent",
-                            }}
-                            _focus={{
-                              bg: "transparent",
-                              outline: "solid 2px #E42B20",
-                              outlineOffset: "5px",
-                            }}
-                            transform={
-                              isMobile
-                                ? "translateY(-5px) translateX(5px)"
-                                : undefined
-                            }
-                          />
-                     
+                        <IconButton
+                          aria-label={t("menu.button.closeMenu", "Close menu")}
+                          icon={<SVG type="cross" width="60px" height="60px" />}
+                          position="absolute"
+                          top="20px"
+                          right="20px"
+                          borderRadius="0"
+                          p="0"
+                          className="svgHover tabbedVisible"
+                          paddingInlineStart="0"
+                          paddingInlineEnd="0"
+                          padding="0"
+                          bg="transparent"
+                          w="30px"
+                          h="30px"
+                          minW="30px"
+                          overflow="hidden"
+                          onClick={() => {
+                            onMenuClose();
+                          }}
+                          transition="background-color 0.3s"
+                          _hover={{
+                            bg: "transparent",
+                          }}
+                          _active={{
+                            bg: "transparent",
+                          }}
+                          _focus={{
+                            bg: "transparent",
+                            outline: "solid 2px #E42B20",
+                            outlineOffset: "5px",
+                          }}
+                          transform={
+                            isMobile
+                              ? "translateY(-5px) translateX(5px)"
+                              : undefined
+                          }
+                        />
                       </Flex>
                     </Flex>
                   </Flex>
@@ -192,7 +192,6 @@ export const MobileNav = () => {
             touchAction: "none",
           }}
         >
-          
           <Box position="relative" w="52px" h="52px" order={2}>
             <motion.div
               animate={{ opacity: isMenuOpen ? 1 : 0 }}
@@ -352,7 +351,7 @@ export const MobileNav = () => {
             animate={{ opacity: isMenuOpen ? 0 : 1 }}
             transition={{ duration: 0.3 }}
             style={{
-              order: 3
+              order: 3,
             }}
           >
             <IconButton

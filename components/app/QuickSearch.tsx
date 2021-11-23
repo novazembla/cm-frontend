@@ -225,7 +225,7 @@ export const QuickSearch = () => {
             <FocusLock>
               <Flex
                 w="100%"
-                h="calc(var(--vh) * 100)"
+                h="100%"
                 minH="100%"
                 layerStyle="pageBg"
                 overflowY="auto"

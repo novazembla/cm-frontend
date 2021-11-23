@@ -17,16 +17,25 @@
   --vh: 1vh;
 }
 
-// html {
-//   min-height: -webkit-fill-available; 
-//   min-height: -moz-available; 
-// }
 
-// body {
-//   min-height: 100vh;
-//   min-height: -webkit-fill-available; 
-//   min-height: -moz-available; 
-// }
+html,
+body {
+  padding: 0;
+  margin: 0;
+  //height: 100%;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+}
+
+html {
+  min-height: -webkit-fill-available; 
+  min-height: -moz-available; 
+}
+
+body {
+  min-height: 100vh;
+  min-height: -webkit-fill-available; 
+  min-height: -moz-available; 
+}
 
 // TOOD:
 // ::-webkit-scrollbar {
@@ -44,15 +53,6 @@
 //   border: 3px solid #333;  /* creates padding around scroll thumb */
 // }
 
-html,
-body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-  height: 100%;
-  -ms-overflow-style: -ms-autohiding-scrollbar;
-}
 .clampTwoLines {
   overflow: hidden;
   hyphens: auto;

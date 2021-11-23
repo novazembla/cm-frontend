@@ -227,11 +227,11 @@ export const MainContent = ({
             if (isAnimationRunningRef.current || panActive.current) return;
             close();
           }}
-          bg="transparent"
+          bg="#f0f"
           position="fixed"
           w="34vw"
           top="0"
-          h="100vh"
+          h="100%"
           zIndex="2"
           right={isDrawerOpen ? "0px" : undefined}
           cursor="pointer"
