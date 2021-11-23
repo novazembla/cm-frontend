@@ -151,7 +151,10 @@ export const Map = ({ layout }: { layout: string }) => {
   };
 
   const buttonVisible = mapLoaded
-    ? layout === "light" || (isMainContentOpen && !(isTablet || isDesktopAndUp))
+    ? layout === "light" ||
+      (!isMainContentOpen && !(isTablet || isDesktopAndUp)) ||
+      isTablet ||
+      isDesktopAndUp
     : false;
   return (
     <>
@@ -160,7 +163,9 @@ export const Map = ({ layout }: { layout: string }) => {
         right={isTabletWide || isDesktopAndUp ? "20px" : "10px"}
         top={
           layout === "light"
-            ? isTabletWide || isDesktopAndUp ? "20px" : "10px"
+            ? isTabletWide || isDesktopAndUp
+              ? "20px"
+              : "10px"
             : isDesktopAndUp
             ? "100px"
             : isTabletWide
