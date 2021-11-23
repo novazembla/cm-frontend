@@ -17,16 +17,16 @@
   --vh: 1vh;
 }
 
-html {
-  min-height: -webkit-fill-available; 
-  min-height: -moz-available; 
-}
+// html {
+//   min-height: -webkit-fill-available; 
+//   min-height: -moz-available; 
+// }
 
-body {
-  min-height: 100vh;
-  min-height: -webkit-fill-available; 
-  min-height: -moz-available; 
-}
+// body {
+//   min-height: 100vh;
+//   min-height: -webkit-fill-available; 
+//   min-height: -moz-available; 
+// }
 
 // TOOD:
 // ::-webkit-scrollbar {
