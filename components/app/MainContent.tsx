@@ -168,6 +168,7 @@ export const MainContent = ({
     setTimeout(() => {
       panActive.current = false;
       isAnimationRunningRef.current = false;
+      setIsDrawerOpen(false);
     }, 350);
   }, [controls, setMainContentStatus, dragLeft]);
 
@@ -177,7 +178,7 @@ export const MainContent = ({
     setIsDrawerOpen(true);
     setMainContentStatus(true);
     isAnimationRunningRef.current = true;
-
+    
     controls.stop();
     controls.start({
       translateX: 0,
@@ -189,6 +190,7 @@ export const MainContent = ({
     setTimeout(() => {
       panActive.current = false;
       isAnimationRunningRef.current = false;
+      setIsDrawerOpen(true);
     }, 350);
   }, [controls, setMainContentStatus]);
 
@@ -214,6 +216,7 @@ export const MainContent = ({
     ? t("mainContent.slideToLeft", "Hide content")
     : t("mainContent.slideToRight", "Show content");
 
+    console.log(isDrawerOpen, panActive.current, isAnimationRunningRef.current);
   return (
     <>
       {isDrawer && !isVerticalContent && (
@@ -282,6 +285,7 @@ export const MainContent = ({
               : {
                   opacity: buttonVisible ? 1 : 0,
                 })}
+            aria-hidden={isMenuOpen || isQuickSearchOpen ? "true": undefined}
           >
             <Box bg="#fff" w="35px" h="55px" transform="translateX(-5px)">
               <IconButton
@@ -311,7 +315,7 @@ export const MainContent = ({
                 onClick={toggle}
                 transform={isDrawerOpen ? "rotate(180deg)" : "rotate(0deg)"}
                 tabIndex={isMenuOpen || isQuickSearchOpen ? -1 : undefined}
-                ariaHidden={isMenuOpen || isQuickSearchOpen ? "true" : undefined}
+                aria-hidden={isMenuOpen || isQuickSearchOpen ? "true" : undefined}
               />
             </Box>
           </Box>
@@ -334,7 +338,7 @@ export const MainContent = ({
           cursor: !isDrawerOpen ? "pointer" : undefined,
           translateY: 0,
         }}
-        ariaHidden={isMenuOpen || isQuickSearchOpen ? "true" : undefined}
+        aria-hidden={isMenuOpen || isQuickSearchOpen ? "true" : undefined}
         transformTemplate={({ translateX }: { translateX: any }) => {
           return `translateX(${translateX}) translateZ(0)`;
         }}
