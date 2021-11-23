@@ -51,7 +51,7 @@ export const Footer = ({
           md: "2em",
         }}
       >
-        <Logo />
+        <Logo layout="full"/>
       </Box>
       <Flex alignItems="flex-end" justifyContent="space-between">
         <Box
