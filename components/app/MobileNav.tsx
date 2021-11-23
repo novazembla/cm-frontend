@@ -57,6 +57,7 @@ export const MobileNav = () => {
               top: 0,
               left: 0,
               height: "100%",
+              minHeight:"stretch",
               //height: "calc(var(--vh) * 100)",
               width: isTablet ? (isTabletWide ? "66.66vw" : "80vw") : "100vw",
               zIndex: 1100,
@@ -67,8 +68,7 @@ export const MobileNav = () => {
               <FocusLock>
                 <Box
                   //h="calc(var(--vh) * 100)"
-                  h="100%"
-                  minH="100%"
+                  h="stretch"
                   layerStyle="pageBg"
                   w="100%"
                   overflowY="auto"

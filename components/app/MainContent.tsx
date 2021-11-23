@@ -312,6 +312,7 @@ export const MainContent = ({
                 onClick={toggle}
                 transform={isDrawerOpen ? "rotate(180deg)" : "rotate(0deg)"}
                 tabIndex={isMenuOpen || isQuickSearchOpen ? -1 : undefined}
+                ariaHidden={isMenuOpen || isQuickSearchOpen ? "true" : undefined}
               />
             </Box>
           </Box>
@@ -334,6 +335,7 @@ export const MainContent = ({
           cursor: !isDrawerOpen ? "pointer" : undefined,
           translateY: 0,
         }}
+        ariaHidden={isMenuOpen || isQuickSearchOpen ? "true" : undefined}
         transformTemplate={({ translateX }: { translateX: any }) => {
           return `translateX(${translateX}) translateZ(0)`;
         }}
