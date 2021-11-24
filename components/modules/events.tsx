@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { gql, useQuery } from "@apollo/client";
 import { ListedEvent, LoadingIcon, ErrorMessage } from "~/components/ui";
-import { Footer, MainContent } from "~/components/app";
+import { MainContent } from "~/components/app/MainContent";
+import { Footer } from "~/components/app/Footer";
 import {
   Box,
   chakra,
@@ -23,7 +24,8 @@ import {
   IconButton,
 } from "@chakra-ui/react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
-import { FieldCheckboxGroup, FieldRadioGroup } from "~/components/forms";
+import { FieldRadioGroup } from "~/components/forms/FieldRadioGroup";
+import { FieldCheckboxGroup } from "~/components/forms/FieldCheckboxGroup";
 import { useAppTranslations } from "~/hooks";
 import { useForm, FormProvider } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";

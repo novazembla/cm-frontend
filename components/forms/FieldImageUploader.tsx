@@ -16,7 +16,9 @@ import {
 import { useAxiosCancelToken, useAppTranslations } from "~/hooks";
 import { useFormContext } from "react-hook-form";
 
-import { FieldErrorMessage, flattenErrors } from ".";
+import { FieldErrorMessage } from "./FieldErrorMessage";
+import { flattenErrors } from "./helpers";
+
 import { ApiImage, ApiImageProps, SVG } from "~/components/ui";
 import { useConfigContext } from "~/provider";
 

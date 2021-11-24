@@ -7,7 +7,8 @@ import {
   CardTourStop,
   SVG,
 } from "~/components/ui";
-import { Footer, MainContent } from "~/components/app";
+import { MainContent } from "~/components/app/MainContent";
+import { Footer } from "~/components/app/Footer";
 import { getApolloClient } from "~/services";
 import {
   useMapContext,
@@ -32,7 +33,7 @@ import { GetStaticPaths, GetStaticProps } from "next";
 import { useRouter } from "next/router";
 import { getLocationColors } from "~/utils";
 import NextLink from "next/link";
-import { debounce } from "lodash";
+import debounce from "lodash/debounce";
 
 const MOBILE_CARD_WIDTH = 275;
 

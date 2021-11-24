@@ -1,3 +1,4 @@
+import { ReactElement } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { GetStaticPaths, GetStaticProps } from "next";
 
@@ -7,6 +8,7 @@ import {
   ModulePageGetStaticProps,
 } from "~/components/modules";
 import { useRouter } from "next/router";
+import LayoutFull from "~/components/app/LayoutFull";
 
 const Page = ({ page, ...props }: { page: any; props: any }) => {
 
@@ -35,5 +37,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     },
   };
 };
-
+Page.getLayout = function getLayout(page: ReactElement) {
+  return <LayoutFull>{page}</LayoutFull>;
+};
 export default Page;

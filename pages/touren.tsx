@@ -1,8 +1,10 @@
+import { ReactElement } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import {
   ModuleComponentTours,
   ModuleToursGetStaticProps,
 } from "~/components/modules";
+import LayoutFull from "~/components/app/LayoutFull";
 import { GetStaticProps } from "next";
 
 const Tours = ({
@@ -36,5 +38,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     },
   };
 };
-
+Tours.getLayout = function getLayout(page: ReactElement) {
+  return <LayoutFull>{page}</LayoutFull>;
+};
 export default Tours;

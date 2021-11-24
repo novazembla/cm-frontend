@@ -1,3 +1,5 @@
+import { ReactElement } from "react";
+
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { GetStaticPaths, GetStaticProps } from "next";
 import {
@@ -7,6 +9,7 @@ import {
   ModuleComponentTourIntroduction,
 } from "~/components/modules";
 import { useRouter } from "next/router";
+import LayoutFull from "~/components/app/LayoutFull";
 
 const Tour = ({
   tour,
@@ -58,5 +61,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     },
   };
 };
-
+Tour.getLayout = function getLayout(page: ReactElement) {
+  return <LayoutFull>{page}</LayoutFull>;
+};
 export default Tour;

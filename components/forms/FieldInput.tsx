@@ -22,7 +22,8 @@ import {
 import { useTranslation } from "react-i18next";
 import { HiOutlineEyeOff, HiOutlineEye } from "react-icons/hi";
 
-import { FieldErrorMessage, flattenErrors } from ".";
+import { FieldErrorMessage } from "./FieldErrorMessage";
+import { flattenErrors } from "./helpers";
 
 export interface FieldInputSettings {
   onChange?: ChangeEventHandler;

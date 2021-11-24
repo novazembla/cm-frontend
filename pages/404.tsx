@@ -1,16 +1,20 @@
+import { ReactElement } from "react";
+
 import { useEffect } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 import { GetStaticProps } from "next";
 
+import LayoutFull from "~/components/app/LayoutFull";
 import { Grid, Box, Heading, Text } from "@chakra-ui/react";
-import { Footer, MainContent } from "~/components/app";
+import { MainContent } from "~/components/app/MainContent";
+import { Footer } from "~/components/app/Footer";
 import { useAppTranslations } from "~/hooks";
 import { getSeoAppTitle } from "~/utils";
 import NextHeadSeo from "next-head-seo";
 import { useMapContext } from "~/provider";
 
-export default function Page404() {
+export function Page404() {
   const { t } = useAppTranslations();
   const cultureMap = useMapContext();
 
@@ -57,3 +61,9 @@ export const getStaticProps: GetStaticProps = async (context) => {
     },
   };
 };
+
+Page404.getLayout = function getLayout(page: ReactElement) {
+  return <LayoutFull>{page}</LayoutFull>;
+};
+
+export default Page404;

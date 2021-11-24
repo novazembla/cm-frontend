@@ -1,5 +1,5 @@
 import { Link, Box, chakra } from "@chakra-ui/react";
-import { ActiveLink } from "~/components/ui";
+import { ActiveLink } from "~/components/ui/ActiveLink";
 import { useAppTranslations } from "~/hooks";
 import { useConfigContext } from "~/provider";
 

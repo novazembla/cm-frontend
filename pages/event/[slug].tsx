@@ -1,4 +1,6 @@
 import { GetStaticPaths, GetStaticProps } from "next";
+import { ReactElement } from "react";
+import LayoutFull from "~/components/app/LayoutFull";
 
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import {
@@ -42,6 +44,10 @@ export const getStaticProps: GetStaticProps = async (context) => {
       ...out?.props,
     },
   };
+};
+
+Event.getLayout = function getLayout(page: ReactElement) {
+  return <LayoutFull>{page}</LayoutFull>;
 };
 
 export default Event;

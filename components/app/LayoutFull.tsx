@@ -2,17 +2,26 @@ import { useEffect, useState, useRef } from "react";
 
 import Head from "next/head";
 
-import { Header, Map, QuickSearch, MobileNav } from ".";
+import { Header } from "./Header";
+import { Map } from "./Map";
+import { QuickSearch } from "./QuickSearch";
+import { MobileNav } from "./MobileNav";
 import { useAppTranslations, useIsBreakPoint } from "~/hooks";
 import { AppProps } from "~/types";
-import { LoadingBar } from ".";
+import { LoadingBar } from "./LoadingBar";
 import { useSettingsContext } from "~/provider";
-import { debounce } from "lodash";
+import debounce from "lodash/debounce";
 import NextHeadSeo from "next-head-seo";
 
 import { chakra } from "@chakra-ui/react";
 
-import { UserTracking } from ".";
+import { UserTracking } from "./UserTracking";
+import {
+  QuickSearchContextProvider,
+  MenuButtonContextProvider,
+  ScrollStateContextProvider,
+  MainContentContextProvider,
+} from "~/provider";
 
 export const LayoutFull = ({ children }: AppProps) => {
   const settings = useSettingsContext();
@@ -51,7 +60,7 @@ export const LayoutFull = ({ children }: AppProps) => {
 
     return () => {
       mounted = false;
-    }
+    };
   }, []);
 
   useEffect(() => {
@@ -87,44 +96,53 @@ export const LayoutFull = ({ children }: AppProps) => {
   }, [settings]);
 
   return (
-    <>
-      <Head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="theme-color" content="#fff" />
-      </Head>
-      <UserTracking />
-      <NextHeadSeo
-        title={`${t("logo.culturemap1", "CULTUREMAP")} ${t(
-          "logo.culturemap2",
-          "Lichtenberg"
-        )}`}
-        og={{
-          image: "https://example.com/default-og.png", // TOOD: default image
-          type: "article",
-          siteName: `${t("logo.culturemap1", "CULTUREMAP")} ${t(
-            "logo.culturemap2",
-            "Lichtenberg"
-          )}`,
-        }}
-        twitter={{
-          card: "summary",
-        }}
-      />
-      <chakra.a href="#content" className="skipToContent">
-        {t("header.skipToContent", "Skip to content")}
-      </chakra.a>
-      <LoadingBar color="cm.accentLight" loading={isLoadingSettings} />
-      {!isLoadingSettings && fontsLoaded && (isMobile || isTablet) && (
-        <MobileNav />
-      )}
-      {!isLoadingSettings && fontsLoaded && <Header />}
+    <ScrollStateContextProvider>
+      <MainContentContextProvider>
+        <QuickSearchContextProvider>
+          <MenuButtonContextProvider>
+            <Head>
+              <meta
+                name="viewport"
+                content="width=device-width, initial-scale=1.0"
+              />
+              <meta name="theme-color" content="#fff" />
+            </Head>
+            <UserTracking />
+            <NextHeadSeo
+              title={`${t("logo.culturemap1", "CULTUREMAP")} ${t(
+                "logo.culturemap2",
+                "Lichtenberg"
+              )}`}
+              og={{
+                image: "https://example.com/default-og.png", // TOOD: default image
+                type: "article",
+                siteName: `${t("logo.culturemap1", "CULTUREMAP")} ${t(
+                  "logo.culturemap2",
+                  "Lichtenberg"
+                )}`,
+              }}
+              twitter={{
+                card: "summary",
+              }}
+            />
+            <chakra.a href="#content" className="skipToContent">
+              {t("header.skipToContent", "Skip to content")}
+            </chakra.a>
+            <LoadingBar color="cm.accentLight" loading={isLoadingSettings} />
+            {!isLoadingSettings && fontsLoaded && (isMobile || isTablet) && (
+              <MobileNav />
+            )}
+            {!isLoadingSettings && fontsLoaded && <Header />}
 
-      <Map layout="full"/>
+            <Map layout="full" />
 
-      {!isLoadingSettings && fontsLoaded && children}
+            {!isLoadingSettings && fontsLoaded && children}
 
-      {!isLoadingSettings && fontsLoaded && <QuickSearch />}
-    </>
+            {!isLoadingSettings && fontsLoaded && <QuickSearch />}
+          </MenuButtonContextProvider>
+        </QuickSearchContextProvider>
+      </MainContentContextProvider>
+    </ScrollStateContextProvider>
   );
 };
 export default LayoutFull;

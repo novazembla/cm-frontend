@@ -7,7 +7,8 @@ import {
   Images,
   CardLocation,
 } from "~/components/ui";
-import { Footer, MainContent } from "~/components/app";
+import { MainContent } from "~/components/app/MainContent";
+import { Footer } from "~/components/app/Footer";
 import { getApolloClient } from "~/services";
 import {
   useMapContext,

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { MultiLangValue, MultiLangHtml, ApiImage, SVG } from "~/components/ui";
-import { Footer, MainContent } from "~/components/app";
+import { MainContent } from "~/components/app/MainContent";
+import { Footer } from "~/components/app/Footer";
 import {
   useMapContext,
   useConfigContext,

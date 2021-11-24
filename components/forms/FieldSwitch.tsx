@@ -2,7 +2,8 @@ import React from "react";
 import { Switch, FormControl, Flex, chakra } from "@chakra-ui/react";
 import { useFormContext, Controller } from "react-hook-form";
 
-import { FieldErrorMessage, flattenErrors } from ".";
+import { FieldErrorMessage } from "./FieldErrorMessage";
+import { flattenErrors } from "./helpers";
 
 export const FieldSwitch = ({
   name,

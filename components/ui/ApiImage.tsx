@@ -1,7 +1,5 @@
 import React from "react";
-import Image from "next/image";
-import { Box, Flex, Text, chakra } from "@chakra-ui/react";
-import { BeatLoader } from "react-spinners";
+import { Box, Flex, chakra } from "@chakra-ui/react";
 
 import { useAppTranslations, useImageStatusPoll } from "~/hooks";
 

@@ -13,7 +13,7 @@ import {
 } from "~/provider";
 
 import { Box, IconButton, Flex } from "@chakra-ui/react";
-import { SVG } from "~/components/ui";
+import { SVG } from "~/components/ui/SVG";
 import type { CultureMap } from "~/services/CultureMap";
 
 const userGeoLocationOptions = {

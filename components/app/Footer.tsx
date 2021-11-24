@@ -1,5 +1,5 @@
 import React from "react";
-import { ActiveLink } from "~/components/ui";
+import ActiveLink from "~/components/ui/ActiveLink";
 
 import { Flex, IconButton, chakra, Box } from "@chakra-ui/react";
 
@@ -7,7 +7,7 @@ import { useConfigContext } from "~/provider";
 import { MultiLangValue, SVG } from "../ui";
 
 import { useIsBreakPoint, useAppTranslations } from "~/hooks";
-import { Logo } from ".";
+import { Logo } from "./Logo";
 
 // https://mmazzarolo.com/blog/2021-04-10-nextjs-scroll-restoration/
 

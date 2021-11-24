@@ -28,7 +28,7 @@ import type * as yup from "yup";
 
 import { LoadingIcon, ErrorMessage, SVG } from "~/components/ui";
 
-import { QuickSearchResult } from ".";
+import { QuickSearchResult } from "./QuickSearchResult";
 import FocusLock from "react-focus-lock";
 
 const debounce = (fn: Function, ms = 300) => {

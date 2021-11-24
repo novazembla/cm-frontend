@@ -1,7 +1,6 @@
 import maplibregl from "maplibre-gl";
 import { primaryInput } from "detect-it";
 import type { CultureMap } from "./CultureMap";
-import { AnyKindOfDictionary } from "lodash";
 
 export class MapPopup {
   locationHash: string = "";

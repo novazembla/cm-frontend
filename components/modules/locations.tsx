@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { gql, useQuery, useLazyQuery } from "@apollo/client";
 import { LoadingIcon, ErrorMessage, CardLocation } from "~/components/ui";
-import { Footer } from "~/components/app";
+
 import {
   Box,
   Flex,
@@ -14,17 +14,15 @@ import {
   AccordionIcon,
   Button,
 } from "@chakra-ui/react";
-import {
-  FieldCheckboxGroup,
-  FieldInput,
-  FieldSwitch,
-} from "~/components/forms";
+import { FieldCheckboxGroup } from "~/components/forms/FieldCheckboxGroup";
+import { FieldInput } from "~/components/forms/FieldInput";
+import { FieldSwitch } from "~/components/forms/FieldSwitch";
 import { useAppTranslations } from "~/hooks";
 import { useForm, FormProvider } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { boolean, object, mixed, number } from "yup";
-
-import { MainContent } from "~/components/app";
+import { MainContent } from "~/components/app/MainContent";
+import { Footer } from "~/components/app/Footer";
 import { useSettingsContext, useMapContext } from "~/provider";
 import { getMultilangSortedList, getSeoAppTitle, getSeoImage } from "~/utils";
 import NextHeadSeo from "next-head-seo";

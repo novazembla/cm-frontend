@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import { gql } from "@apollo/client";
 import { MultiLangValue, MultiLangHtml, ApiImage } from "~/components/ui";
-import { Footer, MainContent } from "~/components/app";
+import { MainContent } from "~/components/app/MainContent";
+import { Footer } from "~/components/app/Footer";
 import { getApolloClient } from "~/services";
 import { Box, Text, chakra, Grid } from "@chakra-ui/react";
 import { GetStaticPaths, GetStaticProps } from "next";

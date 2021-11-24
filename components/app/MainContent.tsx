@@ -12,7 +12,7 @@ import {
 } from "~/provider";
 import { SVG } from "~/components/ui";
 
-import { debounce } from "lodash";
+import debounce from "lodash/debounce";
 
 const MotionBox = motion(Box);
 

@@ -9,7 +9,8 @@ import {
 } from "@chakra-ui/react";
 import { useFormContext, Controller } from "react-hook-form";
 import { MultiLangValue } from "~/components/ui";
-import { FieldErrorMessage, flattenErrors } from ".";
+import { FieldErrorMessage } from "./FieldErrorMessage";
+import { flattenErrors } from "./helpers";
 
 export type FieldCheckboxGroupOption = {
   label: string;

@@ -12,25 +12,28 @@ import {
 import NextHeadSeo from "next-head-seo";
 import { useMutation, gql } from "@apollo/client";
 
-import { Footer } from "~/components/app";
 import { Box, chakra, Grid, Text, Button } from "@chakra-ui/react";
-import { MainContent } from "~/components/app";
+import { MainContent } from "~/components/app/MainContent";
+import { Footer } from "~/components/app/Footer";
 import { useAppTranslations, useIsBreakPoint } from "~/hooks";
 import { SVG, MultiLangHtml, ImageStatusEnum } from "~/components/ui";
+
+import { FieldCheckboxGroup } from "~/components/forms/FieldCheckboxGroup";
+import { FieldInput } from "~/components/forms/FieldInput";
+import { FieldTextArea } from "~/components/forms/FieldTextArea";
+import { FieldSwitch } from "~/components/forms/FieldSwitch";
+import { FieldRow } from "~/components/forms/FieldRow";
+import { TwoColFieldRow } from "~/components/forms/TwoColFieldRow";
+import { TextErrorMessage } from "~/components/forms/TextErrorMessage";
+import { FormScrollInvalidIntoView } from "~/components/forms/FormScrollInvalidIntoView";
+import { FormNavigationBlock } from "~/components/forms/FormNavigationBlock";
+import { FieldImageUploader } from "~/components/forms/FieldImageUploader";
 import {
-  FieldCheckboxGroup,
-  FieldInput,
-  FieldTextArea,
-  FieldSwitch,
-  FieldRow,
-  TwoColFieldRow,
-  TextErrorMessage,
-  FormScrollInvalidIntoView,
-  FormNavigationBlock,
-  FieldImageUploader,
-} from "~/components/forms";
-import { useSettingsContext, useMapContext, useConfigContext } from "~/provider";
-import { pick } from "lodash";
+  useSettingsContext,
+  useMapContext,
+  useConfigContext,
+} from "~/provider";
+import pick from "lodash/pick";
 import { useRouter } from "next/router";
 
 export const SuggestionSchema = object().shape({
@@ -88,7 +91,7 @@ export const ModuleComponentSuggest = () => {
   const { t, i18n, getMultilangValue } = useAppTranslations();
 
   const config = useConfigContext();
-  
+
   const { isMobile } = useIsBreakPoint();
 
   const [hasFormError, setHasFormError] = useState(false);

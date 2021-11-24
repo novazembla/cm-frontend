@@ -1,23 +1,22 @@
 import { useRef, useEffect } from "react";
-import { Flex, Box, IconButton, chakra } from "@chakra-ui/react";
+import { Flex, Box, IconButton } from "@chakra-ui/react";
 
 import { useAppTranslations, useIsBreakPoint } from "~/hooks";
 
 import { motion } from "framer-motion";
 
-import {
-  InlineLanguageButtons,
-  ActiveLink,
-  MultiLangValue,
-  SVG,
-} from "~/components/ui";
+import {InlineLanguageButtons} from "~/components/ui/InlineLanguageButtons";
+import {ActiveLink} from "~/components/ui/ActiveLink";
+import {MultiLangValue} from "~/components/ui/MultiLangValue";
+import {SVG} from "~/components/ui/SVG";
+
 import {
   useConfigContext,
   useMenuButtonContext,
   useQuickSearchContext,
 } from "~/provider";
 import { chakraToBreakpointArray } from "~/theme";
-import { Logo } from ".";
+import { Logo } from "./Logo";
 
 export const Header = (/* props */) => {
   const headerRef = useRef<HTMLDivElement>(null);

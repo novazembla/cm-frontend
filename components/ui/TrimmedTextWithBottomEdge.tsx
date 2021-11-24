@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState } from "react";
 import { chakra, Box } from "@chakra-ui/react";
-import { debounce } from "lodash";
+import debounce from "lodash/debounce";
 
 export const TrimmedTextWithBottomEdge = ({
   text,

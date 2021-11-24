@@ -1,8 +1,6 @@
 import { useRouter } from "next/router";
-import PropTypes from "prop-types";
 import NextLink from "next/link";
-import React, { Children } from "react";
-import { chakra } from "@chakra-ui/react";
+import React from "react";
 
 export const ActiveLink = ({
   children,

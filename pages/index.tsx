@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, UIEvent, useCallback } from "react";
+import { useEffect, ReactElement, useState, useRef, UIEvent, useCallback } from "react";
 
 import { GetStaticProps } from "next";
 import NextLink from "next/link";
@@ -15,6 +15,7 @@ import {
 } from "@chakra-ui/react";
 import { gql } from "@apollo/client";
 
+import LayoutFull from "~/components/app/LayoutFull";
 import {
   MultiLangHtml,
   CardTour,
@@ -26,13 +27,14 @@ import {
 import { useAppTranslations, useIsBreakPoint } from "~/hooks";
 import { getLocationColors } from "~/utils";
 
-import { Footer, MainContent } from "~/components/app";
+import { MainContent } from "~/components/app/MainContent";
+import { Footer } from "~/components/app/Footer";
 import {
   useSettingsContext,
   useMapContext,
   useConfigContext,
 } from "~/provider";
-import { debounce } from "lodash";
+import debounce from "lodash/debounce";
 import NextHeadSeo from "next-head-seo";
 
 const homepageQuery = gql`
@@ -541,5 +543,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     revalidate: 300,
   };
 };
-
+Home.getLayout = function getLayout(page: ReactElement) {
+  return <LayoutFull>{page}</LayoutFull>;
+};
 export default Home;

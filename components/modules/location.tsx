@@ -7,7 +7,7 @@ import {
   CardEvent,
   Images,
 } from "~/components/ui";
-import { Footer } from "~/components/app";
+import { Footer } from "~/components/app/Footer";
 import { getApolloClient } from "~/services";
 import {
   useMapContext,
@@ -34,7 +34,7 @@ import {
 import NextHeadSeo from "next-head-seo";
 import { useIsBreakPoint, useAppTranslations } from "~/hooks";
 import { GetStaticPaths, GetStaticProps } from "next";
-import { MainContent } from "~/components/app";
+import { MainContent } from "~/components/app/MainContent";
 import { useRouter } from "next/router";
 
 const locationQuery = gql`

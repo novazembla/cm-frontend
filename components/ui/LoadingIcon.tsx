@@ -1,6 +1,6 @@
 import { Flex } from "@chakra-ui/react";
 
-import { BeatLoader } from "react-spinners";
+import BeatLoader from "react-spinners/BeatLoader";
 
 export const LoadingIcon = ({ my = "3em" }: { my?: string }) => {
   return (

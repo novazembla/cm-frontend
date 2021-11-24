@@ -13,7 +13,8 @@ import {
   VisuallyHidden,
 } from "@chakra-ui/react";
 
-import { FieldErrorMessage, flattenErrors } from ".";
+import { FieldErrorMessage } from "./FieldErrorMessage";
+import { flattenErrors } from "./helpers";
 
 export interface FieldTextAreaSettings {
   onChange?: ChangeEventHandler;

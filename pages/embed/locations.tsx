@@ -1,8 +1,8 @@
 import { ReactElement } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { ModuleComponentLocationsEmbed } from "~/components/modules";
+import { ModuleComponentLocationsEmbed } from "~/components/modules/locationsEmbed";
 import { GetStaticProps } from "next";
-import { LayoutLight } from "~/components/app";
+import LayoutLight from "~/components/app/LayoutLight";
 
 const Locations = () => {
   return <ModuleComponentLocationsEmbed />;

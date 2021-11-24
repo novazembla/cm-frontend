@@ -16,32 +16,38 @@ console.log(
     .trim()}`
 );
 
-module.exports = withImages({
-  async generateBuildId() {
-    return execSync(lastCommitCommand).toString().trim();
-  },
-  i18n,
-  images: {
-    domains,
-  },
-  // productionBrowserSourceMaps: true,
-  experimental: {
-    scrollRestoration: true,
-  },
-  webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
-    // config.infrastructureLogging = {
-    //   appendOnly: true,
-    //   level: "verbose",
-    // };
-    // config.module.rules.push(
-    //   {
-    //     test: /\.svg$/,
-    //     issuer: {
-    //       and: [/\.(js|ts)x?$/]
-    //     },
-    //     use: ['@svgr/webpack'],
-    //   }
-    // );
-    return config;
-  },
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+  enabled: process.env.ANALYZE === "true",
 });
+
+module.exports = withBundleAnalyzer(
+  withImages({
+    async generateBuildId() {
+      return execSync(lastCommitCommand).toString().trim();
+    },
+    i18n,
+    images: {
+      domains,
+    },
+    //productionBrowserSourceMaps: true,
+    experimental: {
+      scrollRestoration: true,
+    },
+    webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
+      // config.infrastructureLogging = {
+      //   appendOnly: true,
+      //   level: "verbose",
+      // };
+      // config.module.rules.push(
+      //   {
+      //     test: /\.svg$/,
+      //     issuer: {
+      //       and: [/\.(js|ts)x?$/]
+      //     },
+      //     use: ['@svgr/webpack'],
+      //   }
+      // );
+      return config;
+    },
+  })
+);
