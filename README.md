@@ -41,4 +41,10 @@ npm run dev
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 
+## Bundle Size Optimization 
+First of all that barrel index.ts files might confuse the nextjs compiler. Sometimes it's better to access other files directly. However, we've enabled `"sideEffects":false,` to the `package.json` to ensure that webpack does as much treeshaking as it can. 
+
+You can inspect the created bundle by running `npm run build:analyze`
+
+We also recommend to make use of [bundle-wizard](https://www.npmjs.com/package/bundle-wizard). To be able to do that you should make sure that `productionBrowserSourceMaps: true,` is set to true in `next.config.js`, then run `npm run build` followed by `PORT=3001 npx next start` (to serve the just built app locally on a different port as bundle-wizard does use port 3000). Then run `npx bundle-wizard http://localhost:3001` to inspect the individual pages. 
 

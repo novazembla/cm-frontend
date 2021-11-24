@@ -3,10 +3,10 @@ import { ReactElement } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import {
   ModuleComponentTours,
-  ModuleToursGetStaticProps
+  ModuleToursGetStaticProps,
 } from "~/components/modules/tours";
 import LayoutFull from "~/components/app/LayoutFull";
-import { GetStaticProps, GetStaticPaths } from "next";
+import { GetStaticProps } from "next";
 
 const Tours = ({
   tours,
@@ -17,7 +17,9 @@ const Tours = ({
   totalCount: number;
   props: any;
 }) => {
-  return <ModuleComponentTours tours={tours} totalCount={totalCount} {...props} />;
+  return (
+    <ModuleComponentTours tours={tours} totalCount={totalCount} {...props} />
+  );
 };
 
 // This gets called on every request
