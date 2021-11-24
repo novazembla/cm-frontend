@@ -1,6 +1,7 @@
 import { useConfigContext } from "~/provider";
 import { Box } from "@chakra-ui/react";
-import { useAppTranslations } from "~/hooks";
+import { useAppTranslations } from "~/hooks/useAppTranslations";
+
 import { isEmptyHtml } from "~/utils";
 import { useRouter } from "next/router";
 

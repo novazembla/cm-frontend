@@ -20,7 +20,8 @@ import {
 import { FieldCheckboxGroup } from "~/components/forms/FieldCheckboxGroup";
 import { FieldInput } from "~/components/forms/FieldInput";
 import { FieldSwitch } from "~/components/forms/FieldSwitch";
-import { useAppTranslations } from "~/hooks";
+import { useAppTranslations } from "~/hooks/useAppTranslations";
+
 import { useForm, FormProvider } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { boolean, object, mixed, number } from "yup";

@@ -3,7 +3,7 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import { NextRouter } from "next/router";
 
 import type { AppConfig } from "~/types";
-import type { AppTranslationHelper } from "~/hooks";
+import type { AppTranslationHelper } from "~/hooks/useAppTranslations";
 
 import { MapPopup } from "./MapPopup";
 import axios, { AxiosResponse } from "axios";
@@ -88,9 +88,13 @@ export class CultureMap {
       maxZoom: this.config.maxZoom,
       attributionControl: false,
     });
-    this.map.addControl(new maplibregl.AttributionControl({
-      customAttribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="nofollow noreferrer">OpenStreetMap contributors</a>'
-      }), 'bottom-right');
+    this.map.addControl(
+      new maplibregl.AttributionControl({
+        customAttribution:
+          '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="nofollow noreferrer">OpenStreetMap contributors</a>',
+      }),
+      "bottom-right"
+    );
     this.clusterDetail.init();
 
     const process = () => {

@@ -1,6 +1,5 @@
 import React, { useState, useMemo, ChangeEventHandler, useEffect } from "react";
 import axios from "axios";
-import { DocumentNode } from "@apollo/client";
 import { useDropzone } from "react-dropzone";
 import {
   Box,
@@ -12,7 +11,9 @@ import {
   Text,
 } from "@chakra-ui/react";
 
-import { useAxiosCancelToken, useAppTranslations } from "~/hooks";
+import { useAxiosCancelToken } from "~/hooks/useAxiosCancelToken";
+import { useAppTranslations } from "~/hooks/useAppTranslations";
+
 import { useFormContext } from "react-hook-form";
 
 import { FieldErrorMessage } from "./FieldErrorMessage";

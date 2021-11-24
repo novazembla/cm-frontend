@@ -1,4 +1,4 @@
-import { useSSRSaveMediaQuery } from ".";
+import { useSSRSaveMediaQuery } from "./useSSRSaveMediaQuery";
 
 export const useIsBreakPoint = () => {
   const isMobile = useSSRSaveMediaQuery("(max-width: 44.9999em)");

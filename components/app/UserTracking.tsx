@@ -4,7 +4,8 @@ import Cookies from "js-cookie";
 import { useRouter } from "next/router";
 import { useConfigContext } from "~/provider";
 import { Button, Box, chakra, Flex } from "@chakra-ui/react";
-import { useAppTranslations } from "~/hooks";
+import { useAppTranslations } from "~/hooks/useAppTranslations";
+
 
 const COOKIE_NAME = "cm-allow-tracking";
 import FocusLock from "react-focus-lock";

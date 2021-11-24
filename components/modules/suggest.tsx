@@ -15,7 +15,8 @@ import { useMutation, gql } from "@apollo/client";
 import { Box, chakra, Grid, Text, Button } from "@chakra-ui/react";
 import { MainContent } from "~/components/app/MainContent";
 import { Footer } from "~/components/app/Footer";
-import { useAppTranslations, useIsBreakPoint } from "~/hooks";
+import { useIsBreakPoint } from "~/hooks/useIsBreakPoint";
+import { useAppTranslations } from "~/hooks/useAppTranslations";
 
 import { MultiLangHtml } from "~/components/ui/MultiLangHtml";
 import { SVG } from "~/components/ui/SVG";

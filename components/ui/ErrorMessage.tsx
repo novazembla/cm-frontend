@@ -1,6 +1,7 @@
 import React from "react";
 import { Box } from "@chakra-ui/react";
-import { useAppTranslations } from "~/hooks";
+import { useAppTranslations } from "~/hooks/useAppTranslations";
+
 
 // t("error.dataLoad", "Oops, something went wrong and we could not load the required data. Please try again later!")
 export const ErrorMessage = ({ type }: { type: string }) => {

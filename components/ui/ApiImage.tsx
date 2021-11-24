@@ -1,7 +1,8 @@
 import React from "react";
 import { Box, Flex, chakra } from "@chakra-ui/react";
 
-import { useAppTranslations, useImageStatusPoll } from "~/hooks";
+import { useImageStatusPoll } from "~/hooks/useImageStatusPoll";
+import { useAppTranslations } from "~/hooks/useAppTranslations";
 
 export type ApiConfigImageFormatType = "square" | "normal";
 

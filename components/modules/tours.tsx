@@ -6,7 +6,8 @@ import { Footer } from "~/components/app/Footer";
 import { getApolloClient } from "~/services";
 import { Box, Grid, chakra } from "@chakra-ui/react";
 import { GetStaticProps } from "next";
-import { useAppTranslations } from "~/hooks";
+import { useAppTranslations } from "~/hooks/useAppTranslations";
+
 import { useRouter } from "next/router";
 import { useConfigContext, useMapContext } from "~/provider";
 import { getSeoAppTitle } from "~/utils";

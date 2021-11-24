@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useLazyQuery } from "@apollo/client";
 
-import { useAppTranslations } from "~/hooks";
+import { useAppTranslations } from "~/hooks/useAppTranslations";
+
 
 import { useSettingsContext, useMapContext } from "~/provider";
 

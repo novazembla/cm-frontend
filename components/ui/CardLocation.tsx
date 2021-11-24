@@ -12,7 +12,8 @@ import {ApiImage} from "~/components/ui/ApiImage";
 import {TrimmedTextWithBottomEdge} from "~/components/ui/TrimmedTextWithBottomEdge";
 import {SVG} from "~/components/ui/SVG";
 import { htmlToTrimmedString } from "~/utils";
-import { useAppTranslations, useIsBreakPoint } from "~/hooks";
+import { useIsBreakPoint } from "~/hooks/useIsBreakPoint";
+import { useAppTranslations } from "~/hooks/useAppTranslations";
 import { useConfigContext, useSettingsContext } from "~/provider";
 
 import NextLink from "next/link";

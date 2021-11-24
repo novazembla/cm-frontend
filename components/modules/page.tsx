@@ -12,7 +12,8 @@ import { useConfigContext, useMapContext } from "~/provider";
 import { useRouter } from "next/router";
 import { getSeoAppTitle, getSeoImage } from "~/utils";
 import NextHeadSeo from "next-head-seo";
-import { useAppTranslations } from "~/hooks";
+import { useAppTranslations } from "~/hooks/useAppTranslations";
+
 
 const pageQuery = gql`
   query ($slug: String!) {

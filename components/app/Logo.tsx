@@ -1,6 +1,7 @@
 import { Link, Box, chakra } from "@chakra-ui/react";
 import { ActiveLink } from "~/components/ui/ActiveLink";
-import { useAppTranslations } from "~/hooks";
+import { useAppTranslations } from "~/hooks/useAppTranslations";
+
 import { useConfigContext } from "~/provider";
 
 export const Logo = ({ layout }: { layout: string }) => {

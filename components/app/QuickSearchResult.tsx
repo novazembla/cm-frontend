@@ -2,7 +2,8 @@ import React, { useContext } from "react";
 import { Box, chakra, Heading, Text } from "@chakra-ui/react";
 
 import { QuickSearchItem } from "~/components/ui/QuickSearchItem";
-import { useAppTranslations } from "~/hooks";
+import { useAppTranslations } from "~/hooks/useAppTranslations";
+
 
 export const QuickSearchResult = ({ result }: { result: any }) => {
   const { t } = useAppTranslations();

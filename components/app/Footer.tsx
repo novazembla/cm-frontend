@@ -7,7 +7,9 @@ import { useConfigContext } from "~/provider";
 import { MultiLangValue } from "~/components/ui/MultiLangValue";
 import { SVG } from "~/components/ui/SVG";
 
-import { useIsBreakPoint, useAppTranslations } from "~/hooks";
+import { useIsBreakPoint } from "~/hooks/useIsBreakPoint";
+import { useAppTranslations } from "~/hooks/useAppTranslations";
+
 import { Logo } from "./Logo";
 
 // https://mmazzarolo.com/blog/2021-04-10-nextjs-scroll-restoration/
@@ -52,7 +54,7 @@ export const Footer = ({
           md: "2em",
         }}
       >
-        <Logo layout="full"/>
+        <Logo layout="full" />
       </Box>
       <Flex alignItems="flex-end" justifyContent="space-between">
         <Box

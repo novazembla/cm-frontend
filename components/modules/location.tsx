@@ -32,7 +32,9 @@ import {
   getSeoImage,
 } from "~/utils";
 import NextHeadSeo from "next-head-seo";
-import { useIsBreakPoint, useAppTranslations } from "~/hooks";
+import { useIsBreakPoint } from "~/hooks/useIsBreakPoint";
+import { useAppTranslations } from "~/hooks/useAppTranslations";
+
 import { GetStaticPaths, GetStaticProps } from "next";
 import { MainContent } from "~/components/app/MainContent";
 import { useRouter } from "next/router";

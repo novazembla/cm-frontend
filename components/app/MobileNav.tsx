@@ -9,7 +9,9 @@ import {
   useConfigContext,
   useQuickSearchContext,
 } from "~/provider";
-import { useIsBreakPoint, useAppTranslations } from "~/hooks";
+import { useIsBreakPoint } from "~/hooks/useIsBreakPoint";
+import { useAppTranslations } from "~/hooks/useAppTranslations";
+
 
 import { MultiLangValue } from "~/components/ui/MultiLangValue";
 import { ActiveLink } from "~/components/ui/ActiveLink";

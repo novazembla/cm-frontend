@@ -21,7 +21,8 @@ import {
   Grid,
   Button,
 } from "@chakra-ui/react";
-import { useAppTranslations, useIsBreakPoint } from "~/hooks";
+import { useIsBreakPoint } from "~/hooks/useIsBreakPoint";
+import { useAppTranslations } from "~/hooks/useAppTranslations";
 import { useRouter } from "next/router";
 import { getSeoAppTitle, getSeoImage } from "~/utils";
 import NextHeadSeo from "next-head-seo";

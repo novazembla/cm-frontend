@@ -6,7 +6,9 @@ import { Header } from "./Header";
 import { Map } from "./Map";
 import { QuickSearch } from "./QuickSearch";
 import { MobileNav } from "./MobileNav";
-import { useAppTranslations, useIsBreakPoint } from "~/hooks";
+import { useIsBreakPoint } from "~/hooks/useIsBreakPoint";
+import { useAppTranslations } from "~/hooks/useAppTranslations";
+
 import { AppProps } from "~/types";
 import { LoadingBar } from "./LoadingBar";
 import { useSettingsContext } from "~/provider";

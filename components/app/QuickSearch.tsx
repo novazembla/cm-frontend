@@ -16,7 +16,9 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 
 import { useQuickSearchContext } from "~/provider";
-import { useIsBreakPoint, useAppTranslations } from "~/hooks";
+import { useIsBreakPoint } from "~/hooks/useIsBreakPoint";
+import { useAppTranslations } from "~/hooks/useAppTranslations";
+
 
 import { useLazyQuery, gql } from "@apollo/client";
 import { useForm, Controller } from "react-hook-form";

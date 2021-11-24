@@ -3,7 +3,8 @@ import NextLink from "next/link";
 import { Button, HStack, Link } from "@chakra-ui/react";
 import { useConfigContext } from "~/provider";
 import { useRouter } from "next/router";
-import { useAppTranslations } from "~/hooks";
+import { useAppTranslations } from "~/hooks/useAppTranslations";
+
 
 export const InlineLanguageButtons = () => {
   const config = useConfigContext();

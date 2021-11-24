@@ -14,7 +14,8 @@ import {TrimmedTextWithBottomEdge} from "~/components/ui/TrimmedTextWithBottomEd
 import {SVG} from "~/components/ui/SVG";
 
 import { htmlToTrimmedString } from "~/utils";
-import { useAppTranslations, useIsBreakPoint } from "~/hooks";
+import { useIsBreakPoint } from "~/hooks/useIsBreakPoint";
+import { useAppTranslations } from "~/hooks/useAppTranslations";
 import { useConfigContext } from "~/provider";
 import NextLink from "next/link";
 

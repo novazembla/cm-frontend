@@ -11,7 +11,11 @@ import { Footer } from "~/components/app/Footer";
 import { getApolloClient } from "~/services";
 import type { MapHighlightType } from "~/services/MapHighlights";
 
-import { useConfigContext, useMapContext, useSettingsContext } from "~/provider";
+import {
+  useConfigContext,
+  useMapContext,
+  useSettingsContext,
+} from "~/provider";
 import {
   Box,
   SimpleGrid,
@@ -22,7 +26,8 @@ import {
   Link,
 } from "@chakra-ui/react";
 import { GetStaticPaths, GetStaticProps } from "next";
-import { useAppTranslations, useIsBreakPoint } from "~/hooks";
+import { useIsBreakPoint } from "~/hooks/useIsBreakPoint";
+import { useAppTranslations } from "~/hooks/useAppTranslations";
 import { useRouter } from "next/router";
 import {
   isEmptyHtml,
@@ -142,7 +147,7 @@ export const ModuleComponentEvent = ({
   const cultureMap = useMapContext();
   const settings = useSettingsContext();
   const config = useConfigContext();
-  
+
   const { t, getMultilangValue, i18n, getMultilangHtml } = useAppTranslations();
   const { isMobile } = useIsBreakPoint();
 

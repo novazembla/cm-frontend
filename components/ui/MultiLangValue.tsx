@@ -1,6 +1,7 @@
 import React from "react";
 import { useConfigContext } from "~/provider";
-import { useAppTranslations } from "~/hooks";
+import { useAppTranslations } from "~/hooks/useAppTranslations";
+
 
 export const MultiLangValue = ({ json }: { json?: Record<string, string> | string }) => {
   

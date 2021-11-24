@@ -13,7 +13,7 @@ export {}
 // } from ".";
 // import { useTranslation } from "react-i18next";
 // import { useFormContext } from "react-hook-form";
-// import { useConfig } from "~/hooks";
+// import { useConfig } from "~/hooks/useConfig";
 
 // export interface FieldSingleImageSettings {
 //   imageRequired?: boolean;

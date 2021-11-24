@@ -9,7 +9,8 @@ import LayoutFull from "~/components/app/LayoutFull";
 import { Grid, Box, Heading, Text } from "@chakra-ui/react";
 import { MainContent } from "~/components/app/MainContent";
 import { Footer } from "~/components/app/Footer";
-import { useAppTranslations } from "~/hooks";
+import { useAppTranslations } from "~/hooks/useAppTranslations";
+
 import { getSeoAppTitle } from "~/utils";
 import NextHeadSeo from "next-head-seo";
 import { useMapContext } from "~/provider";

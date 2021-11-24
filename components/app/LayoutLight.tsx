@@ -4,7 +4,8 @@ import Head from "next/head";
 import { Box } from "@chakra-ui/react";
 import { Map } from "./Map";
 import { Logo } from "./Logo";
-import { useAppTranslations } from "~/hooks";
+import { useAppTranslations } from "~/hooks/useAppTranslations";
+
 import { AppProps } from "~/types";
 import { LoadingBarLight } from "./LoadingBarLight";
 import { useSettingsContext } from "~/provider";

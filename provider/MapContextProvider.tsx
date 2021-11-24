@@ -2,7 +2,8 @@ import React, { createContext, useContext, useRef, useEffect } from "react";
 import { useState } from "react";
 import type { MapPin } from "~/types";
 import { useConfigContext,  } from "~/provider";
-import { useAppTranslations } from "~/hooks";
+import { useAppTranslations } from "~/hooks/useAppTranslations";
+
 import { CultureMap } from "~/services";
 import { useRouter } from "next/router";
 

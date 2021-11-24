@@ -29,7 +29,8 @@ import { CardLocation } from "~/components/ui/CardLocation";
 import { CardEvent } from "~/components/ui/CardEvent";
 import { SVG } from "~/components/ui/SVG";
 
-import { useAppTranslations, useIsBreakPoint } from "~/hooks";
+import { useIsBreakPoint } from "~/hooks/useIsBreakPoint";
+import { useAppTranslations } from "~/hooks/useAppTranslations";
 import { getLocationColors } from "~/utils";
 
 import { MainContent } from "~/components/app/MainContent";

@@ -1,7 +1,9 @@
 import React, { useRef, useState, useEffect } from "react";
 import { primaryInput } from "detect-it";
 
-import { useAppTranslations, useIsBreakPoint } from "~/hooks";
+import { useIsBreakPoint } from "~/hooks/useIsBreakPoint";
+import { useAppTranslations } from "~/hooks/useAppTranslations";
+
 import { motion } from "framer-motion";
 
 import {

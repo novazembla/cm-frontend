@@ -30,7 +30,8 @@ import {
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import { FieldRadioGroup } from "~/components/forms/FieldRadioGroup";
 import { FieldCheckboxGroup } from "~/components/forms/FieldCheckboxGroup";
-import { useAppTranslations } from "~/hooks";
+import { useAppTranslations } from "~/hooks/useAppTranslations";
+
 import { useForm, FormProvider } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { boolean, object, mixed, number } from "yup";

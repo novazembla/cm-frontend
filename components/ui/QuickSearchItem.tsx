@@ -5,7 +5,8 @@ import { MultiLangValue } from "~/components/ui/MultiLangValue";
 import { SVG } from "~/components/ui/SVG";
 import { Box, chakra } from "@chakra-ui/react";
 import { useQuickSearchContext } from "~/provider";
-import { useAppTranslations, useIsBreakPoint } from "~/hooks";
+import { useIsBreakPoint } from "~/hooks/useIsBreakPoint";
+import { useAppTranslations } from "~/hooks/useAppTranslations";
 
 export const QuickSearchItem = ({
   item,

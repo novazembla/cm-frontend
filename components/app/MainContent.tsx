@@ -1,7 +1,9 @@
 
 import { useState, useRef, useCallback, useEffect } from "react";
 import { Box, IconButton, useBreakpointValue, chakra } from "@chakra-ui/react";
-import { useAppTranslations, useIsBreakPoint } from "~/hooks";
+import { useIsBreakPoint } from "~/hooks/useIsBreakPoint";
+import { useAppTranslations } from "~/hooks/useAppTranslations";
+
 
 import { motion, useAnimation } from "framer-motion";
 import { useRouter } from "next/router";
