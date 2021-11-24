@@ -1,14 +1,11 @@
 import { useState, useEffect } from "react";
 import { useLazyQuery } from "@apollo/client";
 
-import { useAppTranslations } from "~/hooks/useAppTranslations";
-
-
-import { useSettingsContext, useMapContext } from "~/provider";
+import { useMapContext } from "~/provider";
 
 import { useRouter } from "next/router";
 
-import { locationsIdsQuery, locationsInitialQueryState } from "./locations";
+import { locationsIdsQuery, locationsInitialQueryState } from "./locationsShared";
 
 export const ModuleComponentLocationsEmbed = () => {
   const cultureMap = useMapContext();

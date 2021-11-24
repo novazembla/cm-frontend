@@ -32,7 +32,7 @@ import { GetStaticProps } from "next";
 import { useRouter } from "next/router";
 import { getLocationColors, getSeoAppTitle, getSeoImage } from "~/utils";
 
-import { tourQuery, createTourStops } from "./tour";
+import { tourQuery, createTourStops } from "./tourShared";
 
 import NextHeadSeo from "next-head-seo";
 

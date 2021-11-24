@@ -32,6 +32,9 @@ import { getMultilangSortedList, getSeoAppTitle } from "~/utils";
 import NextHeadSeo from "next-head-seo";
 import { useRouter } from "next/router";
 
+import { locationsIdsQuery, locationsInitialQueryState } from "./locationsShared";
+
+
 // @ts-ignore
 //import VirtualScroller from "virtual-scroller/react";
 // https://bvaughn.github.io/react-virtualized/#/components/Masonry
@@ -78,24 +81,6 @@ export const locationsQuery = gql`
   }
 `;
 
-export const locationsIdsQuery = gql`
-  query locationsIds($where: JSON) {
-    locationIds(where: $where) {
-      ids
-    }
-  }
-`;
-
-export const locationsInitialQueryState = {
-  where: {},
-  orderBy: [
-    {
-      id: "asc",
-    },
-  ],
-  pageSize: 20,
-  pageIndex: 0,
-};
 
 export const LocationsFilterSchema = object().shape({});
 

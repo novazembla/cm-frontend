@@ -1,5 +1,4 @@
 import { useEffect, useState, useRef, UIEvent, useCallback } from "react";
-import { gql } from "@apollo/client";
 
 import { MultiLangValue } from "~/components/ui/MultiLangValue";
 import { ApiImage } from "~/components/ui/ApiImage";
@@ -32,107 +31,14 @@ import { useIsBreakPoint } from "~/hooks/useIsBreakPoint";
 import { useAppTranslations } from "~/hooks/useAppTranslations";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { useRouter } from "next/router";
-import { getLocationColors } from "~/utils";
 import NextLink from "next/link";
 import debounce from "lodash/debounce";
+import { tourQuery, createTourStops } from "./tourShared";
 
 const MOBILE_CARD_WIDTH = 275;
 
-export const tourQuery = gql`
-  query ($slug: String!) {
-    tour(slug: $slug) {
-      id
-      title
-      slug
-      distance
-      duration
-      teaser
-      description
-      orderNumber
-      ownerId
-      path
-      heroImage {
-        id
-        meta
-        status
-        alt
-        credits
-        cropPosition
-      }
-      tourStopCount
-      tourStops {
-        id
-        title
-        number
-        teaser
-        description
-        images {
-          id
-          status
-          meta
-          alt
-          credits
-        }
-        heroImage {
-          id
-          status
-          meta
-          alt
-          credits
-          cropPosition
-        }
-        location {
-          id
-          title
-          slug
-          description
-          lat
-          lng
-          primaryTerms {
-            id
-            name
-          }
-          terms {
-            id
-            name
-          }
-          heroImage {
-            id
-            status
-            meta
-            alt
-            credits
-            cropPosition
-          }
-        }
-      }
-    }
-  }
-`;
 
-export const createTourStops = (
-  stops: any,
-  tourSlug: string,
-  newIndex: number,
-  settings: any
-) => {
-  return stops
-    ?.map((ts: any, index: number) => ({
-      number: ts?.number,
-      id: ts?.location.id,
-      lng: ts?.location?.lng,
-      lat: ts?.location?.lat,
-      title: ts?.title,
-      slug: `/tour/${tourSlug}/${ts?.number}`,
-      color: getLocationColors(ts?.location, settings).color,
-      highlight: index === newIndex,
-    }))
-    .sort((a: any, b: any) => {
-      if (a?.number < b?.number) return -1;
-      if (a?.number > b?.number) return 1;
-      return 0;
-    });
-};
+
 
 export const ModuleComponentTour = ({ tour }: { tour: any }) => {
   const cultureMap = useMapContext();

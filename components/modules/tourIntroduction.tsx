@@ -26,7 +26,7 @@ import { useAppTranslations } from "~/hooks/useAppTranslations";
 import { useRouter } from "next/router";
 import { getSeoAppTitle, getSeoImage } from "~/utils";
 import NextHeadSeo from "next-head-seo";
-import { createTourStops } from "./tour";
+import { createTourStops } from "./tourShared";
 
 export const ModuleComponentTourIntroduction = ({ tour }: { tour: any }) => {
   const cultureMap = useMapContext();

@@ -4,8 +4,6 @@ import { primaryInput } from "detect-it";
 import { useIsBreakPoint } from "~/hooks/useIsBreakPoint";
 import { useAppTranslations } from "~/hooks/useAppTranslations";
 
-import { motion } from "framer-motion";
-
 import {
   useMapContext,
   useMenuButtonContext,
@@ -200,10 +198,9 @@ export const Map = ({ layout }: { layout: string }) => {
               borderRadius={buttonDiameter}
               layerStyle="blurredWhite"
             >
-              <motion.div
-                animate={{ opacity: isQuickSearchOpen ? 1 : 0 }}
-                initial={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
+              <Box
+                opacity={isQuickSearchOpen ? 1 : 0 }
+                transition="opacity 0.3s"
               >
                 <Box
                   position="absolute"
@@ -243,11 +240,10 @@ export const Map = ({ layout }: { layout: string }) => {
                     aria-expanded="true"
                   />
                 </Box>
-              </motion.div>
-              <motion.div
-                animate={{ opacity: isQuickSearchOpen ? 0 : 1 }}
-                initial={{ opacity: 1 }}
-                transition={{ duration: 0.3 }}
+              </Box>
+              <Box
+                opacity={isQuickSearchOpen ? 0 : 1 }
+                transition="opacity 0.3s"
               >
                 <Box
                   position="absolute"
@@ -290,7 +286,7 @@ export const Map = ({ layout }: { layout: string }) => {
                     aria-expanded="true"
                   />
                 </Box>
-              </motion.div>
+              </Box>
             </Box>
           )}
 
