@@ -11,7 +11,7 @@ import { useAppTranslations } from "~/hooks/useAppTranslations";
 
 import { AppProps } from "~/types";
 import { LoadingBar } from "./LoadingBar";
-import { useSettingsContext } from "~/provider";
+import { useConfigContext, useSettingsContext } from "~/provider";
 import debounce from "lodash/debounce";
 import NextHeadSeo from "next-head-seo";
 
@@ -27,6 +27,7 @@ import {
 
 export const LayoutFull = ({ children }: AppProps) => {
   const settings = useSettingsContext();
+  const config = useConfigContext();
   const { t } = useAppTranslations();
   const { isMobile, isTablet } = useIsBreakPoint();
   const [isLoadingSettings, setIsLoadingSettings] = useState(true);
@@ -97,6 +98,14 @@ export const LayoutFull = ({ children }: AppProps) => {
     if (settings?.terms) setIsLoadingSettings(false);
   }, [settings]);
 
+  let mapJsonBaseUrl;
+
+  if (config.mapStyleJsonUrl && config.mapStyleJsonUrl.trim()) {
+    try {
+      const url = new URL(config.mapStyleJsonUrl);
+      mapJsonBaseUrl = `${url.protocol}//${url.host}`;
+    } catch (err) {}
+  }
   return (
     <ScrollStateContextProvider>
       <MainContentContextProvider>
@@ -108,6 +117,11 @@ export const LayoutFull = ({ children }: AppProps) => {
                 content="width=device-width, initial-scale=1.0"
               />
               <meta name="theme-color" content="#fff" />
+
+              <link rel="preconnect" href={config.apiUrl} />
+              {mapJsonBaseUrl && (
+                <link rel="preconnect" href={mapJsonBaseUrl} />
+              )}
             </Head>
             <UserTracking />
             <NextHeadSeo

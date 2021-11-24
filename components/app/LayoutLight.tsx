@@ -8,12 +8,14 @@ import { useAppTranslations } from "~/hooks/useAppTranslations";
 
 import { AppProps } from "~/types";
 import { LoadingBarLight } from "./LoadingBarLight";
-import { useSettingsContext } from "~/provider";
+import { useConfigContext, useSettingsContext } from "~/provider";
 import debounce from "lodash/debounce";
 import NextHeadSeo from "next-head-seo";
 
 export const LayoutLight = ({ children }: AppProps) => {
   const settings = useSettingsContext();
+  const config = useConfigContext();
+  
   const { t } = useAppTranslations();
   const [isLoadingSettings, setIsLoadingSettings] = useState(true);
   const [fontsLoaded, setFontsLoaded] = useState(false);
@@ -82,11 +84,22 @@ export const LayoutLight = ({ children }: AppProps) => {
     if (settings?.terms) setIsLoadingSettings(false);
   }, [settings]);
 
+  let mapJsonBaseUrl;
+
+  if (config.mapStyleJsonUrl && config.mapStyleJsonUrl.trim()) {
+    try {
+      const url = new URL(config.mapStyleJsonUrl);
+      mapJsonBaseUrl = `${url.protocol}//${url.host}`;
+    } catch (err) {}
+  }
+
   return (
     <>
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="theme-color" content="#fff" />
+        <link rel="preconnect" href={config.apiUrl} />
+        {mapJsonBaseUrl && <link rel="preconnect" href={mapJsonBaseUrl} />}
       </Head>
       <NextHeadSeo
         title={`${t("logo.culturemap1", "CULTUREMAP")} ${t(

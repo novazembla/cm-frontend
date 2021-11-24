@@ -161,7 +161,8 @@ export const Footer = ({
           pb="20%"
           position="relative"
           target="_blank"
-          rel="noreffer nofollow"
+          rel="noreferrer nofollow"
+          title="Bezirksamt Lichtenberg von Berlin"
         >
           <chakra.span
             display="block"
