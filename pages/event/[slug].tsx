@@ -7,7 +7,7 @@ import {
   ModuleEventGetStaticProps,
   ModuleEventGetStaticPaths,
   ModuleComponentEvent,
-} from "~/components/modules";
+} from "~/components/modules/event";
 
 const Event = ({
   event,

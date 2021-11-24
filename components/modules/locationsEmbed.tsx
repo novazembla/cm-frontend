@@ -7,7 +7,7 @@ import { useSettingsContext, useMapContext } from "~/provider";
 
 import { useRouter } from "next/router";
 
-import { locationsIdsQuery, locationsInitialQueryState } from ".";
+import { locationsIdsQuery, locationsInitialQueryState } from "./locations";
 
 export const ModuleComponentLocationsEmbed = () => {
   const cultureMap = useMapContext();

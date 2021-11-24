@@ -5,7 +5,7 @@ import {
   ModuleTourGetStaticProps,
   ModuleTourGetStaticPaths,
   ModuleComponentTour,
-} from "~/components/modules";
+} from "~/components/modules/tour";
 import LayoutFull from "~/components/app/LayoutFull";
 
 const Tour = ({ location, ...props }: { location: any; props: any }) => {

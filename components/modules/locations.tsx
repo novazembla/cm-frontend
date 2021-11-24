@@ -24,7 +24,7 @@ import { boolean, object, mixed, number } from "yup";
 import { MainContent } from "~/components/app/MainContent";
 import { Footer } from "~/components/app/Footer";
 import { useSettingsContext, useMapContext } from "~/provider";
-import { getMultilangSortedList, getSeoAppTitle, getSeoImage } from "~/utils";
+import { getMultilangSortedList, getSeoAppTitle } from "~/utils";
 import NextHeadSeo from "next-head-seo";
 import { useRouter } from "next/router";
 

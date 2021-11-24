@@ -2,7 +2,7 @@ import { ReactElement } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import {
   ModuleComponentEvents,
-} from "~/components/modules";
+} from "~/components/modules/events";
 import { GetStaticProps } from "next";
 import LayoutFull from "~/components/app/LayoutFull";
 

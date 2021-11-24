@@ -7,7 +7,7 @@ import {
   ModuleComponentPage,
   ModulePageGetStaticPaths,
   ModulePageGetStaticProps,
-} from "~/components/modules";
+} from "~/components/modules/page";
 
 const Page = ({ page, ...props }: { page: any; props: any }) => {
   return <ModuleComponentPage page={page} {...props} />;

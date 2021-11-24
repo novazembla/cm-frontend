@@ -3,7 +3,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { GetStaticProps } from "next";
 
 import LayoutFull from "~/components/app/LayoutFull";
-import { ModuleComponentSuggest } from "~/components/modules";
+import { ModuleComponentSuggest } from "~/components/modules/suggest";
 import { useRouter } from "next/router";
 
 const SuggestLocation = ({ page }: { page: any }) => {

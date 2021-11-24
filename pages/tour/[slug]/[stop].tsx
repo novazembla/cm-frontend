@@ -4,10 +4,10 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { GetStaticPaths, GetStaticProps } from "next";
 import {
   ModuleTourStopGetStaticProps,
-  ModuleTourGetStaticPaths,
   ModuleComponentTourStop,
-  ModuleComponentTourIntroduction,
-} from "~/components/modules";
+} from "~/components/modules/tourStop";
+import { ModuleTourGetStaticPaths } from "~/components/modules/tour";
+import { ModuleComponentTourIntroduction } from "~/components/modules/tourIntroduction";
 import { useRouter } from "next/router";
 import LayoutFull from "~/components/app/LayoutFull";
 

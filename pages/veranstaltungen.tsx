@@ -4,7 +4,7 @@ import { GetStaticProps } from "next";
 import LayoutFull from "~/components/app/LayoutFull";
 import {
   ModuleComponentEvents,
-} from "~/components/modules";
+} from "~/components/modules/events";
 
 const Veranstaltungen = ({ ...props }) => {
   return <ModuleComponentEvents {...props} />;

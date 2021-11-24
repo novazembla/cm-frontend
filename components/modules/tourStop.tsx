@@ -31,7 +31,8 @@ import { GetStaticProps } from "next";
 import { useRouter } from "next/router";
 import { getLocationColors, getSeoAppTitle, getSeoImage } from "~/utils";
 
-import { tourQuery, createTourStops } from ".";
+import { tourQuery, createTourStops } from "./tour";
+
 import NextHeadSeo from "next-head-seo";
 
 export const ModuleComponentTourStop = ({

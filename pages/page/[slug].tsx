@@ -6,7 +6,7 @@ import {
   ModuleComponentPage,
   ModulePageGetStaticPaths,
   ModulePageGetStaticProps,
-} from "~/components/modules";
+} from "~/components/modules/page";
 import { useRouter } from "next/router";
 import LayoutFull from "~/components/app/LayoutFull";
 

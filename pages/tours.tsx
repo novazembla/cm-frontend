@@ -4,7 +4,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import {
   ModuleComponentTours,
   ModuleToursGetStaticProps
-} from "~/components/modules";
+} from "~/components/modules/tours";
 import LayoutFull from "~/components/app/LayoutFull";
 import { GetStaticProps, GetStaticPaths } from "next";
 

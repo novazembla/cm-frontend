@@ -5,7 +5,7 @@ import {
   ModuleLocationGetStaticProps,
   ModuleLocationGetStaticPaths,
   ModuleComponentLocation,
-} from "~/components/modules";
+} from "~/components/modules/location";
 import { useRouter } from "next/router";
 import LayoutFull from "~/components/app/LayoutFull";
 

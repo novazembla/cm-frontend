@@ -22,7 +22,7 @@ import { useAppTranslations, useIsBreakPoint } from "~/hooks";
 import { useRouter } from "next/router";
 import { getSeoAppTitle, getSeoImage } from "~/utils";
 import NextHeadSeo from "next-head-seo";
-import { createTourStops } from ".";
+import { createTourStops } from "./tour";
 
 export const ModuleComponentTourIntroduction = ({ tour }: { tour: any }) => {
   const cultureMap = useMapContext();

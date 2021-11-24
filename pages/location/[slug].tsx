@@ -5,7 +5,7 @@ import {
   ModuleLocationGetStaticProps,
   ModuleLocationGetStaticPaths,
   ModuleComponentLocation,
-} from "~/components/modules";
+} from "~/components/modules/location";
 import LayoutFull from "~/components/app/LayoutFull";
 
 const Location = ({ location, ...props }: { location: any; props: any }) => {
