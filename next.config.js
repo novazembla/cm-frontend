@@ -29,7 +29,7 @@ module.exports = withBundleAnalyzer(
     images: {
       domains,
     },
-    productionBrowserSourceMaps: false,
+    productionBrowserSourceMaps: true,
     experimental: {
       scrollRestoration: true,
     },

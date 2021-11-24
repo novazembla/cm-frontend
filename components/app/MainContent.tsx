@@ -218,7 +218,6 @@ export const MainContent = ({
     ? t("mainContent.slideToLeft", "Hide content")
     : t("mainContent.slideToRight", "Show content");
 
-    console.log(isDrawerOpen, panActive.current, isAnimationRunningRef.current);
   return (
     <>
       {isDrawer && !isVerticalContent && (
