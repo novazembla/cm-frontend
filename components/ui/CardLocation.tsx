@@ -7,12 +7,10 @@ import {
   LinkBox,
   LinkOverlay,
 } from "@chakra-ui/react";
-import {
-  MultiLangValue,
-  ApiImage,
-  TrimmedTextWithBottomEdge,
-  SVG,
-} from "~/components/ui";
+import {MultiLangValue} from "~/components/ui/MultiLangValue";
+import {ApiImage} from "~/components/ui/ApiImage";
+import {TrimmedTextWithBottomEdge} from "~/components/ui/TrimmedTextWithBottomEdge";
+import {SVG} from "~/components/ui/SVG";
 import { htmlToTrimmedString } from "~/utils";
 import { useAppTranslations, useIsBreakPoint } from "~/hooks";
 import { useConfigContext, useSettingsContext } from "~/provider";

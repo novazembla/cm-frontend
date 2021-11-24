@@ -1,6 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import { gql, useQuery, useLazyQuery } from "@apollo/client";
-import { LoadingIcon, ErrorMessage, CardLocation } from "~/components/ui";
+
+import { CardLocation } from "~/components/ui/CardLocation";
+import { ErrorMessage } from "~/components/ui/ErrorMessage";
+import { LoadingIcon } from "~/components/ui/LoadingIcon";
 
 import {
   Box,

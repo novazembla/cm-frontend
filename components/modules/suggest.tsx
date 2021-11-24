@@ -16,7 +16,10 @@ import { Box, chakra, Grid, Text, Button } from "@chakra-ui/react";
 import { MainContent } from "~/components/app/MainContent";
 import { Footer } from "~/components/app/Footer";
 import { useAppTranslations, useIsBreakPoint } from "~/hooks";
-import { SVG, MultiLangHtml, ImageStatusEnum } from "~/components/ui";
+
+import { MultiLangHtml } from "~/components/ui/MultiLangHtml";
+import { SVG } from "~/components/ui/SVG";
+import { ImageStatusEnum } from "~/components/ui/ApiImage";
 
 import { FieldCheckboxGroup } from "~/components/forms/FieldCheckboxGroup";
 import { FieldInput } from "~/components/forms/FieldInput";

@@ -1,12 +1,12 @@
 import { useEffect, useState, useRef, UIEvent, useCallback } from "react";
 import { gql } from "@apollo/client";
-import {
-  MultiLangValue,
-  TrimmedTextWithBottomEdge,
-  ApiImage,
-  CardTourStop,
-  SVG,
-} from "~/components/ui";
+
+import { MultiLangValue } from "~/components/ui/MultiLangValue";
+import { ApiImage } from "~/components/ui/ApiImage";
+import { TrimmedTextWithBottomEdge } from "~/components/ui/TrimmedTextWithBottomEdge";
+import { CardTourStop } from "~/components/ui/CardTourStop";
+import { SVG } from "~/components/ui/SVG";
+
 import { MainContent } from "~/components/app/MainContent";
 import { Footer } from "~/components/app/Footer";
 import { getApolloClient } from "~/services";
@@ -431,14 +431,13 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
         behavior: "auto",
       });
 
-      if (!scrollState.wasBack())
-        setOpacity(1)
+      if (!scrollState.wasBack()) setOpacity(1);
 
       setTimeout(() => {
         if (tourStopsCardsContainerRef.current)
           tourStopsCardsContainerRef.current.style.scrollBehavior = "smooth";
 
-        setOpacity(1)
+        setOpacity(1);
       }, 200);
     }, 60);
   }, [router.asPath, scrollState]);

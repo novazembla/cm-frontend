@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import {
-  MultiLangValue,
-  MultiLangHtml,
-  ApiImage,
-  SVG,
-  Images,
-  CardLocation,
-} from "~/components/ui";
+
+import { MultiLangValue } from "~/components/ui/MultiLangValue";
+import { ApiImage } from "~/components/ui/ApiImage";
+import { Images } from "~/components/ui/Images";
+import { SVG } from "~/components/ui/SVG";
+import { MultiLangHtml } from "~/components/ui/MultiLangHtml";
+import { CardLocation } from "~/components/ui/CardLocation";
+
 import { MainContent } from "~/components/app/MainContent";
 import { Footer } from "~/components/app/Footer";
 import { getApolloClient } from "~/services";

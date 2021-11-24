@@ -1,6 +1,10 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { gql, useQuery } from "@apollo/client";
-import { ListedEvent, LoadingIcon, ErrorMessage } from "~/components/ui";
+
+import { ListedEvent } from "~/components/ui/ListedEvent";
+import { LoadingIcon } from "~/components/ui/LoadingIcon";
+import { ErrorMessage } from "~/components/ui/ErrorMessage";
+
 import { MainContent } from "~/components/app/MainContent";
 import { Footer } from "~/components/app/Footer";
 import {

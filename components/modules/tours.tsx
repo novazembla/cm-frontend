@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { gql } from "@apollo/client";
-import { CardTour } from "~/components/ui";
+import { CardTour } from "~/components/ui/CardTour";
 import { MainContent } from "~/components/app/MainContent";
 import { Footer } from "~/components/app/Footer";
 import { getApolloClient } from "~/services";

@@ -1,9 +1,9 @@
-import { MultiLangValue } from "~/components/ui";
+import { MultiLangValue } from "~/components/ui/MultiLangValue";
 import NextLink from "next/link";
 import { Box, chakra, LinkBox, LinkOverlay, Flex } from "@chakra-ui/react";
 
 import { useAppTranslations, useIsBreakPoint } from "~/hooks";
-import { SVG } from "~/components/ui";
+import { SVG } from "~/components/ui/SVG";
 
 export const ListedEvent = ({ event }: { event: any }) => {
   const { t, i18n, getMultilangValue } = useAppTranslations();

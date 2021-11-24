@@ -4,7 +4,8 @@ import ActiveLink from "~/components/ui/ActiveLink";
 import { Flex, IconButton, chakra, Box } from "@chakra-ui/react";
 
 import { useConfigContext } from "~/provider";
-import { MultiLangValue, SVG } from "../ui";
+import { MultiLangValue } from "~/components/ui/MultiLangValue";
+import { SVG } from "~/components/ui/SVG";
 
 import { useIsBreakPoint, useAppTranslations } from "~/hooks";
 import { Logo } from "./Logo";

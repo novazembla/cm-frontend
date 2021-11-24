@@ -12,14 +12,16 @@ import {
   Text,
 } from "@chakra-ui/react";
 
-
 import { useAxiosCancelToken, useAppTranslations } from "~/hooks";
 import { useFormContext } from "react-hook-form";
 
 import { FieldErrorMessage } from "./FieldErrorMessage";
 import { flattenErrors } from "./helpers";
 
-import { ApiImage, ApiImageProps, SVG } from "~/components/ui";
+import { ApiImage, ApiImageProps } from "~/components/ui/ApiImage";
+
+import { SVG } from "~/components/ui/SVG";
+
 import { useConfigContext } from "~/provider";
 
 const humanFileSize = (
@@ -356,7 +358,11 @@ export const FieldImageUploader = ({
 
         {!showImage && (
           <>
-            <input name={`${name}_dropzone`} id={`${name}_dropzone`} {...getInputProps()} />
+            <input
+              name={`${name}_dropzone`}
+              id={`${name}_dropzone`}
+              {...getInputProps()}
+            />
 
             <Box
               position="relative"

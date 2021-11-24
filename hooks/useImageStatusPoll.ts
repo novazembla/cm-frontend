@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { ImageStatusEnum, ApiImageMetaInformation } from "~/components/ui";
+import { ImageStatusEnum, ApiImageMetaInformation } from "~/components/ui/ApiImage";
+
 import { useLazyQuery, gql } from "@apollo/client";
 
 export const imageStatusGQL = gql`

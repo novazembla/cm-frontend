@@ -10,7 +10,11 @@ import {
   useQuickSearchContext,
 } from "~/provider";
 import { useIsBreakPoint, useAppTranslations } from "~/hooks";
-import { ActiveLink, MultiLangValue, SVG } from "~/components/ui";
+
+import { MultiLangValue } from "~/components/ui/MultiLangValue";
+import { ActiveLink } from "~/components/ui/ActiveLink";
+import { SVG } from "~/components/ui/SVG";
+
 import { useRouter } from "next/router";
 
 export const MobileNav = () => {

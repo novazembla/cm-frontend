@@ -10,7 +10,7 @@ import {
   useQuickSearchContext,
   useMainContentContext,
 } from "~/provider";
-import { SVG } from "~/components/ui";
+import { SVG } from "~/components/ui/SVG";
 
 import debounce from "lodash/debounce";
 

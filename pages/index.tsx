@@ -1,4 +1,11 @@
-import { useEffect, ReactElement, useState, useRef, UIEvent, useCallback } from "react";
+import {
+  useEffect,
+  ReactElement,
+  useState,
+  useRef,
+  UIEvent,
+  useCallback,
+} from "react";
 
 import { GetStaticProps } from "next";
 import NextLink from "next/link";
@@ -8,7 +15,6 @@ import {
   Box,
   Flex,
   IconButton,
-  Link,
   chakra,
   Collapse,
   Grid,
@@ -16,13 +22,12 @@ import {
 import { gql } from "@apollo/client";
 
 import LayoutFull from "~/components/app/LayoutFull";
-import {
-  MultiLangHtml,
-  CardTour,
-  CardLocation,
-  CardEvent,
-  SVG,
-} from "~/components/ui";
+
+import { MultiLangHtml } from "~/components/ui/MultiLangHtml";
+import { CardTour } from "~/components/ui/CardTour";
+import { CardLocation } from "~/components/ui/CardLocation";
+import { CardEvent } from "~/components/ui/CardEvent";
+import { SVG } from "~/components/ui/SVG";
 
 import { useAppTranslations, useIsBreakPoint } from "~/hooks";
 import { getLocationColors } from "~/utils";

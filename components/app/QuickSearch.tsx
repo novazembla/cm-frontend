@@ -26,7 +26,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { object, string } from "yup";
 import type * as yup from "yup";
 
-import { LoadingIcon, ErrorMessage, SVG } from "~/components/ui";
+import { LoadingIcon } from "~/components/ui/LoadingIcon";
+import { ErrorMessage } from "~/components/ui/ErrorMessage";
+import { SVG } from "~/components/ui/SVG";
 
 import { QuickSearchResult } from "./QuickSearchResult";
 import FocusLock from "react-focus-lock";

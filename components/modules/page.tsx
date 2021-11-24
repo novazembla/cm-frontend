@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import { gql } from "@apollo/client";
-import { MultiLangValue, MultiLangHtml, ApiImage } from "~/components/ui";
+import { ApiImage } from "~/components/ui/ApiImage";
+import { MultiLangValue } from "~/components/ui/MultiLangValue";
+import { MultiLangHtml } from "~/components/ui/MultiLangHtml";
 import { MainContent } from "~/components/app/MainContent";
 import { Footer } from "~/components/app/Footer";
 import { getApolloClient } from "~/services";

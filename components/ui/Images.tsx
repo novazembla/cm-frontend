@@ -1,6 +1,7 @@
 import React from "react";
-import { Box, AspectRatio, Text, SimpleGrid } from "@chakra-ui/react";
-import { MultiLangValue, ApiImage, ImageCropPosition } from "~/components/ui";
+import { Box, Text, SimpleGrid } from "@chakra-ui/react";
+import { ApiImage, ImageCropPosition } from "~/components/ui/ApiImage";
+import { MultiLangValue } from "~/components/ui/MultiLangValue";
 import { useAppTranslations } from "~/hooks";
 
 export const Images = ({ images }: { images: any }) => {
