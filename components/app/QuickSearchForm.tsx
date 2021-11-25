@@ -30,6 +30,7 @@ import type * as yup from "yup";
 import { LoadingIcon } from "~/components/ui/LoadingIcon";
 import { ErrorMessage } from "~/components/ui/ErrorMessage";
 import { SVG } from "~/components/ui/SVG";
+import { PageTitle } from "~/components/ui/PageTitle";
 
 import { QuickSearchResult } from "./QuickSearchResult";
 
@@ -241,21 +242,13 @@ export const QuickSearchForm = () => {
               }}
             >
               <Box top="0px">
-                <Box layerStyle="headingPullOut" mb="3">
-                  <chakra.h1
-                    className="highlight"
-                    color="cm.text"
-                    fontWeight="bold"
-                  >
-                    {t("quicksearch.title", "Search")}
-                  </chakra.h1>
-                </Box>
+                <PageTitle
+                  type="high"
+                  title={t("quicksearch.title", "Search")}
+                />
+
                 <form noValidate onSubmit={handleSubmit(onSubmit)}>
-                  <HStack
-                    pt={{
-                      md: "20px",
-                    }}
-                  >
+                  <HStack>
                     <FormControl isInvalid={isFieldInValid} isRequired>
                       <VisuallyHidden>
                         <FormLabel>Search</FormLabel>
@@ -302,15 +295,19 @@ export const QuickSearchForm = () => {
                     <IconButton
                       variant="unstyled"
                       icon={
-                        <SVG type="arrow-right" width="45px" height="25px" />
+                        <SVG
+                          type="arrow-right"
+                          width={isMobile ? "40px" : "50px"}
+                          height={isMobile ? "17px" : "22px"}
+                        />
                       }
                       borderRadius="0"
                       p="0"
                       className="svgHover"
                       paddingInlineStart="0"
                       paddingInlineEnd="0"
-                      w="50px"
-                      h="25px"
+                      w={isMobile ? "30px" : "55px"}
+                      h={isMobile ? "17px" : "22px"}
                       type="submit"
                       aria-label="Search"
                       value="submit"

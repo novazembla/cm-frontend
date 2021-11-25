@@ -27,6 +27,7 @@ import { useRouter } from "next/router";
 import { getSeoAppTitle, getSeoImage } from "~/utils";
 import NextHeadSeo from "next-head-seo";
 import { createTourStops } from "./tourShared";
+import { PageTitle } from "~/components/ui/PageTitle";
 
 export const ModuleComponentTourIntroduction = ({ tour }: { tour: any }) => {
   const cultureMap = useMapContext();
@@ -54,7 +55,6 @@ export const ModuleComponentTourIntroduction = ({ tour }: { tour: any }) => {
   };
 
   useEffect(() => {
-    
     if (cultureMap) cultureMap.hideCurrentView();
 
     // As next.js doesn't unmount/remount if only components route changes we
@@ -133,11 +133,7 @@ export const ModuleComponentTourIntroduction = ({ tour }: { tour: any }) => {
         }}
       >
         <Box px="20px" pt="0.5em">
-          <Box mb="3">
-            <Text className="highlight" color="cm.text" fontWeight="bold">
-              {getMultilangValue(tour?.title)}
-            </Text>
-          </Box>
+          <PageTitle title={getMultilangValue(tour?.title)} type="short" />
 
           <Box bg="#fff" borderRadius="lg" overflow="hidden">
             {tour?.heroImage?.id && (

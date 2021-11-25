@@ -45,6 +45,7 @@ import { getMultilangSortedList, getSeoAppTitle } from "~/utils";
 import NextHeadSeo from "next-head-seo";
 import { useRouter } from "next/router";
 import useCalendar from "@veccu/react-calendar";
+import { PageTitle } from "../ui/PageTitle";
 
 const ONE_DAY = 1000 * 60 * 60 * 24;
 const LOOK_DAYS_AHEAD = 100; // how many days should the calendar look ahead.
@@ -445,11 +446,11 @@ export const ModuleComponentEvents = ({ ...props }) => {
           AND: where,
         },
       };
-    // } else {
-    //   newQueryState = {
-    //     ...newQueryState,
-    //     where: {},
-    //   };
+      // } else {
+      //   newQueryState = {
+      //     ...newQueryState,
+      //     where: {},
+      //   };
     }
 
     if (JSON.stringify(currentQueryState) !== JSON.stringify(newQueryState)) {
@@ -586,18 +587,14 @@ export const ModuleComponentEvents = ({ ...props }) => {
         }}
       >
         <Box layerStyle="page">
-          <Box layerStyle="headingPullOut" mb="3">
-            <chakra.h1 className="highlight" color="cm.text" fontWeight="bold">
-              {t("page.title", "Events")}
-            </chakra.h1>
-          </Box>
+          <PageTitle h1 type="high" title={t("page.title", "Events")} />
+
           <FormProvider {...formMethods}>
             <form noValidate onSubmit={handleSubmit(onSubmit)}>
               {accordionDefaultIndex && (
                 <Accordion
                   allowToggle
                   allowMultiple
-                  my="10"
                   defaultIndex={accordionDefaultIndex}
                 >
                   <AccordionItem>
@@ -919,21 +916,22 @@ export const ModuleComponentEvents = ({ ...props }) => {
               )}
             </form>
           </FormProvider>
-          <Flex
-            textStyle="larger"
-            mt="1em"
-            borderColor="cm.accentDark"
-            borderTop="1px solid"
-            borderBottom="1px solid"
-            justifyContent={loading ? "center" : "flex-start"}
-            h="50px"
-            alignItems="center"
-            ref={resultRef}
-          >
-            {(!data || loading) && <LoadingIcon my="0" />}
-            {!loading && !error && <Box>{resultText}</Box>}
-            {error && <ErrorMessage type="dataLoad" />}
-          </Flex>
+          <Box pt="1.5em">
+            <Flex
+              textStyle="larger"
+              borderColor="cm.accentDark"
+              borderTop="1px solid"
+              borderBottom="1px solid"
+              justifyContent={loading ? "center" : "flex-start"}
+              h="50px"
+              alignItems="center"
+              ref={resultRef}
+            >
+              {(!data || loading) && <LoadingIcon my="0" />}
+              {!loading && !error && <Box>{resultText}</Box>}
+              {error && <ErrorMessage type="dataLoad" />}
+            </Flex>
+          </Box>
           <Box w="100%">
             {data?.events?.events?.length > 0 && (
               <Box size="md" mt="3" w="100%">

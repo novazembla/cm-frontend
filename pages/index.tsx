@@ -42,6 +42,7 @@ import {
 } from "~/provider";
 import debounce from "lodash/debounce";
 import NextHeadSeo from "next-head-seo";
+import { PageTitle } from "~/components/ui/PageTitle";
 
 const homepageQuery = gql`
   query {
@@ -253,11 +254,6 @@ export const Home = ({ homepage }: { homepage: any }) => {
 
       if (highlights.length) {
         cultureMap.setHighlights(highlights);
-        // cultureMap.panTo(
-        //   highlights[0].lng,
-        //   highlights[0].lat,
-        //   !window.matchMedia("(max-width: 44.999em)").matches
-        // );
         setHighlights(highlights);
         parsedHighlightsRef.current = highlights;
       }
@@ -283,12 +279,13 @@ export const Home = ({ homepage }: { homepage: any }) => {
         {homepage?.missionStatement && (
           <Collapse in={isMSOpen}>
             <Box
-              layerStyle="pageContainerWhite"
+              layerStyle="blurredWhite"
               borderBottom="1px solid"
               borderColor="cm.accentDark"
               position={isMobile ? "fixed" : "static"}
               top="60px"
               zIndex="2"
+              p={{ base: "20px", md: "40px", "2xl": "50px" }}
             >
               <Box px={!isMobile ? "10px" : 0}>
                 <Box
@@ -393,19 +390,14 @@ export const Home = ({ homepage }: { homepage: any }) => {
               }}
             >
               <Box>
-                <chakra.h1
-                  className="highlight"
-                  id="highlights"
-                  color="cm.text"
-                  mt="0.5em"
-                  px="20px"
-                  textTransform="uppercase"
-                  textAlign={isMobile ? "center" : undefined}
-                  fontWeight="bold"
-                >
-                  {t("homepage.title.highlights", "Highlights")}
-                </chakra.h1>
-
+                <Box px="20px" pt="0.5em">
+                  <PageTitle
+                    h1
+                    title={t("homepage.title.highlights", "Highlights")}
+                    type="short"
+                    center={isMobile}
+                  />
+                </Box>
                 <Box
                   w="100%"
                   pl={isMobile ? "0px" : "20px"}
@@ -426,9 +418,10 @@ export const Home = ({ homepage }: { homepage: any }) => {
                     w="100%"
                     tabIndex={isMobile ? 0 : undefined}
                     role="group"
-                    aria-labelledby="highlights"
+                    aria-labelledby="title"
                     overflowY={isMobile ? "auto" : "hidden"}
                     ref={highlightsCardsContainerRef}
+                    pb={isMobile ? "20px" : undefined}
                     onScroll={
                       isMobile
                         ? (e: UIEvent<HTMLDivElement>) => {

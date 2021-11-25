@@ -6,6 +6,7 @@ import { MultiLangValue } from "~/components/ui/MultiLangValue";
 import { CardEvent } from "~/components/ui/CardEvent";
 import { ApiImage } from "~/components/ui/ApiImage";
 import { Images } from "~/components/ui/Images";
+import { PageTitle } from "~/components/ui/PageTitle";
 
 import { Footer } from "~/components/app/Footer";
 import { getApolloClient } from "~/services";
@@ -288,11 +289,8 @@ export const ModuleComponentLocation = ({
         }}
       >
         <Box px="20px" pt="0.5em">
-          <Box mb="3">
-            <Text className="highlight" color="cm.text" fontWeight="bold">
-              {t("location.detail.title", "Location")}
-            </Text>
-          </Box>
+          <PageTitle title={t("location.detail.title", "Location")} type="short" />
+          
 
           <Box bg="#fff" borderRadius="lg" overflow="hidden">
             {location?.heroImage?.id && (
@@ -567,18 +565,13 @@ export const ModuleComponentLocation = ({
 
           {location.events && location.events.length > 0 && (
             <Box mt="2em">
-              <chakra.h3
-                className="highlight"
-                color="cm.text"
-                fontWeight="bold"
-                pb="0"
-                mb="20px"
-              >
-                {t(
+              <PageTitle
+                title={t(
                   "location.title.eventsHeldAt",
                   "Events held at the location"
                 )}
-              </chakra.h3>
+                type="short"
+              />
               {location.events.map((event: any, i: number) => (
                 <Box
                   key={`evnt-${i}`}

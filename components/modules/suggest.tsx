@@ -39,6 +39,7 @@ import {
 } from "~/provider";
 import pick from "lodash/pick";
 import { useRouter } from "next/router";
+import { PageTitle } from "~/components/ui/PageTitle";
 
 export const SuggestionSchema = object().shape({
   title: string().required(),
@@ -424,11 +425,7 @@ export const ModuleComponentSuggest = () => {
         }}
       >
         <Box layerStyle="page">
-          <Box layerStyle="headingPullOut" mb="3">
-            <chakra.h1 className="highlight" color="cm.text" fontWeight="bold">
-              {t("suggest.title", "Suggest a location")}
-            </chakra.h1>
-          </Box>
+          <PageTitle h1 type="high" title={t("suggest.title", "Suggest a location")} />
 
           {successfullySubmitted ? (
             <Box>
@@ -473,7 +470,7 @@ export const ModuleComponentSuggest = () => {
           ) : (
             <>
               {!isEmptyHtml(getMultilangValue(settings?.suggestionsIntro)) && (
-                <Box textStyle="larger" mt="1em" mb="2em" fontWeight="bold">
+                <Box textStyle="larger" mt="1em" mb={isMobile ? "2em" : "3em"} fontWeight="bold">
                   <MultiLangHtml json={settings?.suggestionsIntro} />
                 </Box>
               )}

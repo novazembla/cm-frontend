@@ -15,6 +15,7 @@ import { useAppTranslations } from "~/hooks/useAppTranslations";
 import { MultiLangValue } from "~/components/ui/MultiLangValue";
 import { ActiveLink } from "~/components/ui/ActiveLink";
 import { SVG } from "~/components/ui/SVG";
+import { PageTitle } from "~/components/ui/PageTitle";
 
 import { useRouter } from "next/router";
 
@@ -119,17 +120,10 @@ export const MobileNav = () => {
                             w="100%"
                           >
                             {isTablet && (
-                              <>
-                                <Box layerStyle="headingPullOut" mb="3">
-                                  <chakra.h1
-                                    className="highlight"
-                                    color="cm.text"
-                                    fontWeight="bold"
-                                  >
-                                    {t("menu.title", "Menu")}
-                                  </chakra.h1>
-                                </Box>
-                              </>
+                              <PageTitle
+                                type="medium"
+                                title={t("menu.title", "Menu")}
+                              />
                             )}
                             {config.nav.main.map((link: any, index: number) => (
                               <chakra.span key={`nav-link-${index}`}>

@@ -217,8 +217,8 @@ const themeConfig = {
   layerStyles: {
     headingPullOut: {
       transform: {
-        base: "translateX(-10px)",
-        sm: "translateX(-10px)",
+        // base: "translateX(-10px)",
+        // sm: "translateX(-10px)",
         md: "translateX(-25px)",
         "2xl": "translateX(-35px)",
       },

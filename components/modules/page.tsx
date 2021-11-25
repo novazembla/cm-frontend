@@ -13,7 +13,7 @@ import { useRouter } from "next/router";
 import { getSeoAppTitle, getSeoImage } from "~/utils";
 import NextHeadSeo from "next-head-seo";
 import { useAppTranslations } from "~/hooks/useAppTranslations";
-
+import { PageTitle } from "~/components/ui/PageTitle";
 
 const pageQuery = gql`
   query ($slug: String!) {
@@ -67,11 +67,7 @@ export const ModuleComponentPage = ({ page }: { page: any }) => {
         }}
       >
         <Box layerStyle="page">
-          <Box layerStyle="headingPullOut" mb="3">
-            <chakra.h1 className="highlight" color="cm.text" fontWeight="bold">
-              <MultiLangValue json={page.title} />
-            </chakra.h1>
-          </Box>
+          <PageTitle h1 type="high" title={getMultilangValue(page.title)} />
 
           <Box color="cm.text" w="100%">
             {page.heroImage && page.heroImage.id && (

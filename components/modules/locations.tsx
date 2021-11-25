@@ -32,8 +32,11 @@ import { getMultilangSortedList, getSeoAppTitle } from "~/utils";
 import NextHeadSeo from "next-head-seo";
 import { useRouter } from "next/router";
 
-import { locationsIdsQuery, locationsInitialQueryState } from "./locationsShared";
-
+import {
+  locationsIdsQuery,
+  locationsInitialQueryState,
+} from "./locationsShared";
+import { PageTitle } from "../ui/PageTitle";
 
 // @ts-ignore
 //import VirtualScroller from "virtual-scroller/react";
@@ -80,7 +83,6 @@ export const locationsQuery = gql`
     }
   }
 `;
-
 
 export const LocationsFilterSchema = object().shape({});
 
@@ -716,11 +718,7 @@ export const ModuleComponentLocations = () => {
         }}
       >
         <Box px="20px" pt="0.5em">
-          <Box mb="3">
-            <chakra.h1 className="highlight" color="cm.text" fontWeight="bold">
-              {t("locations.title", "Map")}
-            </chakra.h1>
-          </Box>
+          <PageTitle title={t("locations.title", "Map")} type="short" />
           <Box
             bg="#fff"
             borderRadius="lg"
@@ -736,7 +734,6 @@ export const ModuleComponentLocations = () => {
                   <Accordion
                     allowToggle
                     allowMultiple
-                    mb="10"
                     defaultIndex={accordionDefaultIndex}
                   >
                     <AccordionItem>
@@ -972,21 +969,22 @@ export const ModuleComponentLocations = () => {
               </form>
             </FormProvider>
 
-            <Flex
-              textStyle="larger"
-              mt="1em"
-              borderColor="cm.accentDark"
-              borderTop="1px solid"
-              borderBottom="1px solid"
-              justifyContent={loading ? "center" : "flex-start"}
-              h="50px"
-              alignItems="center"
-              ref={resultRef}
-            >
-              {(!data || loading) && <LoadingIcon my="0" />}
-              {!loading && !error && <Box>{resultText}</Box>}
-              {error && <ErrorMessage type="dataLoad" />}
-            </Flex>
+            <Box pt="1.5em">
+              <Flex
+                textStyle="larger"
+                borderColor="cm.accentDark"
+                borderTop="1px solid"
+                borderBottom="1px solid"
+                justifyContent={loading ? "center" : "flex-start"}
+                h="50px"
+                alignItems="center"
+                ref={resultRef}
+              >
+                {(!data || loading) && <LoadingIcon my="0" />}
+                {!loading && !error && <Box>{resultText}</Box>}
+                {error && <ErrorMessage type="dataLoad" />}
+              </Flex>
+            </Box>
           </Box>
 
           <Box>

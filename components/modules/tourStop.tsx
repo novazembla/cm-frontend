@@ -35,6 +35,7 @@ import { getLocationColors, getSeoAppTitle, getSeoImage } from "~/utils";
 import { tourQuery, createTourStops } from "./tourShared";
 
 import NextHeadSeo from "next-head-seo";
+import { PageTitle } from "~/components/ui/PageTitle";
 
 export const ModuleComponentTourStop = ({
   tour,
@@ -167,11 +168,7 @@ export const ModuleComponentTourStop = ({
       >
         <Box>
           <Box px="20px" pt="0.5em">
-            <Box mb="3">
-              <Text className="highlight" color="cm.text" fontWeight="bold">
-                {getMultilangValue(tour?.title)}
-              </Text>
-            </Box>
+            <PageTitle title={getMultilangValue(tour?.title)} type="short" />
 
             <Box bg="#fff" borderRadius="lg" overflow="hidden">
               {tourStop?.heroImage?.id && (
@@ -324,9 +321,7 @@ export const ModuleComponentTourStop = ({
           </Box>
           {tourStop?.location?.id && (
             <Box p="20px">
-              <chakra.h3 className="highlight" color="cm.text" pb="0" mb="20px">
-                {t("event.title.location", "Location")}
-              </chakra.h3>
+              <PageTitle title={t("event.title.location", "Location")} type="short" />
 
               <CardLocation
                 key={`loc-${tourStop?.location.id}`}

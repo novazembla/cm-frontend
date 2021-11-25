@@ -36,6 +36,7 @@ import {
   getSeoImage,
 } from "~/utils";
 import NextHeadSeo from "next-head-seo";
+import { PageTitle } from "~/components/ui/PageTitle";
 
 const eventQuery = gql`
   query ($slug: String!) {
@@ -275,11 +276,7 @@ export const ModuleComponentEvent = ({
         }}
       >
         <Box layerStyle="page">
-          <Box layerStyle="headingPullOut" mb="3">
-            <Text className="highlight" color="cm.text" fontWeight="bold">
-              {t("event.detail.title", "Event")}
-            </Text>
-          </Box>
+          <PageTitle type="high" title={t("event.detail.title", "Event")} />
 
           <Box color="cm.text">
             {event?.heroImage && event?.heroImage.id && (
@@ -362,7 +359,11 @@ export const ModuleComponentEvent = ({
               </Box>
             )}
 
-            <SimpleGrid columns={2} spacingX="0.5em" spacingY="1em">
+            <SimpleGrid
+              columns={isMobile ? 1 : 2}
+              spacingX="0.5em"
+              spacingY="1em"
+            >
               {!isEmptyHtml(event?.address ?? "") && (
                 <Box className="item">
                   <Box
@@ -472,9 +473,10 @@ export const ModuleComponentEvent = ({
         <Box layerStyle="lightGray">
           {event.locations && event.locations.length > 0 && (
             <Box p="20px">
-              <chakra.h3 className="highlight" color="cm.text" pb="0" mb="20px">
-                {t("event.title.location", "Location")}
-              </chakra.h3>
+              <PageTitle
+                title={t("event.title.location", "Location")}
+                type="short"
+              />
 
               {event.locations.map((location: any, i: number) => (
                 <CardLocation key={`loc-${location.id}`} location={location} />

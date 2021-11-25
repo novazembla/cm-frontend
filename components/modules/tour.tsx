@@ -34,11 +34,9 @@ import { useRouter } from "next/router";
 import NextLink from "next/link";
 import debounce from "lodash/debounce";
 import { tourQuery, createTourStops } from "./tourShared";
+import { PageTitle } from "../ui/PageTitle";
 
 const MOBILE_CARD_WIDTH = 275;
-
-
-
 
 export const ModuleComponentTour = ({ tour }: { tour: any }) => {
   const cultureMap = useMapContext();
@@ -394,23 +392,18 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
             }}
           >
             <Box>
-              <chakra.h3
-                className="highlight"
-                color="cm.text"
-                mt="0.5em"
-                px="20px"
-                textTransform="uppercase"
-                fontWeight="bold"
-                w="100%"
-                whiteSpace="nowrap"
-                textOverflow="ellipsis"
-                overflow="hidden"
-                id="title"
-              >
-                {isMobile
-                  ? getMultilangValue(tour?.title)
-                  : t("tour.title.tour", "Tour")}
-              </chakra.h3>
+              <Box px="20px" pt="0.5em">
+                <PageTitle
+                  h1={isMobile}
+                  title={
+                    isMobile
+                      ? getMultilangValue(tour?.title)
+                      : t("tour.title.tour", "Tour")
+                  }
+                  type="short"
+                  center={isMobile}
+                />
+              </Box>
 
               <Box
                 w="100%"
@@ -431,6 +424,7 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
                   role="group"
                   aria-labelledby="title"
                   ref={tourStopsCardsContainerRef}
+                  pb={isMobile ? "20px" : undefined}
                   onScroll={
                     isMobile
                       ? (e: UIEvent<HTMLDivElement>) => {
@@ -532,7 +526,7 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
                             >
                               {t("tour.title.aboutTheTour", "About the tour")}
                             </Flex>
-                            <chakra.h2
+                            <chakra.h1
                               mb="0.3em !important"
                               sx={{
                                 a: {
@@ -561,7 +555,7 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
                                   <MultiLangValue json={tour.title} />
                                 </LinkOverlay>
                               </NextLink>
-                            </chakra.h2>
+                            </chakra.h1>
                           </>
                         )}
                         {isMobile && (

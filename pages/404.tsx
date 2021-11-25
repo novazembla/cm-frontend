@@ -14,6 +14,7 @@ import { useAppTranslations } from "~/hooks/useAppTranslations";
 import { getSeoAppTitle } from "~/utils";
 import NextHeadSeo from "next-head-seo";
 import { useMapContext } from "~/provider";
+import { PageTitle } from "~/components/ui/PageTitle";
 
 export function Page404() {
   const { t } = useAppTranslations();
@@ -40,11 +41,11 @@ export function Page404() {
         }}
       >
         <Box layerStyle="page">
-          <Box layerStyle="headingPullOut" mb="3">
-            <Heading as="h1" className="highlight" color="cm.text">
-              {t("error.pagenotfound", "Page not found")}
-            </Heading>
-          </Box>
+          <PageTitle 
+            h1
+            type="high"
+            title={t("error.pagenotfound", "Page not found")}
+          />
           <Text h="400px">
             {t("error.pleaseReloadInAFewMoments", "Please try again")}
           </Text>

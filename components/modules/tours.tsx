@@ -8,6 +8,7 @@ import { Box, Grid, chakra } from "@chakra-ui/react";
 import { GetStaticProps } from "next";
 import { useAppTranslations } from "~/hooks/useAppTranslations";
 
+import { PageTitle } from "~/components/ui/PageTitle";
 import { useRouter } from "next/router";
 import { useConfigContext, useMapContext } from "~/provider";
 import { getSeoAppTitle } from "~/utils";
@@ -72,7 +73,7 @@ export const ModuleComponentTours = ({
   const router = useRouter();
   const cultureMap = useMapContext();
   const config = useConfigContext();
-  
+
   useEffect(() => {
     if (cultureMap) cultureMap.showCurrentView();
   }, [router.asPath, cultureMap]);
@@ -80,7 +81,9 @@ export const ModuleComponentTours = ({
   return (
     <MainContent layerStyle="lightGray">
       <NextHeadSeo
-        canonical={`${config.baseUrl}${i18n.language === "en" ? "/en/tours" : "/touren"}`}
+        canonical={`${config.baseUrl}${
+          i18n.language === "en" ? "/en/tours" : "/touren"
+        }`}
         title={`${t("tour.listings.title", "Tours")} - ${getSeoAppTitle(t)}`}
       />
       <Grid
@@ -93,11 +96,11 @@ export const ModuleComponentTours = ({
         }}
       >
         <Box px="20px" pt="0.5em">
-          <Box mb="3">
-            <chakra.h1 className="highlight" color="cm.text" fontWeight="bold">
-              {t("tour.listings.title", "Tours")}
-            </chakra.h1>
-          </Box>
+          <PageTitle
+            h1
+            title={t("tour.listings.title", "Tours")}
+            type="short"
+          />
 
           <Box>
             {totalCount > 0 &&

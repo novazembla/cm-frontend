@@ -82,7 +82,7 @@ export const ListedEvent = ({ event }: { event: any }) => {
                 i18n.language === "de" ? "veranstaltung" : "event"
               }/${getMultilangValue(event?.slug)}`}
             >
-              <LinkOverlay textDecoration="none">
+              <LinkOverlay textDecoration="none" textStyle="headline">
                 <MultiLangValue json={event?.title} />
               </LinkOverlay>
             </NextLink>

@@ -14,6 +14,7 @@ import { useAppTranslations } from "~/hooks/useAppTranslations";
 import { getSeoAppTitle } from "~/utils";
 import NextHeadSeo from "next-head-seo";
 import { useMapContext } from "~/provider";
+import { PageTitle } from "~/components/ui/PageTitle";
 
 export function Page500() {
   const { t } = useAppTranslations();
@@ -41,14 +42,15 @@ export function Page500() {
         }}
       >
         <Box layerStyle="page" w="100%">
-          <Box layerStyle="headingPullOut" mb="3">
-            <Heading as="h1" className="highlight" color="cm.text">
-              {t(
-                "error.internalServerError",
-                "Oops, an error happened on our server"
-              )}
-            </Heading>
-          </Box>
+          <PageTitle
+            h1
+            type="high"
+            title={t(
+              "error.internalServerError",
+              "Oops, an error happened on our server"
+            )}
+          />
+
           <Text h="400px">{t("error.pleasetryagain", "Please try again")}</Text>
         </Box>
         <Footer />
