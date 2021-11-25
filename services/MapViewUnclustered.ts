@@ -6,6 +6,7 @@ export class MapViewUnclustered {
   cultureMap: CultureMap;
   bounds: maplibregl.LngLatBounds;
   events: Record<string, any> = {};
+  isVisible: boolean = false;
 
   constructor(cultureMap: CultureMap) {
     this.cultureMap = cultureMap;
@@ -20,7 +21,7 @@ export class MapViewUnclustered {
       if (!this.cultureMap?.map) return;
 
       this.hide();
-      
+
       setTimeout(() => {
         if (!this.cultureMap?.map) return;
 
@@ -34,33 +35,31 @@ export class MapViewUnclustered {
             this.cultureMap?.map?.getSource("unclustered-locations") as any
           )?.setData(data ?? this.cultureMap.geoJsonAllData ?? {});
         }
-  
+
         this.bounds = new maplibregl.LngLatBounds(
           [this.cultureMap.config.lng, this.cultureMap.config.lat],
           [this.cultureMap.config.lng, this.cultureMap.config.lat]
         );
-  
+
         if ((data ?? this.cultureMap.geoJsonAllData ?? {})?.features?.length) {
           for (
             let i = 0;
-            i < (data ?? this.cultureMap.geoJsonAllData ?? {})?.features?.length;
+            i <
+            (data ?? this.cultureMap.geoJsonAllData ?? {})?.features?.length;
             i++
           ) {
-            const coordinates = (data ?? this.cultureMap.geoJsonAllData ?? {})?.features[i]
-            ?.geometry?.coordinates ?? [
+            const coordinates = (data ?? this.cultureMap.geoJsonAllData ?? {})
+              ?.features[i]?.geometry?.coordinates ?? [
               this.cultureMap.config.lng,
               this.cultureMap.config.lat,
             ];
-  
+
             if (coordinates[0] !== 0 && coordinates[1] !== 0) {
-              this.bounds.extend(
-                coordinates
-              );
+              this.bounds.extend(coordinates);
             }
           }
-        }        
+        }
       }, 60);
-      
     }
   }
 
@@ -73,13 +72,13 @@ export class MapViewUnclustered {
         return;
 
       this.clear();
-      
+
       this.cultureMap.map.addLayer({
         id: "unclustered-locations",
         type: "circle",
         source: "unclustered-locations",
         layout: {
-          "visibility": "none"
+          visibility: "none",
         },
         paint: {
           "circle-color": ["get", "color"],
@@ -99,7 +98,7 @@ export class MapViewUnclustered {
         }
         try {
           const titles = JSON.parse(feature?.properties?.title);
-          
+
           const slug = `/${
             this.cultureMap.tHelper.i18n?.language === "en"
               ? "location"
@@ -191,7 +190,7 @@ export class MapViewUnclustered {
               }/${this.cultureMap.tHelper.getMultilangValue(
                 JSON.parse(e?.features?.[0]?.properties?.slug)
               )}`;
-    
+
               this.cultureMap.onMapPointNavigate(slug);
             } catch (err) {}
           }
@@ -214,7 +213,7 @@ export class MapViewUnclustered {
     if (this.cultureMap?.map) {
       if (this.cultureMap.map?.getLayer("unclustered-locations"))
         this.cultureMap.map.setFilter("unclustered-locations", filter);
-        //["match", ["get", "id"], ["loc-1", "loc-2", "loc-3", "loc-4", "loc-5", "loc-8", "loc-10"], true, false]      
+      //["match", ["get", "id"], ["loc-1", "loc-2", "loc-3", "loc-4", "loc-5", "loc-8", "loc-10"], true, false]
     }
   }
 
@@ -223,12 +222,14 @@ export class MapViewUnclustered {
       this.cultureMap.map?.fitBounds(this.bounds, {
         maxZoom: this.cultureMap.MAX_BOUNDS_ZOOM,
         linear: true,
-        padding: this.cultureMap.getBoundsPadding()
-      })
+        padding: this.cultureMap.getBoundsPadding(),
+      });
     }
   }
 
   hide() {
+    if (!this.isVisible) return;
+
     if (this.cultureMap?.map) {
       if (this.cultureMap.map?.getLayer("unclustered-locations"))
         this.cultureMap?.map?.setLayoutProperty(
@@ -236,10 +237,14 @@ export class MapViewUnclustered {
           "visibility",
           "none"
         );
+
+      this.isVisible = false;
     }
   }
 
   show() {
+    if (this.isVisible) return;
+
     if (this.cultureMap?.map) {
       if (this.cultureMap.map?.getLayer("unclustered-locations"))
         this.cultureMap?.map?.setLayoutProperty(
@@ -247,11 +252,15 @@ export class MapViewUnclustered {
           "visibility",
           "visible"
         );
+
+      this.isVisible = true;
     }
   }
 
   clear() {
     if (this.cultureMap?.map) {
+      this.isVisible = false;
+
       if (this.cultureMap.map?.getLayer("unclustered-locations"))
         this.cultureMap?.map?.removeLayer("unclustered-locations");
 

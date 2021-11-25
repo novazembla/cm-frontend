@@ -19,7 +19,7 @@ export const Logo = ({ layout }: { layout: string }) => {
         whiteSpace="nowrap"
         target={layout === "light" ? "_blank" : undefined}
       >
-        <chakra.span>{t("logo.culturemap1", "CULTUREMAP")}</chakra.span>{" "}
+        <chakra.span letterSpacing="1px">{t("logo.culturemap1", "CULTUREMAP")}</chakra.span>{" "}
         <chakra.span fontWeight="normal">
           {t("logo.culturemap2", "Lichtenberg")}
         </chakra.span>

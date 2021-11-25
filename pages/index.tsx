@@ -253,11 +253,11 @@ export const Home = ({ homepage }: { homepage: any }) => {
 
       if (highlights.length) {
         cultureMap.setHighlights(highlights);
-        cultureMap.panTo(
-          highlights[0].lng,
-          highlights[0].lat,
-          !window.matchMedia("(max-width: 44.999em)").matches
-        );
+        // cultureMap.panTo(
+        //   highlights[0].lng,
+        //   highlights[0].lat,
+        //   !window.matchMedia("(max-width: 44.999em)").matches
+        // );
         setHighlights(highlights);
         parsedHighlightsRef.current = highlights;
       }

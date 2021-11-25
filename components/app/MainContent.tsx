@@ -4,7 +4,6 @@ import { Box, IconButton, useBreakpointValue, chakra } from "@chakra-ui/react";
 import { useIsBreakPoint } from "~/hooks/useIsBreakPoint";
 import { useAppTranslations } from "~/hooks/useAppTranslations";
 
-
 import { motion, useAnimation } from "framer-motion";
 import { useRouter } from "next/router";
 import {

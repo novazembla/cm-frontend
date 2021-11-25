@@ -50,8 +50,8 @@ const themeConfig = {
         bg: "#fff",
         fontSize: chakraToBreakpointArray({
           sm: "18px",
-          md: "21px",
-          xl: "21px",
+          md: "20px",
+          xl: "20px",
         }),
         lineHeight: chakraToBreakpointArray({
           sm: "22px",
@@ -62,15 +62,16 @@ const themeConfig = {
       "h1, h2, h3, h4, h5, h6": {
         fontWeight: "bold",
         margin: "0 0 0.6em 0",
-        lineHeight: chakraToBreakpointArray({
-          sm: "25px",
-          md: "31px",
-          xl: "31px",
-        }),
+        
         fontSize: chakraToBreakpointArray({
           sm: "22px",
-          md: "28px",
-          xl: "28px",
+          md: "26px",
+          xl: "26px",
+        }),
+        lineHeight: chakraToBreakpointArray({
+          sm: "25px",
+          md: "30px",
+          xl: "30px",
         }),
         "&:last-child": {
           mb: "0",
@@ -114,6 +115,8 @@ const themeConfig = {
         cursor: "pointer",
         textDecoration: "underline",
         textDecorationColor: "cm.accentLight",
+        textUnderlineOffset: "0.2em",
+        textDecorationThickness: "0.5px",
         outline: "none",
         _hover: {
           color: "cm.accentDark",
@@ -258,7 +261,7 @@ const themeConfig = {
       }),
     },
     pageBg: {
-      bg: "linear-gradient(180deg, rgba(252,210,207,1) 0%, rgba(255,255,255,1) 300px, rgba(255,255,255,1) 100%) fixed",
+      bg: "linear-gradient(180deg, rgba(252,210,207,1) 0%, rgba(252,230,230,1) 300px, rgba(252,242,242,1) 100%)",
       backgroundAttachment: "fixed",
     },
   },
@@ -266,13 +269,13 @@ const themeConfig = {
     navigation: {
       fontSize: chakraToBreakpointArray({
         base: "17px",
-        md: "17px",
-        xl: "17px",
+        md: "16px",
+        xl: "16px",
       }),
       lineHeight: chakraToBreakpointArray({
         base: "17px",
-        md: "17px",
-        xl: "17px",
+        md: "16px",
+        xl: "16px",
       }),
       letterSpacing: chakraToBreakpointArray({
         base: "1.7px",
@@ -283,25 +286,25 @@ const themeConfig = {
     headline: {
       fontSize: chakraToBreakpointArray({
         base: "22px",
-        md: "28px",
-        xl: "28px",
+        md: "26px",
+        xl: "26px",
       }),
       lineHeight: chakraToBreakpointArray({
         base: "25px",
-        md: "31px",
-        xl: "31px",
+        md: "30px",
+        xl: "30px",
       }),
     },
     larger: {
       fontSize: chakraToBreakpointArray({
         base: "18px",
-        md: "24px",
-        xl: "24px",
+        md: "22px",
+        xl: "22px",
       }),
       lineHeight: chakraToBreakpointArray({
         base: "22px",
-        md: "29px",
-        xl: "29px",
+        md: "27px",
+        xl: "27px",
       }),
     },
     finePrint: {
@@ -360,8 +363,8 @@ const themeConfig = {
     categoriesHighlight: {
       fontSize: chakraToBreakpointArray({
         base: "13px",
-        md: "18px",
-        xl: "18px",
+        md: "16px",
+        xl: "16px",
       }),
       lineHeight: chakraToBreakpointArray({
         base: "17px",
@@ -378,8 +381,8 @@ const themeConfig = {
     card: {
       fontSize: chakraToBreakpointArray({
         base: "16px",
-        md: "21px",
-        xl: "21px",
+        md: "20px",
+        xl: "20px",
       }),
       lineHeight: chakraToBreakpointArray({
         base: "20px",
@@ -391,15 +394,13 @@ const themeConfig = {
       fontWeight: "bold",
       fontSize: chakraToBreakpointArray({
         base: "22px",
-        md: "28px",
-        xl: "30px",
-        "2xl": "32px",
+        md: "26px",
+        xl: "26px",
       }),
       lineHeight: chakraToBreakpointArray({
-        base: "22px",
-        md: "28px",
+        base: "25px",
+        md: "30px",
         xl: "30px",
-        "2xl": "32px",
       }),
     },
   },

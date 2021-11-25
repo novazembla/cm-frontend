@@ -605,7 +605,7 @@ export const ModuleComponentEvents = ({ ...props }) => {
                       <Box
                         flex="1"
                         textAlign="left"
-                        textStyle="headline"
+                        textStyle="larger"
                         fontWeight="bold"
                       >
                         {t("events.filter.title.dateRange", "Date (range)")}
@@ -879,7 +879,7 @@ export const ModuleComponentEvents = ({ ...props }) => {
                           <Box
                             flex="1"
                             textAlign="left"
-                            textStyle="headline"
+                            textStyle="larger"
                             fontWeight="bold"
                           >
                             {t(

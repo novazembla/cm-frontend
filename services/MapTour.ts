@@ -17,6 +17,7 @@ export class MapTour {
 
   bounds: maplibregl.LngLatBounds;
   events: Record<string, any> = {};
+  isVisible: boolean = false;
 
   constructor(cultureMap: CultureMap) {
     this.cultureMap = cultureMap;
@@ -291,6 +292,8 @@ export class MapTour {
   }
 
   hide() {
+    if (!this.isVisible) return;
+
     if (this.cultureMap?.map) {
       if (this.cultureMap?.map?.getLayer("tourStops"))
         this.cultureMap?.map?.setLayoutProperty(
@@ -328,10 +331,14 @@ export class MapTour {
           "visibility",
           "none"
         );
+
+      this.isVisible = false;
     }
   }
 
   show() {
+    if (this.isVisible) return;
+
     if (this.cultureMap?.map) {
       if (this.cultureMap?.map?.getLayer("tourStops"))
         this.cultureMap?.map?.setLayoutProperty(
@@ -371,12 +378,15 @@ export class MapTour {
           "visibility",
           "visible"
         );
+
+      this.isVisible = true;
     }
   }
 
   clear() {
     this.clearPath();
     this.clearStops();
+    this.isVisible = false;
   }
 
   clearPath() {

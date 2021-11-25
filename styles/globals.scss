@@ -3,14 +3,16 @@
   font-style: normal;
   font-display: swap;
   font-weight: 400;
-  src: url("/fonts/BerlinType/BerlinTypeWeb-Regular.woff") format("woff");
+  src: url("/fonts/BerlinType/BerlinTypeWeb-Regular.woff2") format("woff2"),
+    url("/fonts/BerlinType/BerlinTypeWeb-Bold.woff") format("woff");
 }
 @font-face {
   font-family: "Berlin Type";
   font-style: normal;
   font-display: swap;
   font-weight: 700;
-  src: url("/fonts/BerlinType/BerlinTypeWeb-Bold.woff") format("woff");
+  src: url("/fonts/BerlinType/BerlinTypeWeb-Bold.woff2") format("woff2"),
+    url("/fonts/BerlinType/BerlinTypeWeb-Bold.woff") format("woff");
 }
 
 :root {
@@ -27,7 +29,7 @@ body {
 
 .clampTwoLines {
   overflow: hidden;
-  hyphens: auto;
+  // hyphens: auto;
   text-overflow: ellipsis;
   -moz-box-orient: vertical;
   display: -webkit-box;
@@ -36,7 +38,7 @@ body {
 }
 .clampThreeLines {
   overflow: hidden;
-  hyphens: auto;
+  // hyphens: auto;
   text-overflow: ellipsis;
   -moz-box-orient: vertical;
   display: -webkit-box;
@@ -46,7 +48,7 @@ body {
 
 .clampFourLines {
   overflow: hidden;
-  hyphens: auto;
+  // hyphens: auto;
   text-overflow: ellipsis;
   -moz-box-orient: vertical;
   display: -webkit-box;
@@ -56,7 +58,7 @@ body {
 
 .clampFifeLines {
   overflow: hidden;
-  hyphens: auto;
+  // hyphens: auto;
   text-overflow: ellipsis;
   -moz-box-orient: vertical;
   display: -webkit-box;
@@ -79,8 +81,8 @@ body {
 
 .popup {
   height: 112px;
-  width: 160px;
-  border: 3px solid;
+  width: 200px;
+  border: 1.5px solid;
   border-radius: 10px;
   padding: 6px 8px;
   background: var(--chakra-colors-blur-white);
@@ -90,6 +92,7 @@ body {
   font-family: Berlin Type, Helvetica, Arial, sans-serif;
   font-size: 13px;
   line-height: 17px;
+  letter-spacing: 1.8px;
   text-transform: uppercase;
   cursor: pointer;
   opacity: 0;
@@ -184,6 +187,16 @@ body {
   }
 }
 
+@media screen and (min-width: 72em) {
+  .popup {
+    height: 112px;
+    width: 200px;
+    // font-size: 16px;
+    // line-height: 22px;
+    // letter-spacing: 1.8px;
+  }
+}
+
 .aspect {
   position: relative;
   width: 100%;
@@ -228,7 +241,7 @@ body {
       brightness(99%) contrast(106%);
 
     &.black {
-      filter: invert(33%) ;
+      filter: invert(33%);
     }
   }
 }

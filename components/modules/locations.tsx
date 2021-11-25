@@ -745,7 +745,7 @@ export const ModuleComponentLocations = () => {
                           <Box
                             flex="1"
                             textAlign="left"
-                            textStyle="headline"
+                            textStyle="larger"
                             fontWeight="bold"
                           >
                             {t(
@@ -782,7 +782,7 @@ export const ModuleComponentLocations = () => {
                             <Box
                               flex="1"
                               textAlign="left"
-                              textStyle="headline"
+                              textStyle="larger"
                               fontWeight="bold"
                             >
                               {t(
@@ -825,7 +825,7 @@ export const ModuleComponentLocations = () => {
                             <Box
                               flex="1"
                               textAlign="left"
-                              textStyle="headline"
+                              textStyle="larger"
                               fontWeight="bold"
                             >
                               {t(
@@ -868,7 +868,7 @@ export const ModuleComponentLocations = () => {
                             <Box
                               flex="1"
                               textAlign="left"
-                              textStyle="headline"
+                              textStyle="larger"
                               fontWeight="bold"
                             >
                               {t(
@@ -911,7 +911,7 @@ export const ModuleComponentLocations = () => {
                           <Box
                             flex="1"
                             textAlign="left"
-                            textStyle="headline"
+                            textStyle="larger"
                             fontWeight="bold"
                           >
                             {t(

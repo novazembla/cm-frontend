@@ -12,7 +12,6 @@ import {
 import { useIsBreakPoint } from "~/hooks/useIsBreakPoint";
 import { useAppTranslations } from "~/hooks/useAppTranslations";
 
-
 import { MultiLangValue } from "~/components/ui/MultiLangValue";
 import { ActiveLink } from "~/components/ui/ActiveLink";
 import { SVG } from "~/components/ui/SVG";
@@ -51,134 +50,148 @@ export const MobileNav = () => {
 
   return (
     <>
-      <AnimatePresence>
-        {isMenuOpen && !isDesktopAndUp && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            style={{
-              position: "fixed",
-              top: 0,
-              left: 0,
-              height: "calc(var(--vh) * 100)",
-              width: isTablet ? (isTabletWide ? "66.66vw" : "80vw") : "100vw",
-              zIndex: 1100,
-            }}
-            id="menu"
-          >
-            <RemoveScroll>
-              <FocusLock>
-                <Box
-                  h="calc(var(--vh) * 100)"
-                  layerStyle="pageBg"
-                  w="100%"
-                  overflowY="auto"
-                  pt="60px"
-                  pb={{
-                    base: "80px",
-                    md: "45px",
-                  }}
-                  id="menu"
-                >
-                  <Flex
-                    overflow="hidden"
-                    minH="100%"
-                    alignItems={isTablet ? "flex-start" : "flex-end"}
-                  >
-                    <Flex w="100%" minH="100%" h="100%">
+      <Box id="menu">
+        <AnimatePresence>
+          {!isDesktopAndUp &&
+            (!isMenuOpen ? (
+              <Box key="mobile-closed"></Box>
+            ) : (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                style={{
+                  position: "fixed",
+                  top: 0,
+                  left: 0,
+                  height: "calc(var(--vh) * 100)",
+                  width: isTablet
+                    ? isTabletWide
+                      ? "66.66vw"
+                      : "80vw"
+                    : "100vw",
+                  zIndex: 1100,
+                }}
+                id="menu"
+                key="menu-open"
+              >
+                <RemoveScroll>
+                  <FocusLock>
+                    <Box
+                      h="calc(var(--vh) * 100)"
+                      layerStyle="pageBg"
+                      w="100%"
+                      overflowY="auto"
+                      pt="60px"
+                      pb={{
+                        base: "80px",
+                        md: "45px",
+                      }}
+                    >
                       <Flex
-                        sx={{
-                          a: {
-                            display: "inline-block",
-                            marginBottom: "0.3em",
-                            _last: {
-                              marginBottom: 0,
-                            },
-                            pb: "3px",
-                            mt: "0.5em",
-                            borderBottom: "1px solid #ff0",
-                            borderColor: "cm.accentLight",
-                          },
-                        }}
-                        direction={{
-                          base: "column",
-                        }}
-                        textStyle="headline"
-                        fontWeight="bold"
-                        layerStyle="page"
-                        position="relative"
-                        w="100%"
+                        overflow="hidden"
+                        minH="100%"
+                        alignItems={isTablet ? "flex-start" : "flex-end"}
                       >
-                        {isTablet && (
-                          <>
-                            <Box layerStyle="headingPullOut" mb="3">
-                              <chakra.h1
-                                className="highlight"
-                                color="cm.text"
-                                fontWeight="bold"
-                              >
-                                {t("menu.title", "Menu")}
-                              </chakra.h1>
-                            </Box>
-                          </>
-                        )}
-                        {config.nav.main.map((link: any, index: number) => (
-                          <chakra.span key={`nav-link-${index}`}>
-                            <ActiveLink href={getMultilangValue(link.path)}>
-                              <MultiLangValue json={link.title} />
-                            </ActiveLink>
-                          </chakra.span>
-                        ))}
+                        <Flex w="100%" minH="100%" h="100%">
+                          <Flex
+                            sx={{
+                              a: {
+                                display: "inline-block",
+                                marginBottom: "0.3em",
+                                _last: {
+                                  marginBottom: 0,
+                                },
+                                pb: "3px",
+                                mt: "1.5em",
+                                borderBottom: "0.5px solid",
+                                borderColor: "cm.accentLight",
+                              },
+                            }}
+                            direction={{
+                              base: "column",
+                            }}
+                            textStyle="headline"
+                            fontWeight="bold"
+                            layerStyle="page"
+                            position="relative"
+                            w="100%"
+                          >
+                            {isTablet && (
+                              <>
+                                <Box layerStyle="headingPullOut" mb="3">
+                                  <chakra.h1
+                                    className="highlight"
+                                    color="cm.text"
+                                    fontWeight="bold"
+                                  >
+                                    {t("menu.title", "Menu")}
+                                  </chakra.h1>
+                                </Box>
+                              </>
+                            )}
+                            {config.nav.main.map((link: any, index: number) => (
+                              <chakra.span key={`nav-link-${index}`}>
+                                <ActiveLink href={getMultilangValue(link.path)}>
+                                  <MultiLangValue json={link.title} />
+                                </ActiveLink>
+                              </chakra.span>
+                            ))}
 
-                        <IconButton
-                          aria-label={t("menu.button.closeMenu", "Close menu")}
-                          icon={<SVG type="cross" width="60px" height="60px" />}
-                          position="absolute"
-                          top="20px"
-                          right="20px"
-                          borderRadius="0"
-                          p="0"
-                          className="svgHover tabbedVisible"
-                          paddingInlineStart="0"
-                          paddingInlineEnd="0"
-                          padding="0"
-                          bg="transparent"
-                          w="30px"
-                          h="30px"
-                          minW="30px"
-                          overflow="hidden"
-                          onClick={() => {
-                            onMenuClose();
-                          }}
-                          transition="background-color 0.3s"
-                          _hover={{
-                            bg: "transparent",
-                          }}
-                          _active={{
-                            bg: "transparent",
-                          }}
-                          _focus={{
-                            bg: "transparent",
-                            outline: "solid 2px #E42B20",
-                            outlineOffset: "5px",
-                          }}
-                          transform={
-                            isMobile
-                              ? "translateY(-5px) translateX(5px)"
-                              : undefined
-                          }
-                        />
+                            <IconButton
+                              aria-label={t(
+                                "menu.button.closeMenu",
+                                "Close menu"
+                              )}
+                              icon={
+                                <SVG type="cross" width="60px" height="60px" />
+                              }
+                              position="absolute"
+                              top="20px"
+                              right="20px"
+                              borderRadius="0"
+                              p="0"
+                              className="svgHover tabbedVisible"
+                              paddingInlineStart="0"
+                              paddingInlineEnd="0"
+                              padding="0"
+                              bg="transparent"
+                              w="30px"
+                              h="30px"
+                              minW="30px"
+                              overflow="hidden"
+                              onClick={() => {
+                                onMenuClose();
+                              }}
+                              transition="background-color 0.3s"
+                              _hover={{
+                                bg: "transparent",
+                              }}
+                              _active={{
+                                bg: "transparent",
+                              }}
+                              _focus={{
+                                bg: "transparent",
+                                outline: "solid 2px #E42B20",
+                                outlineOffset: "5px",
+                              }}
+                              transform={
+                                isMobile
+                                  ? "translateY(-5px) translateX(5px)"
+                                  : undefined
+                              }
+                            />
+                          </Flex>
+                        </Flex>
                       </Flex>
-                    </Flex>
-                  </Flex>
-                </Box>
-              </FocusLock>
-            </RemoveScroll>
-          </motion.div>
-        )}
-      </AnimatePresence>
+                    </Box>
+                  </FocusLock>
+                </RemoveScroll>
+              </motion.div>
+            ))}
+        </AnimatePresence>
+      </Box>
       {isMobile && (
         <Flex
           w="100%"
@@ -230,6 +243,7 @@ export const MobileNav = () => {
                   aria-controls="menu"
                   aria-haspopup="true"
                   aria-expanded="true"
+                  aria-hidden={isMenuOpen ? undefined : "true"}
                 />
               </Box>
             </motion.div>
@@ -268,6 +282,7 @@ export const MobileNav = () => {
                   aria-controls="menu"
                   aria-haspopup="true"
                   aria-expanded="false"
+                  aria-hidden={isMenuOpen ? "true" : undefined}
                 />
               </Box>
             </motion.div>
@@ -312,6 +327,7 @@ export const MobileNav = () => {
                     aria-controls="search"
                     aria-haspopup="true"
                     aria-expanded="true"
+                    aria-hidden={!isQuickSearchOpen ? "true" : undefined}
                   />
                 </Box>
               </motion.div>
@@ -338,6 +354,7 @@ export const MobileNav = () => {
                     border="none"
                     pointerEvents={isQuickSearchOpen ? "none" : undefined}
                     tabIndex={isQuickSearchOpen ? -1 : undefined}
+                    aria-hidden={isQuickSearchOpen ? "true" : undefined}
                     onClick={() => {
                       onQuickSearchToggle();
                     }}
@@ -377,6 +394,7 @@ export const MobileNav = () => {
               }}
               pointerEvents={isMenuOpen ? "none" : undefined}
               tabIndex={isMenuOpen ? -1 : undefined}
+              aria-hidden={isMenuOpen ? "true" : undefined}
             />
           </motion.div>
         </Flex>

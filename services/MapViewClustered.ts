@@ -6,6 +6,7 @@ export class MapViewClustered {
   cultureMap: CultureMap;
   bounds: maplibregl.LngLatBounds;
   events: Record<string, any> = {};
+  isVisible: boolean = false;
 
   constructor(cultureMap: CultureMap) {
     this.cultureMap = cultureMap;
@@ -393,6 +394,9 @@ export class MapViewClustered {
   }
 
   hide() {
+    if (!this.isVisible) 
+      return;
+
     if (this.cultureMap?.map) {
       if (this.cultureMap.map?.getLayer("clusters"))
         this.cultureMap?.map?.setLayoutProperty(
@@ -412,10 +416,15 @@ export class MapViewClustered {
           "visibility",
           "none"
         );
+
+      this.isVisible = false;
     }
   }
 
   show() {
+    if (this.isVisible) 
+      return;
+      
     if (this.cultureMap?.map) {
       if (this.cultureMap.map?.getLayer("clusters")) {
         this.cultureMap?.map?.setLayoutProperty(
@@ -438,11 +447,15 @@ export class MapViewClustered {
           "visible"
         );
       }
+
+      this.isVisible = true;
     }
   }
 
   clear() {
     if (this.cultureMap?.map) {
+      this.isVisible = false;
+
       if (this.cultureMap.map?.getLayer("clusters"))
         this.cultureMap?.map?.removeLayer("clusters");
       if (this.cultureMap.map?.getLayer("cluster-count"))

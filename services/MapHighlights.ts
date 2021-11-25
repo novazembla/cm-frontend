@@ -12,6 +12,7 @@ export type MapHighlightType = {
 
 export class MapHighlights {
   cultureMap: CultureMap;
+  isVisible: boolean = false;
 
   events: Record<string, any> = {};
 
@@ -165,6 +166,8 @@ export class MapHighlights {
   }
 
   hide() {
+    if (!this.isVisible) return;
+
     if (this.cultureMap?.map) {
       if (this.cultureMap?.map?.getLayer("highlights"))
         this.cultureMap?.map?.setLayoutProperty(
@@ -172,10 +175,14 @@ export class MapHighlights {
           "visibility",
           "none"
         );
+
+      this.isVisible = false;
     }
   }
 
   show() {
+    if (this.isVisible) return;
+
     if (this.cultureMap?.map) {
       if (this.cultureMap?.map?.getLayer("highlights"))
         this.cultureMap?.map?.setLayoutProperty(
@@ -183,11 +190,15 @@ export class MapHighlights {
           "visibility",
           "visible"
         );
+
+      this.isVisible = true;
     }
   }
 
   clear() {
     if (this.cultureMap?.map) {
+      this.isVisible = false;
+
       if (this.cultureMap?.map?.getLayer("highlights"))
         this.cultureMap?.map?.removeLayer("highlights");
 

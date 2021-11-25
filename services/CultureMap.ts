@@ -227,7 +227,6 @@ export class CultureMap {
         this.popup.hide();
         this.clusterDetail.hide();
         this.views[this.currentView].show();
-        console.log(this.currentView, "show");
       };
       if (!this.ready) {
         this.onLoadJobs.push(run);

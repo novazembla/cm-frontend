@@ -48,3 +48,4 @@ You can inspect the created bundle by running `npm run build:analyze`
 
 We also recommend to make use of [bundle-wizard](https://www.npmjs.com/package/bundle-wizard). To be able to do that you should make sure that `productionBrowserSourceMaps: true,` is set to true in `next.config.js`, then run `npm run build` followed by `PORT=3001 npx next start` (to serve the just built app locally on a different port as bundle-wizard does use port 3000). Then run `npx bundle-wizard http://localhost:3001` to inspect the individual pages. 
 
+You also might want to consult https://bundlephobia.com/ before you add new packages. 

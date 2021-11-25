@@ -238,6 +238,7 @@ export const Map = ({ layout }: { layout: string }) => {
                     aria-controls="search"
                     aria-haspopup="true"
                     aria-expanded="true"
+                    aria-hidden={isQuickSearchOpen ? undefined : "true" }
                   />
                 </Box>
               </Box>
@@ -283,7 +284,9 @@ export const Map = ({ layout }: { layout: string }) => {
                     tabIndex={isQuickSearchOpen ? -1 : undefined}
                     aria-controls="search"
                     aria-haspopup="true"
-                    aria-expanded="true"
+                    aria-expanded="false"
+                    aria-hidden={isQuickSearchOpen ? "true" : undefined}
+                    
                   />
                 </Box>
               </Box>

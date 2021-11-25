@@ -4,12 +4,10 @@ import { Flex, Box, IconButton } from "@chakra-ui/react";
 import { useIsBreakPoint } from "~/hooks/useIsBreakPoint";
 import { useAppTranslations } from "~/hooks/useAppTranslations";
 
-import { motion } from "framer-motion";
-
-import {InlineLanguageButtons} from "~/components/ui/InlineLanguageButtons";
-import {ActiveLink} from "~/components/ui/ActiveLink";
-import {MultiLangValue} from "~/components/ui/MultiLangValue";
-import {SVG} from "~/components/ui/SVG";
+import { InlineLanguageButtons } from "~/components/ui/InlineLanguageButtons";
+import { ActiveLink } from "~/components/ui/ActiveLink";
+import { MultiLangValue } from "~/components/ui/MultiLangValue";
+import { SVG } from "~/components/ui/SVG";
 
 import {
   useConfigContext,
@@ -95,13 +93,10 @@ export const Header = (/* props */) => {
           xl: "3",
         }}
       >
-        <Logo layout="full"/>
+        <Logo layout="full" />
 
         {isDesktopAndUp && (
-          <Flex
-            flexGrow={10}
-            justifyContent="flex-end"
-          >
+          <Flex flexGrow={10} justifyContent="flex-end">
             <Flex
               justifyContent="flex-end"
               textStyle="navigation"
@@ -155,10 +150,9 @@ export const Header = (/* props */) => {
             <>
               {!isTabletWide && (
                 <Box position="relative" w="40px" h="40px" pr="3em">
-                  <motion.div
-                    animate={{ opacity: isQuickSearchOpen ? 1 : 0 }}
-                    transition={{ duration: 0.3 }}
-                    initial={{ opacity: 0 }}
+                  <Box
+                    opacity={isQuickSearchOpen ? 1 : 0 }
+                    transition="opacity 0.3s"
                   >
                     <Box
                       position="absolute"
@@ -189,6 +183,10 @@ export const Header = (/* props */) => {
                         }}
                         pointerEvents={isQuickSearchOpen ? undefined : "none"}
                         tabIndex={isQuickSearchOpen ? undefined : -1}
+                        aria-hidden={isQuickSearchOpen ? undefined : "true"}
+                        aria-controls="search"
+                        aria-haspopup="true"
+                        aria-expanded="true"
                         transition="all 0.3s"
                         _hover={{
                           bg: "transparent",
@@ -202,10 +200,10 @@ export const Header = (/* props */) => {
                         }}
                       />
                     </Box>
-                  </motion.div>
-                  <motion.div
-                    animate={{ opacity: isQuickSearchOpen ? 0 : 1 }}
-                    transition={{ duration: 0.3 }}
+                  </Box>
+                  <Box
+                    opacity={isQuickSearchOpen ? 0 : 1 }
+                    transition="opacity 0.3s"
                   >
                     <Box
                       position="absolute"
@@ -237,6 +235,10 @@ export const Header = (/* props */) => {
                         }}
                         pointerEvents={isQuickSearchOpen ? "none" : undefined}
                         tabIndex={isQuickSearchOpen ? -1 : undefined}
+                        aria-hidden={!isQuickSearchOpen ? undefined : "true"}
+                        aria-controls="search"
+                        aria-haspopup="true"
+                        aria-expanded="false"
                         transition="all 0.3s"
                         _hover={{
                           bg: "transparent",
@@ -250,14 +252,13 @@ export const Header = (/* props */) => {
                         }}
                       />
                     </Box>
-                  </motion.div>
+                  </Box>
                 </Box>
               )}
               <Box position="relative" w="40px" h="40px" pr="3em">
-                <motion.div
-                  animate={{ opacity: isMenuOpen ? 1 : 0 }}
-                  transition={{ duration: 0.3 }}
-                  initial={{ opacity: 0 }}
+                <Box
+                  opacity={isMenuOpen ? 1 : 0 }
+                  transition="opacity 0.3s"
                 >
                   <Box
                     position="absolute"
@@ -284,6 +285,10 @@ export const Header = (/* props */) => {
                       }}
                       pointerEvents={isMenuOpen ? undefined : "none"}
                       tabIndex={isMenuOpen ? undefined : -1}
+                      aria-controls="menu"
+                      aria-haspopup="true"
+                      aria-expanded="true"
+                      aria-hidden={isMenuOpen ? undefined : "true"}
                       transition="all 0.3s"
                       _hover={{
                         bg: "transparent",
@@ -297,11 +302,10 @@ export const Header = (/* props */) => {
                       }}
                     />
                   </Box>
-                </motion.div>
-                <motion.div
-                  initial={{ opacity: 1 }}
-                  animate={{ opacity: isMenuOpen ? 0 : 1 }}
-                  transition={{ duration: 0.3 }}
+                </Box>
+                <Box
+                  opacity={isMenuOpen ? 0 : 1 }
+                  transition="opacity 0.3s"
                 >
                   <Box
                     position="absolute"
@@ -333,6 +337,10 @@ export const Header = (/* props */) => {
                       }}
                       pointerEvents={isMenuOpen ? "none" : undefined}
                       tabIndex={isMenuOpen ? -1 : undefined}
+                      aria-controls="menu"
+                      aria-haspopup="true"
+                      aria-expanded="false"
+                      aria-hidden={!isMenuOpen ? undefined : "true"}
                       transition="all 0.3s"
                       _hover={{
                         bg: "transparent",
@@ -345,8 +353,9 @@ export const Header = (/* props */) => {
                         boxShadow: "none",
                       }}
                     />
+                    
                   </Box>
-                </motion.div>
+                </Box>
               </Box>
             </>
           )}
