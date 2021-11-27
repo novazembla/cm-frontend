@@ -8,6 +8,8 @@ export class MapViewClustered {
   events: Record<string, any> = {};
   isVisible: boolean = false;
 
+  layers: string[] = ["clusters", "cluster-count", "clustered-locations"];
+
   constructor(cultureMap: CultureMap) {
     this.cultureMap = cultureMap;
     this.bounds = new maplibregl.LngLatBounds(
@@ -394,75 +396,27 @@ export class MapViewClustered {
   }
 
   hide() {
-    if (!this.isVisible) 
-      return;
+    if (!this.isVisible) return;
 
-    if (this.cultureMap?.map) {
-      if (this.cultureMap.map?.getLayer("clusters"))
-        this.cultureMap?.map?.setLayoutProperty(
-          "clusters",
-          "visibility",
-          "none"
-        );
-      if (this.cultureMap.map?.getLayer("cluster-count"))
-        this.cultureMap?.map?.setLayoutProperty(
-          "cluster-count",
-          "visibility",
-          "none"
-        );
-      if (this.cultureMap.map?.getLayer("clustered-locations"))
-        this.cultureMap?.map?.setLayoutProperty(
-          "clustered-locations",
-          "visibility",
-          "none"
-        );
+    this.cultureMap.toggleLayersVisibility(this.layers, "none");
 
-      this.isVisible = false;
-    }
+    this.isVisible = false;
   }
 
   show() {
-    if (this.isVisible) 
-      return;
-      
-    if (this.cultureMap?.map) {
-      if (this.cultureMap.map?.getLayer("clusters")) {
-        this.cultureMap?.map?.setLayoutProperty(
-          "clusters",
-          "visibility",
-          "visible"
-        );
-      }
-      if (this.cultureMap.map?.getLayer("cluster-count")) {
-        this.cultureMap?.map?.setLayoutProperty(
-          "cluster-count",
-          "visibility",
-          "visible"
-        );
-      }
-      if (this.cultureMap.map?.getLayer("clustered-locations")) {
-        this.cultureMap?.map?.setLayoutProperty(
-          "clustered-locations",
-          "visibility",
-          "visible"
-        );
-      }
+    if (this.isVisible) return;
 
-      this.isVisible = true;
-    }
+    this.cultureMap.toggleLayersVisibility(this.layers, "visible");
+
+    this.isVisible = true;
   }
 
   clear() {
     if (this.cultureMap?.map) {
       this.isVisible = false;
 
-      if (this.cultureMap.map?.getLayer("clusters"))
-        this.cultureMap?.map?.removeLayer("clusters");
-      if (this.cultureMap.map?.getLayer("cluster-count"))
-        this.cultureMap?.map?.removeLayer("cluster-count");
-      if (this.cultureMap.map?.getLayer("clustered-locations"))
-        this.cultureMap?.map?.removeLayer("clustered-locations");
-
+      this.cultureMap.removeLayers(this.layers);
+      
       if (Object.keys(this.events).length) {
         Object.keys(this.events).forEach((key) => {
           if (this.cultureMap?.map) {

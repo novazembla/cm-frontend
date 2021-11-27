@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import Router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { Box } from "@chakra-ui/react";
 import {
   useMenuButtonContext,
@@ -15,18 +15,20 @@ export const LoadingBar = ({
   color: string;
   loading?: boolean;
 }) => {
-  const [barVisible, setBarVisible] = useState(false);
-  const { onMenuClose } = useMenuButtonContext();
-  const { onQuickSearchClose } = useQuickSearchContext();
-  const { setMainContentStatus, mainContentOpen } = useMainContentContext();
-  const [initialLoadDone, setInitialLoadDone] = useState(false);
   const router = useRouter();
 
+  const { onMenuClose } = useMenuButtonContext();
+  const { onQuickSearchClose } = useQuickSearchContext();
+  const { mainContentOpen, setIsMainContentActive } = useMainContentContext();
   const scrollState = useScrollStateContext();
+  
+  const [barVisible, setBarVisible] = useState(false);
+  const [initialLoadDone, setInitialLoadDone] = useState(false);
+
 
   const showBar = useCallback(() => {
     scrollState.setWasBack(scrollState.isBack());
-
+    setIsMainContentActive(false);
     onMenuClose();
     onQuickSearchClose();
     mainContentOpen();
@@ -34,19 +36,19 @@ export const LoadingBar = ({
     if (typeof document !== "undefined") {
       document.body.setAttribute("tabindex", "-1");
     }
-  }, [onMenuClose, scrollState, onQuickSearchClose, mainContentOpen]);
+  }, [onMenuClose, setIsMainContentActive, scrollState, onQuickSearchClose, mainContentOpen]);
 
   const hideBar = useCallback(() => {
     setBarVisible(false);
-    setMainContentStatus(true);
     scrollState.setIsBack(false);
-    scrollState.setCurrentPath(Router.asPath);
+    scrollState.setCurrentPath(router.asPath);
+    setIsMainContentActive(true);
     if (typeof document !== "undefined") {
       document.body.removeAttribute("tabindex");
       document.body.classList.remove("tabbed");
       document.body.focus();
     }
-  }, [setMainContentStatus, scrollState]);
+  }, [setIsMainContentActive, scrollState, router]);
 
   const tabPressed = (e: KeyboardEvent) => {
     if (e.key === "Tab") {

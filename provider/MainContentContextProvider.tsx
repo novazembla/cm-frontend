@@ -8,6 +8,8 @@ import React, {
 
 type MainContentContext = {
   isMainContentOpen: boolean;
+  isMainContentActive: boolean;
+  setIsMainContentActive: Function;
   setMainContentStatus: Function;
   setMainContentFunctions: Function;
   mainContentClose: Function;
@@ -17,6 +19,8 @@ type MainContentContext = {
 // create context
 const MainContentContext = createContext<MainContentContext>({
   isMainContentOpen: true,
+  isMainContentActive: false,
+  setIsMainContentActive: (state: boolean) => {},
   setMainContentStatus: (state: boolean) => {},
   setMainContentFunctions: (open: Function, close: Function) => {},
   mainContentOpen: () => {},
@@ -32,6 +36,7 @@ export const MainContentContextProvider = ({
   children: React.ReactNode;
 }) => {
   const [isMainContentOpen, onMainContentToggle] = useState(true);
+  const [isMainContentActive, setIsMainContentActive] = useState(false)
   const refOpen = useRef<any>(null);
   const refClose = useRef<any>(null);
 
@@ -62,6 +67,8 @@ export const MainContentContextProvider = ({
     <MainContentContext.Provider
       value={{
         isMainContentOpen,
+        isMainContentActive,
+        setIsMainContentActive,
         setMainContentStatus,
         setMainContentFunctions,
         mainContentOpen,

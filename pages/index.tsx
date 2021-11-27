@@ -279,13 +279,14 @@ export const Home = ({ homepage }: { homepage: any }) => {
         {homepage?.missionStatement && (
           <Collapse in={isMSOpen}>
             <Box
-              layerStyle="blurredWhite"
+              layerStyle="white"
               borderBottom="1px solid"
               borderColor="cm.accentDark"
               position={isMobile ? "fixed" : "static"}
               top="60px"
               zIndex="2"
               p={{ base: "20px", md: "40px", "2xl": "50px" }}
+              transform="translate3d(0,0,0)"
             >
               <Box px={!isMobile ? "10px" : 0}>
                 <Box

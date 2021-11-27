@@ -8,6 +8,8 @@ export class MapViewUnclustered {
   events: Record<string, any> = {};
   isVisible: boolean = false;
 
+  layers: string[] = ["unclustered-locations"];
+
   constructor(cultureMap: CultureMap) {
     this.cultureMap = cultureMap;
     this.bounds = new maplibregl.LngLatBounds(
@@ -227,42 +229,29 @@ export class MapViewUnclustered {
     }
   }
 
+  
+
   hide() {
     if (!this.isVisible) return;
 
-    if (this.cultureMap?.map) {
-      if (this.cultureMap.map?.getLayer("unclustered-locations"))
-        this.cultureMap?.map?.setLayoutProperty(
-          "unclustered-locations",
-          "visibility",
-          "none"
-        );
+    this.cultureMap.toggleLayersVisibility(this.layers, "none");
 
-      this.isVisible = false;
-    }
+    this.isVisible = false;
   }
 
   show() {
     if (this.isVisible) return;
 
-    if (this.cultureMap?.map) {
-      if (this.cultureMap.map?.getLayer("unclustered-locations"))
-        this.cultureMap?.map?.setLayoutProperty(
-          "unclustered-locations",
-          "visibility",
-          "visible"
-        );
+    this.cultureMap.toggleLayersVisibility(this.layers, "visible");
 
-      this.isVisible = true;
-    }
+    this.isVisible = true;
   }
 
   clear() {
     if (this.cultureMap?.map) {
       this.isVisible = false;
 
-      if (this.cultureMap.map?.getLayer("unclustered-locations"))
-        this.cultureMap?.map?.removeLayer("unclustered-locations");
+      this.cultureMap.removeLayers(this.layers);
 
       if (Object.keys(this.events).length) {
         Object.keys(this.events).forEach((key) => {

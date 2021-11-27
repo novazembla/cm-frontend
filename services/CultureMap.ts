@@ -1,12 +1,10 @@
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
-import { NextRouter } from "next/router";
-
+import type { NextRouter } from "next/router";
 import type { AppConfig } from "~/types";
 import type { AppTranslationHelper } from "~/hooks/useAppTranslations";
 
 import { MapPopup } from "./MapPopup";
-import axios, { AxiosResponse } from "axios";
 import { MapViewClustered } from "./MapViewClustered";
 import { MapViewUnclustered } from "./MapViewUnclustered";
 import { MapClusterDetail } from "./MapClusterDetail";
@@ -40,6 +38,7 @@ export class CultureMap {
   overlayZoomLevel: number;
   geoJsonAllData: any = null;
 
+  intitiallyFitToBounds: boolean = true;
   isEmbed = false;
   loaded = false;
   styleLoaded = false;
@@ -98,6 +97,8 @@ export class CultureMap {
     this.clusterDetail.init();
 
     const process = () => {
+      if (this.ready) return;
+
       this.ready = true;
 
       if (typeof setIsLoaded === "function") setIsLoaded.call(null, true);
@@ -127,14 +128,12 @@ export class CultureMap {
     });
     this.map.once("load", () => {
       this.loaded = true;
-
-      if (!this.map) return;
-
-      this.map.on("movestart", (e) => {
+      
+      this?.map?.on("movestart", (e) => {
         this.isAnimating = e?.cmAnimation === true;
       });
 
-      this.map.on("moveend", (e) => {
+      this?.map?.on("moveend", (e) => {
         if (!this.map) return;
         this.isAnimating = false;
         if (this.map.getZoom() > this.config.maxZoom - 1) {
@@ -151,29 +150,30 @@ export class CultureMap {
       maybeProcess();
     });
 
-    const client = axios.create({
-      baseURL: this.config.apiUrl,
-    });
+    if (typeof window !== "undefined") {
+      fetch(`${this.config.apiUrl}/geojson`)
+      .then(async (response) => {
+        if (response.ok) {
+          const data = await response.json();
+          if (
+            data &&
+            data?.type &&
+            data?.type === "FeatureCollection" &&
+            Array.isArray(data?.features)
+          ) {
+            this.geoJsonAllData = data;
+            this.baseDataLoaded = true;
+  
+            maybeProcess();
 
-    client
-      .get(`/geojson`)
-      .then((response: AxiosResponse<any>) => {
-        if (
-          response.data &&
-          response?.data?.type &&
-          response?.data?.type === "FeatureCollection" &&
-          Array.isArray(response?.data?.features)
-        ) {
-          this.geoJsonAllData = response?.data;
-          this.baseDataLoaded = true;
-
-          maybeProcess();
+            console.log(this.geoJsonAllData)
+          }
         }
-      })
-      .catch((err) => {
-        throw err;
       });
+    }
   }
+
+  setInitallyFitToBounds = (flag: boolean) => this.intitiallyFitToBounds = flag;
 
   setView(view: string) {
     if (this.map) {
@@ -364,6 +364,7 @@ export class CultureMap {
       }
     }
   }
+
   setTourPath(path: any) {
     if (this.map) {
       const run = () => {
@@ -652,5 +653,29 @@ export class CultureMap {
         run();
       }
     }
+  }
+
+  toggleLayersVisibility = (layers: string[], visibility: string) => {
+    if (!this.map) return;
+
+    layers.forEach((l) => {
+      if (this?.map?.getLayer(l)) {
+        this?.map?.setLayoutProperty(
+         l,
+          "visibility",
+          visibility
+        );
+      }
+    });
+  }
+
+  removeLayers = (layers: string[]) => {
+    if (!this.map) return;
+
+    layers.forEach((l) => {
+      if (this?.map?.getLayer(l)) {
+        this.map?.removeLayer(l);
+      }
+    });
   }
 }

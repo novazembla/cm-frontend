@@ -102,7 +102,7 @@ export const appConfig: AppConfig = {
   lng: 13.493659,
   bounds: [[12.583801,52.154557],[14.117298,52.869959]],
   minZoom: 10,
-  zoom: 14,
+  zoom: 12,
   maxZoom: 19,
   nav: {
     main: appConfigMainNav,

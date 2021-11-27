@@ -117,7 +117,18 @@ export const LayoutFull = ({ children }: AppProps) => {
                 content="width=device-width, initial-scale=1.0"
               />
               <meta name="theme-color" content="#fff" />
-
+              <link
+                rel="preload"
+                href="/fonts/BerlinType/BerlinTypeWeb-Regular.woff2"
+                as="font"
+                type="font/woff2"
+              />
+              <link
+                rel="preload"
+                href="/fonts/BerlinType/BerlinTypeWeb-Bold.woff2"
+                as="font"
+                type="font/woff2"
+              />
               <link rel="preconnect" href={config.apiUrl} />
               {mapJsonBaseUrl && (
                 <link rel="preconnect" href={mapJsonBaseUrl} />

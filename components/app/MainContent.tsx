@@ -42,7 +42,7 @@ export const MainContent = ({
 
   const { isMenuOpen } = useMenuButtonContext();
   const { isQuickSearchOpen } = useQuickSearchContext();
-  const { setMainContentStatus, setMainContentFunctions } =
+  const { setMainContentStatus, setMainContentFunctions, isMainContentActive } =
     useMainContentContext();
 
   const router = useRouter();
@@ -128,6 +128,8 @@ export const MainContent = ({
   const onResizeDebounced = debounce(onResize, 350);
 
   useEffect(() => {
+    if (!isMainContentActive) return;
+
     if (typeof window === "undefined") return;
 
     if (!eventListenerAdded) {
@@ -150,6 +152,7 @@ export const MainContent = ({
   }, [router.asPath, onResize]);
 
   const close = useCallback(() => {
+    if (!isMainContentActive) return;
     if (isAnimationRunningRef.current) return;
 
     setIsDrawerOpen(false);
@@ -171,9 +174,10 @@ export const MainContent = ({
       isAnimationRunningRef.current = false;
       setIsDrawerOpen(false);
     }, 350);
-  }, [controls, setMainContentStatus, dragLeft]);
+  }, [controls, setMainContentStatus, dragLeft, isMainContentActive]);
 
   const open = useCallback(() => {
+    if (!isMainContentActive) return;
     if (isAnimationRunningRef.current) return;
 
     setIsDrawerOpen(true);
@@ -193,9 +197,10 @@ export const MainContent = ({
       isAnimationRunningRef.current = false;
       setIsDrawerOpen(true);
     }, 350);
-  }, [controls, setMainContentStatus]);
+  }, [controls, setMainContentStatus, isMainContentActive]);
 
   const toggle = () => {
+    if (!isMainContentActive) return;
     if (isAnimationRunningRef.current) return;
 
     if (isDrawerOpen) {
@@ -209,10 +214,7 @@ export const MainContent = ({
     if (typeof window === "undefined") return;
     setMainContentFunctions(open, close);
   }, [router.asPath, setMainContentFunctions, open, close]);
-
-  console;
-  setMainContentFunctions;
-
+  
   let toggleLabel = isDrawerOpen
     ? t("mainContent.slideToLeft", "Hide content")
     : t("mainContent.slideToRight", "Show content");
@@ -346,7 +348,7 @@ export const MainContent = ({
           ? {
               onTap: !isDrawerOpen
                 ? (event: any) => {
-                    if (isAnimationRunningRef.current || panActive.current)
+                    if (isAnimationRunningRef.current || panActive.current || !isMainContentActive)
                       return;
                     event.preventDefault();
                     open();

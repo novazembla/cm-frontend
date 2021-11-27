@@ -5,7 +5,7 @@ import { ChakraProvider } from "@chakra-ui/react";
 import type { NextPage } from "next";
 import "../styles/globals.scss";
 import type { AppProps } from "next/app";
-
+import Head from "next/head";
 import {
   ConfigContextProvider,
   AppApolloProvider,
@@ -31,6 +31,11 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   /* eslint-disable react/jsx-props-no-spreading */
   return (
     <ConfigContextProvider>
+      <Head>
+      <link rel="shortcut icon" href="/img/reddot.png" />
+      <link rel="icon" type="image/png" href="/img/reddot.png" sizes="16x16" />
+      <link rel="icon" type="image/png" href="/img/reddot.png" sizes="32x32" />
+      </Head>
       <AppApolloProvider>
         <ChakraProvider theme={chakraTheme}>
           <SettingsContextProvider>

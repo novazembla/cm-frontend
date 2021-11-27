@@ -226,17 +226,20 @@ const themeConfig = {
     lightGray: {
       bg: "var(--chakra-colors-blur-gray)",
     },
+    white: {
+      bg: "var(--chakra-colors-blur-white)",
+    },
     blurredLightGray: {
       bg: "var(--chakra-colors-blur-blurredGray)",
       backdropFilter: "blur(20px)",
       backgroundBlendMode: "lighten",
-      backgroundAttachmend: "fixed",
+      backgroundAttachment: "fixed",
     },
     blurredWhite: {
       bg: "var(--chakra-colors-blur-blurredWhite)",
       backdropFilter: "blur(20px)",
       backgroundBlendMode: "lighten",
-      backgroundAttachmend: "fixed",
+      backgroundAttachment: "fixed",
     },
     pageContainerWhite: {
       bg: "white",

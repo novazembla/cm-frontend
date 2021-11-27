@@ -16,6 +16,8 @@ export class MapHighlights {
 
   events: Record<string, any> = {};
 
+  layers: string[] = ["highlights"];
+  
   constructor(cultureMap: CultureMap) {
     this.cultureMap = cultureMap;
   }
@@ -167,41 +169,26 @@ export class MapHighlights {
 
   hide() {
     if (!this.isVisible) return;
+    
+    this.cultureMap.toggleLayersVisibility(this.layers, "none");
 
-    if (this.cultureMap?.map) {
-      if (this.cultureMap?.map?.getLayer("highlights"))
-        this.cultureMap?.map?.setLayoutProperty(
-          "highlights",
-          "visibility",
-          "none"
-        );
-
-      this.isVisible = false;
-    }
+    this.isVisible = false;
   }
 
   show() {
     if (this.isVisible) return;
 
-    if (this.cultureMap?.map) {
-      if (this.cultureMap?.map?.getLayer("highlights"))
-        this.cultureMap?.map?.setLayoutProperty(
-          "highlights",
-          "visibility",
-          "visible"
-        );
+    this.cultureMap.toggleLayersVisibility(this.layers, "visible");
 
-      this.isVisible = true;
-    }
+    this.isVisible = true;
   }
 
   clear() {
     if (this.cultureMap?.map) {
       this.isVisible = false;
 
-      if (this.cultureMap?.map?.getLayer("highlights"))
-        this.cultureMap?.map?.removeLayer("highlights");
-
+      this.cultureMap.removeLayers(this.layers);
+      
       if (Object.keys(this.events).length) {
         Object.keys(this.events).forEach((key) => {
           if (this.cultureMap?.map) {

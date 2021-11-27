@@ -19,6 +19,8 @@ export class MapTour {
   events: Record<string, any> = {};
   isVisible: boolean = false;
 
+  layers: string[] = ["tourStops", "tourStopsHighlight", "tourStopsHighlightDot", "tourStopsHighlightNumber", "tourStopNumbers"];
+
   constructor(cultureMap: CultureMap) {
     this.cultureMap = cultureMap;
     this.bounds = new maplibregl.LngLatBounds(
@@ -294,93 +296,17 @@ export class MapTour {
   hide() {
     if (!this.isVisible) return;
 
-    if (this.cultureMap?.map) {
-      if (this.cultureMap?.map?.getLayer("tourStops"))
-        this.cultureMap?.map?.setLayoutProperty(
-          "tourStops",
-          "visibility",
-          "none"
-        );
-      if (this.cultureMap?.map?.getLayer("tourStopsHighlight"))
-        this.cultureMap?.map?.setLayoutProperty(
-          "tourStopsHighlight",
-          "visibility",
-          "none"
-        );
-      if (this.cultureMap?.map?.getLayer("tourStopsHighlightDot"))
-        this.cultureMap?.map?.setLayoutProperty(
-          "tourStopsHighlightDot",
-          "visibility",
-          "none"
-        );
-      if (this.cultureMap?.map?.getLayer("tourStopsHighlightNumber"))
-        this.cultureMap?.map?.setLayoutProperty(
-          "tourStopsHighlightNumber",
-          "visibility",
-          "none"
-        );
-      if (this.cultureMap?.map?.getLayer("tourStopNumbers"))
-        this.cultureMap?.map?.setLayoutProperty(
-          "tourStopNumbers",
-          "visibility",
-          "none"
-        );
-      if (this.cultureMap?.map?.getLayer("tourPath"))
-        this.cultureMap?.map?.setLayoutProperty(
-          "tourPath",
-          "visibility",
-          "none"
-        );
+    this.cultureMap.toggleLayersVisibility([...this.layers, "tourPath"], "none");
 
-      this.isVisible = false;
-    }
+    this.isVisible = false;
   }
 
   show() {
     if (this.isVisible) return;
 
-    if (this.cultureMap?.map) {
-      if (this.cultureMap?.map?.getLayer("tourStops"))
-        this.cultureMap?.map?.setLayoutProperty(
-          "tourStops",
-          "visibility",
-          "visible"
-        );
-      if (this.cultureMap?.map?.getLayer("tourStopsHighlight"))
-        this.cultureMap?.map?.setLayoutProperty(
-          "tourStopsHighlight",
-          "visibility",
-          "visible"
-        );
-      if (this.cultureMap?.map?.getLayer("tourStopsHighlightDot"))
-        this.cultureMap?.map?.setLayoutProperty(
-          "tourStopsHighlightDot",
-          "visibility",
-          "visible"
-        );
+    this.cultureMap.toggleLayersVisibility([...this.layers, "tourPath"], "visible");
 
-      if (this.cultureMap?.map?.getLayer("tourStopsHighlightNumber"))
-        this.cultureMap?.map?.setLayoutProperty(
-          "tourStopsHighlightNumber",
-          "visibility",
-          "visible"
-        );
-
-      if (this.cultureMap?.map?.getLayer("tourStopNumbers"))
-        this.cultureMap?.map?.setLayoutProperty(
-          "tourStopNumbers",
-          "visibility",
-          "visible"
-        );
-      if (this.cultureMap?.map?.getLayer("tourPath"))
-        this.cultureMap?.map?.setLayoutProperty(
-          "tourPath",
-          "visibility",
-          "visible"
-        );
-
-      this.isVisible = true;
-    }
+    this.isVisible = true;    
   }
 
   clear() {
@@ -390,29 +316,13 @@ export class MapTour {
   }
 
   clearPath() {
-    if (this.cultureMap?.map) {
-      if (this.cultureMap?.map?.getLayer("tourPath")) {
-        this.cultureMap?.map?.removeLayer("tourPath");
-      }
-    }
+    this.cultureMap.removeLayers(["tourPath"]);
   }
 
   clearStops() {
     if (this.cultureMap?.map) {
-      if (this.cultureMap?.map?.getLayer("tourStops"))
-        this.cultureMap?.map?.removeLayer("tourStops");
 
-      if (this.cultureMap?.map?.getLayer("tourStopsHighlight"))
-        this.cultureMap?.map?.removeLayer("tourStopsHighlight");
-
-      if (this.cultureMap?.map?.getLayer("tourStopsHighlightDot"))
-        this.cultureMap?.map?.removeLayer("tourStopsHighlightDot");
-
-      if (this.cultureMap?.map?.getLayer("tourStopsHighlightNumber"))
-        this.cultureMap?.map?.removeLayer("tourStopsHighlightNumber");
-
-      if (this.cultureMap?.map?.getLayer("tourStopNumbers"))
-        this.cultureMap?.map?.removeLayer("tourStopNumbers");
+      this.cultureMap.removeLayers(this.layers);
 
       if (Object.keys(this.events).length) {
         Object.keys(this.events).forEach((key) => {

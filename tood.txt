@@ -1,3 +1,2 @@
-- favicon
 - default seo image
 - wording suggest form
