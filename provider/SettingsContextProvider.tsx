@@ -2,44 +2,14 @@ import React, {
   createContext,
   useContext,
   useState,
-  useEffect,
-  useRef,
 } from "react";
 import { isObject } from "~/utils";
-
-import { gql } from "@apollo/client";
-import { getApolloClient } from "~/services";
 
 let currentSettingsInMemory = {};
 
 // create context
 const SettingsContext = createContext<any>(currentSettingsInMemory);
 
-const settingsQuery = gql`
-  query {
-    frontendSettings {
-      centerOfGravity
-      mapJsonUrl
-      taxMapping
-      suggestionsIntro
-      suggestionsTandCInfo
-      taxonomies {
-        id
-        name
-        slug
-        terms {
-          id
-          name
-          slug
-          color
-          taxonomyId
-          colorDark
-          _count
-        }
-      }
-    }
-  }
-`;
 
 const parseSettings = (settings: any) => {
   if (settings && isObject(settings)) {
@@ -86,35 +56,41 @@ export const useSettingsContext = () => useContext(SettingsContext);
 
 // context provider
 export const SettingsContextProvider = ({
+  frontendSettings,
   children,
 }: {
+  frontendSettings: any;
   children: React.ReactNode;
 }) => {
-  const [settings, setSettings] = useState(null);
+  const [settings, setSettings] = useState(parseSettings(frontendSettings));
 
-  useEffect(() => {
-    let mounted = true;
-    const getSettings = async () => {
-      const client = getApolloClient();
+  // useEffect(() => {    
+  //   let mounted = true;
+  //   if (frontendSettings) {
+  //     console.log("props settings");
+  //     setSettings(parseSettings(frontendSettings));
+  //   } else {
+  //     const getSettings = async () => {
+  //       const client = getApolloClient();
 
-      const { data } = await client.query({
-        query: settingsQuery,
-      });
+  //       const { data } = await client.query({
+  //         query: settingsQuery,
+  //       });
 
-      if (data?.frontendSettings) {
-        if (mounted) setSettings(parseSettings(data?.frontendSettings));
-      }
-    };
+  //       if (data?.frontendSettings) {
+  //         if (mounted) setSettings(parseSettings(data?.frontendSettings));
+  //       }
+  //     };
 
-    if (!settings) {
-      getSettings();
-    }
-
-    return () => {
-      mounted = false;
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  //     if (!settings) {
+  //       getSettings();
+  //     }
+  //   }
+  //   return () => {
+  //     mounted = false;
+  //   };
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   return (
     <SettingsContext.Provider value={settings}>

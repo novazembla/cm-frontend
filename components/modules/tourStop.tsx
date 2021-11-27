@@ -321,7 +321,10 @@ export const ModuleComponentTourStop = ({
           </Box>
           {tourStop?.location?.id && (
             <Box p="20px">
-              <PageTitle title={t("event.title.location", "Location")} type="short" />
+              <PageTitle
+                title={t("event.title.location", "Location")}
+                type="short"
+              />
 
               <CardLocation
                 key={`loc-${tourStop?.location.id}`}
@@ -336,7 +339,6 @@ export const ModuleComponentTourStop = ({
   );
 };
 
-// This gets called on every request
 export const ModuleTourStopGetStaticProps: GetStaticProps = async (context) => {
   const client = getApolloClient();
 
@@ -380,7 +382,8 @@ export const ModuleTourStopGetStaticProps: GetStaticProps = async (context) => {
     props: {
       tour: data?.tour,
       tourStop: data?.tour?.tourStops?.[stop - 1] ?? null,
+      frontendSettings: data?.frontendSettings,
     },
-    revalidate: 3600,
+    revalidate: 300,
   };
 };

@@ -404,7 +404,7 @@ export const ModuleComponentSuggest = () => {
   );
   // t("suggestion.writeError", "We could unfortunately not save your suggestion at the moment. Please try again later.")
   return (
-    <MainContent isDrawer layerStyle="pageBg">
+    <MainContent isDrawer>
       <NextHeadSeo
         canonical={`${config.baseUrl}${
           i18n.language === "en"
@@ -424,765 +424,788 @@ export const ModuleComponentSuggest = () => {
           xl: "calc(100vh - 80px)",
         }}
       >
-        <Box layerStyle="page">
-          <PageTitle h1 type="high" title={t("suggest.title", "Suggest a location")} />
+        <Box layerStyle="pageBg">
+          <Box layerStyle="page">
+            <PageTitle
+              h1
+              type="high"
+              title={t("suggest.title", "Suggest a location")}
+            />
 
-          {successfullySubmitted ? (
-            <Box>
+            {successfullySubmitted ? (
               <Box>
+                <Box>
+                  <Box
+                    border="1px solid"
+                    borderColor="cm.accentDark"
+                    my="3em"
+                    w="70px"
+                    h="70px"
+                    borderRadius="100px"
+                    mx="auto"
+                  >
+                    <Box>
+                      <SVG
+                        type="ok"
+                        width="70px"
+                        height="70px"
+                        className="svg-dark"
+                      />
+                    </Box>
+                  </Box>
+                </Box>
                 <Box
-                  border="1px solid"
-                  borderColor="cm.accentDark"
-                  my="3em"
-                  w="70px"
-                  h="70px"
-                  borderRadius="100px"
-                  mx="auto"
+                  textStyle="larger"
+                  fontWeight="bold"
+                  mb="1em"
+                  textAlign="center"
                 >
-                  <Box>
-                    <SVG
-                      type="ok"
-                      width="70px"
-                      height="70px"
-                      className="svg-dark"
-                    />
-                  </Box>
+                  {t(
+                    "suggestion.successfullySubmitted",
+                    "Thank you! Your suggestion has been successfully submitted"
+                  )}
+                </Box>
+                <Box mb="1em" textAlign="center">
+                  {t(
+                    "suggestion.successfullySubmittedReviewInfor",
+                    "We will review it manually and put your suggestion online as fast as possible"
+                  )}
                 </Box>
               </Box>
-              <Box
-                textStyle="larger"
-                fontWeight="bold"
-                mb="1em"
-                textAlign="center"
-              >
-                {t(
-                  "suggestion.successfullySubmitted",
-                  "Thank you! Your suggestion has been successfully submitted"
-                )}
-              </Box>
-              <Box mb="1em" textAlign="center">
-                {t(
-                  "suggestion.successfullySubmittedReviewInfor",
-                  "We will review it manually and put your suggestion online as fast as possible"
-                )}
-              </Box>
-            </Box>
-          ) : (
-            <>
-              {!isEmptyHtml(getMultilangValue(settings?.suggestionsIntro)) && (
-                <Box textStyle="larger" mt="1em" mb={isMobile ? "2em" : "3em"} fontWeight="bold">
-                  <MultiLangHtml json={settings?.suggestionsIntro} />
-                </Box>
-              )}
-              <FormProvider {...formMethods}>
-                <FormNavigationBlock
-                  shouldBlock={isDirty || activeUploadCounter > 0}
-                />
-                <FormScrollInvalidIntoView hasFormError={hasFormError} />
-
-                {hasFormError && (
+            ) : (
+              <>
+                {!isEmptyHtml(
+                  getMultilangValue(settings?.suggestionsIntro)
+                ) && (
                   <Box
+                    textStyle="larger"
                     mt="1em"
-                    mb="2em"
-                    pt="0.5em"
-                    borderTop="1px solid"
-                    borderColor="cm.accentDark"
+                    mb={isMobile ? "2em" : "3em"}
+                    fontWeight="bold"
                   >
-                    <TextErrorMessage error="suggestion.writeError" />
+                    <MultiLangHtml json={settings?.suggestionsIntro} />
                   </Box>
                 )}
+                <FormProvider {...formMethods}>
+                  <FormNavigationBlock
+                    shouldBlock={isDirty || activeUploadCounter > 0}
+                  />
+                  <FormScrollInvalidIntoView hasFormError={hasFormError} />
 
-                <form noValidate onSubmit={handleSubmit(onSubmit)}>
-                  <Box
-                    mb="2em"
-                    pt="0.5em"
-                    borderTop="1px solid"
-                    borderColor="cm.accentDark"
-                  >
-                    <chakra.h2 textStyle="formOptions" mb="2px">
-                      {t(
-                        "suggestion.section.about.title",
-                        "About the location"
-                      )}
-                    </chakra.h2>
-                    <Text textStyle="formOptions" mb="1em">
-                      {t(
-                        "suggestion.section.about.description",
-                        "Please tell us something about the suggested location."
-                      )}
-                    </Text>
-                    <FieldRow>
-                      <FieldInput
-                        type="text"
-                        name="title"
-                        id="title"
-                        label={t(
-                          "suggestion.field.label.title",
-                          "Name of location"
+                  {hasFormError && (
+                    <Box
+                      mt="1em"
+                      mb="2em"
+                      pt="0.5em"
+                      borderTop="1px solid"
+                      borderColor="cm.accentDark"
+                    >
+                      <TextErrorMessage error="suggestion.writeError" />
+                    </Box>
+                  )}
+
+                  <form noValidate onSubmit={handleSubmit(onSubmit)}>
+                    <Box
+                      mb="2em"
+                      pt="0.5em"
+                      borderTop="1px solid"
+                      borderColor="cm.accentDark"
+                    >
+                      <chakra.h2 textStyle="formOptions" mb="2px">
+                        {t(
+                          "suggestion.section.about.title",
+                          "About the location"
                         )}
-                        isRequired={true}
-                        settings={{
-                          hideLabel: false,
-                          placeholder: t(
-                            "suggestion.field.placeholder.title",
-                            "Please enter the name of the suggested location"
-                          ),
-                        }}
-                      />
-                    </FieldRow>
-                    <FieldRow>
-                      <FieldTextArea
-                        name="description"
-                        id="description"
-                        label={
-                          i18n.language === "en"
-                            ? t(
-                                "suggestion.field.label.mandatoryDescriptionInEnglish",
-                                "Description in English"
-                              )
-                            : t(
-                                "suggestion.field.label.mandatoryDescriptionInGerman",
-                                "Description in German"
-                              )
-                        }
-                        isRequired={true}
-                        settings={{
-                          hideLabel: false,
-                          placeholder: t(
-                            "suggestion.field.placeholder.description",
-                            "Please describe the location briefly"
-                          ),
-                        }}
-                      />
-                    </FieldRow>
-                    <FieldRow>
-                      <FieldTextArea
-                        name="description_other"
-                        id="description_other"
-                        label={
-                          i18n.language === "en"
-                            ? t(
-                                "suggestion.field.label.otherLanguageDescriptionInGerman",
-                                "Description in German"
-                              )
-                            : t(
-                                "suggestion.field.label.otherLanguageDescriptionInEnglish",
-                                "Description in English"
-                              )
-                        }
-                        isRequired={false}
-                        settings={{
-                          hideLabel: false,
-                          placeholder:
+                      </chakra.h2>
+                      <Text textStyle="formOptions" mb="1em">
+                        {t(
+                          "suggestion.section.about.description",
+                          "Please tell us something about the suggested location."
+                        )}
+                      </Text>
+                      <FieldRow>
+                        <FieldInput
+                          type="text"
+                          name="title"
+                          id="title"
+                          label={t(
+                            "suggestion.field.label.title",
+                            "Name of location"
+                          )}
+                          isRequired={true}
+                          settings={{
+                            hideLabel: false,
+                            placeholder: t(
+                              "suggestion.field.placeholder.title",
+                              "Please enter the name of the suggested location"
+                            ),
+                          }}
+                        />
+                      </FieldRow>
+                      <FieldRow>
+                        <FieldTextArea
+                          name="description"
+                          id="description"
+                          label={
                             i18n.language === "en"
                               ? t(
-                                  "suggestion.field.placeholder.otherLanguageDescriptionInGerman",
-                                  "If you can please describe the location in German too"
+                                  "suggestion.field.label.mandatoryDescriptionInEnglish",
+                                  "Description in English"
                                 )
                               : t(
-                                  "suggestion.field.placeholder.otherLanguageDescriptionInEnglish",
-                                  "If you can please describe the location in English too"
+                                  "suggestion.field.label.mandatoryDescriptionInGerman",
+                                  "Description in German"
+                                )
+                          }
+                          isRequired={true}
+                          settings={{
+                            hideLabel: false,
+                            placeholder: t(
+                              "suggestion.field.placeholder.description",
+                              "Please describe the location briefly"
+                            ),
+                          }}
+                        />
+                      </FieldRow>
+                      <FieldRow>
+                        <FieldTextArea
+                          name="description_other"
+                          id="description_other"
+                          label={
+                            i18n.language === "en"
+                              ? t(
+                                  "suggestion.field.label.otherLanguageDescriptionInGerman",
+                                  "Description in German"
+                                )
+                              : t(
+                                  "suggestion.field.label.otherLanguageDescriptionInEnglish",
+                                  "Description in English"
+                                )
+                          }
+                          isRequired={false}
+                          settings={{
+                            hideLabel: false,
+                            placeholder:
+                              i18n.language === "en"
+                                ? t(
+                                    "suggestion.field.placeholder.otherLanguageDescriptionInGerman",
+                                    "If you can please describe the location in German too"
+                                  )
+                                : t(
+                                    "suggestion.field.placeholder.otherLanguageDescriptionInEnglish",
+                                    "If you can please describe the location in English too"
+                                  ),
+                          }}
+                        />
+                      </FieldRow>
+                    </Box>
+
+                    <Box
+                      mb="2em"
+                      pt="0.5em"
+                      borderTop="1px solid"
+                      borderColor="cm.accentDark"
+                    >
+                      <chakra.h2 textStyle="formOptions" mb="2px">
+                        {t("suggestion.section.address.title", "Address")}
+                      </chakra.h2>
+
+                      <Text textStyle="formOptions" mb="1em">
+                        {t(
+                          "suggestion.section.address.description",
+                          "Please enter the address of the location. We will use this information to place the location on the map"
+                        )}
+                      </Text>
+                      <TwoColFieldRow>
+                        <FieldRow>
+                          <FieldInput
+                            type="text"
+                            name="street1"
+                            id="street1"
+                            label={t("suggestion.field.label.street", "Street")}
+                            isRequired={true}
+                            settings={{
+                              hideLabel: false,
+                              placeholder: t(
+                                "suggestion.field.placeholder.street1",
+                                "Siegfriedstr."
+                              ),
+                            }}
+                          />
+                        </FieldRow>
+                        <FieldRow>
+                          <FieldInput
+                            type="text"
+                            name="houseNumber"
+                            id="houseNumber"
+                            label={t(
+                              "suggestion.field.label.houseNumber",
+                              "House number"
+                            )}
+                            isRequired={true}
+                            settings={{
+                              hideLabel: false,
+                              placeholder: t(
+                                "suggestion.field.placeholder.houseNumber",
+                                "11"
+                              ),
+                            }}
+                          />
+                        </FieldRow>
+                      </TwoColFieldRow>
+                      <TwoColFieldRow>
+                        <FieldRow>
+                          <FieldInput
+                            type="text"
+                            name="postCode"
+                            id="postCode"
+                            label={t(
+                              "suggestion.field.label.postcode",
+                              "Post code"
+                            )}
+                            isRequired={true}
+                            settings={{
+                              hideLabel: false,
+                              placeholder: t(
+                                "suggestion.field.placeholder.postcode",
+                                "12345"
+                              ),
+                            }}
+                          />
+                        </FieldRow>
+                        <FieldRow>
+                          <FieldInput
+                            type="text"
+                            name="city"
+                            id="city"
+                            label={t("suggestion.field.label.city", "City")}
+                            isRequired={true}
+                            settings={{
+                              hideLabel: false,
+                              defaultValue: "Berlin",
+                            }}
+                          />
+                        </FieldRow>
+                      </TwoColFieldRow>
+                    </Box>
+                    <Box
+                      mb="2em"
+                      pt="0.5em"
+                      borderTop="1px solid"
+                      borderColor="cm.accentDark"
+                    >
+                      <chakra.h2 textStyle="formOptions" mb="2px">
+                        {t(
+                          "suggestion.section.contact.title",
+                          "Contact information"
+                        )}
+                      </chakra.h2>
+                      <Text textStyle="formOptions" mb="1em">
+                        {t(
+                          "suggestion.section.contact.description",
+                          "How can people contact the location? This information will be listed on our website."
+                        )}
+                      </Text>
+                      <FieldRow>
+                        <FieldInput
+                          type="text"
+                          name="phone"
+                          id="phone"
+                          label={t(
+                            "suggestion.field.label.phone",
+                            "Phone number"
+                          )}
+                          settings={{
+                            hideLabel: false,
+                            placeholder: t(
+                              "suggestion.field.placeholder.phone",
+                              "030/1234567"
+                            ),
+                          }}
+                        />
+                      </FieldRow>
+                      <FieldRow>
+                        <FieldInput
+                          type="text"
+                          name="email1"
+                          id="email1"
+                          label={t(
+                            "suggestion.field.label.email",
+                            "Email address"
+                          )}
+                          settings={{
+                            hideLabel: false,
+                            placeholder: t(
+                              "suggestion.field.placeholder.email",
+                              "Your email address"
+                            ),
+                          }}
+                        />
+                      </FieldRow>
+                    </Box>
+                    <Box
+                      mb="2em"
+                      pt="0.5em"
+                      borderTop="1px solid"
+                      borderColor="cm.accentDark"
+                    >
+                      <chakra.h2 textStyle="formOptions" mb="2px">
+                        {t("suggestion.section.image.title", "Image")}
+                      </chakra.h2>
+                      <Text textStyle="formOptions" mb="1em">
+                        {t(
+                          "suggestion.section.image.description",
+                          "Would you have an image of the location at hand? TODO: better text"
+                        )}
+                      </Text>
+                      <FieldRow>
+                        <FieldSwitch
+                          name="suggestionSubmittersImageRightsConfirmation"
+                          isRequired={!!heroImage}
+                          label={
+                            <span>
+                              {t(
+                                "suggestion.field.label.suggestionSubmittersImageRightsConfirmation",
+                                "I confirm that the uploaded image can be used freely on the website TODO:"
+                              )}
+                            </span>
+                          }
+                          defaultChecked={false}
+                        />
+                      </FieldRow>
+                      {(suggestionSubmittersImageRightsConfirmation ||
+                        !!heroImage) && (
+                        <>
+                          <FieldRow>
+                            <FieldImageUploader
+                              name="heroImage"
+                              id="heroImage"
+                              label={t("suggestion.field.label.image", "Image")}
+                              isRequired={!!settings.imageRequired}
+                              route="suggestionImage"
+                              objectFit="contain"
+                              objectPosition="left center"
+                              setActiveUploadCounter={setActiveUploadCounter}
+                              settings={{
+                                minFileSize:
+                                  settings?.minFileSize ?? 1024 * 1024 * 0.0977,
+                                maxFileSize:
+                                  settings?.maxFileSize ?? 1024 * 1024 * 3,
+                                aspectRatioPB: 25, // % bottom padding
+
+                                image: {
+                                  status: ImageStatusEnum.READY,
+                                  id: undefined,
+                                  meta: undefined,
+                                  alt: "",
+                                  forceAspectRatioPB: 25,
+                                  showPlaceholder: true,
+                                  sizes:
+                                    settings?.sizes ??
+                                    "(min-width: 45em) 800px, 95vw",
+                                },
+                              }}
+                            />
+                          </FieldRow>
+                          <FieldRow>
+                            <FieldInput
+                              type="text"
+                              name="alt"
+                              id="alt"
+                              label={t(
+                                "suggestion.field.label.alt",
+                                "Image description"
+                              )}
+                              isRequired={!!heroImage}
+                              isDisabled={!!!heroImage}
+                              settings={{
+                                hideLabel: false,
+                                placeholder: t(
+                                  "suggestion.field.placeholder.alt",
+                                  "Short description of the image"
                                 ),
-                        }}
-                      />
-                    </FieldRow>
-                  </Box>
-
-                  <Box
-                    mb="2em"
-                    pt="0.5em"
-                    borderTop="1px solid"
-                    borderColor="cm.accentDark"
-                  >
-                    <chakra.h2 textStyle="formOptions" mb="2px">
-                      {t("suggestion.section.address.title", "Address")}
-                    </chakra.h2>
-
-                    <Text textStyle="formOptions" mb="1em">
-                      {t(
-                        "suggestion.section.address.description",
-                        "Please enter the address of the location. We will use this information to place the location on the map"
-                      )}
-                    </Text>
-                    <TwoColFieldRow>
-                      <FieldRow>
-                        <FieldInput
-                          type="text"
-                          name="street1"
-                          id="street1"
-                          label={t("suggestion.field.label.street", "Street")}
-                          isRequired={true}
-                          settings={{
-                            hideLabel: false,
-                            placeholder: t(
-                              "suggestion.field.placeholder.street1",
-                              "Siegfriedstr."
-                            ),
-                          }}
-                        />
-                      </FieldRow>
-                      <FieldRow>
-                        <FieldInput
-                          type="text"
-                          name="houseNumber"
-                          id="houseNumber"
-                          label={t(
-                            "suggestion.field.label.houseNumber",
-                            "House number"
-                          )}
-                          isRequired={true}
-                          settings={{
-                            hideLabel: false,
-                            placeholder: t(
-                              "suggestion.field.placeholder.houseNumber",
-                              "11"
-                            ),
-                          }}
-                        />
-                      </FieldRow>
-                    </TwoColFieldRow>
-                    <TwoColFieldRow>
-                      <FieldRow>
-                        <FieldInput
-                          type="text"
-                          name="postCode"
-                          id="postCode"
-                          label={t(
-                            "suggestion.field.label.postcode",
-                            "Post code"
-                          )}
-                          isRequired={true}
-                          settings={{
-                            hideLabel: false,
-                            placeholder: t(
-                              "suggestion.field.placeholder.postcode",
-                              "12345"
-                            ),
-                          }}
-                        />
-                      </FieldRow>
-                      <FieldRow>
-                        <FieldInput
-                          type="text"
-                          name="city"
-                          id="city"
-                          label={t("suggestion.field.label.city", "City")}
-                          isRequired={true}
-                          settings={{
-                            hideLabel: false,
-                            defaultValue: "Berlin",
-                          }}
-                        />
-                      </FieldRow>
-                    </TwoColFieldRow>
-                  </Box>
-                  <Box
-                    mb="2em"
-                    pt="0.5em"
-                    borderTop="1px solid"
-                    borderColor="cm.accentDark"
-                  >
-                    <chakra.h2 textStyle="formOptions" mb="2px">
-                      {t(
-                        "suggestion.section.contact.title",
-                        "Contact information"
-                      )}
-                    </chakra.h2>
-                    <Text textStyle="formOptions" mb="1em">
-                      {t(
-                        "suggestion.section.contact.description",
-                        "How can people contact the location? This information will be listed on our website."
-                      )}
-                    </Text>
-                    <FieldRow>
-                      <FieldInput
-                        type="text"
-                        name="phone"
-                        id="phone"
-                        label={t(
-                          "suggestion.field.label.phone",
-                          "Phone number"
-                        )}
-                        settings={{
-                          hideLabel: false,
-                          placeholder: t(
-                            "suggestion.field.placeholder.phone",
-                            "030/1234567"
-                          ),
-                        }}
-                      />
-                    </FieldRow>
-                    <FieldRow>
-                      <FieldInput
-                        type="text"
-                        name="email1"
-                        id="email1"
-                        label={t(
-                          "suggestion.field.label.email",
-                          "Email address"
-                        )}
-                        settings={{
-                          hideLabel: false,
-                          placeholder: t(
-                            "suggestion.field.placeholder.email",
-                            "Your email address"
-                          ),
-                        }}
-                      />
-                    </FieldRow>
-                  </Box>
-                  <Box
-                    mb="2em"
-                    pt="0.5em"
-                    borderTop="1px solid"
-                    borderColor="cm.accentDark"
-                  >
-                    <chakra.h2 textStyle="formOptions" mb="2px">
-                      {t("suggestion.section.image.title", "Image")}
-                    </chakra.h2>
-                    <Text textStyle="formOptions" mb="1em">
-                      {t(
-                        "suggestion.section.image.description",
-                        "Would you have an image of the location at hand? TODO: better text"
-                      )}
-                    </Text>
-                    <FieldRow>
-                      <FieldSwitch
-                        name="suggestionSubmittersImageRightsConfirmation"
-                        isRequired={!!heroImage}
-                        label={
-                          <span>
-                            {t(
-                              "suggestion.field.label.suggestionSubmittersImageRightsConfirmation",
-                              "I confirm that the uploaded image can be used freely on the website TODO:"
-                            )}
-                          </span>
-                        }
-                        defaultChecked={false}
-                      />
-                    </FieldRow>
-                    {(suggestionSubmittersImageRightsConfirmation ||
-                      !!heroImage) && (
-                      <>
-                        <FieldRow>
-                          <FieldImageUploader
-                            name="heroImage"
-                            id="heroImage"
-                            label={t("suggestion.field.label.image", "Image")}
-                            isRequired={!!settings.imageRequired}
-                            route="suggestionImage"
-                            objectFit="contain"
-                            objectPosition="left center"
-                            setActiveUploadCounter={setActiveUploadCounter}
-                            settings={{
-                              minFileSize:
-                                settings?.minFileSize ?? 1024 * 1024 * 0.0977,
-                              maxFileSize:
-                                settings?.maxFileSize ?? 1024 * 1024 * 3,
-                              aspectRatioPB: 25, // % bottom padding
-
-                              image: {
-                                status: ImageStatusEnum.READY,
-                                id: undefined,
-                                meta: undefined,
-                                alt: "",
-                                forceAspectRatioPB: 25,
-                                showPlaceholder: true,
-                                sizes:
-                                  settings?.sizes ??
-                                  "(min-width: 45em) 800px, 95vw",
-                              },
-                            }}
-                          />
-                        </FieldRow>
-                        <FieldRow>
-                          <FieldInput
-                            type="text"
-                            name="alt"
-                            id="alt"
-                            label={t(
-                              "suggestion.field.label.alt",
-                              "Image description"
-                            )}
-                            isRequired={!!heroImage}
-                            isDisabled={!!!heroImage}
-                            settings={{
-                              hideLabel: false,
-                              placeholder: t(
-                                "suggestion.field.placeholder.alt",
-                                "Short description of the image"
-                              ),
-                            }}
-                          />
-                        </FieldRow>
-                        <FieldRow>
-                          <FieldInput
-                            type="text"
-                            name="credits"
-                            id="credits"
-                            label={t(
-                              "suggestion.field.label.credits",
-                              "Image credits"
-                            )}
-                            isRequired={!!heroImage}
-                            isDisabled={!!!heroImage}
-                            settings={{
-                              hideLabel: false,
-                              placeholder: t(
-                                "suggestion.field.placeholder.credits",
-                                "The image credits"
-                              ),
-                            }}
-                          />
-                        </FieldRow>
-                      </>
-                    )}
-                  </Box>
-                  <Box
-                    mb="2em"
-                    pt="0.5em"
-                    borderTop="1px solid"
-                    borderColor="cm.accentDark"
-                  >
-                    <chakra.h2 textStyle="formOptions" mb="2px">
-                      {t("suggestion.section.online.title", "Website(s)")}
-                    </chakra.h2>
-                    <Text textStyle="formOptions" mb="1em">
-                      {t(
-                        "suggestion.section.online.description",
-                        "Can the location be found online?"
-                      )}
-                    </Text>
-                    <FieldRow>
-                      <FieldInput
-                        type="text"
-                        name="website"
-                        id="website"
-                        label={t("suggestion.field.label.website", "Website")}
-                        settings={{
-                          hideLabel: false,
-                          placeholder: t(
-                            "suggestion.field.placeholder.website",
-                            "https://www.example.com"
-                          ),
-                        }}
-                      />
-                    </FieldRow>
-                    <TwoColFieldRow>
-                      <FieldRow>
-                        <FieldInput
-                          type="text"
-                          name="facebook"
-                          id="facebook"
-                          label={t(
-                            "suggestion.field.label.facebook",
-                            "Facebook"
-                          )}
-                          settings={{
-                            hideLabel: false,
-                            placeholder: t(
-                              "suggestion.field.placeholder.website",
-                              "https://www.example.com"
-                            ),
-                          }}
-                        />
-                      </FieldRow>
-                      <FieldRow>
-                        <FieldInput
-                          type="text"
-                          name="instagram"
-                          id="instagram"
-                          label={t(
-                            "suggestion.field.label.instagram",
-                            "Instagram"
-                          )}
-                          settings={{
-                            hideLabel: false,
-                            placeholder: t(
-                              "suggestion.field.placeholder.website",
-                              "https://www.example.com"
-                            ),
-                          }}
-                        />
-                      </FieldRow>
-                    </TwoColFieldRow>
-                    <TwoColFieldRow>
-                      <FieldRow>
-                        <FieldInput
-                          type="text"
-                          name="twitter"
-                          id="twitter"
-                          label={t("suggestion.field.label.twitter", "Twitter")}
-                          settings={{
-                            hideLabel: false,
-                            placeholder: t(
-                              "suggestion.field.placeholder.website",
-                              "https://www.example.com"
-                            ),
-                          }}
-                        />
-                      </FieldRow>
-                      <FieldRow>
-                        <FieldInput
-                          type="text"
-                          name="youtube"
-                          id="youtube"
-                          label={t("suggestion.field.label.youtube", "Youtube")}
-                          settings={{
-                            hideLabel: false,
-                            placeholder: t(
-                              "suggestion.field.placeholder.website",
-                              "https://www.example.com"
-                            ),
-                          }}
-                        />
-                      </FieldRow>
-                    </TwoColFieldRow>
-                  </Box>
-
-                  <Box
-                    mb="1.5em"
-                    pt="0.5em"
-                    borderTop="1px solid"
-                    borderColor="cm.accentDark"
-                  >
-                    <chakra.h2 textStyle="formOptions" mb="2px">
-                      {t(
-                        "suggestion.section.taxonomies.title",
-                        "The location is ..."
-                      )}
-                    </chakra.h2>
-                    <Text textStyle="formOptions" mb="1em">
-                      {t(
-                        "suggestion.section.taxonomies.description",
-                        "Please indicate the attributes under the location should be found in the search."
-                      )}
-                    </Text>
-
-                    {activeTermsToI?.length > 0 && (
-                      <FieldRow>
-                        <Box>
-                          <chakra.h3 textStyle="formOptions" mb="2px">
-                            {t(
-                              "suggestion.tax.title.typeOfInstitution",
-                              "Type of institution"
-                            )}
-                          </chakra.h3>
-                          <FieldCheckboxGroup
-                            id="typeOfInstitution"
-                            name="typeOfInstitution"
-                            isRequired={false}
-                            label={t(
-                              "suggestion.tax.title.typeOfInstitution",
-                              "Type of institution"
-                            )}
-                            type="checkbox"
-                            options={getMultilangSortedList(
-                              activeTermsToI.map((term: any) => ({
-                                label: term.name,
-                                id: term.id,
-                              })),
-                              "label",
-                              getMultilangValue
-                            )}
-                          />
-                        </Box>
-                      </FieldRow>
-                    )}
-                    {activeTermsTA?.length > 0 && (
-                      <FieldRow>
-                        <Box>
-                          <chakra.h3 textStyle="formOptions" mb="2px">
-                            {t(
-                              "suggestion.tax.title.targetAudience",
-                              "Target audience"
-                            )}
-                          </chakra.h3>
-                          <FieldCheckboxGroup
-                            id="targetAudience"
-                            name="targetAudience"
-                            isRequired={false}
-                            label={t(
-                              "suggestion.tax.title.targetAudience",
-                              "Target audience"
-                            )}
-                            type="checkbox"
-                            options={getMultilangSortedList(
-                              activeTermsTA.map((term: any) => ({
-                                label: term.name,
-                                id: term.id,
-                              })),
-                              "label",
-                              getMultilangValue
-                            )}
-                          />
-                        </Box>
-                      </FieldRow>
-                    )}
-                    {activeTermsToO?.length > 0 && (
-                      <FieldRow>
-                        <Box>
-                          <chakra.h3 textStyle="formOptions" mb="2px">
-                            {t(
-                              "suggestion.tax.title.typeOfOrganisation",
-                              "Type of organisation"
-                            )}
-                          </chakra.h3>
-                          <FieldCheckboxGroup
-                            id="typeOfOrganisation"
-                            name="typeOfOrganisation"
-                            isRequired={false}
-                            label={t(
-                              "suggestion.tax.title.typeOfOrganisation",
-                              "Type of organisation"
-                            )}
-                            type="checkbox"
-                            options={getMultilangSortedList(
-                              activeTermsToO.map((term: any) => ({
-                                label: term.name,
-                                id: term.id,
-                              })),
-                              "label",
-                              getMultilangValue
-                            )}
-                          />
-                        </Box>
-                      </FieldRow>
-                    )}
-                  </Box>
-                  <Box
-                    mb="2em"
-                    pt="0.5em"
-                    borderTop="1px solid"
-                    borderColor="cm.accentDark"
-                  >
-                    <chakra.h2 textStyle="formOptions" mb="2px">
-                      {t(
-                        "suggestion.section.suggestor.title",
-                        "About yourself"
-                      )}
-                    </chakra.h2>
-                    <Text textStyle="formOptions" mb="1em">
-                      {t(
-                        "suggestion.section.suggestor.description",
-                        "In case we have further questions please give us your name and email address. We will keep this information private."
-                      )}
-                    </Text>
-
-                    <FieldRow>
-                      <FieldInput
-                        type="text"
-                        name="suggestionSubmittersName"
-                        id="suggestionSubmittersName"
-                        label={t(
-                          "suggestion.field.label.suggestionSubmittersName",
-                          "Your name"
-                        )}
-                        isRequired={true}
-                        settings={{
-                          hideLabel: false,
-                          placeholder: t(
-                            "suggestion.field.placeholder.suggestionSubmittersName",
-                            "Please enter your name"
-                          ),
-                        }}
-                      />
-                    </FieldRow>
-                    <FieldRow>
-                      <FieldInput
-                        type="email"
-                        name="suggestionSubmittersEmail"
-                        id="suggestionSubmittersEmail"
-                        label={t(
-                          "suggestion.field.label.suggestionSubmittersEmail",
-                          "Your email address"
-                        )}
-                        isRequired={true}
-                        settings={{
-                          hideLabel: false,
-                          placeholder: t(
-                            "suggestion.field.placeholder.suggestionSubmittersEmail",
-                            "Please enter your email address"
-                          ),
-                        }}
-                      />
-                    </FieldRow>
-
-                    <FieldRow>
-                      <FieldTextArea
-                        name="suggestionComments"
-                        id="suggestionComments"
-                        label={t(
-                          "suggestion.field.label.comments",
-                          "Further comments"
-                        )}
-                        settings={{
-                          hideLabel: false,
-                          placeholder: t(
-                            "suggestion.field.placeholder.comments",
-                            "Do you have any other notes or comments?"
-                          ),
-                        }}
-                      />
-                    </FieldRow>
-                  </Box>
-
-                  <Box
-                    mb="2em"
-                    pt="0.5em"
-                    borderTop="1px solid"
-                    borderColor="cm.accentDark"
-                  >
-                    <Box textStyle="formOptions" mb="1em">
-                      {!isEmptyHtml(
-                        getMultilangValue(settings?.suggestionsTandCInfo)
-                      ) && (
-                        <MultiLangHtml json={settings?.suggestionsTandCInfo} />
+                              }}
+                            />
+                          </FieldRow>
+                          <FieldRow>
+                            <FieldInput
+                              type="text"
+                              name="credits"
+                              id="credits"
+                              label={t(
+                                "suggestion.field.label.credits",
+                                "Image credits"
+                              )}
+                              isRequired={!!heroImage}
+                              isDisabled={!!!heroImage}
+                              settings={{
+                                hideLabel: false,
+                                placeholder: t(
+                                  "suggestion.field.placeholder.credits",
+                                  "The image credits"
+                                ),
+                              }}
+                            />
+                          </FieldRow>
+                        </>
                       )}
                     </Box>
-                    <FieldRow>
-                      <FieldSwitch
-                        name="suggestionTandC"
-                        isRequired={true}
-                        label={
-                          <span>
-                            {t(
-                              "suggestion.field.label.suggestionSubmittersTandCAcceptance",
-                              "I accept the terms and conditions"
+                    <Box
+                      mb="2em"
+                      pt="0.5em"
+                      borderTop="1px solid"
+                      borderColor="cm.accentDark"
+                    >
+                      <chakra.h2 textStyle="formOptions" mb="2px">
+                        {t("suggestion.section.online.title", "Website(s)")}
+                      </chakra.h2>
+                      <Text textStyle="formOptions" mb="1em">
+                        {t(
+                          "suggestion.section.online.description",
+                          "Can the location be found online?"
+                        )}
+                      </Text>
+                      <FieldRow>
+                        <FieldInput
+                          type="text"
+                          name="website"
+                          id="website"
+                          label={t("suggestion.field.label.website", "Website")}
+                          settings={{
+                            hideLabel: false,
+                            placeholder: t(
+                              "suggestion.field.placeholder.website",
+                              "https://www.example.com"
+                            ),
+                          }}
+                        />
+                      </FieldRow>
+                      <TwoColFieldRow>
+                        <FieldRow>
+                          <FieldInput
+                            type="text"
+                            name="facebook"
+                            id="facebook"
+                            label={t(
+                              "suggestion.field.label.facebook",
+                              "Facebook"
                             )}
-                          </span>
-                        }
-                        defaultChecked={false}
-                      />
-                    </FieldRow>
-                    <FieldRow>
-                      <FieldSwitch
-                        name="suggestionIsOwner"
-                        label={
-                          <span>
-                            {t(
-                              "suggestion.field.label.ownerOfLocation",
-                              "I am legally responsible for the location"
+                            settings={{
+                              hideLabel: false,
+                              placeholder: t(
+                                "suggestion.field.placeholder.website",
+                                "https://www.example.com"
+                              ),
+                            }}
+                          />
+                        </FieldRow>
+                        <FieldRow>
+                          <FieldInput
+                            type="text"
+                            name="instagram"
+                            id="instagram"
+                            label={t(
+                              "suggestion.field.label.instagram",
+                              "Instagram"
                             )}
-                          </span>
-                        }
-                        defaultChecked={false}
-                      />
-                    </FieldRow>
-                    <FieldRow>
-                      <Box textAlign="right" mt="2em" w="100%">
-                        <Button type="submit" variant="ghost">
-                          {t("suggestion.button.submit", "Submit suggestion")}
-                        </Button>
+                            settings={{
+                              hideLabel: false,
+                              placeholder: t(
+                                "suggestion.field.placeholder.website",
+                                "https://www.example.com"
+                              ),
+                            }}
+                          />
+                        </FieldRow>
+                      </TwoColFieldRow>
+                      <TwoColFieldRow>
+                        <FieldRow>
+                          <FieldInput
+                            type="text"
+                            name="twitter"
+                            id="twitter"
+                            label={t(
+                              "suggestion.field.label.twitter",
+                              "Twitter"
+                            )}
+                            settings={{
+                              hideLabel: false,
+                              placeholder: t(
+                                "suggestion.field.placeholder.website",
+                                "https://www.example.com"
+                              ),
+                            }}
+                          />
+                        </FieldRow>
+                        <FieldRow>
+                          <FieldInput
+                            type="text"
+                            name="youtube"
+                            id="youtube"
+                            label={t(
+                              "suggestion.field.label.youtube",
+                              "Youtube"
+                            )}
+                            settings={{
+                              hideLabel: false,
+                              placeholder: t(
+                                "suggestion.field.placeholder.website",
+                                "https://www.example.com"
+                              ),
+                            }}
+                          />
+                        </FieldRow>
+                      </TwoColFieldRow>
+                    </Box>
+
+                    <Box
+                      mb="1.5em"
+                      pt="0.5em"
+                      borderTop="1px solid"
+                      borderColor="cm.accentDark"
+                    >
+                      <chakra.h2 textStyle="formOptions" mb="2px">
+                        {t(
+                          "suggestion.section.taxonomies.title",
+                          "The location is ..."
+                        )}
+                      </chakra.h2>
+                      <Text textStyle="formOptions" mb="1em">
+                        {t(
+                          "suggestion.section.taxonomies.description",
+                          "Please indicate the attributes under the location should be found in the search."
+                        )}
+                      </Text>
+
+                      {activeTermsToI?.length > 0 && (
+                        <FieldRow>
+                          <Box>
+                            <chakra.h3 textStyle="formOptions" mb="2px">
+                              {t(
+                                "suggestion.tax.title.typeOfInstitution",
+                                "Type of institution"
+                              )}
+                            </chakra.h3>
+                            <FieldCheckboxGroup
+                              id="typeOfInstitution"
+                              name="typeOfInstitution"
+                              isRequired={false}
+                              label={t(
+                                "suggestion.tax.title.typeOfInstitution",
+                                "Type of institution"
+                              )}
+                              type="checkbox"
+                              options={getMultilangSortedList(
+                                activeTermsToI.map((term: any) => ({
+                                  label: term.name,
+                                  id: term.id,
+                                })),
+                                "label",
+                                getMultilangValue
+                              )}
+                            />
+                          </Box>
+                        </FieldRow>
+                      )}
+                      {activeTermsTA?.length > 0 && (
+                        <FieldRow>
+                          <Box>
+                            <chakra.h3 textStyle="formOptions" mb="2px">
+                              {t(
+                                "suggestion.tax.title.targetAudience",
+                                "Target audience"
+                              )}
+                            </chakra.h3>
+                            <FieldCheckboxGroup
+                              id="targetAudience"
+                              name="targetAudience"
+                              isRequired={false}
+                              label={t(
+                                "suggestion.tax.title.targetAudience",
+                                "Target audience"
+                              )}
+                              type="checkbox"
+                              options={getMultilangSortedList(
+                                activeTermsTA.map((term: any) => ({
+                                  label: term.name,
+                                  id: term.id,
+                                })),
+                                "label",
+                                getMultilangValue
+                              )}
+                            />
+                          </Box>
+                        </FieldRow>
+                      )}
+                      {activeTermsToO?.length > 0 && (
+                        <FieldRow>
+                          <Box>
+                            <chakra.h3 textStyle="formOptions" mb="2px">
+                              {t(
+                                "suggestion.tax.title.typeOfOrganisation",
+                                "Type of organisation"
+                              )}
+                            </chakra.h3>
+                            <FieldCheckboxGroup
+                              id="typeOfOrganisation"
+                              name="typeOfOrganisation"
+                              isRequired={false}
+                              label={t(
+                                "suggestion.tax.title.typeOfOrganisation",
+                                "Type of organisation"
+                              )}
+                              type="checkbox"
+                              options={getMultilangSortedList(
+                                activeTermsToO.map((term: any) => ({
+                                  label: term.name,
+                                  id: term.id,
+                                })),
+                                "label",
+                                getMultilangValue
+                              )}
+                            />
+                          </Box>
+                        </FieldRow>
+                      )}
+                    </Box>
+                    <Box
+                      mb="2em"
+                      pt="0.5em"
+                      borderTop="1px solid"
+                      borderColor="cm.accentDark"
+                    >
+                      <chakra.h2 textStyle="formOptions" mb="2px">
+                        {t(
+                          "suggestion.section.suggestor.title",
+                          "About yourself"
+                        )}
+                      </chakra.h2>
+                      <Text textStyle="formOptions" mb="1em">
+                        {t(
+                          "suggestion.section.suggestor.description",
+                          "In case we have further questions please give us your name and email address. We will keep this information private."
+                        )}
+                      </Text>
+
+                      <FieldRow>
+                        <FieldInput
+                          type="text"
+                          name="suggestionSubmittersName"
+                          id="suggestionSubmittersName"
+                          label={t(
+                            "suggestion.field.label.suggestionSubmittersName",
+                            "Your name"
+                          )}
+                          isRequired={true}
+                          settings={{
+                            hideLabel: false,
+                            placeholder: t(
+                              "suggestion.field.placeholder.suggestionSubmittersName",
+                              "Please enter your name"
+                            ),
+                          }}
+                        />
+                      </FieldRow>
+                      <FieldRow>
+                        <FieldInput
+                          type="email"
+                          name="suggestionSubmittersEmail"
+                          id="suggestionSubmittersEmail"
+                          label={t(
+                            "suggestion.field.label.suggestionSubmittersEmail",
+                            "Your email address"
+                          )}
+                          isRequired={true}
+                          settings={{
+                            hideLabel: false,
+                            placeholder: t(
+                              "suggestion.field.placeholder.suggestionSubmittersEmail",
+                              "Please enter your email address"
+                            ),
+                          }}
+                        />
+                      </FieldRow>
+
+                      <FieldRow>
+                        <FieldTextArea
+                          name="suggestionComments"
+                          id="suggestionComments"
+                          label={t(
+                            "suggestion.field.label.comments",
+                            "Further comments"
+                          )}
+                          settings={{
+                            hideLabel: false,
+                            placeholder: t(
+                              "suggestion.field.placeholder.comments",
+                              "Do you have any other notes or comments?"
+                            ),
+                          }}
+                        />
+                      </FieldRow>
+                    </Box>
+
+                    <Box
+                      mb="2em"
+                      pt="0.5em"
+                      borderTop="1px solid"
+                      borderColor="cm.accentDark"
+                    >
+                      <Box textStyle="formOptions" mb="1em">
+                        {!isEmptyHtml(
+                          getMultilangValue(settings?.suggestionsTandCInfo)
+                        ) && (
+                          <MultiLangHtml
+                            json={settings?.suggestionsTandCInfo}
+                          />
+                        )}
                       </Box>
-                    </FieldRow>
-                  </Box>
-                </form>
-              </FormProvider>
-            </>
-          )}
+                      <FieldRow>
+                        <FieldSwitch
+                          name="suggestionTandC"
+                          isRequired={true}
+                          label={
+                            <span>
+                              {t(
+                                "suggestion.field.label.suggestionSubmittersTandCAcceptance",
+                                "I accept the terms and conditions"
+                              )}
+                            </span>
+                          }
+                          defaultChecked={false}
+                        />
+                      </FieldRow>
+                      <FieldRow>
+                        <FieldSwitch
+                          name="suggestionIsOwner"
+                          label={
+                            <span>
+                              {t(
+                                "suggestion.field.label.ownerOfLocation",
+                                "I am legally responsible for the location"
+                              )}
+                            </span>
+                          }
+                          defaultChecked={false}
+                        />
+                      </FieldRow>
+                      <FieldRow>
+                        <Box textAlign="right" mt="2em" w="100%">
+                          <Button type="submit" variant="ghost">
+                            {t("suggestion.button.submit", "Submit suggestion")}
+                          </Button>
+                        </Box>
+                      </FieldRow>
+                    </Box>
+                  </form>
+                </FormProvider>
+              </>
+            )}
+          </Box>
         </Box>
-        <Footer />
+        <Box>
+          <Footer />
+        </Box>
       </Grid>
     </MainContent>
   );

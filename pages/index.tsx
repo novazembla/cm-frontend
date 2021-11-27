@@ -43,6 +43,7 @@ import {
 import debounce from "lodash/debounce";
 import NextHeadSeo from "next-head-seo";
 import { PageTitle } from "~/components/ui/PageTitle";
+import {settingsQueryPartial} from "~/graphql";
 
 const homepageQuery = gql`
   query {
@@ -51,6 +52,7 @@ const homepageQuery = gql`
       missionStatementPage
       highlights
     }
+    ${settingsQueryPartial}
   }
 `;
 
@@ -511,7 +513,7 @@ export const Home = ({ homepage }: { homepage: any }) => {
   );
 };
 
-// This gets called on every request
+
 export const getStaticProps: GetStaticProps = async (context) => {
   const {
     // params,
@@ -539,6 +541,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     props: {
       ...(await serverSideTranslations(locale ?? "en")),
       homepage: data?.homepage,
+      frontendSettings: data?.frontendSettings,
     },
     revalidate: 300,
   };

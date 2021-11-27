@@ -14,9 +14,11 @@ import { getSeoAppTitle, getSeoImage } from "~/utils";
 import NextHeadSeo from "next-head-seo";
 import { useAppTranslations } from "~/hooks/useAppTranslations";
 import { PageTitle } from "~/components/ui/PageTitle";
+import { settingsQueryPartial } from "~/graphql";
 
 const pageQuery = gql`
   query ($slug: String!) {
+    ${settingsQueryPartial}
     page(slug: $slug) {
       id
       title
@@ -45,7 +47,7 @@ export const ModuleComponentPage = ({ page }: { page: any }) => {
   }, [router.asPath, cultureMap]);
 
   return (
-    <MainContent isDrawer layerStyle="pageBg">
+    <MainContent isDrawer>
       <NextHeadSeo
         canonical={`${config.baseUrl}${
           i18n.language === "en" ? "/en" : ""
@@ -66,39 +68,41 @@ export const ModuleComponentPage = ({ page }: { page: any }) => {
           xl: "calc(100vh - 80px)",
         }}
       >
-        <Box layerStyle="page">
-          <PageTitle h1 type="high" title={getMultilangValue(page.title)} />
+        <Box layerStyle="pageBg">
+          <Box layerStyle="page">
+            <PageTitle h1 type="high" title={getMultilangValue(page.title)} />
 
-          <Box color="cm.text" w="100%">
-            {page.heroImage && page.heroImage.id && (
-              <Box w="100%" mt="1em" mb="3em" position="relative">
-                <Box bg="#333">
-                  <ApiImage
-                    id={page.heroImage.id}
-                    useImageAspectRatioPB
-                    alt={getMultilangValue(page?.heroImage.alt)}
-                    meta={page.heroImage.meta}
-                    status={page.heroImage.status}
-                    sizes="(min-width: 45rem) 700px, 100vw"
-                  />
+            <Box color="cm.text" w="100%">
+              {page.heroImage && page.heroImage.id && (
+                <Box w="100%" mt="1em" mb="3em" position="relative">
+                  <Box bg="#333">
+                    <ApiImage
+                      id={page.heroImage.id}
+                      useImageAspectRatioPB
+                      alt={getMultilangValue(page?.heroImage.alt)}
+                      meta={page.heroImage.meta}
+                      status={page.heroImage.status}
+                      sizes="(min-width: 45rem) 700px, 100vw"
+                    />
+                  </Box>
+                  {page.heroImage.credits && (
+                    <Text fontSize="xs" mt="0.5" color="cm.text">
+                      <MultiLangValue json={page.heroImage.credits} />
+                    </Text>
+                  )}
                 </Box>
-                {page.heroImage.credits && (
-                  <Text fontSize="xs" mt="0.5" color="cm.text">
-                    <MultiLangValue json={page.heroImage.credits} />
-                  </Text>
-                )}
-              </Box>
-            )}
-            {page.intro && (
-              <Box textStyle="larger" mb="3em" fontWeight="bold">
-                <MultiLangHtml json={page.intro} />
-              </Box>
-            )}
+              )}
+              {page.intro && (
+                <Box textStyle="larger" mb="3em" fontWeight="bold">
+                  <MultiLangHtml json={page.intro} />
+                </Box>
+              )}
 
-            <MultiLangHtml json={page.content} />
+              <MultiLangHtml json={page.content} />
+            </Box>
           </Box>
         </Box>
-        <Footer />
+        <Box><Footer /></Box>
       </Grid>
     </MainContent>
   );
@@ -109,7 +113,6 @@ export const ModulePageGetStaticPaths: GetStaticPaths = () => ({
   fallback: "blocking",
 });
 
-// This gets called on every request
 export const ModulePageGetStaticProps: GetStaticProps = async (context) => {
   const client = getApolloClient();
 
@@ -141,6 +144,7 @@ export const ModulePageGetStaticProps: GetStaticProps = async (context) => {
   return {
     props: {
       page: data?.page,
+      frontendSettings: data?.frontendSettings,
     },
     revalidate: 3600,
   };

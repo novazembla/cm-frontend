@@ -44,7 +44,7 @@ export const getStaticPaths: GetStaticPaths = async (context) => {
   return ModuleTourGetStaticPaths(context);
 };
 
-// This gets called on every request
+
 export const getStaticProps: GetStaticProps = async (context) => {
   const {
     // params,

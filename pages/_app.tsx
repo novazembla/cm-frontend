@@ -38,7 +38,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
       </Head>
       <AppApolloProvider>
         <ChakraProvider theme={chakraTheme}>
-          <SettingsContextProvider>
+          <SettingsContextProvider frontendSettings={pageProps.frontendSettings}>
             <MapContextProvider>
               {getLayout(<Component {...pageProps} />)}
             </MapContextProvider>

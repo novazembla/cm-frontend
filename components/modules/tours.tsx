@@ -13,9 +13,11 @@ import { useRouter } from "next/router";
 import { useConfigContext, useMapContext } from "~/provider";
 import { getSeoAppTitle } from "~/utils";
 import NextHeadSeo from "next-head-seo";
+import { settingsQueryPartial } from "~/graphql";
 
 const toursQuery = gql`
   query tours($where: JSON, $orderBy: JSON, $pageIndex: Int, $pageSize: Int) {
+    ${settingsQueryPartial}
     tours(
       where: $where
       orderBy: $orderBy
@@ -117,7 +119,7 @@ export const ModuleComponentTours = ({
   );
 };
 
-// This gets called on every request
+
 export const ModuleToursGetStaticProps: GetStaticProps = async (context) => {
   const client = getApolloClient();
 
@@ -137,6 +139,7 @@ export const ModuleToursGetStaticProps: GetStaticProps = async (context) => {
     props: {
       tours: data?.tours?.tours,
       totalCount: data?.tours?.totalCount,
+      frontendSettings: data?.frontendSettings,
     },
     revalidate: 3600,
   };

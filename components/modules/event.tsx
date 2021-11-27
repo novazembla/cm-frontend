@@ -37,9 +37,11 @@ import {
 } from "~/utils";
 import NextHeadSeo from "next-head-seo";
 import { PageTitle } from "~/components/ui/PageTitle";
+import { settingsQueryPartial } from "~/graphql";
 
 const eventQuery = gql`
   query ($slug: String!) {
+    ${settingsQueryPartial}
     event(slug: $slug) {
       id
       title
@@ -255,7 +257,7 @@ export const ModuleComponentEvent = ({
   }
 
   return (
-    <MainContent layerStyle="pageBg">
+    <MainContent>
       <NextHeadSeo
         canonical={`${config.baseUrl}${
           i18n.language === "en" ? "/en" : ""
@@ -275,201 +277,204 @@ export const ModuleComponentEvent = ({
           xl: "calc(100vh - 80px)",
         }}
       >
-        <Box layerStyle="page">
-          <PageTitle type="high" title={t("event.detail.title", "Event")} />
+        <Box layerStyle="pageBg">
+          <Box layerStyle="page">
+            <PageTitle type="high" title={t("event.detail.title", "Event")} />
 
-          <Box color="cm.text">
-            {event?.heroImage && event?.heroImage.id && (
-              <Box w="100%" mb="3">
-                <Box bg="#333">
-                  <ApiImage
-                    id={event.heroImage.id}
-                    alt={getMultilangValue(event?.heroImage.alt)}
-                    meta={event.heroImage.meta}
-                    status={event.heroImage.status}
-                    useImageAspectRatioPB
-                    sizes="(min-width: 45rem) 700px, 100vw"
-                    objectFit="cover"
-                  />
-                </Box>
-                {event.heroImage.credits !== "" && (
-                  <Text textStyle="finePrint" mt="0.5">
-                    <MultiLangValue json={event.heroImage.credits} />
-                  </Text>
-                )}
-              </Box>
-            )}
-
-            <Box mb="2em">
-              <chakra.h1 mb="3" textStyle="headline">
-                <MultiLangValue json={event.title} />
-              </chakra.h1>
-              <Box
-                textStyle="larger"
-                my="1em"
-                py="3"
-                borderColor="cm.accentDark"
-                borderTop="1px solid"
-                borderBottom="1px solid"
-              >
-                <Box
-                  dangerouslySetInnerHTML={{
-                    __html: `${dateInfo} ${timeInfo}`,
-                  }}
-                />
-              </Box>
-              {!isEmptyHtml(
-                getMultilangHtml(event?.description ?? "", true)
-              ) && (
-                <MultiLangHtml
-                  json={event.description}
-                  addMissingTranslationInfo
-                />
-              )}
-            </Box>
-
-            {event?.meta?.event?.event_homepage && (
-              <Box className="item" mb="1em">
-                <Box
-                  mb="0.5em"
-                  color="cm.accentDark"
-                  textTransform="uppercase"
-                  textStyle="categories"
-                >
-                  {t("event.label.website", "Website")}
-                </Box>
-                <Box textStyle="card">
-                  <Link
-                    target="_blank"
-                    rel="no-referral no-follow"
-                    href={event?.meta?.event?.event_homepage}
-                    display="inline-block"
-                    textDecoration="underline"
-                    textDecorationColor="cm.accentLight"
-                    maxW="100%"
-                    overflow="hidden"
-                    whiteSpace="nowrap"
-                    textOverflow="ellipsis"
-                  >
-                    {event?.meta?.event?.event_homepagename
-                      ? event?.meta?.event?.event_homepagename
-                      : event?.meta?.event?.event_homepage}
-                  </Link>
-                </Box>
-              </Box>
-            )}
-
-            <SimpleGrid
-              columns={isMobile ? 1 : 2}
-              spacingX="0.5em"
-              spacingY="1em"
-            >
-              {!isEmptyHtml(event?.address ?? "") && (
-                <Box className="item">
-                  <Box
-                    mb="0.5em"
-                    color="cm.accentDark"
-                    textTransform="uppercase"
-                    textStyle="categories"
-                  >
-                    {t("event.label.eventLocation", "Event Location")}
-                  </Box>
-                  <Box textStyle="card">
-                    <Box dangerouslySetInnerHTML={{ __html: event?.address }} />
-                  </Box>
-                </Box>
-              )}
-              {!isEmptyHtml(event?.organiser ?? "") && (
-                <Box className="item">
-                  <Box
-                    mb="0.5em"
-                    color="cm.accentDark"
-                    textTransform="uppercase"
-                    textStyle="categories"
-                  >
-                    {t("event.label.eventOrganiser", "Event Organiser")}
-                  </Box>
-                  <Box textStyle="card">
-                    <Box
-                      dangerouslySetInnerHTML={{ __html: event?.organiser }}
+            <Box color="cm.text">
+              {event?.heroImage && event?.heroImage.id && (
+                <Box w="100%" mb="3">
+                  <Box bg="#333">
+                    <ApiImage
+                      id={event.heroImage.id}
+                      alt={getMultilangValue(event?.heroImage.alt)}
+                      meta={event.heroImage.meta}
+                      status={event.heroImage.status}
+                      useImageAspectRatioPB
+                      sizes="(min-width: 45rem) 700px, 100vw"
+                      objectFit="cover"
                     />
                   </Box>
+                  {event.heroImage.credits !== "" && (
+                    <Text textStyle="finePrint" mt="0.5">
+                      <MultiLangValue json={event.heroImage.credits} />
+                    </Text>
+                  )}
                 </Box>
               )}
 
-              {event?.terms?.length > 0 && (
-                <Box className="item">
+              <Box mb="2em">
+                <chakra.h1 mb="3" textStyle="headline">
+                  <MultiLangValue json={event.title} />
+                </chakra.h1>
+                <Box
+                  textStyle="larger"
+                  my="1em"
+                  py="3"
+                  borderColor="cm.accentDark"
+                  borderTop="1px solid"
+                  borderBottom="1px solid"
+                >
+                  <Box
+                    dangerouslySetInnerHTML={{
+                      __html: `${dateInfo} ${timeInfo}`,
+                    }}
+                  />
+                </Box>
+                {!isEmptyHtml(
+                  getMultilangHtml(event?.description ?? "", true)
+                ) && (
+                  <MultiLangHtml
+                    json={event.description}
+                    addMissingTranslationInfo
+                  />
+                )}
+              </Box>
+
+              {event?.meta?.event?.event_homepage && (
+                <Box className="item" mb="1em">
                   <Box
                     mb="0.5em"
                     color="cm.accentDark"
                     textTransform="uppercase"
                     textStyle="categories"
                   >
-                    {t("event.label.category", "Category")}
+                    {t("event.label.website", "Website")}
                   </Box>
                   <Box textStyle="card">
-                    {event.terms
-                      .map((t: any) => {
-                        if (!t) return "";
-
-                        return getMultilangValue(t?.name);
-                      })
-                      .join(", ")}
+                    <Link
+                      target="_blank"
+                      rel="no-referral no-follow"
+                      href={event?.meta?.event?.event_homepage}
+                      display="inline-block"
+                      textDecoration="underline"
+                      textDecorationColor="cm.accentLight"
+                      maxW="100%"
+                      overflow="hidden"
+                      whiteSpace="nowrap"
+                      textOverflow="ellipsis"
+                    >
+                      {event?.meta?.event?.event_homepagename
+                        ? event?.meta?.event?.event_homepagename
+                        : event?.meta?.event?.event_homepage}
+                    </Link>
                   </Box>
                 </Box>
               )}
-            </SimpleGrid>
 
-            {multipleUpcommingDates?.length > 0 && (
-              <Box className="item" mt="1em">
-                <Box
-                  mb="0.5em"
-                  color="cm.accentDark"
-                  textTransform="uppercase"
-                  textStyle="categories"
-                >
-                  {t("event.label.eventDatesMultiple", "Upcoming dates")}
-                </Box>
-
-                {multipleUpcommingDates?.length > 10 ? (
-                  <Box textStyle="card">
-                    <Collapse
-                      startingHeight={isMobile ? 100 : 130}
-                      in={showDates}
+              <SimpleGrid
+                columns={isMobile ? 1 : 2}
+                spacingX="0.5em"
+                spacingY="1em"
+              >
+                {!isEmptyHtml(event?.address ?? "") && (
+                  <Box className="item">
+                    <Box
+                      mb="0.5em"
+                      color="cm.accentDark"
+                      textTransform="uppercase"
+                      textStyle="categories"
                     >
+                      {t("event.label.eventLocation", "Event Location")}
+                    </Box>
+                    <Box textStyle="card">
+                      <Box
+                        dangerouslySetInnerHTML={{ __html: event?.address }}
+                      />
+                    </Box>
+                  </Box>
+                )}
+                {!isEmptyHtml(event?.organiser ?? "") && (
+                  <Box className="item">
+                    <Box
+                      mb="0.5em"
+                      color="cm.accentDark"
+                      textTransform="uppercase"
+                      textStyle="categories"
+                    >
+                      {t("event.label.eventOrganiser", "Event Organiser")}
+                    </Box>
+                    <Box textStyle="card">
+                      <Box
+                        dangerouslySetInnerHTML={{ __html: event?.organiser }}
+                      />
+                    </Box>
+                  </Box>
+                )}
+
+                {event?.terms?.length > 0 && (
+                  <Box className="item">
+                    <Box
+                      mb="0.5em"
+                      color="cm.accentDark"
+                      textTransform="uppercase"
+                      textStyle="categories"
+                    >
+                      {t("event.label.category", "Category")}
+                    </Box>
+                    <Box textStyle="card">
+                      {event.terms
+                        .map((t: any) => {
+                          if (!t) return "";
+
+                          return getMultilangValue(t?.name);
+                        })
+                        .join(", ")}
+                    </Box>
+                  </Box>
+                )}
+              </SimpleGrid>
+
+              {multipleUpcommingDates?.length > 0 && (
+                <Box className="item" mt="1em">
+                  <Box
+                    mb="0.5em"
+                    color="cm.accentDark"
+                    textTransform="uppercase"
+                    textStyle="categories"
+                  >
+                    {t("event.label.eventDatesMultiple", "Upcoming dates")}
+                  </Box>
+
+                  {multipleUpcommingDates?.length > 10 ? (
+                    <Box textStyle="card">
+                      <Collapse
+                        startingHeight={isMobile ? 100 : 130}
+                        in={showDates}
+                      >
+                        <Box
+                          dangerouslySetInnerHTML={{
+                            __html: multipleUpcommingDates.join(""),
+                          }}
+                        />
+                      </Collapse>
+                      <Link
+                        size="sm"
+                        onClick={() => setShowDates(!showDates)}
+                        pt="1rem"
+                        display="inline-block"
+                        textDecoration="underline"
+                        textDecorationColor="cm.accentLight"
+                      >
+                        {showDates
+                          ? t("button.showLess", "Show less")
+                          : t("button.showMore", "Show all")}
+                      </Link>
+                    </Box>
+                  ) : (
+                    <Box textStyle="card">
                       <Box
                         dangerouslySetInnerHTML={{
                           __html: multipleUpcommingDates.join(""),
                         }}
                       />
-                    </Collapse>
-                    <Link
-                      size="sm"
-                      onClick={() => setShowDates(!showDates)}
-                      pt="1rem"
-                      display="inline-block"
-                      textDecoration="underline"
-                      textDecorationColor="cm.accentLight"
-                    >
-                      {showDates
-                        ? t("button.showLess", "Show less")
-                        : t("button.showMore", "Show all")}
-                    </Link>
-                  </Box>
-                ) : (
-                  <Box textStyle="card">
-                    <Box
-                      dangerouslySetInnerHTML={{
-                        __html: multipleUpcommingDates.join(""),
-                      }}
-                    />
-                  </Box>
-                )}
-              </Box>
-            )}
+                    </Box>
+                  )}
+                </Box>
+              )}
+            </Box>
           </Box>
         </Box>
-
         <Box layerStyle="lightGray">
           {event.locations && event.locations.length > 0 && (
             <Box p="20px">
@@ -496,7 +501,6 @@ export const ModuleEventGetStaticPaths: GetStaticPaths = () => ({
   fallback: "blocking",
 });
 
-// This gets called on every request
 export const ModuleEventGetStaticProps: GetStaticProps = async (context) => {
   const client = getApolloClient();
 
@@ -528,6 +532,7 @@ export const ModuleEventGetStaticProps: GetStaticProps = async (context) => {
   return {
     props: {
       event: data?.event,
+      frontendSettings: data?.frontendSettings,
     },
     revalidate: 3600,
   };

@@ -5,16 +5,30 @@ import {
 } from "~/components/modules/locations";
 import { GetStaticProps } from "next";
 import LayoutFull from "~/components/app/LayoutFull";
+import { settingsQuery } from "~/graphql";
+import { getApolloClient } from "~/services";
 
 const Locations = ({ ...props }) => {
   return <ModuleComponentLocations {...props} />;
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
+  const {
+    // params,
+    locale,
+  } = context;
+  const client = getApolloClient();
+  
+  const { data } = await client.query({
+    query: settingsQuery,
+  });
+
   return {
     props: {
-      ...(await serverSideTranslations(context.locale ?? "en")),
+      ...(await serverSideTranslations(locale ?? "en")),
+      frontendSettings: data?.frontendSettings,
     },
+    revalidate: 300,
   };
 }
 Locations.getLayout = function getLayout(page: ReactElement) {

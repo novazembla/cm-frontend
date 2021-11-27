@@ -6,7 +6,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { GetStaticProps } from "next";
 import LayoutFull from "~/components/app/LayoutFull";
 
-import { Grid, Box, Heading, Text } from "@chakra-ui/react";
+import { Grid, Box, Text } from "@chakra-ui/react";
 import { MainContent } from "~/components/app/MainContent";
 import { Footer } from "~/components/app/Footer";
 import { useAppTranslations } from "~/hooks/useAppTranslations";
@@ -15,6 +15,8 @@ import { getSeoAppTitle } from "~/utils";
 import NextHeadSeo from "next-head-seo";
 import { useMapContext } from "~/provider";
 import { PageTitle } from "~/components/ui/PageTitle";
+import { settingsQuery } from "~/graphql";
+import { getApolloClient } from "~/services";
 
 export function Page500() {
   const { t } = useAppTranslations();
@@ -25,7 +27,7 @@ export function Page500() {
   }, [cultureMap]);
 
   return (
-    <MainContent isDrawer layerStyle="pageBg">
+    <MainContent isDrawer>
       <NextHeadSeo
         title={`${t(
           "error.internalServerError",
@@ -41,29 +43,47 @@ export function Page500() {
           xl: "calc(100vh - 80px)",
         }}
       >
-        <Box layerStyle="page" w="100%">
-          <PageTitle
-            h1
-            type="high"
-            title={t(
-              "error.internalServerError",
-              "Oops, an error happened on our server"
-            )}
-          />
+        <Box layerStyle="pageBg">
+          <Box layerStyle="page" w="100%">
+            <PageTitle
+              h1
+              type="high"
+              title={t(
+                "error.internalServerError",
+                "Oops, an error happened on our server"
+              )}
+            />
 
-          <Text h="400px">{t("error.pleasetryagain", "Please try again")}</Text>
+            <Text h="400px">
+              {t("error.pleasetryagain", "Please try again")}
+            </Text>
+          </Box>
         </Box>
-        <Footer />
+        <Box>
+          <Footer />
+        </Box>
       </Grid>
     </MainContent>
   );
 }
 
 export const getStaticProps: GetStaticProps = async (context) => {
+  const {
+    // params,
+    locale,
+  } = context;
+  const client = getApolloClient();
+
+  const { data } = await client.query({
+    query: settingsQuery,
+  });
+
   return {
     props: {
-      ...(await serverSideTranslations(context.locale ?? "en")),
+      ...(await serverSideTranslations(locale ?? "en")),
+      frontendSettings: data?.frontendSettings,
     },
+    revalidate: 300,
   };
 };
 

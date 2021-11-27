@@ -17,7 +17,6 @@ export const LayoutLight = ({ children }: AppProps) => {
   const config = useConfigContext();
 
   const { t } = useAppTranslations();
-  const [isLoadingSettings, setIsLoadingSettings] = useState(true);
   const [fontsLoaded, setFontsLoaded] = useState(false);
 
   const onResize = debounce(() => {
@@ -80,10 +79,6 @@ export const LayoutLight = ({ children }: AppProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    if (settings?.terms) setIsLoadingSettings(false);
-  }, [settings]);
-
   let mapJsonBaseUrl;
 
   if (config.mapStyleJsonUrl && config.mapStyleJsonUrl.trim()) {
@@ -130,12 +125,12 @@ export const LayoutLight = ({ children }: AppProps) => {
           card: "summary",
         }}
       />
-      <LoadingBarLight color="cm.accentLight" loading={isLoadingSettings} />
+      <LoadingBarLight color="cm.accentLight" />
       <Map layout="light" />
       <Box position="fixed" top="10px" left="10px" zIndex="20">
-        <Logo layout="light" />
+        {fontsLoaded && <Logo layout="light" />}
       </Box>
-      {!isLoadingSettings && fontsLoaded && children}
+      {fontsLoaded && children}
     </>
   );
 };

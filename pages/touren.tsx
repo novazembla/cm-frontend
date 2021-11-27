@@ -21,7 +21,7 @@ const Tours = ({
   );
 };
 
-// This gets called on every request
+
 export const getStaticProps: GetStaticProps = async (context) => {
   const {
     // params,

@@ -172,7 +172,6 @@ export const MainContent = ({
     setTimeout(() => {
       panActive.current = false;
       isAnimationRunningRef.current = false;
-      setIsDrawerOpen(false);
     }, 350);
   }, [controls, setMainContentStatus, dragLeft, isMainContentActive]);
 
@@ -195,7 +194,6 @@ export const MainContent = ({
     setTimeout(() => {
       panActive.current = false;
       isAnimationRunningRef.current = false;
-      setIsDrawerOpen(true);
     }, 350);
   }, [controls, setMainContentStatus, isMainContentActive]);
 

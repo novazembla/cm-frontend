@@ -4,19 +4,33 @@ import { GetStaticProps } from "next";
 
 import LayoutFull from "~/components/app/LayoutFull";
 import { ModuleComponentSuggest } from "~/components/modules/suggest";
+import { settingsQuery } from "~/graphql";
+import { getApolloClient } from "~/services";
 
 export const SuggestLocation = () => {
   return <ModuleComponentSuggest />;
 };
 
-// This gets called on every request
 export const getStaticProps: GetStaticProps = async (context) => {
+  const {
+    // params,
+    locale,
+  } = context;
+  const client = getApolloClient();
+  
+  const { data } = await client.query({
+    query: settingsQuery,
+  });
+
   return {
     props: {
-      ...(await serverSideTranslations(context.locale ?? "en")),
+      ...(await serverSideTranslations(locale ?? "en")),
+      frontendSettings: data?.frontendSettings,
     },
+    revalidate: 300,
   };
-};
+}
+
 SuggestLocation.getLayout = function getLayout(page: ReactElement) {
   return <LayoutFull>{page}</LayoutFull>;
 };

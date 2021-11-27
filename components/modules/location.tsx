@@ -39,9 +39,11 @@ import { useAppTranslations } from "~/hooks/useAppTranslations";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { MainContent } from "~/components/app/MainContent";
 import { useRouter } from "next/router";
+import { settingsQueryPartial } from "~/graphql";
 
 const locationQuery = gql`
   query ($slug: String!) {
+    ${settingsQueryPartial}
     location(slug: $slug) {
       id
       title
@@ -597,7 +599,7 @@ export const ModuleLocationGetStaticPaths: GetStaticPaths = () => ({
   fallback: "blocking",
 });
 
-// This gets called on every request
+
 export const ModuleLocationGetStaticProps: GetStaticProps = async (context) => {
   const client = getApolloClient();
 

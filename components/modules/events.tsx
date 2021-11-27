@@ -570,7 +570,7 @@ export const ModuleComponentEvents = ({ ...props }) => {
 
   const today = new Date(new Date().setHours(0, 0, 0, 0));
   return (
-    <MainContent layerStyle="pageBg">
+    <MainContent>
       <NextHeadSeo
         canonical={`${config.baseUrl}${
           i18n.language === "en" ? "/en/events" : "/veranstaltungen"
@@ -586,394 +586,403 @@ export const ModuleComponentEvents = ({ ...props }) => {
           xl: "calc(100vh - 80px)",
         }}
       >
-        <Box layerStyle="page">
-          <PageTitle h1 type="high" title={t("page.title", "Events")} />
+        <Box layerStyle="pageBg">
+          <Box layerStyle="page">
+            <PageTitle h1 type="high" title={t("page.title", "Events")} />
 
-          <FormProvider {...formMethods}>
-            <form noValidate onSubmit={handleSubmit(onSubmit)}>
-              {accordionDefaultIndex && (
-                <Accordion
-                  allowToggle
-                  allowMultiple
-                  defaultIndex={accordionDefaultIndex}
-                >
-                  <AccordionItem>
-                    <AccordionButton className="tabbedFocus">
-                      <Box
-                        flex="1"
-                        textAlign="left"
-                        textStyle="larger"
-                        fontWeight="bold"
-                      >
-                        {t("events.filter.title.dateRange", "Date (range)")}
-                      </Box>
-                      <AccordionIcon color="cm.accentLight" fontSize="2xl" />
-                    </AccordionButton>
-                    <AccordionPanel pb={4} pt={2}>
-                      <FieldRadioGroup
-                        id="eventDateRange"
-                        name="eventDateRange"
-                        isRequired={false}
-                        label={t(
-                          "events.filter.title.eventDateRange",
-                          "Date range"
-                        )}
-                        type="checkbox"
-                        defaultValue={(router?.query?.date as string) ?? "all"}
-                        options={[
-                          {
-                            label: t("events.filter.eventDateRange.all", "All"),
-                            id: "all",
-                          },
-                          {
-                            label: t(
-                              "events.filter.eventDateRange.today",
-                              "Today"
-                            ),
-                            id: "today",
-                          },
-                          {
-                            label: t(
-                              "events.filter.eventDateRange.tomorrow",
-                              "Tomorrow"
-                            ),
-                            id: "tomorrow",
-                          },
-                          {
-                            label: t(
-                              "events.filter.eventDateRange.weekend",
-                              "Upcoming weekend"
-                            ),
-                            id: "weekend",
-                          },
-                          {
-                            label: t(
-                              "events.filter.eventDateRange.next7days",
-                              "Next 7 days"
-                            ),
-                            id: "7days",
-                          },
-                          {
-                            label: t(
-                              "events.filter.eventDateRange.chooseDate",
-                              "Select own date"
-                            ),
-                            id: "ownDate",
-                          },
-                        ]}
-                      />
-                      {getValues("eventDateRange") === "ownDate" && (
-                        <>
-                          <Flex
-                            w="100%"
-                            justifyContent="space-between"
-                            maxW="300px"
-                            mt="1em"
-                            mx="auto"
-                            alignItems="center"
-                            mb=""
-                          >
-                            <IconButton
-                              aria-label={t(
-                                "event.calendar.previousMonth",
-                                "Previous month"
-                              )}
-                              className="tabbedFocus"
-                              icon={<ChevronLeftIcon />}
-                              onClick={navigation.toPrev}
-                              variant="unstyled"
-                              color="cm.accentLight"
-                              fontSize="2xl"
-                              _hover={{
-                                bg: "transparent",
-                                color: "cm.accentDark",
-                              }}
-                              _active={{
-                                color: "cm.accentDark",
-                              }}
-                            />
-                            <Box textStyle="navigation">
-                              {cursorDate.toLocaleDateString(i18n.language, {
-                                month: "long",
-                                year: "numeric",
-                              })}
-                            </Box>
-                            <IconButton
-                              variant="unstyled"
-                              aria-label={t(
-                                "event.calendar.nextMonth",
-                                "Next month"
-                              )}
-                              className="tabbedFocus"
-                              icon={<ChevronRightIcon />}
-                              onClick={navigation.toNext}
-                              color="cm.accentLight"
-                              fontSize="2xl"
-                              _hover={{
-                                bg: "transparent",
-                                color: "cm.accentDark",
-                              }}
-                              _active={{
-                                color: "cm.accentDark",
-                              }}
-                            />
-                          </Flex>
-
-                          <Table
-                            w="100%"
-                            maxW="300px"
-                            variant="unstyled"
-                            mx="auto"
-                            mb="1em"
-                          >
-                            <Thead>
-                              <Tr>
-                                {headers.weekDays.map(({ key, value }) => {
-                                  return (
-                                    <Th key={key} px="1" textAlign="center">
-                                      <chakra.span
-                                        textStyle="calendar"
-                                        fontWeight="bold"
-                                      >
-                                        {value.toLocaleDateString(
-                                          i18n.language,
-                                          { weekday: "short" }
-                                        )}
-                                      </chakra.span>
-                                    </Th>
-                                  );
+            <FormProvider {...formMethods}>
+              <form noValidate onSubmit={handleSubmit(onSubmit)}>
+                {accordionDefaultIndex && (
+                  <Accordion
+                    allowToggle
+                    allowMultiple
+                    defaultIndex={accordionDefaultIndex}
+                  >
+                    <AccordionItem>
+                      <AccordionButton className="tabbedFocus">
+                        <Box
+                          flex="1"
+                          textAlign="left"
+                          textStyle="larger"
+                          fontWeight="bold"
+                        >
+                          {t("events.filter.title.dateRange", "Date (range)")}
+                        </Box>
+                        <AccordionIcon color="cm.accentLight" fontSize="2xl" />
+                      </AccordionButton>
+                      <AccordionPanel pb={4} pt={2}>
+                        <FieldRadioGroup
+                          id="eventDateRange"
+                          name="eventDateRange"
+                          isRequired={false}
+                          label={t(
+                            "events.filter.title.eventDateRange",
+                            "Date range"
+                          )}
+                          type="checkbox"
+                          defaultValue={
+                            (router?.query?.date as string) ?? "all"
+                          }
+                          options={[
+                            {
+                              label: t(
+                                "events.filter.eventDateRange.all",
+                                "All"
+                              ),
+                              id: "all",
+                            },
+                            {
+                              label: t(
+                                "events.filter.eventDateRange.today",
+                                "Today"
+                              ),
+                              id: "today",
+                            },
+                            {
+                              label: t(
+                                "events.filter.eventDateRange.tomorrow",
+                                "Tomorrow"
+                              ),
+                              id: "tomorrow",
+                            },
+                            {
+                              label: t(
+                                "events.filter.eventDateRange.weekend",
+                                "Upcoming weekend"
+                              ),
+                              id: "weekend",
+                            },
+                            {
+                              label: t(
+                                "events.filter.eventDateRange.next7days",
+                                "Next 7 days"
+                              ),
+                              id: "7days",
+                            },
+                            {
+                              label: t(
+                                "events.filter.eventDateRange.chooseDate",
+                                "Select own date"
+                              ),
+                              id: "ownDate",
+                            },
+                          ]}
+                        />
+                        {getValues("eventDateRange") === "ownDate" && (
+                          <>
+                            <Flex
+                              w="100%"
+                              justifyContent="space-between"
+                              maxW="300px"
+                              mt="1em"
+                              mx="auto"
+                              alignItems="center"
+                              mb=""
+                            >
+                              <IconButton
+                                aria-label={t(
+                                  "event.calendar.previousMonth",
+                                  "Previous month"
+                                )}
+                                className="tabbedFocus"
+                                icon={<ChevronLeftIcon />}
+                                onClick={navigation.toPrev}
+                                variant="unstyled"
+                                color="cm.accentLight"
+                                fontSize="2xl"
+                                _hover={{
+                                  bg: "transparent",
+                                  color: "cm.accentDark",
+                                }}
+                                _active={{
+                                  color: "cm.accentDark",
+                                }}
+                              />
+                              <Box textStyle="navigation">
+                                {cursorDate.toLocaleDateString(i18n.language, {
+                                  month: "long",
+                                  year: "numeric",
                                 })}
-                              </Tr>
-                            </Thead>
-                            <Tbody>
-                              {body.value.map(({ key, value: days }) => {
-                                return (
-                                  <Tr key={key}>
-                                    {days.map(
-                                      ({ key, value, isCurrentDate }) => {
-                                        if (value < today)
+                              </Box>
+                              <IconButton
+                                variant="unstyled"
+                                aria-label={t(
+                                  "event.calendar.nextMonth",
+                                  "Next month"
+                                )}
+                                className="tabbedFocus"
+                                icon={<ChevronRightIcon />}
+                                onClick={navigation.toNext}
+                                color="cm.accentLight"
+                                fontSize="2xl"
+                                _hover={{
+                                  bg: "transparent",
+                                  color: "cm.accentDark",
+                                }}
+                                _active={{
+                                  color: "cm.accentDark",
+                                }}
+                              />
+                            </Flex>
+
+                            <Table
+                              w="100%"
+                              maxW="300px"
+                              variant="unstyled"
+                              mx="auto"
+                              mb="1em"
+                            >
+                              <Thead>
+                                <Tr>
+                                  {headers.weekDays.map(({ key, value }) => {
+                                    return (
+                                      <Th key={key} px="1" textAlign="center">
+                                        <chakra.span
+                                          textStyle="calendar"
+                                          fontWeight="bold"
+                                        >
+                                          {value.toLocaleDateString(
+                                            i18n.language,
+                                            { weekday: "short" }
+                                          )}
+                                        </chakra.span>
+                                      </Th>
+                                    );
+                                  })}
+                                </Tr>
+                              </Thead>
+                              <Tbody>
+                                {body.value.map(({ key, value: days }) => {
+                                  return (
+                                    <Tr key={key}>
+                                      {days.map(
+                                        ({ key, value, isCurrentDate }) => {
+                                          if (value < today)
+                                            return (
+                                              <Td
+                                                pt="0"
+                                                px="1"
+                                                pb="2"
+                                                key={key}
+                                                color="#999"
+                                                textStyle="calendar"
+                                                textAlign="center"
+                                              >
+                                                <Box
+                                                  w="30px"
+                                                  h="30px"
+                                                  border="1px solid"
+                                                  lineHeight="30px"
+                                                  borderColor="transparent"
+                                                  borderRadius="20"
+                                                  textStyle="calendar"
+                                                  textAlign="center"
+                                                  mx="auto"
+                                                >
+                                                  {value.toLocaleDateString(
+                                                    i18n.language,
+                                                    { day: "numeric" }
+                                                  )}
+                                                </Box>
+                                              </Td>
+                                            );
                                           return (
                                             <Td
+                                              key={key}
+                                              textStyle="calendar"
+                                              textAlign="center"
                                               pt="0"
                                               px="1"
                                               pb="2"
-                                              key={key}
-                                              color="#999"
-                                              textStyle="calendar"
-                                              textAlign="center"
                                             >
-                                              <Box
+                                              <Button
+                                                variant="unstyled"
                                                 w="30px"
                                                 h="30px"
-                                                border="1px solid"
-                                                lineHeight="30px"
-                                                borderColor="transparent"
-                                                borderRadius="20"
-                                                textStyle="calendar"
-                                                textAlign="center"
+                                                minW="30px"
                                                 mx="auto"
+                                                border="1px solid"
+                                                fontSize={{
+                                                  base: "13px",
+                                                  md: "17px",
+                                                }}
+                                                lineHeight="24px"
+                                                borderColor={
+                                                  value.valueOf() ===
+                                                  customDate?.valueOf()
+                                                    ? "cm.accentLight"
+                                                    : value.valueOf() ===
+                                                      today.valueOf()
+                                                    ? "cm.accentDark"
+                                                    : "transparent"
+                                                }
+                                                borderRadius="20"
+                                                fontWeight="normal"
+                                                transition="all 0.3s"
+                                                className="tabbedFocus"
+                                                _hover={{
+                                                  bg: "transparent",
+                                                  color: "cm.text",
+                                                  borderColor: "cm.accentLight",
+                                                }}
+                                                _active={{
+                                                  bg: "cm.accentLight",
+                                                  color: "white",
+                                                  borderColor: "cm.accenLight",
+                                                }}
+                                                onClick={() => {
+                                                  setValue(
+                                                    "customDate",
+                                                    new Date(
+                                                      value.setHours(0, 0, 0, 0)
+                                                    )
+                                                  );
+                                                  setCustomDate(
+                                                    new Date(
+                                                      value.setHours(0, 0, 0, 0)
+                                                    )
+                                                  );
+                                                }}
+                                                aria-label={t(
+                                                  "event.calendar.chooseDay",
+                                                  "Select day {{dayAndMonth}}",
+                                                  {
+                                                    dayAndMonth: `${value.toLocaleDateString(
+                                                      i18n.language,
+                                                      {
+                                                        day: "numeric",
+                                                        year: "numeric",
+                                                      }
+                                                    )}`,
+                                                  }
+                                                )}
                                               >
                                                 {value.toLocaleDateString(
                                                   i18n.language,
                                                   { day: "numeric" }
                                                 )}
-                                              </Box>
+                                              </Button>
                                             </Td>
                                           );
-                                        return (
-                                          <Td
-                                            key={key}
-                                            textStyle="calendar"
-                                            textAlign="center"
-                                            pt="0"
-                                            px="1"
-                                            pb="2"
-                                          >
-                                            <Button
-                                              variant="unstyled"
-                                              w="30px"
-                                              h="30px"
-                                              minW="30px"
-                                              mx="auto"
-                                              border="1px solid"
-                                              fontSize={{
-                                                base: "13px",
-                                                md: "17px",
-                                              }}
-                                              lineHeight="24px"
-                                              borderColor={
-                                                value.valueOf() ===
-                                                customDate?.valueOf()
-                                                  ? "cm.accentLight"
-                                                  : value.valueOf() ===
-                                                    today.valueOf()
-                                                  ? "cm.accentDark"
-                                                  : "transparent"
-                                              }
-                                              borderRadius="20"
-                                              fontWeight="normal"
-                                              transition="all 0.3s"
-                                              className="tabbedFocus"
-                                              _hover={{
-                                                bg: "transparent",
-                                                color: "cm.text",
-                                                borderColor: "cm.accentLight",
-                                              }}
-                                              _active={{
-                                                bg: "cm.accentLight",
-                                                color: "white",
-                                                borderColor: "cm.accenLight",
-                                              }}
-                                              onClick={() => {
-                                                setValue(
-                                                  "customDate",
-                                                  new Date(
-                                                    value.setHours(0, 0, 0, 0)
-                                                  )
-                                                );
-                                                setCustomDate(
-                                                  new Date(
-                                                    value.setHours(0, 0, 0, 0)
-                                                  )
-                                                );
-                                              }}
-                                              aria-label={t(
-                                                "event.calendar.chooseDay",
-                                                "Select day {{dayAndMonth}}",
-                                                {
-                                                  dayAndMonth: `${value.toLocaleDateString(
-                                                    i18n.language,
-                                                    {
-                                                      day: "numeric",
-                                                      year: "numeric",
-                                                    }
-                                                  )}`,
-                                                }
-                                              )}
-                                            >
-                                              {value.toLocaleDateString(
-                                                i18n.language,
-                                                { day: "numeric" }
-                                              )}
-                                            </Button>
-                                          </Td>
-                                        );
-                                      }
-                                    )}
-                                  </Tr>
-                                );
-                              })}
-                            </Tbody>
-                          </Table>
-                        </>
-                      )}
-                    </AccordionPanel>
-                  </AccordionItem>
-                  {activeTermsET?.length > 0 && (
-                    <AccordionItem>
-                      <h2>
-                        <AccordionButton className="tabbedFocus">
-                          <Box
-                            flex="1"
-                            textAlign="left"
-                            textStyle="larger"
-                            fontWeight="bold"
-                          >
-                            {t(
+                                        }
+                                      )}
+                                    </Tr>
+                                  );
+                                })}
+                              </Tbody>
+                            </Table>
+                          </>
+                        )}
+                      </AccordionPanel>
+                    </AccordionItem>
+                    {activeTermsET?.length > 0 && (
+                      <AccordionItem>
+                        <h2>
+                          <AccordionButton className="tabbedFocus">
+                            <Box
+                              flex="1"
+                              textAlign="left"
+                              textStyle="larger"
+                              fontWeight="bold"
+                            >
+                              {t(
+                                "events.filter.title.eventType",
+                                "Type of event"
+                              )}
+                            </Box>
+                            <AccordionIcon
+                              color="cm.accentLight"
+                              fontSize="2xl"
+                            />
+                          </AccordionButton>
+                        </h2>
+                        <AccordionPanel pb={4}>
+                          <FieldCheckboxGroup
+                            id="eventType"
+                            name="eventType"
+                            isRequired={false}
+                            label={t(
                               "events.filter.title.eventType",
                               "Type of event"
                             )}
-                          </Box>
-                          <AccordionIcon
-                            color="cm.accentLight"
-                            fontSize="2xl"
+                            type="checkbox"
+                            options={getMultilangSortedList(
+                              activeTermsET.map((term: any) => ({
+                                label: term.name,
+                                id: term.id,
+                              })),
+                              "label",
+                              getMultilangValue
+                            )}
                           />
-                        </AccordionButton>
-                      </h2>
-                      <AccordionPanel pb={4}>
-                        <FieldCheckboxGroup
-                          id="eventType"
-                          name="eventType"
-                          isRequired={false}
-                          label={t(
-                            "events.filter.title.eventType",
-                            "Type of event"
-                          )}
-                          type="checkbox"
-                          options={getMultilangSortedList(
-                            activeTermsET.map((term: any) => ({
-                              label: term.name,
-                              id: term.id,
-                            })),
-                            "label",
-                            getMultilangValue
-                          )}
-                        />
-                      </AccordionPanel>
-                    </AccordionItem>
-                  )}
-                </Accordion>
-              )}
-            </form>
-          </FormProvider>
-          <Box pt="1.5em">
-            <Flex
-              textStyle="larger"
-              borderColor="cm.accentDark"
-              borderTop="1px solid"
-              borderBottom="1px solid"
-              justifyContent={loading ? "center" : "flex-start"}
-              h="50px"
-              alignItems="center"
-              ref={resultRef}
-            >
-              {(!data || loading) && <LoadingIcon my="0" />}
-              {!loading && !error && <Box>{resultText}</Box>}
-              {error && <ErrorMessage type="dataLoad" />}
-            </Flex>
-          </Box>
-          <Box w="100%">
-            {data?.events?.events?.length > 0 && (
-              <Box size="md" mt="3" w="100%">
-                {data?.events?.events.map((event: any) => (
-                  <ListedEvent key={`event-${event.id}`} event={event} />
-                ))}
-                {/* <VirtualScroller
+                        </AccordionPanel>
+                      </AccordionItem>
+                    )}
+                  </Accordion>
+                )}
+              </form>
+            </FormProvider>
+            <Box pt="1.5em">
+              <Flex
+                textStyle="larger"
+                borderColor="cm.accentDark"
+                borderTop="1px solid"
+                borderBottom="1px solid"
+                justifyContent={loading ? "center" : "flex-start"}
+                h="50px"
+                alignItems="center"
+                ref={resultRef}
+              >
+                {(!data || loading) && <LoadingIcon my="0" />}
+                {!loading && !error && <Box>{resultText}</Box>}
+                {error && <ErrorMessage type="dataLoad" />}
+              </Flex>
+            </Box>
+            <Box w="100%">
+              {data?.events?.events?.length > 0 && (
+                <Box size="md" mt="3" w="100%">
+                  {data?.events?.events.map((event: any) => (
+                    <ListedEvent key={`event-${event.id}`} event={event} />
+                  ))}
+                  {/* <VirtualScroller
                 scrollableContainer={scrollContainerRef.current}
                 items={data?.events?.events}
                 itemComponent={Event}
               /> */}
-              </Box>
-            )}
-
-            {data?.events?.totalCount > data?.events?.events?.length &&
-              !loading &&
-              !error && (
-                <Box textAlign="center" mt="2em">
-                  <Button
-                    onClick={() => {
-                      const nextPageIndex = Math.floor(
-                        data?.events?.events?.length /
-                          initialQueryState?.pageSize
-                      );
-                      fetchMore({
-                        variables: {
-                          pageIndex: nextPageIndex,
-                        },
-                      });
-                      setCurrentPageIndex(nextPageIndex);
-                    }}
-                    variant="ghost"
-                  >
-                    {t("events.loadMore", "Load more events")}
-                  </Button>
                 </Box>
               )}
 
-            {loading && currentPageIndex > 0 && <LoadingIcon />}
+              {data?.events?.totalCount > data?.events?.events?.length &&
+                !loading &&
+                !error && (
+                  <Box textAlign="center" mt="2em">
+                    <Button
+                      onClick={() => {
+                        const nextPageIndex = Math.floor(
+                          data?.events?.events?.length /
+                            initialQueryState?.pageSize
+                        );
+                        fetchMore({
+                          variables: {
+                            pageIndex: nextPageIndex,
+                          },
+                        });
+                        setCurrentPageIndex(nextPageIndex);
+                      }}
+                      variant="ghost"
+                    >
+                      {t("events.loadMore", "Load more events")}
+                    </Button>
+                  </Box>
+                )}
+
+              {loading && currentPageIndex > 0 && <LoadingIcon />}
+            </Box>
           </Box>
         </Box>
-        <Footer />
+        <Box>
+          <Footer />
+        </Box>
       </Grid>
     </MainContent>
   );

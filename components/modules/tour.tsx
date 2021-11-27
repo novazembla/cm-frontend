@@ -830,7 +830,7 @@ export const ModuleTourGetStaticPaths: GetStaticPaths = () => ({
   fallback: "blocking",
 });
 
-// This gets called on every request
+
 export const ModuleTourGetStaticProps: GetStaticProps = async (context) => {
   const client = getApolloClient();
 

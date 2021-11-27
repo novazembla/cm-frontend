@@ -15,6 +15,8 @@ import { getSeoAppTitle } from "~/utils";
 import NextHeadSeo from "next-head-seo";
 import { useMapContext } from "~/provider";
 import { PageTitle } from "~/components/ui/PageTitle";
+import { settingsQuery } from "~/graphql";
+import { getApolloClient } from "~/services";
 
 export function Page404() {
   const { t } = useAppTranslations();
@@ -25,7 +27,7 @@ export function Page404() {
   }, [cultureMap]);
 
   return (
-    <MainContent isDrawer layerStyle="pageBg">
+    <MainContent isDrawer>
       <NextHeadSeo
         title={`${t("error.pagenotfound", "Page not found")} - ${getSeoAppTitle(
           t
@@ -40,27 +42,43 @@ export function Page404() {
           xl: "calc(100vh - 80px)",
         }}
       >
-        <Box layerStyle="page">
-          <PageTitle 
-            h1
-            type="high"
-            title={t("error.pagenotfound", "Page not found")}
-          />
-          <Text h="400px">
-            {t("error.pleaseReloadInAFewMoments", "Please try again")}
-          </Text>
+        <Box layerStyle="pageBg">
+          <Box layerStyle="page">
+            <PageTitle
+              h1
+              type="high"
+              title={t("error.pagenotfound", "Page not found")}
+            />
+            <Text h="400px">
+              {t("error.pleaseReloadInAFewMoments", "Please try again")}
+            </Text>
+          </Box>
         </Box>
-        <Footer />
+        <Box>
+          <Footer />
+        </Box>
       </Grid>
     </MainContent>
   );
 }
 
 export const getStaticProps: GetStaticProps = async (context) => {
+  const {
+    // params,
+    locale,
+  } = context;
+  const client = getApolloClient();
+
+  const { data } = await client.query({
+    query: settingsQuery,
+  });
+
   return {
     props: {
-      ...(await serverSideTranslations(context.locale ?? "en")),
+      ...(await serverSideTranslations(locale ?? "en")),
+      frontendSettings: data?.frontendSettings,
     },
+    revalidate: 300,
   };
 };
 

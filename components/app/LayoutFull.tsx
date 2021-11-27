@@ -30,9 +30,7 @@ export const LayoutFull = ({ children }: AppProps) => {
   const config = useConfigContext();
   const { t } = useAppTranslations();
   const { isMobile, isTablet } = useIsBreakPoint();
-  const [isLoadingSettings, setIsLoadingSettings] = useState(true);
   const [fontsLoaded, setFontsLoaded] = useState(false);
-
   const onResize = debounce(() => {
     document.documentElement.style.setProperty(
       "--vh",
@@ -94,10 +92,6 @@ export const LayoutFull = ({ children }: AppProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    if (settings?.terms) setIsLoadingSettings(false);
-  }, [settings]);
-
   let mapJsonBaseUrl;
 
   if (config.mapStyleJsonUrl && config.mapStyleJsonUrl.trim()) {
@@ -155,17 +149,17 @@ export const LayoutFull = ({ children }: AppProps) => {
             <chakra.a href="#content" className="skipToContent">
               {t("header.skipToContent", "Skip to content")}
             </chakra.a>
-            <LoadingBar color="cm.accentLight" loading={isLoadingSettings} />
-            {!isLoadingSettings && fontsLoaded && (isMobile || isTablet) && (
+            <LoadingBar color="cm.accentLight" />
+            {(isMobile || isTablet) && (
               <MobileNav />
             )}
-            {!isLoadingSettings && fontsLoaded && <Header />}
+            {fontsLoaded && <Header />}
 
             <Map layout="full" />
 
-            {!isLoadingSettings && fontsLoaded && children}
+            {fontsLoaded && children}
 
-            {!isLoadingSettings && fontsLoaded && <QuickSearch />}
+            {fontsLoaded && <QuickSearch />}
           </MenuButtonContextProvider>
         </QuickSearchContextProvider>
       </MainContentContextProvider>

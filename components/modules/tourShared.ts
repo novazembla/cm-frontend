@@ -1,8 +1,10 @@
 import { getLocationColors } from "~/utils";
 import { gql } from "@apollo/client";
+import { settingsQueryPartial } from "~/graphql";
 
 export const tourQuery = gql`
   query ($slug: String!) {
+    ${settingsQueryPartial}
     tour(slug: $slug) {
       id
       title
