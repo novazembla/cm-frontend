@@ -1,4 +1,3 @@
-
 import { useState, useRef, useCallback, useEffect } from "react";
 import { Box, IconButton, useBreakpointValue, chakra } from "@chakra-ui/react";
 import { useIsBreakPoint } from "~/hooks/useIsBreakPoint";
@@ -36,9 +35,11 @@ export const MainContent = ({
   children: React.ReactNode;
 }) => {
   const mainContentRef = useRef<HTMLDivElement>(null);
+  const motionBoxRef = useRef<HTMLDivElement>(null);
   const isAnimationRunningRef = useRef<boolean>(false);
   const panPositionXRef = useRef<number>(0);
   const panActive = useRef<boolean>(false);
+  const currentWindowWidth = useRef<number>(0);
 
   const { isMenuOpen } = useMenuButtonContext();
   const { isQuickSearchOpen } = useQuickSearchContext();
@@ -82,7 +83,7 @@ export const MainContent = ({
   });
 
   const onResize = useCallback(() => {
-    let dL = window.innerWidth - 20 - 40;
+    let dL = window.innerWidth - 60;
 
     const isMobile = window.matchMedia(
       "(min-width: 21em) and (max-width: 44.999em)"
@@ -123,7 +124,20 @@ export const MainContent = ({
     setIsDrawerOpen(true);
     setMainContentStatus(true);
     isAnimationRunningRef.current = false;
-  }, [controls, setMainContentStatus]);
+
+    if (motionBoxRef.current) {
+      if (isVerticalContent) {
+        if (currentWindowWidth.current !== window.innerWidth) {
+          motionBoxRef.current.style.top = `${
+            window.innerHeight - Math.max(250, window.innerHeight * 0.25)
+          }px`;
+          currentWindowWidth.current = window.innerWidth;
+        }
+      } else {
+        motionBoxRef.current.style.top = "0px";
+      }
+    }
+  }, [controls, setMainContentStatus, isVerticalContent]);
 
   const onResizeDebounced = debounce(onResize, 350);
 
@@ -182,7 +196,7 @@ export const MainContent = ({
     setIsDrawerOpen(true);
     setMainContentStatus(true);
     isAnimationRunningRef.current = true;
-    
+
     controls.stop();
     controls.start({
       translateX: 0,
@@ -212,7 +226,7 @@ export const MainContent = ({
     if (typeof window === "undefined") return;
     setMainContentFunctions(open, close);
   }, [router.asPath, setMainContentFunctions, open, close]);
-  
+
   let toggleLabel = isDrawerOpen
     ? t("mainContent.slideToLeft", "Hide content")
     : t("mainContent.slideToRight", "Show content");
@@ -285,7 +299,7 @@ export const MainContent = ({
               : {
                   opacity: buttonVisible ? 1 : 0,
                 })}
-            aria-hidden={isMenuOpen || isQuickSearchOpen ? "true": undefined}
+            aria-hidden={isMenuOpen || isQuickSearchOpen ? "true" : undefined}
           >
             <Box bg="#fff" w="35px" h="55px" transform="translateX(-5px)">
               <IconButton
@@ -315,7 +329,9 @@ export const MainContent = ({
                 onClick={toggle}
                 transform={isDrawerOpen ? "rotate(180deg)" : "rotate(0deg)"}
                 tabIndex={isMenuOpen || isQuickSearchOpen ? -1 : undefined}
-                aria-hidden={isMenuOpen || isQuickSearchOpen ? "true" : undefined}
+                aria-hidden={
+                  isMenuOpen || isQuickSearchOpen ? "true" : undefined
+                }
               />
             </Box>
           </Box>
@@ -342,11 +358,16 @@ export const MainContent = ({
         transformTemplate={({ translateX }: { translateX: any }) => {
           return `translateX(${translateX}) translateZ(0)`;
         }}
+        ref={motionBoxRef}
         {...(isDrawer
           ? {
               onTap: !isDrawerOpen
                 ? (event: any) => {
-                    if (isAnimationRunningRef.current || panActive.current || !isMainContentActive)
+                    if (
+                      isAnimationRunningRef.current ||
+                      panActive.current ||
+                      !isMainContentActive
+                    )
                       return;
                     event.preventDefault();
                     open();

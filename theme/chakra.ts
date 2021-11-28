@@ -396,7 +396,8 @@ const themeConfig = {
     logo: {
       fontWeight: "bold",
       fontSize: chakraToBreakpointArray({
-        base: "22px",
+        base: "20px",
+        sm: "22px",
         md: "26px",
         xl: "26px",
       }),
