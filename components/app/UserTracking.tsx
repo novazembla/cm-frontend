@@ -144,7 +144,8 @@ export const UserTracking = () => {
             <Flex
               p={{
                 base: "20px",
-                md: "35px",
+                md: "30px",
+                "2xl": "45px"
               }}
               flexDirection={{
                 base: "column",
@@ -168,7 +169,8 @@ export const UserTracking = () => {
                 }}
                 pr={{
                   base: "0",
-                  md: "35px",
+                  md: "30px",
+                  "2xl": "45px"
                 }}
               >
                 <chakra.h2 id="cpopup_label" textStyle="larger">

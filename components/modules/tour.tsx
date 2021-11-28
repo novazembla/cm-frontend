@@ -502,7 +502,11 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
                             <Text
                               textStyle="finePrint"
                               mt="0.5"
-                              px={isMobile ? "20px" : "35px"}
+                              px={{
+                                base: "20px",
+                                md: "30px",
+                                "2xl": "35px",
+                              }}
                             >
                               <MultiLangValue json={tour?.heroImage?.credits} />
                             </Text>
@@ -511,8 +515,16 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
                       }
 
                       <Box
-                        px={isMobile ? "20px" : "35px"}
-                        pt={isMobile ? "12px" : "35px"}
+                        px={{
+                          base: "20px",
+                          md: "30px",
+                          "2xl": "35px",
+                        }}
+                        pt={{
+                          base: "12px",
+                          md: "30px",
+                          "2xl": "35px",
+                        }}
                         pb={isMobile ? "12px" : "20px"}
                         w={isMobile ? "100%" : "66.66%"}
                       >
@@ -586,9 +598,21 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
                       </Box>
 
                       <Box
-                        pt={isMobile ? "0" : "35px"}
-                        px={isMobile ? "20px" : "35px"}
-                        pb={isMobile ? "20px" : "35px"}
+                        pt={{
+                          base: "0px",
+                          md: "30px",
+                          "2xl": "35px",
+                        }}
+                        px={{
+                          base: "20px",
+                          md: "30px",
+                          "2xl": "35px",
+                        }}
+                        pb={{
+                          base: "20px",
+                          md: "30px",
+                          "2xl": "35px",
+                        }}
                       >
                         <Flex
                           justifyContent="space-between"
@@ -661,8 +685,16 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
                           </AspectRatio>
                         </Box>
                         <Box
-                          px={isMobile ? "20px" : "35px"}
-                          pt={isMobile ? "12px" : "35px"}
+                          px={{
+                            base: "20px",
+                            md: "30px",
+                            "2xl": "35px",
+                          }}
+                          pt={{
+                            base: "12px",
+                            md: "30px",
+                            "2xl": "35px",
+                          }}
                           pb={isMobile ? "0px" : "20px"}
                           w={isMobile ? "100%" : "66.66%"}
                         >
@@ -688,8 +720,16 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
                       </Flex>
 
                       <Box
-                        px={isMobile ? "20px" : "35px"}
-                        pb={isMobile ? "20px" : "35px"}
+                        px={{
+                          base: "20px",
+                          md: "30px",
+                          "2xl": "35px",
+                        }}
+                        pb={{
+                          base: "20px",
+                          md: "30px",
+                          "2xl": "35px",
+                        }}
                       >
                         {tour?.tourStops?.length > 0 && (
                           <Flex alignItems="center" mb="0.25em">
@@ -829,7 +869,6 @@ export const ModuleTourGetStaticPaths: GetStaticPaths = () => ({
   paths: [],
   fallback: "blocking",
 });
-
 
 export const ModuleTourGetStaticProps: GetStaticProps = async (context) => {
   const client = getApolloClient();

@@ -160,7 +160,11 @@ export const ModuleComponentTourIntroduction = ({ tour }: { tour: any }) => {
                   <Text
                     textStyle="finePrint"
                     mt="0.5"
-                    px={isMobile ? "20px" : "35px"}
+                    px={{
+                      base: "20px",
+                      md: "30px",
+                      "2xl": "35px",
+                    }}
                   >
                     <MultiLangValue json={tour?.heroImage?.credits} />
                   </Text>
@@ -178,8 +182,16 @@ export const ModuleComponentTourIntroduction = ({ tour }: { tour: any }) => {
             )}
 
             <Box
-              px={isMobile ? "20px" : "35px"}
-              pt={isMobile ? "20px" : "35px"}
+              px={{
+                base: "20px",
+                md: "30px",
+                "2xl": "35px",
+              }}
+              pt={{
+                base: "20px",
+                md: "30px",
+                "2xl": "35px",
+              }}
               pb={isMobile ? "20px" : "1em"}
               w="100%"
             >
@@ -253,7 +265,8 @@ export const ModuleComponentTourIntroduction = ({ tour }: { tour: any }) => {
             <Box
               px={{
                 base: "20px",
-                md: "35px",
+                md: "30px",
+                "2xl": "35px"
               }}
               pb="1em"
             >

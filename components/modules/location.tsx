@@ -291,8 +291,10 @@ export const ModuleComponentLocation = ({
         }}
       >
         <Box px="20px" pt="0.5em">
-          <PageTitle title={t("location.detail.title", "Location")} type="short" />
-          
+          <PageTitle
+            title={t("location.detail.title", "Location")}
+            type="short"
+          />
 
           <Box bg="#fff" borderRadius="lg" overflow="hidden">
             {location?.heroImage?.id && (
@@ -319,7 +321,11 @@ export const ModuleComponentLocation = ({
                   <Text
                     textStyle="finePrint"
                     mt="0.5"
-                    px={isMobile ? "20px" : "35px"}
+                    px={{
+                      base: "20px",
+                      md: "30px",
+                      "2xl": "35px",
+                    }}
                   >
                     <MultiLangValue json={location?.heroImage.credits} />
                   </Text>
@@ -338,8 +344,16 @@ export const ModuleComponentLocation = ({
             )}
 
             <Box
-              px={isMobile ? "20px" : "35px"}
-              pt={isMobile ? "20px" : "35px"}
+              px={{
+                base: "20px",
+                md: "30px",
+                "2xl": "35px",
+              }}
+              pt={{
+                base: "20px",
+                md: "30px",
+                "2xl": "35px",
+              }}
               pb={isMobile ? "20px" : "1em"}
               w={isMobile ? "100%" : "66.66%"}
             >
@@ -374,7 +388,8 @@ export const ModuleComponentLocation = ({
               <Box
                 px={{
                   base: "20px",
-                  md: "35px",
+                  md: "30px",
+                  "2xl": "35px"
                 }}
                 pb="1em"
               >
@@ -394,7 +409,8 @@ export const ModuleComponentLocation = ({
               <Box
                 px={{
                   base: "20px",
-                  md: "35px",
+                  md: "30px",
+                  "2xl": "35px"
                 }}
                 pb="2em"
               >
@@ -410,7 +426,8 @@ export const ModuleComponentLocation = ({
                 className="item"
                 px={{
                   base: "20px",
-                  md: "35px",
+                  md: "30px",
+                  "2xl": "35px"
                 }}
                 pb="1em"
               >
@@ -438,7 +455,8 @@ export const ModuleComponentLocation = ({
                 className="item"
                 px={{
                   base: "20px",
-                  md: "35px",
+                  md: "30px",
+                  "2xl": "35px"
                 }}
                 pb="1em"
               >
@@ -466,11 +484,13 @@ export const ModuleComponentLocation = ({
               spacingY="1em"
               px={{
                 base: "20px",
-                md: "35px",
+                md: "30px",
+                "2xl": "35px"
               }}
               pb={{
                 base: "20px",
-                md: "35px",
+                md: "30px",
+                "2xl": "35px"
               }}
             >
               {taxonomies?.["typeOfInstitution"]?.length > 0 && (
@@ -598,7 +618,6 @@ export const ModuleLocationGetStaticPaths: GetStaticPaths = () => ({
   paths: [],
   fallback: "blocking",
 });
-
 
 export const ModuleLocationGetStaticProps: GetStaticProps = async (context) => {
   const client = getApolloClient();

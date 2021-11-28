@@ -9,10 +9,10 @@ import {
   LinkOverlay,
 } from "@chakra-ui/react";
 
-import {MultiLangValue} from "~/components/ui/MultiLangValue";
-import {ApiImage} from "~/components/ui/ApiImage";
-import {TrimmedTextWithBottomEdge} from "~/components/ui/TrimmedTextWithBottomEdge";
-import {SVG} from "~/components/ui/SVG";
+import { MultiLangValue } from "~/components/ui/MultiLangValue";
+import { ApiImage } from "~/components/ui/ApiImage";
+import { TrimmedTextWithBottomEdge } from "~/components/ui/TrimmedTextWithBottomEdge";
+import { SVG } from "~/components/ui/SVG";
 
 import { htmlToTrimmedString, getLocationColors } from "~/utils";
 import { useIsBreakPoint } from "~/hooks/useIsBreakPoint";
@@ -130,8 +130,16 @@ export const CardTourStop = ({
           </Box>
         </Box>
         <Box
-          px={isMobile ? "20px" : "35px"}
-          pt={isMobile ? "10px" : "35px"}
+          px={{
+            base: "20px",
+            md: "30px",
+            "2xl": "35px",
+          }}
+          pt={{
+            base: "10px",
+            md: "30px",
+            "2xl": "35px"
+          }}
           pb={isMobile ? "0px" : "20px"}
           w={isMobile ? "100%" : "66.66%"}
         >
@@ -174,7 +182,18 @@ export const CardTourStop = ({
         </Box>
       </Flex>
 
-      <Box px={isMobile ? "20px" : "35px"} pb={isMobile ? "20px" : "35px"}>
+      <Box
+        px={{
+          base: "20px",
+          md: "30px",
+          "2xl": "35px",
+        }}
+        pb={{
+          base: "20px",
+          md: "30px",
+          "2xl": "35px",
+        }}
+      >
         <Flex justifyContent="space-between" position="relative">
           <Box
             w={isMobile ? "100%" : "66.66%"}

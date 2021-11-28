@@ -16,11 +16,13 @@ export const Images = ({ images }: { images: any }) => {
       spacingY="1em"
       px={{
         base: "20px",
-        md: "35px",
+        md: "30px",
+        "2xl": "35px"
       }}
       pb={{
         base: "20px",
-        md: "35px",
+        md: "30px",
+        "2xl": "35px"
       }}
     >
       {images.map((image: any, index: number) => {

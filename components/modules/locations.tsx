@@ -725,7 +725,8 @@ export const ModuleComponentLocations = () => {
             overflow="hidden"
             p={{
               base: "20px",
-              md: "35px",
+              md: "30px",
+              "2xl": "35px"
             }}
           >
             <FormProvider {...formMethods}>
