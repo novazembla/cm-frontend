@@ -24,7 +24,7 @@ export const QuickSearchItem = ({
   let path = "";
   switch (module) {
     case "location":
-      path = i18n.language === "de" ? "kartenpunkt" : "location";
+      path = i18n.language === "de" ? "ort" : "location";
       break;
 
     case "event":

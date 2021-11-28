@@ -40,6 +40,7 @@ import { GetStaticPaths, GetStaticProps } from "next";
 import { MainContent } from "~/components/app/MainContent";
 import { useRouter } from "next/router";
 import { settingsQueryPartial } from "~/graphql";
+import { ShareIcons } from "../ui/ShareIcons";
 
 const locationQuery = gql`
   query ($slug: String!) {
@@ -389,7 +390,7 @@ export const ModuleComponentLocation = ({
                 px={{
                   base: "20px",
                   md: "30px",
-                  "2xl": "35px"
+                  "2xl": "35px",
                 }}
                 pb="1em"
               >
@@ -410,7 +411,7 @@ export const ModuleComponentLocation = ({
                 px={{
                   base: "20px",
                   md: "30px",
-                  "2xl": "35px"
+                  "2xl": "35px",
                 }}
                 pb="2em"
               >
@@ -427,7 +428,7 @@ export const ModuleComponentLocation = ({
                 px={{
                   base: "20px",
                   md: "30px",
-                  "2xl": "35px"
+                  "2xl": "35px",
                 }}
                 pb="1em"
               >
@@ -456,7 +457,7 @@ export const ModuleComponentLocation = ({
                 px={{
                   base: "20px",
                   md: "30px",
-                  "2xl": "35px"
+                  "2xl": "35px",
                 }}
                 pb="1em"
               >
@@ -485,12 +486,12 @@ export const ModuleComponentLocation = ({
               px={{
                 base: "20px",
                 md: "30px",
-                "2xl": "35px"
+                "2xl": "35px",
               }}
               pb={{
                 base: "20px",
                 md: "30px",
-                "2xl": "35px"
+                "2xl": "35px",
               }}
             >
               {taxonomies?.["typeOfInstitution"]?.length > 0 && (
@@ -583,6 +584,20 @@ export const ModuleComponentLocation = ({
                 <Images images={location?.images} />
               </Box>
             )}
+            <Box
+              p={{
+                base: "20px",
+                md: "30px",
+                "2xl": "35px",
+              }}
+            >
+              <ShareIcons
+                title={getMultilangValue(location.title)}
+                url={`${config.baseUrl}${
+                  i18n.language === "en" ? "/en/location" : "/ort"
+                }/${getMultilangValue(location.slug)}/`}
+              />
+            </Box>
           </Box>
 
           {location.events && location.events.length > 0 && (

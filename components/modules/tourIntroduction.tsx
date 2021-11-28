@@ -28,6 +28,7 @@ import { getSeoAppTitle, getSeoImage } from "~/utils";
 import NextHeadSeo from "next-head-seo";
 import { createTourStops } from "./tourShared";
 import { PageTitle } from "~/components/ui/PageTitle";
+import { ShareIcons } from "../ui/ShareIcons";
 
 export const ModuleComponentTourIntroduction = ({ tour }: { tour: any }) => {
   const cultureMap = useMapContext();
@@ -266,7 +267,7 @@ export const ModuleComponentTourIntroduction = ({ tour }: { tour: any }) => {
               px={{
                 base: "20px",
                 md: "30px",
-                "2xl": "35px"
+                "2xl": "35px",
               }}
               pb="1em"
             >
@@ -277,12 +278,32 @@ export const ModuleComponentTourIntroduction = ({ tour }: { tour: any }) => {
               )}
 
               <MultiLangHtml json={tour.description} />
+            </Box>
+            <Box
+              p={{
+                base: "20px",
+                md: "30px",
+                "2xl": "35px",
+              }}
+            >
+              <Button onClick={onNavigationButtonClick} variant="ghost">
+                {t("tour.button.viewAllTourStops", "View all tour stops")}
+              </Button>
+            </Box>
 
-              <Box textAlign="right" mt="2em">
-                <Button onClick={onNavigationButtonClick} variant="ghost">
-                  {t("tour.button.viewAllTourStops", "View all tour stops")}
-                </Button>
-              </Box>
+            <Box
+              p={{
+                base: "20px",
+                md: "30px",
+                "2xl": "35px",
+              }}
+            >
+              <ShareIcons
+                title={getMultilangValue(tour.title)}
+                url={`${config.baseUrl}${
+                  i18n.language === "en" ? "/en/tour" : "/tour"
+                }/${getMultilangValue(tour.slug)}/0`}
+              />
             </Box>
           </Box>
         </Box>

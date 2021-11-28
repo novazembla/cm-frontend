@@ -28,7 +28,7 @@ export class MapClusterDetail {
           const slug = `/${
             this.cultureMap.tHelper.i18n?.language === "en"
               ? "location"
-              : "kartenpunkt"
+              : "ort"
           }/${this.cultureMap.tHelper.getMultilangValue(
             spiderLeg?.feature?.slug
           )}`;

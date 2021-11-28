@@ -409,7 +409,7 @@ export const ModuleComponentSuggest = () => {
         canonical={`${config.baseUrl}${
           i18n.language === "en"
             ? "/en/suggest-a-location"
-            : "/kartenpunktvorschlag"
+            : "/ort-vorschlagen"
         }`}
         title={`${t("suggest.title", "Suggest a location")} - ${getSeoAppTitle(
           t

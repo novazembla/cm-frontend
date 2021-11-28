@@ -59,7 +59,7 @@ export const CardLocation = ({
     meta = t("card.meta.location", "Location");
   }
 
-  let type = "kartenpunkt";
+  let type = "ort";
   if (i18n.language === "en") type = "location";
 
   const description = htmlToTrimmedString(

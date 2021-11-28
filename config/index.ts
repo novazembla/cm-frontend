@@ -34,7 +34,7 @@ export const appConfigMainNav = [
   },
   {
     path: {
-      de: "/kartenpunktvorschlag",
+      de: "/ort-vorschlagen",
       en: "/suggest-a-location",
     },
     title: {
@@ -92,6 +92,7 @@ export const appConfig: AppConfig = {
   colorLight: "#E42B20",
   colorDark: "#660D36",
   contactEmail: "info@culturemap.test",
+  twitterHandle: "balichtenberg",
   apiUrl: `${process.env.NEXT_PUBLIC_API_URL ?? ""}`,
   baseUrl: `${process.env.NEXT_PUBLIC_URL ?? ""}`,
   apiGraphQLUrl: `${process.env.NEXT_PUBLIC_API_URL}/graphql`,

@@ -74,7 +74,7 @@ export class MapHighlights {
           const slug = `/${
             this.cultureMap.tHelper.i18n?.language === "en"
               ? "location"
-              : "kartenpunkt"
+              : "ort"
           }/${this.cultureMap.tHelper.getMultilangValue(
             JSON.parse(feature?.properties?.slug)
           )}`;
@@ -146,7 +146,7 @@ export class MapHighlights {
               const slug = `/${
                 this.cultureMap.tHelper.i18n?.language === "en"
                   ? "location"
-                  : "kartenpunkt"
+                  : "ort"
               }/${this.cultureMap.tHelper.getMultilangValue(
                 JSON.parse(e?.features?.[0]?.properties?.slug)
               )}`;

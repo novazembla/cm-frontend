@@ -246,6 +246,19 @@ body {
   }
 }
 
+.svgHoverRI {
+  filter: invert(18%) sepia(82%) saturate(4434%) hue-rotate(355deg)
+    brightness(96%) contrast(85%);
+  transition: filter 0.3s;
+  &.active {
+    filter: none !important;
+  }
+  &:hover {
+    filter: invert(13%) sepia(17%) saturate(7488%) hue-rotate(306deg)
+      brightness(99%) contrast(106%);
+  }
+}
+
 @keyframes loadingAnimationCross {
   0% {
     width: 0%;

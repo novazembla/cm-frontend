@@ -38,6 +38,7 @@ import {
 import NextHeadSeo from "next-head-seo";
 import { PageTitle } from "~/components/ui/PageTitle";
 import { settingsQueryPartial } from "~/graphql";
+import { ShareIcons } from "../ui/ShareIcons";
 
 const eventQuery = gql`
   query ($slug: String!) {
@@ -472,6 +473,20 @@ export const ModuleComponentEvent = ({
                   )}
                 </Box>
               )}
+              <Box
+                pt={{
+                  base: "20px",
+                  md: "30px",
+                  "2xl": "35px",
+                }}
+              >
+                <ShareIcons
+                  title={getMultilangValue(event.title)}
+                  url={`${config.baseUrl}${
+                    i18n.language === "en" ? "/en/event" : "/veranstaltung"
+                  }/${getMultilangValue(event.slug)}/`}
+                />
+              </Box>
             </Box>
           </Box>
         </Box>

@@ -381,7 +381,7 @@ export const MobileNav = () => {
               border="none"
               onClick={() => {
                 if (i18n.language === "de") {
-                  router.push(`/kartenpunktvorschlag`);
+                  router.push(`/ort-vorschlagen`);
                 } else {
                   router.push(`/suggest-a-location`);
                 }

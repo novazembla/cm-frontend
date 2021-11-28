@@ -36,6 +36,7 @@ import { tourQuery, createTourStops } from "./tourShared";
 
 import NextHeadSeo from "next-head-seo";
 import { PageTitle } from "~/components/ui/PageTitle";
+import { ShareIcons } from "../ui/ShareIcons";
 
 export const ModuleComponentTourStop = ({
   tour,
@@ -196,10 +197,10 @@ export const ModuleComponentTourStop = ({
                       textStyle="finePrint"
                       mt="0.5"
                       px={{
-                base: "20px",
-                md: "30px",
-                "2xl": "35px"
-              }}
+                        base: "20px",
+                        md: "30px",
+                        "2xl": "35px",
+                      }}
                     >
                       <MultiLangValue json={tourStop?.heroImage?.credits} />
                     </Text>
@@ -218,15 +219,15 @@ export const ModuleComponentTourStop = ({
 
               <Box
                 px={{
-                base: "20px",
-                md: "30px",
-                "2xl": "35px"
-              }}
+                  base: "20px",
+                  md: "30px",
+                  "2xl": "35px",
+                }}
                 pt={{
-                base: "20px",
-                md: "30px",
-                "2xl": "35px"
-              }}
+                  base: "20px",
+                  md: "30px",
+                  "2xl": "35px",
+                }}
                 pb={isMobile ? "20px" : "1em"}
                 w="100%"
               >
@@ -300,7 +301,7 @@ export const ModuleComponentTourStop = ({
                 px={{
                   base: "20px",
                   md: "30px",
-                  "2xl": "35px"
+                  "2xl": "35px",
                 }}
                 pb="1em"
               >
@@ -320,16 +321,30 @@ export const ModuleComponentTourStop = ({
               )}
 
               <Box
-                textAlign="right"
                 p={{
                   base: "20px",
                   md: "30px",
-                  "2xl": "35px"
+                  "2xl": "35px",
                 }}
               >
                 <Button onClick={onNavigationButtonClick} variant="ghost">
                   {t("tour.button.viewAllTourStops", "View all tour stops")}
                 </Button>
+              </Box>
+
+              <Box
+                p={{
+                  base: "20px",
+                  md: "30px",
+                  "2xl": "35px",
+                }}
+              >
+                <ShareIcons
+                  title={getMultilangValue(tour.title)}
+                  url={`${config.baseUrl}${
+                    i18n.language === "en" ? "/en/tour" : "/tour"
+                  }/${getMultilangValue(tour.slug)}/${tourStop?.number}`}
+                />
               </Box>
             </Box>
           </Box>

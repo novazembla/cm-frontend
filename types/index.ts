@@ -12,6 +12,7 @@ export interface AppConfig {
   bounds: [[number, number], [number, number]],
   zoom: number;
   contactEmail: string;
+  twitterHandle: string;
   apiUrl: string;
   baseUrl: string;
   apiGraphQLUrl: string;
