@@ -374,6 +374,13 @@
     "comingSoon": "Please bear with us. We are working on the English translation."
   },
   "translationnotfound": "Trans. not found",
+  "share": {
+    "onFacebook": "Share on Facebook",
+    "onTwitter": "Share on Twitter",
+    "onWhatsapp": "Share with Whatsapp",
+    "onFbMessenger": "Share with facebook messenger",
+    "copyUrl": "Copy url to clipboard"
+  },
   "mission": {
     "statement": {
       "read": "read mission statement",

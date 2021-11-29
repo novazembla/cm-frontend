@@ -374,6 +374,13 @@
     "comingSoon": "Wir arbeiten an der deutschen Übersetzung."
   },
   "translationnotfound": "Übersetzung nicht gefunden",
+  "share": {
+    "onFacebook": "Auf Facebook teilen",
+    "onTwitter": "Auf Twitter teilen",
+    "onWhatsapp": "Mit Whatsapp versenden",
+    "onFbMessenger": "Mit Facebook messenger versenden",
+    "copyUrl": "In die Zwischenablage kopieren"
+  },
   "mission": {
     "statement": {
       "read": "Mehr lesen",
