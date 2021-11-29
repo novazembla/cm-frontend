@@ -57,7 +57,7 @@
       "toosmall": "Die ausgewählte Datei ist zu klein.",
       "invalidtype": "Dieses Dateiformat kann nicht verwendet werden."
     },
-    "pleasedroporclick": "Hier ein Bild mit der Maus fallen lassen, oder klicken Sie, um eine Bild auszuwählen.",
+    "pleasedroporclick": "Hier ein Bild hinziehen und fallen lassen oder klicken Sie um eine Bilddatei auszuwählen.",
     "uploading": "Hochladen",
     "cancelupload": "Upload abbrechen",
     "error": "Leider konnten wir Ihren Upload nicht abschließen, bitte versuchen Sie es später noch einmal."
@@ -127,7 +127,7 @@
   },
   "locations": {
     "title": "Kulturkarte",
-    "totalCount": "{{count}} Kartenpunkt gefunden",
+    "totalCount": "{{count}} Kartenpunkt(e) gefunden",
     "totalCount_plural": "{{count}} Kartenpunkte gefunden",
     "totalCountPlural": "{{count}} Kartenpunkte gefunden",
     "totalCountPlural_plural": "{{count}} Kartenpunkte gefunden",
@@ -140,7 +140,7 @@
         "settings": "Weitere Einstellungen"
       },
       "andRelationship": "Alle gewählten Begriffe müssen zugewiesen sein",
-      "clusterResult": "Naheliegende Kartenpunkte Grupieren"
+      "clusterResult": "Naheliegende Kartenpunkte gruppieren"
     },
     "loadMore": "Weitere Kartenpunkte laden",
     "totalCount_plural_plural": "{{count}} Kartenpunkte gefunden"
@@ -243,15 +243,15 @@
       },
       "address": {
         "title": "Adresse",
-        "description": "Bitte geben Sie die Adresse des vorgeschlagenen Kartenpunktes an. Wir nutzen diese um den Kartpunkt auf der Karte zu lokalisieren."
+        "description": "Bitte geben Sie die Adresse des vorgeschlagenen Kartenpunktes an. Wir nutzen diese um den Kartenpunkt auf der Karte zu lokalisieren."
       },
       "contact": {
-        "title": "Kontaktinformation",
-        "description": "Wie kann man die Organisation kontaktieren. Wir werden diese Information öffentlich zugänglich machen."
+        "title": "Kontaktinformationen",
+        "description": "Wir werden diese Information öffentlich zugänglich machen."
       },
       "image": {
         "title": "Bild",
-        "description": "Hätten Sie zufällig ein Bild und wären die Urheberrechte ... TODO:"
+        "description": "Haben Sie ein Bild das Sie hochladen möchten und liegen die Bildrechte bei Ihnen?"
       },
       "online": {
         "title": "Website(n)",
@@ -263,7 +263,7 @@
       },
       "suggestor": {
         "title": "Über Sie selbst",
-        "description": "Für den Fall, dass wir Nachfragen haben. Diese Angabgen werden nicht veröffentlicht."
+        "description": "Für den Fall, dass wir Nachfragen haben. Diese Angaben werden nicht veröffentlicht."
       }
     },
     "field": {
@@ -279,7 +279,7 @@
         "city": "Stadt",
         "phone": "Telefonnummer",
         "email": "Emailadresse",
-        "suggestionSubmittersImageRightsConfirmation": "I confirm that the uploaded image can be used freely on the website TODO:",
+        "suggestionSubmittersImageRightsConfirmation": "Bitte bestätigen Sie das die Bildrechte bei Ihnen liegen, danach können Sie das Foto hochladen.",
         "image": "Bild",
         "alt": "Kurze Bildbeschreibung",
         "credits": "Urheberrechtsinformation",
@@ -291,8 +291,8 @@
         "suggestionSubmittersName": "Ihr Name",
         "suggestionSubmittersEmail": "Ihre Emailadresse",
         "comments": "Weitere Anmerkungen",
-        "suggestionSubmittersTandCAcceptance": "I accept the terms and conditions TODO:",
-        "ownerOfLocation": "I am legally responsible for the location TODO: "
+        "suggestionSubmittersTandCAcceptance": "Ich bestätige die Richtigkeit der oben angegebenen Daten.",
+        "ownerOfLocation": "Ich bin der/die rechtlich Verantwortliche für den übermittelten Kartenpunkt."
       },
       "placeholder": {
         "title": "Bitte geben Sie den Namen der Organisation an",
