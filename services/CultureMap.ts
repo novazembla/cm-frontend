@@ -77,6 +77,10 @@ export class CultureMap {
     this.mapContainerRef = null;
     this.isEmbed = isEmbed;
 
+    this.ready = false;
+    this.styleLoaded = false;
+    this.loaded = false;
+    
     this.map = new maplibregl.Map({
       container: ref,
       style: this.config.mapStyleJsonUrl,
