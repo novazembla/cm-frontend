@@ -73,9 +73,13 @@ const themeConfig = {
           md: "30px",
           xl: "30px",
         }),
+
         "&:last-child": {
           mb: "0",
         },
+      },
+      "p + h2, p + h3, p + h4, p + h5, p + h6": {
+        mt: "1em",
       },
       "h1.highlight,h2.highlight,h3.highlight,.highlight": {
         fontSize: chakraToBreakpointArray({
