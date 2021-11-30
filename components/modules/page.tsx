@@ -94,11 +94,11 @@ export const ModuleComponentPage = ({ page }: { page: any }) => {
               )}
               {page.intro && (
                 <Box textStyle="larger" mb="3em" fontWeight="bold">
-                  <MultiLangHtml json={page.intro} />
+                  <MultiLangHtml json={page.intro} addMissingTranslationInfo/>
                 </Box>
               )}
 
-              <MultiLangHtml json={page.content} />
+              <MultiLangHtml json={page.content} addMissingTranslationInfo/>
             </Box>
           </Box>
         </Box>
