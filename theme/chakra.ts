@@ -59,7 +59,7 @@ const themeConfig = {
           xl: "26px",
         }),
       },
-      "h1, h2, h3, h4, h5, h6": {
+      "h1": {
         fontWeight: "bold",
         margin: "0 0 0.6em 0",
         
@@ -78,8 +78,26 @@ const themeConfig = {
           mb: "0",
         },
       },
+
+      "h2, h3, h4, h5, h6": {
+        fontWeight: "bold",
+        margin: "0 0 0.4em 0",
+        fontSize: chakraToBreakpointArray({
+          base: "18px",
+          md: "22px",
+          xl: "22px",
+        }),
+        lineHeight: chakraToBreakpointArray({
+          base: "22px",
+          md: "27px",
+          xl: "27px",
+        }),
+        "&:last-child": {
+          mb: "0",
+        },
+      },
       "p + h2, p + h3, p + h4, p + h5, p + h6": {
-        mt: "1em",
+        mt: "1.5em",
       },
       "h1.highlight,h2.highlight,h3.highlight,.highlight": {
         fontSize: chakraToBreakpointArray({
