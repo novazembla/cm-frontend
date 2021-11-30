@@ -21,10 +21,9 @@ export const LoadingBar = ({
   const { onQuickSearchClose } = useQuickSearchContext();
   const { mainContentOpen, setIsMainContentActive } = useMainContentContext();
   const scrollState = useScrollStateContext();
-  
+
   const [barVisible, setBarVisible] = useState(false);
   const [initialLoadDone, setInitialLoadDone] = useState(false);
-
 
   const showBar = useCallback(() => {
     scrollState.setWasBack(scrollState.isBack());
@@ -36,19 +35,30 @@ export const LoadingBar = ({
     if (typeof document !== "undefined") {
       document.body.setAttribute("tabindex", "-1");
     }
-  }, [onMenuClose, setIsMainContentActive, scrollState, onQuickSearchClose, mainContentOpen]);
+  }, [
+    onMenuClose,
+    setIsMainContentActive,
+    scrollState,
+    onQuickSearchClose,
+    mainContentOpen,
+  ]);
 
-  const hideBar = useCallback(() => {
-    setBarVisible(false);
-    scrollState.setIsBack(false);
-    scrollState.setCurrentPath(router.asPath);
-    setIsMainContentActive(true);
-    if (typeof document !== "undefined") {
-      document.body.removeAttribute("tabindex");
-      document.body.classList.remove("tabbed");
-      document.body.focus();
-    }
-  }, [setIsMainContentActive, scrollState, router]);
+  const hideBar = useCallback(
+    (url = null) => {
+      setBarVisible(false);
+      scrollState.setIsBack(false);
+
+      if (typeof url === "string") scrollState.setCurrentPath(url);
+
+      setIsMainContentActive(true);
+      if (typeof document !== "undefined") {
+        document.body.removeAttribute("tabindex");
+        document.body.classList.remove("tabbed");
+        document.body.focus();
+      }
+    },
+    [setIsMainContentActive, scrollState]
+  );
 
   const tabPressed = (e: KeyboardEvent) => {
     if (e.key === "Tab") {

@@ -55,7 +55,7 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
   const footerRef = useRef<HTMLDivElement>(null);
   const tourStopsCardsContainerRef = useRef<HTMLDivElement>(null);
 
-  const [opacity, setOpacity] = useState(0);
+  const [opacity, setOpacity] = useState(isMobile ? 0 : 1);
 
   const scrollState = useScrollStateContext();
 
@@ -324,6 +324,8 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
 
   useEffect(() => {
     setTimeout(() => {
+
+
       const scrollLeft = scrollState.get(
         "vertical",
         router.asPath.replace(/[^a-z]/g, "")
