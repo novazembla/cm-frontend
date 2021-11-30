@@ -169,8 +169,6 @@ export class CultureMap {
             this.baseDataLoaded = true;
   
             maybeProcess();
-
-            console.log(this.geoJsonAllData)
           }
         }
       });

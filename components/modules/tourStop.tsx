@@ -58,18 +58,13 @@ export const ModuleComponentTourStop = ({
   const scrollState = useScrollStateContext();
 
   const onNavigationButtonClick = () => {
-
-    console.log(scrollState.getPreviousPath(), router.asPath);
     if (scrollState.getPreviousPath()) {
       if (router.asPath.indexOf(scrollState.getPreviousPath()) > -1) {
-        console.log("back");
         router.back();
       } else {
-        console.log("p1");
         router.push(`/tour/${getMultilangValue(tour?.slug)}`);
       }
     } else {
-      console.log("p2");
       router.push(`/tour/${getMultilangValue(tour?.slug)}`);
     }
   };

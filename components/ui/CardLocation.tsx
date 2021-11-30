@@ -47,13 +47,19 @@ export const CardLocation = ({
         color;
     }
   } else if (location?.terms?.length > 0) {
+
     meta = getMultilangValue(location?.terms?.[0]?.name);
-    if (settings?.terms && location?.terms?.[0]?.id in settings?.terms) {
-      color = settings?.terms[location?.terms?.[0]?.id].color ?? color;
-      colorDark =
-        settings?.terms[location?.terms?.[0]?.id].colorDark ??
-        settings?.terms[location?.terms?.[0]?.id].color ??
-        color;
+    if (settings?.terms && settings?.taxonomies?.typeOfInstitution?.terms?.length && location?.terms?.[0]?.id in settings?.terms) {
+      const terms = location?.terms.filter((t: any) => settings?.taxonomies?.typeOfInstitution?.terms.find((toit: any) => toit.id === t.id));
+      if (terms?.length) {
+        meta = getMultilangValue(terms[0]?.name);
+        color = settings?.terms[terms[0]?.id].color ?? color;
+        colorDark =
+          settings?.terms[terms[0]?.id].colorDark ??
+          settings?.terms[terms[0]?.id].color ??
+          color;
+      }
+      
     }
   } else {
     meta = t("card.meta.location", "Location");
