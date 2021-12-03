@@ -7,7 +7,7 @@ import { settingsQuery } from "~/graphql";
 import { getApolloClient } from "~/services";
 
 const Locations = ({ ...props }) => {
-  return <ModuleComponentLocations {...props} />;
+  return <ModuleComponentLocations type="listing"  {...props} />;
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {

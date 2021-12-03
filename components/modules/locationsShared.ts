@@ -18,3 +18,45 @@ export const locationsInitialQueryState = {
   pageSize: 20,
   pageIndex: 0,
 };
+
+
+export const locationsQuery = gql`
+  query locations(
+    $where: JSON
+    $orderBy: JSON
+    $pageIndex: Int
+    $pageSize: Int
+  ) {
+    locations(
+      where: $where
+      orderBy: $orderBy
+      pageIndex: $pageIndex
+      pageSize: $pageSize
+    ) {
+      totalCount
+      locations {
+        id
+        title
+        slug
+        description
+        primaryTerms {
+          id
+          taxonomyId
+          name
+        }
+        terms {
+          id
+          taxonomyId
+          name
+        }
+        heroImage {
+          id
+          status
+          meta
+          alt
+          credits
+        }
+      }
+    }
+  }
+`;

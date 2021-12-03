@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from "react";
-import { gql, useQuery, useLazyQuery } from "@apollo/client";
+import { useQuery, useLazyQuery } from "@apollo/client";
 
 import { CardLocation } from "~/components/ui/CardLocation";
 import { ErrorMessage } from "~/components/ui/ErrorMessage";
 import { LoadingIcon } from "~/components/ui/LoadingIcon";
+import dynamic from "next/dynamic";
 
 import {
   Box,
@@ -34,59 +35,23 @@ import { useRouter } from "next/router";
 
 import {
   locationsIdsQuery,
+  locationsQuery,
   locationsInitialQueryState,
 } from "./locationsShared";
+
 import { PageTitle } from "../ui/PageTitle";
 
-// @ts-ignore
-//import VirtualScroller from "virtual-scroller/react";
-// https://bvaughn.github.io/react-virtualized/#/components/Masonry
-// TODO use react-virtualized
-
-export const locationsQuery = gql`
-  query locations(
-    $where: JSON
-    $orderBy: JSON
-    $pageIndex: Int
-    $pageSize: Int
-  ) {
-    locations(
-      where: $where
-      orderBy: $orderBy
-      pageIndex: $pageIndex
-      pageSize: $pageSize
-    ) {
-      totalCount
-      locations {
-        id
-        title
-        slug
-        description
-        primaryTerms {
-          id
-          taxonomyId
-          name
-        }
-        terms {
-          id
-          taxonomyId
-          name
-        }
-        heroImage {
-          id
-          status
-          meta
-          alt
-          credits
-        }
-      }
-    }
-  }
-`;
+const LocationEmbedCodeLocations = dynamic(
+  () => import("./locationEmbedCodeLocations")
+);
 
 export const LocationsFilterSchema = object().shape({});
 
-export const ModuleComponentLocations = () => {
+export const ModuleComponentLocations = ({
+  type = "listing",
+}: {
+  type: string;
+}) => {
   const { t, i18n, getMultilangValue } = useAppTranslations();
   const resultRef = useRef<HTMLDivElement>(null);
   const cultureMap = useMapContext();
@@ -94,6 +59,7 @@ export const ModuleComponentLocations = () => {
   const router = useRouter();
   const [isFiltered, setIsFiltered] = useState<boolean>(false);
   const [currentMapView, setCurrentMapView] = useState("clustered");
+  const [iframeQuery, setIframeQuery] = useState("");
 
   const [currentQueryState, setCurrentQueryState] = useState<any>({
     where: locationsInitialQueryState.where,
@@ -585,6 +551,7 @@ export const ModuleComponentLocations = () => {
       setCurrentQueryState(newQueryState);
       setCurrentPageIndex(0);
     }
+
     const baseUrl = [
       location.protocol,
       "//",
@@ -653,21 +620,27 @@ export const ModuleComponentLocations = () => {
       }, [])
       .join("&");
 
-    const as = window.history?.state?.as
-      ? window.history?.state?.as.split("?")[0]
-      : i18n.language === "en"
-      ? "/map/"
-      : "/karte/";
+    if (type === "listing") {
+      const as = window.history?.state?.as
+        ? window.history?.state?.as.split("?")[0]
+        : i18n.language === "en"
+        ? "/map/"
+        : "/karte/";
 
-    window.history.replaceState(
-      {
-        ...window.history.state,
-        url: `${as}?${queryStringEncoded}`,
-        as: `${as}?${queryString}`,
-      },
-      "",
-      `${baseUrl}?${queryString}`
-    );
+      window.history.replaceState(
+        {
+          ...window.history.state,
+          url: `${as}?${queryStringEncoded}`,
+          as: `${as}?${queryString}`,
+        },
+        "",
+        `${baseUrl}?${queryString}`
+      );
+    }
+
+    if (type === "embed") {
+      setIframeQuery(queryString);
+    }
   }, [
     watchVariables,
     cultureMap,
@@ -677,6 +650,7 @@ export const ModuleComponentLocations = () => {
     currentQueryState,
     i18n?.language,
     router,
+    type,
   ]);
 
   let resultText = t("locations.totalCount", "{{count}} location found", {
@@ -726,7 +700,7 @@ export const ModuleComponentLocations = () => {
             p={{
               base: "20px",
               md: "30px",
-              "2xl": "35px"
+              "2xl": "35px",
             }}
           >
             <FormProvider {...formMethods}>
@@ -988,46 +962,48 @@ export const ModuleComponentLocations = () => {
             </Box>
           </Box>
 
-          <Box>
-            {data?.locations?.locations?.length > 0 && (
-              <Box size="md" mt="20px">
-                {data?.locations?.locations.map((location: any) => (
-                  <Box key={`location-${location.id}`} pb="20px">
-                    <CardLocation location={location} />
-                  </Box>
-                ))}
-                {/* <VirtualScroller
-                scrollableContainer={scrollContainerRef.current}
-                items={data?.locations?.locations}
-                itemComponent={Location}
-              /> */}
-              </Box>
-            )}
-
-            {data?.locations?.totalCount > data?.locations?.locations?.length &&
-              !loading &&
-              !error && (
-                <Box textAlign="center" mt="2em">
-                  <Button
-                    onClick={() => {
-                      const nextPageIndex = Math.floor(
-                        data?.locations?.locations?.length /
-                          locationsInitialQueryState?.pageSize
-                      );
-                      fetchMore({
-                        variables: {
-                          pageIndex: nextPageIndex,
-                        },
-                      });
-                      setCurrentPageIndex(nextPageIndex);
-                    }}
-                    variant="ghost"
-                  >
-                    {t("locations.loadMore", "Load more locations")}
-                  </Button>
+          {type === "listing" && (
+            <Box>
+              {data?.locations?.locations?.length > 0 && (
+                <Box size="md" mt="20px">
+                  {data?.locations?.locations.map((location: any) => (
+                    <Box key={`location-${location.id}`} pb="20px">
+                      <CardLocation location={location} />
+                    </Box>
+                  ))}
                 </Box>
               )}
-          </Box>
+
+              {data?.locations?.totalCount >
+                data?.locations?.locations?.length &&
+                !loading &&
+                !error && (
+                  <Box textAlign="center" mt="2em">
+                    <Button
+                      onClick={() => {
+                        const nextPageIndex = Math.floor(
+                          data?.locations?.locations?.length /
+                            locationsInitialQueryState?.pageSize
+                        );
+                        fetchMore({
+                          variables: {
+                            pageIndex: nextPageIndex,
+                          },
+                        });
+                        setCurrentPageIndex(nextPageIndex);
+                      }}
+                      variant="ghost"
+                    >
+                      {t("locations.loadMore", "Load more locations")}
+                    </Button>
+                  </Box>
+                )}
+            </Box>
+          )}
+
+          {type === "embed" && (
+            <LocationEmbedCodeLocations query={iframeQuery} />
+          )}
         </Box>
         <Footer noBackground />
       </Grid>

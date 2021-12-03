@@ -3,16 +3,20 @@ import { useLazyQuery } from "@apollo/client";
 
 import { useMapContext } from "~/provider";
 
-import { useRouter } from "next/router";
+import {
+  locationsIdsQuery,
+  locationsInitialQueryState,
+} from "./locationsShared";
 
-import { locationsIdsQuery, locationsInitialQueryState } from "./locationsShared";
-
-export const ModuleComponentLocationsEmbed = () => {
+export const ModuleComponentLocationsEmbed = ({
+  filter,
+}: {
+  filter: string;
+}) => {
   const cultureMap = useMapContext();
-  cultureMap?.hideCurrentView();
 
-  const router = useRouter();
   const [isFiltered, setIsFiltered] = useState<boolean>(false);
+  const [isInit, setIsInit] = useState(false);
 
   const [layzLocationIdsQuery, layzLocationIdsQueryResult] = useLazyQuery(
     locationsIdsQuery,
@@ -41,8 +45,9 @@ export const ModuleComponentLocationsEmbed = () => {
       } else {
         cultureMap?.setFilteredViewData([]);
       }
-      cultureMap?.fitToCurrentViewBounds();
+      cultureMap?.renderCurrentView();
       cultureMap?.showCurrentView();
+      cultureMap?.fitToCurrentViewBounds();
     }
   }, [
     layzLocationIdsQueryResult.loading,
@@ -53,28 +58,24 @@ export const ModuleComponentLocationsEmbed = () => {
   ]);
 
   useEffect(() => {
+    if (!cultureMap || isInit) return;
+
     let where: any = [];
     let termsWhere: any = [];
     let allTerms: any[] = [];
 
-    const urlParams = new URLSearchParams(window.location.search);
+    const urlParams = new URLSearchParams(filter);
 
-    const termsToI: string[] = router?.query?.toi
-      ? Array.isArray(router.query.toi)
-        ? router.query.toi
-        : router.query.toi.split(",")
+    const termsToI: string[] = urlParams.get("toi")
+      ? urlParams.get("toi")?.split(",") ?? []
       : [];
 
-    const termsToO: string[] = router?.query?.too
-      ? Array.isArray(router.query.too)
-        ? router.query.too
-        : router.query.too.split(",")
+    const termsToO: string[] = urlParams.get("too")
+      ? urlParams.get("too")?.split(",") ?? []
       : [];
 
-    const termsTA: string[] = router?.query?.ta
-      ? Array.isArray(router.query.ta)
-        ? router.query.ta
-        : router.query.ta.split(",")
+    const termsTA: string[] = urlParams.get("ta")
+      ? urlParams.get("ta")?.split(",") ?? []
       : [];
 
     if (termsToI?.length) {
@@ -186,25 +187,40 @@ export const ModuleComponentLocationsEmbed = () => {
     }
 
     if (urlParams.get("cluster") === "0") {
+      console.log("current view unclustered");
       cultureMap?.setView("unclustered");
     } else {
+      console.log("current view clustered");
       cultureMap?.setView("clustered");
     }
-    
-    // if (where.length > 0) {
-    //   layzLocationIdsQuery({
-    //     variables: {
-    //       where: (newQueryState as any).where,
-    //     },
-    //   });
-    //   setIsFiltered(true);
-    //   cultureMap?.hideCurrentView();
-    // } else {
+
+    cultureMap?.clearOnloadJobs();
+
+    if (where.length > 0) {
+      console.log("filtered", where);
+      layzLocationIdsQuery({
+        variables: {
+          where: (newQueryState as any).where,
+        },
+      });
+      setIsFiltered(true);
+    } else {
+      console.log("not filtered");
+
       cultureMap?.setCurrentViewData(undefined, true);
-      cultureMap?.showCurrentView();
-    //   setIsFiltered(false);
-    // }
-  }, [cultureMap, layzLocationIdsQuery, setIsFiltered, router]);
+      cultureMap?.renderCurrentView();
+      cultureMap?.fitToCurrentViewBounds();
+      setIsFiltered(false);
+    }
+    setIsInit(true);
+  }, [
+    cultureMap,
+    layzLocationIdsQuery,
+    setIsFiltered,
+    filter,
+    isInit,
+    setIsInit,
+  ]);
 
   return <></>;
 };

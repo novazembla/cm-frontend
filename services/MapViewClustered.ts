@@ -38,10 +38,9 @@ export class MapViewClustered {
         )?.setData(data ?? this.cultureMap.geoJsonAllData ?? {});
       }
 
-      this.bounds = new maplibregl.LngLatBounds(
-        [this.cultureMap.config.lng, this.cultureMap.config.lat],
-        [this.cultureMap.config.lng, this.cultureMap.config.lat]
-      );
+      console.log("setting clustered data", data ?? this.cultureMap.geoJsonAllData ?? {});
+      
+      let bounds: maplibregl.LngLatBounds | undefined;
 
       if ((data ?? this.cultureMap.geoJsonAllData ?? {})?.features?.length) {
         for (
@@ -56,9 +55,21 @@ export class MapViewClustered {
           ];
 
           if (coordinates[0] !== 0 && coordinates[1] !== 0) {
-            this.bounds.extend(coordinates);
+            if (!bounds) {
+              bounds = new maplibregl.LngLatBounds(coordinates, coordinates);
+            } else {
+              bounds.extend(coordinates);
+            }
           }
         }
+      }
+      if (bounds) {
+        this.bounds = bounds;
+      } else {
+        this.bounds = new maplibregl.LngLatBounds(
+          [this.cultureMap.config.lng, this.cultureMap.config.lat],
+          [this.cultureMap.config.lng, this.cultureMap.config.lat]
+        );
       }
     }
   }
@@ -281,9 +292,7 @@ export class MapViewClustered {
           const titles = JSON.parse(feature?.properties?.title);
 
           const slug = `/${
-            this.cultureMap.tHelper.i18n?.language === "en"
-              ? "location"
-              : "ort"
+            this.cultureMap.tHelper.i18n?.language === "en" ? "location" : "ort"
           }/${this.cultureMap.tHelper.getMultilangValue(
             JSON.parse(feature?.properties?.slug)
           )}`;
@@ -416,7 +425,7 @@ export class MapViewClustered {
       this.isVisible = false;
 
       this.cultureMap.removeLayers(this.layers);
-      
+
       if (Object.keys(this.events).length) {
         Object.keys(this.events).forEach((key) => {
           if (this.cultureMap?.map) {

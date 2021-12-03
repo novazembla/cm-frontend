@@ -32,13 +32,25 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   return (
     <ConfigContextProvider>
       <Head>
-      <link rel="shortcut icon" href="/img/reddot.png" />
-      <link rel="icon" type="image/png" href="/img/reddot.png" sizes="16x16" />
-      <link rel="icon" type="image/png" href="/img/reddot.png" sizes="32x32" />
+        <link rel="shortcut icon" href="/img/reddot.png" />
+        <link
+          rel="icon"
+          type="image/png"
+          href="/img/reddot.png"
+          sizes="16x16"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          href="/img/reddot.png"
+          sizes="32x32"
+        />
       </Head>
       <AppApolloProvider>
         <ChakraProvider theme={chakraTheme}>
-          <SettingsContextProvider frontendSettings={pageProps.frontendSettings}>
+          <SettingsContextProvider
+            frontendSettings={pageProps.frontendSettings}
+          >
             <MapContextProvider>
               {getLayout(<Component {...pageProps} />)}
             </MapContextProvider>

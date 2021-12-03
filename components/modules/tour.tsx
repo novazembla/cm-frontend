@@ -903,6 +903,7 @@ export const ModuleTourGetStaticProps: GetStaticProps = async (context) => {
   return {
     props: {
       tour: data?.tour,
+      frontendSettings: data?.frontendSettings,      
     },
     revalidate: 3600,
   };

@@ -64,34 +64,6 @@ export const SettingsContextProvider = ({
 }) => {
   const [settings, setSettings] = useState(parseSettings(frontendSettings));
 
-  // useEffect(() => {    
-  //   let mounted = true;
-  //   if (frontendSettings) {
-  //     console.log("props settings");
-  //     setSettings(parseSettings(frontendSettings));
-  //   } else {
-  //     const getSettings = async () => {
-  //       const client = getApolloClient();
-
-  //       const { data } = await client.query({
-  //         query: settingsQuery,
-  //       });
-
-  //       if (data?.frontendSettings) {
-  //         if (mounted) setSettings(parseSettings(data?.frontendSettings));
-  //       }
-  //     };
-
-  //     if (!settings) {
-  //       getSettings();
-  //     }
-  //   }
-  //   return () => {
-  //     mounted = false;
-  //   };
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
-
   return (
     <SettingsContext.Provider value={settings}>
       {children}

@@ -7,10 +7,11 @@ import { useAppTranslations } from "~/hooks/useAppTranslations";
 import { CultureMap } from "~/services";
 import { useRouter } from "next/router";
 
-const MapContext = createContext<CultureMap | undefined>(undefined)
+const MapContext = createContext<CultureMap | null>(null)
 
 export const useMapContext = () => useContext(MapContext);
 
+let mapInstance: CultureMap | null = null;
 // context provider
 export const MapContextProvider = ({
   children,
@@ -19,13 +20,14 @@ export const MapContextProvider = ({
 }) => {
   const router = useRouter();
   
-  const tranlationHelper = useAppTranslations();
+  const translationHelper = useAppTranslations();
   const config = useConfigContext();
 
-  const cultureMapRef = useRef<CultureMap>(new CultureMap(router, tranlationHelper, config));
+  if (router && translationHelper && config && !mapInstance)
+    mapInstance = new CultureMap(router, translationHelper, config);
  
   return (
-    <MapContext.Provider value={cultureMapRef.current}>
+    <MapContext.Provider value={mapInstance}>
       {children}
     </MapContext.Provider>
   );

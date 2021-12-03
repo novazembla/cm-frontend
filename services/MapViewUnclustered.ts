@@ -24,44 +24,55 @@ export class MapViewUnclustered {
 
       this.hide();
 
-      setTimeout(() => {
-        if (!this.cultureMap?.map) return;
+      if (!this.cultureMap?.map) return;
 
-        if (!this.cultureMap.map.getSource("unclustered-locations")) {
-          this.cultureMap.map.addSource("unclustered-locations", {
-            type: "geojson",
-            data: data ?? this.cultureMap.geoJsonAllData ?? {},
-          });
-        } else {
-          (
-            this.cultureMap?.map?.getSource("unclustered-locations") as any
-          )?.setData(data ?? this.cultureMap.geoJsonAllData ?? {});
+      if (!this.cultureMap.map.getSource("unclustered-locations")) {
+        this.cultureMap.map.addSource("unclustered-locations", {
+          type: "geojson",
+          data: data ?? this.cultureMap.geoJsonAllData ?? {},
+        });
+        console.log("unclustered all data");
+      } else {
+        (
+          this.cultureMap?.map?.getSource("unclustered-locations") as any
+        )?.setData(data ?? this.cultureMap.geoJsonAllData ?? {});
+        console.log("unclustered filtered data");
+      }
+
+      let bounds: maplibregl.LngLatBounds | undefined;
+
+      if ((data ?? this.cultureMap.geoJsonAllData ?? {})?.features?.length) {
+        for (
+          let i = 0;
+          i <
+          (data ?? this.cultureMap.geoJsonAllData ?? {})?.features?.length;
+          i++
+        ) {
+          console.log(i)
+          const coordinates = (data ?? this.cultureMap.geoJsonAllData ?? {})
+            ?.features[i]?.geometry?.coordinates ?? [
+            this.cultureMap.config.lng,
+            this.cultureMap.config.lat,
+          ];
+
+          if (coordinates[0] !== 0 && coordinates[1] !== 0) {
+            if (!bounds) {
+              bounds = new maplibregl.LngLatBounds(coordinates, coordinates);
+            } else {
+              bounds.extend(coordinates);
+            }
+          }
         }
-
+      }
+      
+      if (bounds) {
+        this.bounds = bounds;
+      } else {
         this.bounds = new maplibregl.LngLatBounds(
           [this.cultureMap.config.lng, this.cultureMap.config.lat],
           [this.cultureMap.config.lng, this.cultureMap.config.lat]
         );
-
-        if ((data ?? this.cultureMap.geoJsonAllData ?? {})?.features?.length) {
-          for (
-            let i = 0;
-            i <
-            (data ?? this.cultureMap.geoJsonAllData ?? {})?.features?.length;
-            i++
-          ) {
-            const coordinates = (data ?? this.cultureMap.geoJsonAllData ?? {})
-              ?.features[i]?.geometry?.coordinates ?? [
-              this.cultureMap.config.lng,
-              this.cultureMap.config.lat,
-            ];
-
-            if (coordinates[0] !== 0 && coordinates[1] !== 0) {
-              this.bounds.extend(coordinates);
-            }
-          }
-        }
-      }, 60);
+      }
     }
   }
 
@@ -102,9 +113,7 @@ export class MapViewUnclustered {
           const titles = JSON.parse(feature?.properties?.title);
 
           const slug = `/${
-            this.cultureMap.tHelper.i18n?.language === "en"
-              ? "location"
-              : "ort"
+            this.cultureMap.tHelper.i18n?.language === "en" ? "location" : "ort"
           }/${this.cultureMap.tHelper.getMultilangValue(
             JSON.parse(feature?.properties?.slug)
           )}`;
@@ -228,8 +237,6 @@ export class MapViewUnclustered {
       });
     }
   }
-
-  
 
   hide() {
     if (!this.isVisible) return;
