@@ -48,7 +48,6 @@ import useCalendar from "@veccu/react-calendar";
 import { PageTitle } from "../ui/PageTitle";
 
 const ONE_DAY = 1000 * 60 * 60 * 24;
-const LOOK_DAYS_AHEAD = 100; // how many days should the calendar look ahead.
 
 const padTo2Digits = (num: number) => {
   return num.toString().padStart(2, "0");
@@ -94,17 +93,7 @@ const eventsQuery = gql`
 `;
 
 const initialQueryState = {
-  where: {
-    dates: {
-      some: {
-        date: {
-          lt: new Date(
-            new Date().setHours(0, 0, 0, 0) + ONE_DAY * LOOK_DAYS_AHEAD
-          ),
-        },
-      },
-    },
-  },
+  where: {},
   orderBy: [
     {
       firstEventDate: "asc",
@@ -123,7 +112,19 @@ export const ModuleComponentEvents = ({ ...props }) => {
   const config = useConfigContext();
 
   const [currentQueryState, setCurrentQueryState] = useState<any>({
-    where: initialQueryState.where,
+    where: {
+      ...initialQueryState.where,
+      dates: {
+        some: {
+          date: {
+            lt: new Date(
+              new Date().setHours(0, 0, 0, 0) +
+                ONE_DAY * config.eventLookAheadDays
+            ),
+          },
+        },
+      },
+    },
     orderBy: initialQueryState.orderBy,
   });
 
@@ -177,6 +178,19 @@ export const ModuleComponentEvents = ({ ...props }) => {
     notifyOnNetworkStatusChange: true,
     variables: {
       ...initialQueryState,
+      where: {
+        ...initialQueryState.where,
+        dates: {
+          some: {
+            date: {
+              lt: new Date(
+                new Date().setHours(0, 0, 0, 0) +
+                  ONE_DAY * config.eventLookAheadDays
+              ),
+            },
+          },
+        },
+      },
       orderBy: [
         {
           firstEventDate: "asc",
@@ -433,7 +447,8 @@ export const ModuleComponentEvents = ({ ...props }) => {
         some: {
           date: {
             lt: new Date(
-              new Date().setHours(0, 0, 0, 0) + ONE_DAY * LOOK_DAYS_AHEAD
+              new Date().setHours(0, 0, 0, 0) +
+                ONE_DAY * config.eventLookAheadDays
             ),
           },
         },
@@ -545,6 +560,7 @@ export const ModuleComponentEvents = ({ ...props }) => {
     currentQueryState,
     i18n?.language,
     router,
+    config.eventLookAheadDays,
   ]);
 
   let resultText = t("events.totalCount", "{{count}} event found", {

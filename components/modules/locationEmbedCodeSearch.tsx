@@ -3,7 +3,7 @@ import { useAppTranslations } from "~/hooks/useAppTranslations";
 import { useConfigContext } from "~/provider";
 import { PageTitle } from "../ui/PageTitle";
 
-export const LocationEmbedCodeLocations = ({ query }: { query: string }) => {
+export const LocationEmbedCodeSearch = ({ query }: { query: string }) => {
   const { t } = useAppTranslations();
   const config = useConfigContext();
 
@@ -39,7 +39,7 @@ export const LocationEmbedCodeLocations = ({ query }: { query: string }) => {
       </Box>
       <Box pt="0.5em">
         <PageTitle
-          title={t("locations.embed.title.embedCode", "EmbedCode")}
+          title={t("locations.embed.title.embedCode", "Embed code")}
           type="short"
         />
         <Box
@@ -76,4 +76,4 @@ export const LocationEmbedCodeLocations = ({ query }: { query: string }) => {
   );
 };
 
-export default LocationEmbedCodeLocations;
+export default LocationEmbedCodeSearch;

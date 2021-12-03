@@ -251,14 +251,19 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
   }, []);
 
   useEffect(() => {
-    if (cultureMap) cultureMap.hideCurrentView();
+    if (cultureMap) {
+      cultureMap.clearOnloadJobs();
+      cultureMap.hideCurrentView();
+    }
     currentHightlightIndexRef.current = -2;
 
     // As next.js doesn't unmount/remount if only components route changes we
     // need to rely on router.asPath to trigger in between tour change actions
 
     return () => {
-      if (cultureMap) cultureMap.clearTour();
+      if (cultureMap) {
+        cultureMap.clearTour();
+      }
     };
   }, [router.asPath, cultureMap]);
 
@@ -324,8 +329,6 @@ export const ModuleComponentTour = ({ tour }: { tour: any }) => {
 
   useEffect(() => {
     setTimeout(() => {
-
-
       const scrollLeft = scrollState.get(
         "vertical",
         router.asPath.replace(/[^a-z]/g, "")
@@ -903,7 +906,7 @@ export const ModuleTourGetStaticProps: GetStaticProps = async (context) => {
   return {
     props: {
       tour: data?.tour,
-      frontendSettings: data?.frontendSettings,      
+      frontendSettings: data?.frontendSettings,
     },
     revalidate: 3600,
   };

@@ -42,6 +42,9 @@ import { useRouter } from "next/router";
 import { settingsQueryPartial } from "~/graphql";
 import { ShareIcons } from "../ui/ShareIcons";
 
+const ONE_DAY = 1000 * 60 * 60 * 24;
+
+
 const locationQuery = gql`
   query ($slug: String!) {
     ${settingsQueryPartial}
@@ -617,17 +620,38 @@ export const ModuleComponentLocation = ({
                 )}
                 type="short"
               />
-              {location.events.map((event: any, i: number) => (
-                <Box
-                  key={`evnt-${i}`}
-                  mt="4"
-                  _first={{
-                    mt: 3,
-                  }}
-                >
-                  <CardEvent event={event} />
-                </Box>
-              ))}
+              {location.events
+                .filter((e: any) => {
+                  const begin = new Date(e.firstEventDate);
+                  const end = new Date(e.lastEventDate);
+  
+                  return (
+                    end >= new Date() &&
+                    begin <=
+                      new Date(
+                        new Date().setHours(0, 0, 0, 0) +
+                          ONE_DAY * config.eventLookAheadDays
+                      )
+                  );
+                }).sort((a: any, b: any) => {
+                  const aBegin = new Date(a.firstEventDate);
+                  const bBegin = new Date(b.firstEventDate);
+                  
+                  if (aBegin < bBegin) return -1;
+                  if (aBegin > bBegin) return 1;
+                  return 0
+                })
+                .map((event: any, i: number) => (
+                  <Box
+                    key={`evnt-${i}`}
+                    mt="4"
+                    _first={{
+                      mt: 3,
+                    }}
+                  >
+                    <CardEvent event={event} />
+                  </Box>
+                ))}
             </Box>
           )}
         </Box>

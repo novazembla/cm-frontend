@@ -122,6 +122,9 @@ export const Footer = ({
               mb="1em"
               sx={{
                 lineHeight: "1.5em",
+                a: {
+                  mb: "0.6em"
+                }
               }}
             >
               {config.nav.main.map((link: any, index: number) => (

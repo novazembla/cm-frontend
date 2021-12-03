@@ -56,7 +56,10 @@ export const ModuleComponentTourIntroduction = ({ tour }: { tour: any }) => {
   };
 
   useEffect(() => {
-    if (cultureMap) cultureMap.hideCurrentView();
+    if (cultureMap) {
+      cultureMap.clearOnloadJobs();
+      cultureMap.hideCurrentView();
+    }
 
     // As next.js doesn't unmount/remount if only components route changes we
     // need to rely on router.asPath to trigger in between tour change actions

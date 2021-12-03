@@ -126,8 +126,8 @@ export class CultureMap {
       this.ready = true;
 
       if (typeof setIsLoaded === "function") setIsLoaded.call(null, true);
-      
-      console.log(this.onLoadJobs)
+
+      console.log(this.onLoadJobs);
       this.onLoadJobs.forEach(async (f) => {
         await new Promise(f);
       });
@@ -135,7 +135,7 @@ export class CultureMap {
     };
 
     const maybeProcess = async () => {
-      console.log("maybe process")
+      console.log("maybe process");
       if (this.baseDataLoaded && this.styleLoaded && this.loaded)
         await process();
     };
@@ -363,7 +363,12 @@ export class CultureMap {
     if (!slug) return null;
 
     this.popup.hide();
-    this.router.push(slug);
+
+    if (this.isEmbed && typeof window !== "undefined") {
+      window.open(`${this.config.baseUrl}${slug}`, "_ blank");
+    } else {
+      this.router.push(slug);
+    }
   }
 
   setTourStops(stops: MapTourType[]) {

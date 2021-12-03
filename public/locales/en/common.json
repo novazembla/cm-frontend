@@ -127,6 +127,16 @@
   },
   "locations": {
     "title": "Map",
+    "embed": {
+      "title": {
+        "preview": "Preview",
+        "embedCode": "Embed code",
+        "filter": "Filter"
+      },
+      "button": {
+        "copy": "Copy HTML"
+      }
+    },
     "totalCount": "{{count}} Locations found",
     "totalCount_plural": "{{count}} Locations found",
     "totalCountPlural": "{{count}} Locations found",

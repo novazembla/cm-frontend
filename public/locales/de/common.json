@@ -127,6 +127,16 @@
   },
   "locations": {
     "title": "Kulturkarte",
+    "embed": {
+      "title": {
+        "preview": "Vorschau",
+        "embedCode": "Embedcode",
+        "filter": "Ortssuche"
+      },
+      "button": {
+        "copy": "HTML kopieren"
+      }
+    },
     "totalCount": "{{count}} Kartenpunkt(e) gefunden",
     "totalCount_plural": "{{count}} Kartenpunkte gefunden",
     "totalCountPlural": "{{count}} Kartenpunkte gefunden",

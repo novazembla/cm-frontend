@@ -22,6 +22,7 @@ export interface AppConfig {
   nav: Record<string, any[]>;
   umamiId: string;
   umamiUrl: string;
+  eventLookAheadDays: number;
 }
 
 export interface MapPin {

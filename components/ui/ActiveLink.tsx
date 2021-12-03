@@ -6,6 +6,7 @@ export const ActiveLink = ({
   children,
   activeClassName = "active",
   href,
+  target,
   style = {
     textDecoration:"none"
   },
@@ -13,6 +14,7 @@ export const ActiveLink = ({
 }: {
   children: React.ReactNode;
   activeClassName?: string;
+  target?: string;
   href: string;
   onClick?: (event: MouseEvent) => void,
   props?: any;
@@ -31,7 +33,7 @@ export const ActiveLink = ({
 
   return (
     <NextLink href={href}>
-      <a {...{ className }} onClick={(props as any)?.onClick} style={style}>
+      <a {...{ className, target }} onClick={(props as any)?.onClick} style={style}>
         {children}
       </a>
     </NextLink>

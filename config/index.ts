@@ -68,6 +68,16 @@ export const appConfigFooterNav = [
   },
   {
     path: {
+      de: "/seite/orte-einbinden",
+      en: "/page/embed-locations",
+    },
+    title: {
+      de: "Embedcodes generieren",
+      en: "Generate embed codes",
+    },
+  },
+  {
+    path: {
       de: "/seite/impressum",
       en: "/page/imprint",
     },
@@ -111,4 +121,5 @@ export const appConfig: AppConfig = {
   },
   umamiId: `${process.env.NEXT_PUBLIC_UMAMI_TRACKING_ID ?? ""}`,
   umamiUrl: `${process.env.NEXT_PUBLIC_UMAMI_URL ?? ""}`,
+  eventLookAheadDays: 100,
 };

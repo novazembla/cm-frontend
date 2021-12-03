@@ -70,7 +70,10 @@ export const ModuleComponentTourStop = ({
   };
 
   useEffect(() => {
-    if (cultureMap) cultureMap.hideCurrentView();
+    if (cultureMap) {
+      cultureMap.clearOnloadJobs();
+      cultureMap.hideCurrentView();
+    }
 
     return () => {
       if (cultureMap) cultureMap.clearTour();

@@ -41,8 +41,8 @@ import {
 
 import { PageTitle } from "../ui/PageTitle";
 
-const LocationEmbedCodeLocations = dynamic(
-  () => import("./locationEmbedCodeLocations")
+const LocationEmbedCodeSearch = dynamic(
+  () => import("./locationEmbedCodeSearch")
 );
 
 export const LocationsFilterSchema = object().shape({});
@@ -675,11 +675,12 @@ export const ModuleComponentLocations = ({
     }
   }, [loading, data?.locations?.totalCount, currentPageIndex, isFiltered]);
 
+  const title = type === "embed" ? t("locations.embed.title.filter", "Filter") : t("locations.title", "Map");
   return (
     <MainContent layerStyle="lightGray">
       <NextHeadSeo
         canonical={`${i18n.language === "en" ? "/en/map" : "/karte"}`}
-        title={`${t("locations.title", "Map")} - ${getSeoAppTitle(t)}`}
+        title={`${title} - ${getSeoAppTitle(t)}`}
       />
 
       <Grid
@@ -692,7 +693,7 @@ export const ModuleComponentLocations = ({
         }}
       >
         <Box px="20px" pt="0.5em">
-          <PageTitle title={t("locations.title", "Map")} type="short" />
+          <PageTitle title={title} type="short" />
           <Box
             bg="#fff"
             borderRadius="lg"
@@ -1002,7 +1003,7 @@ export const ModuleComponentLocations = ({
           )}
 
           {type === "embed" && (
-            <LocationEmbedCodeLocations query={iframeQuery} />
+            <LocationEmbedCodeSearch query={iframeQuery} />
           )}
         </Box>
         <Footer noBackground />
