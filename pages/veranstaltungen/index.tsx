@@ -1,13 +1,15 @@
 import { ReactElement } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { ModuleComponentLocations } from "~/components/modules/locations";
+import {
+  ModuleComponentEvents,
+} from "~/components/modules/events";
 import { GetStaticProps } from "next";
 import LayoutFull from "~/components/app/LayoutFull";
-import { settingsQuery } from "~/graphql";
 import { getApolloClient } from "~/services";
+import { settingsQuery } from "~/graphql";
 
-const Locations = ({ ...props }) => {
-  return <ModuleComponentLocations type="listing"  {...props} />;
+const Events = ({ ...props }) => {
+  return <ModuleComponentEvents {...props} />;
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
@@ -16,7 +18,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     locale,
   } = context;
   const client = getApolloClient();
-
+  
   const { data } = await client.query({
     query: settingsQuery,
   });
@@ -29,7 +31,9 @@ export const getStaticProps: GetStaticProps = async (context) => {
     revalidate: 300,
   };
 };
-Locations.getLayout = function getLayout(page: ReactElement) {
+
+Events.getLayout = function getLayout(page: ReactElement) {
   return <LayoutFull>{page}</LayoutFull>;
 };
-export default Locations;
+
+export default Events;

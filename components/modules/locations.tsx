@@ -31,7 +31,6 @@ import { Footer } from "~/components/app/Footer";
 import { useSettingsContext, useMapContext } from "~/provider";
 import { getMultilangSortedList, getSeoAppTitle } from "~/utils";
 import NextHeadSeo from "next-head-seo";
-import { useRouter } from "next/router";
 
 import {
   locationsIdsQuery,
@@ -48,15 +47,16 @@ const LocationEmbedCodeSearch = dynamic(
 export const LocationsFilterSchema = object().shape({});
 
 export const ModuleComponentLocations = ({
+  filter,
   type = "listing",
 }: {
   type: string;
+  filter?: string;
 }) => {
   const { t, i18n, getMultilangValue } = useAppTranslations();
   const resultRef = useRef<HTMLDivElement>(null);
   const cultureMap = useMapContext();
 
-  const router = useRouter();
   const [isFiltered, setIsFiltered] = useState<boolean>(false);
   const [currentMapView, setCurrentMapView] = useState("clustered");
   const [iframeQuery, setIframeQuery] = useState("");
@@ -279,29 +279,24 @@ export const ModuleComponentLocations = ({
   }, [settings?.taxonomies, reset]);
 
   useEffect(() => {
-    if (router.query) {
-      const tois: string[] = router?.query?.toi
-        ? Array.isArray(router.query.toi)
-          ? router.query.toi
-          : router.query.toi.split(",")
+    if (filter) {
+      const urlParams = new URLSearchParams(filter);
+      const tois: string[] = urlParams.get("toi")
+        ? urlParams.get("toi")?.split(",") ?? []
         : [];
 
-      const toos: string[] = router?.query?.too
-        ? Array.isArray(router.query.too)
-          ? router.query.too
-          : router.query.too.split(",")
+      const toos: string[] = urlParams.get("too")
+        ? urlParams.get("too")?.split(",") ?? []
         : [];
 
-      const tas: string[] = router?.query?.ta
-        ? Array.isArray(router.query.ta)
-          ? router.query.ta
-          : router.query.ta.split(",")
+      const tas: string[] = urlParams.get("ta")
+        ? urlParams.get("ta")?.split(",") ?? []
         : [];
 
       reset({
-        s: router?.query?.s ?? "",
-        cluster: !(router?.query?.cluster === "0"),
-        and: router?.query?.and === "1",
+        s: urlParams.get("s") ?? "",
+        cluster: !(urlParams.get("cluster") === "0"),
+        and: urlParams.get("and") === "1",
         ...activeTermsToI.reduce(
           (acc: any, t: any) => ({
             ...acc,
@@ -325,12 +320,12 @@ export const ModuleComponentLocations = ({
         ),
       });
     }
-  }, [router.query, reset, activeTermsToI, activeTermsToO, activeTermsTA]);
+  }, [filter, reset, activeTermsToI, activeTermsToO, activeTermsTA]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    const urlParams = new URLSearchParams(window.location.search);
+    const urlParams = new URLSearchParams(filter);
     const aDI = [];
     if (urlParams.get("s")) aDI.push(0);
     if (urlParams.get("toi")) aDI.push(1);
@@ -552,12 +547,7 @@ export const ModuleComponentLocations = ({
       setCurrentPageIndex(0);
     }
 
-    const baseUrl = [
-      location.protocol,
-      "//",
-      location.host,
-      location.pathname,
-    ].join("");
+    
 
     const query = Object.keys(allVars).reduce(
       (acc: any, key: any) => {
@@ -621,20 +611,31 @@ export const ModuleComponentLocations = ({
       .join("&");
 
     if (type === "listing") {
-      const as = window.history?.state?.as
-        ? window.history?.state?.as.split("?")[0]
-        : i18n.language === "en"
-        ? "/map/"
-        : "/karte/";
+      let pathAs = i18n.language === "en" ? "/en/map" : "/karte";
+
+      if (window.history?.state?.as) {
+        const lastElement = window.history?.state?.as.split("/").pop();
+        
+        if (lastElement !== "map" && lastElement !== "karte") {
+          pathAs = window.history?.state?.as.split("/").slice(0, -1).join("/");
+        }
+      }
+      
+      const baseUrl = [
+        location.protocol,
+        "//",
+        location.host,
+        pathAs,
+      ].join("");
 
       window.history.replaceState(
         {
           ...window.history.state,
-          url: `${as}?${queryStringEncoded}`,
-          as: `${as}?${queryString}`,
+          url: `${pathAs}${queryStringEncoded ? `/${queryStringEncoded}` : ""}`,
+          as: `${pathAs}${queryString ? `/${queryString}` : ""}`,
         },
         "",
-        `${baseUrl}?${queryString}`
+        `${baseUrl}${queryString ? `/${queryString}` : ""}`
       );
     }
 
@@ -649,7 +650,7 @@ export const ModuleComponentLocations = ({
     layzLocationIdsQuery,
     currentQueryState,
     i18n?.language,
-    router,
+    filter,
     type,
   ]);
 
@@ -675,7 +676,10 @@ export const ModuleComponentLocations = ({
     }
   }, [loading, data?.locations?.totalCount, currentPageIndex, isFiltered]);
 
-  const title = type === "embed" ? t("locations.embed.title.filter", "Filter") : t("locations.title", "Map");
+  const title =
+    type === "embed"
+      ? t("locations.embed.title.filter", "Filter")
+      : t("locations.title", "Map");
   return (
     <MainContent layerStyle="lightGray">
       <NextHeadSeo
@@ -1002,9 +1006,7 @@ export const ModuleComponentLocations = ({
             </Box>
           )}
 
-          {type === "embed" && (
-            <LocationEmbedCodeSearch query={iframeQuery} />
-          )}
+          {type === "embed" && <LocationEmbedCodeSearch query={iframeQuery} />}
         </Box>
         <Footer noBackground />
       </Grid>

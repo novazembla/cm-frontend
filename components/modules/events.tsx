@@ -43,7 +43,6 @@ import {
 } from "~/provider";
 import { getMultilangSortedList, getSeoAppTitle } from "~/utils";
 import NextHeadSeo from "next-head-seo";
-import { useRouter } from "next/router";
 import useCalendar from "@veccu/react-calendar";
 import { PageTitle } from "../ui/PageTitle";
 
@@ -105,8 +104,7 @@ const initialQueryState = {
 
 export const EventsFilterSchema = object().shape({});
 
-export const ModuleComponentEvents = ({ ...props }) => {
-  const router = useRouter();
+export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
   const cultureMap = useMapContext();
   const resultRef = useRef<HTMLDivElement>(null);
   const config = useConfigContext();
@@ -252,12 +250,14 @@ export const ModuleComponentEvents = ({ ...props }) => {
   useEffect(() => {
     let customDate = null;
     try {
-      if (router?.query?.customDate)
+      const urlParams = new URLSearchParams(filter);
+
+      if (urlParams.get("customDate"))
         customDate = new Date(
-          new Date(router?.query?.customDate as string).setHours(0, 0, 0, 0)
+          new Date(urlParams.get("customDate") as string).setHours(0, 0, 0, 0)
         );
 
-      if (customDate && router?.query?.date === "ownDate") {
+      if (customDate && urlParams.get("date") === "ownDate") {
         setCustomDate(customDate);
         navigation.setDate(customDate);
       }
@@ -266,18 +266,18 @@ export const ModuleComponentEvents = ({ ...props }) => {
   }, []);
 
   useEffect(() => {
-    if (router.query) {
-      const tois: string[] = router?.query?.tet
-        ? Array.isArray(router.query.tet)
-          ? router.query.tet
-          : router.query.tet.split(",")
+    if (filter) {
+      const urlParams = new URLSearchParams(filter);
+
+      const tets: string[] = urlParams.get("tet")
+        ? urlParams.get("tet")?.split(",") ?? []
         : [];
 
       let customDate = null;
       try {
-        if (router?.query?.customDate)
+        if (urlParams.get("customDate"))
           customDate = new Date(
-            new Date(router?.query?.customDate as string).setHours(0, 0, 0, 0)
+            new Date(urlParams.get("customDate") as string).setHours(0, 0, 0, 0)
           );
 
         if (customDate) {
@@ -287,31 +287,29 @@ export const ModuleComponentEvents = ({ ...props }) => {
       } catch (err) {}
 
       reset({
-        // TODO: date filter s: router?.query?.s ?? "",
-        // cluster: router?.query?.cluster === "1",
         customDate,
-        eventDateRange: router?.query?.date ?? "all",
+        eventDateRange: urlParams.get("date") ?? "all",
         ...activeTermsET.reduce(
           (acc: any, t: any) => ({
             ...acc,
-            [`eventType_${t.id}`]: tois.includes(t.id.toString()),
+            [`eventType_${t.id}`]: tets.includes(t.id.toString()),
           }),
           {}
         ),
       });
     }
-  }, [router.query, reset, activeTermsET]);
+  }, [filter, reset, activeTermsET]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    const urlParams = new URLSearchParams(window.location.search);
+    const urlParams = new URLSearchParams(filter);
     const aDI = [];
     if (urlParams.get("date") && urlParams.get("date") !== "all") aDI.push(0);
     if (urlParams.get("tet")) aDI.push(1);
 
     setAccordionDefaultIndex(aDI);
-  }, []);
+  }, [filter]);
 
   const watchVariables = JSON.stringify(watch());
   useEffect(() => {
@@ -475,13 +473,6 @@ export const ModuleComponentEvents = ({ ...props }) => {
         pageSize: initialQueryState.pageSize,
       });
 
-      const baseUrl = [
-        location.protocol,
-        "//",
-        location.host,
-        location.pathname,
-      ].join("");
-
       const query = Object.keys(allVars).reduce(
         (acc: any, key: any) => {
           if (key.indexOf("eventType_") > -1) {
@@ -534,20 +525,26 @@ export const ModuleComponentEvents = ({ ...props }) => {
         }, [])
         .join("&");
 
-      const as = window.history?.state?.as
-        ? window.history?.state?.as.split("?")[0]
-        : i18n.language === "en"
-        ? "/events/"
-        : "/veranstaltungen/";
+      let pathAs = i18n.language === "en" ? "/en/events" : "/veranstaltungen";
+
+      if (window.history?.state?.as) {
+        const lastElement = window.history?.state?.as.split("/").pop();
+
+        if (lastElement !== "events" && lastElement !== "veranstaltungen") {
+          pathAs = window.history?.state?.as.split("/").slice(0, -1).join("/");
+        }
+      }
+
+      const baseUrl = [location.protocol, "//", location.host, pathAs].join("");
 
       window.history.replaceState(
         {
           ...window.history.state,
-          url: `${as}?${queryStringEncoded}`,
-          as: `${as}?${queryString}`,
+          url: `${pathAs}${queryStringEncoded ? `/${queryStringEncoded}` : ""}`,
+          as: `${pathAs}${queryString ? `/${queryString}` : ""}`,
         },
         "",
-        `${baseUrl}?${queryString}`
+        `${baseUrl}${queryString ? `/${queryString}` : ""}`
       );
 
       setCurrentQueryState(newQueryState);
@@ -559,7 +556,7 @@ export const ModuleComponentEvents = ({ ...props }) => {
     refetch,
     currentQueryState,
     i18n?.language,
-    router,
+    filter,
     config.eventLookAheadDays,
   ]);
 
@@ -585,6 +582,7 @@ export const ModuleComponentEvents = ({ ...props }) => {
   }, [loading, data?.events?.totalCount, currentPageIndex]);
 
   const today = new Date(new Date().setHours(0, 0, 0, 0));
+  const urlParams = new URLSearchParams(filter);
   return (
     <MainContent>
       <NextHeadSeo
@@ -637,7 +635,7 @@ export const ModuleComponentEvents = ({ ...props }) => {
                           )}
                           type="checkbox"
                           defaultValue={
-                            (router?.query?.date as string) ?? "all"
+                            (urlParams.get("date") as string) ?? "all"
                           }
                           options={[
                             {

@@ -187,17 +187,14 @@ export const ModuleComponentLocationsEmbed = ({
     }
 
     if (urlParams.get("cluster") === "0") {
-      console.log("current view unclustered");
       cultureMap?.setView("unclustered");
     } else {
-      console.log("current view clustered");
       cultureMap?.setView("clustered");
     }
 
     cultureMap?.clearOnloadJobs();
 
     if (where.length > 0) {
-      console.log("filtered", where);
       layzLocationIdsQuery({
         variables: {
           where: (newQueryState as any).where,
@@ -205,8 +202,6 @@ export const ModuleComponentLocationsEmbed = ({
       });
       setIsFiltered(true);
     } else {
-      console.log("not filtered");
-
       cultureMap?.setCurrentViewData(undefined, true);
       cultureMap?.renderCurrentView();
       cultureMap?.fitToCurrentViewBounds();

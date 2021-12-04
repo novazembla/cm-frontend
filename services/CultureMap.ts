@@ -40,7 +40,6 @@ export class CultureMap {
 
   intitiallyFitToBounds: boolean = true;
   isEmbed = false;
-  isInit = false;
   loaded = false;
   styleLoaded = false;
   baseDataLoaded = false;
@@ -77,10 +76,7 @@ export class CultureMap {
 
   init(ref: HTMLDivElement, setIsLoaded: Function, isEmbed: boolean) {
     console.log("loading init", ref);
-    if (this.isInit) return;
-    console.log("loading init 2");
-
-    this.isInit = true;
+    
     this.mapContainerRef = null;
     this.isEmbed = isEmbed;
 

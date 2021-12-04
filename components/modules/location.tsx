@@ -139,26 +139,22 @@ export const ModuleComponentLocation = ({
   }, [router.asPath, cultureMap]);
 
   useEffect(() => {
-    console.log(11111, highlight, cultureMap);
+    
     if (typeof window !== "undefined" && highlight && cultureMap) {
-      console.log(22222);
       cultureMap.setHighlights([highlight]);
       cultureMap.panTo(highlight.lng, highlight.lat, true);
     }
 
     return () => {
       if (cultureMap) {
-        console.log(33333);
         cultureMap.clearHighlights();
       }
     };
   }, [highlight, cultureMap]);
 
   useEffect(() => {
-    console.log(1, location, settings);
     if (location && settings) {
       let meta;
-      console.log(2);
       const { color, colorDark } = getLocationColors(location, settings);
 
       if (location?.primaryTerms?.length > 0) {
@@ -169,9 +165,7 @@ export const ModuleComponentLocation = ({
         meta = t("card.meta.location", "Location");
       }
 
-      console.log(3, highlight);
       if (!highlight) {
-        console.log(55555);
         setHighlight({
           id: location.id,
           lng: location?.lng,
