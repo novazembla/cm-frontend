@@ -9,7 +9,6 @@ import dynamic from "next/dynamic";
 import {
   Box,
   Flex,
-  chakra,
   Grid,
   Accordion,
   AccordionItem,
