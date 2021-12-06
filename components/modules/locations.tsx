@@ -531,11 +531,13 @@ export const ModuleComponentLocations = ({
       });
 
       if (where.length > 0) {
-        layzLocationIdsQuery({
-          variables: {
-            where: newQueryState.where,
-          },
-        });
+        if (type === "listing") {
+          layzLocationIdsQuery({
+            variables: {
+              where: newQueryState.where,
+            },
+          });
+        }
         setIsFiltered(true);
       } else {
         cultureMap?.setCurrentViewData(undefined, true);
@@ -545,8 +547,6 @@ export const ModuleComponentLocations = ({
       setCurrentQueryState(newQueryState);
       setCurrentPageIndex(0);
     }
-
-    
 
     const query = Object.keys(allVars).reduce(
       (acc: any, key: any) => {
@@ -614,18 +614,13 @@ export const ModuleComponentLocations = ({
 
       if (window.history?.state?.as) {
         const lastElement = window.history?.state?.as.split("/").pop();
-        
+
         if (lastElement !== "map" && lastElement !== "karte") {
           pathAs = window.history?.state?.as.split("/").slice(0, -1).join("/");
         }
       }
-      
-      const baseUrl = [
-        location.protocol,
-        "//",
-        location.host,
-        pathAs,
-      ].join("");
+
+      const baseUrl = [location.protocol, "//", location.host, pathAs].join("");
 
       window.history.replaceState(
         {

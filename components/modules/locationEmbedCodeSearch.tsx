@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { Box, useClipboard, Button, Flex, Textarea } from "@chakra-ui/react";
 import { useAppTranslations } from "~/hooks/useAppTranslations";
 import { useConfigContext } from "~/provider";
@@ -27,14 +28,19 @@ export const LocationEmbedCodeSearch = ({ query }: { query: string }) => {
             md: "25px",
           }}
         >
-          <iframe
-            src={src}
-            width="100%"
-            height="300px"
-            style={{
-              border: "1px solid #ccc",
-            }}
-          />
+          {useMemo(
+            () => (
+              <iframe
+                src={src}
+                width="100%"
+                height="300px"
+                style={{
+                  border: "1px solid #ccc",
+                }}
+              />
+            ),
+            [src]
+          )}
         </Box>
       </Box>
       <Box pt="0.5em">
@@ -64,10 +70,7 @@ export const LocationEmbedCodeSearch = ({ query }: { query: string }) => {
           />
           <Flex mt="20px" justifyContent="flex-end">
             <Button onClick={onCopy} variant="ghost">
-              {t(
-                "locations.embed.button.copy",
-                "Copy HTML"
-              )}
+              {t("locations.embed.button.copy", "Copy HTML")}
             </Button>
           </Flex>
         </Box>

@@ -1,5 +1,4 @@
-import { useEffect } from "react";
-import { CardTour } from "~/components/ui/CardTour";
+import { useEffect, useMemo } from "react";
 import { MainContent } from "~/components/app/MainContent";
 import { Footer } from "~/components/app/Footer";
 import {
@@ -139,14 +138,19 @@ export const ModuleComponentToursEmbedCode = ({
                 md: "25px",
               }}
             >
-              <iframe
-                src={src}
-                width="100%"
-                height="300px"
-                style={{
-                  border: "1px solid #ccc",
-                }}
-              />
+              {useMemo(
+                () => (
+                  <iframe
+                    src={src}
+                    width="100%"
+                    height="300px"
+                    style={{
+                      border: "1px solid #ccc",
+                    }}
+                  />
+                ),
+                [src]
+              )}
             </Box>
           </Box>
           <Box pt="0.5em">
