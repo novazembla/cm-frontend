@@ -13,6 +13,7 @@ import {
 import { SVG } from "~/components/ui/SVG";
 
 import debounce from "lodash/debounce";
+import { primaryInput } from "detect-it";
 
 const MotionBox = motion(Box);
 
@@ -350,7 +351,8 @@ export const MainContent = ({
           left: contentLeft,
           width: isVerticalContent ? "100vw" : contentWidth,
           zIndex: 2,
-          touchAction: isDrawerOpen ? "pan-y" : "none",
+          touchAction:
+            isDrawerOpen && primaryInput === "touch" ? "pan-y" : "none",
           cursor: !isDrawerOpen ? "pointer" : undefined,
           translateY: 0,
         }}
@@ -359,77 +361,79 @@ export const MainContent = ({
           return `translateX(${translateX}) translateZ(0)`;
         }}
         ref={motionBoxRef}
-        {...(isDrawer
-          ? {
-              onTap: !isDrawerOpen
-                ? (event: any) => {
-                    if (
-                      isAnimationRunningRef.current ||
-                      panActive.current ||
-                      !isMainContentActive
-                    )
-                      return;
-                    event.preventDefault();
-                    open();
-                  }
-                : undefined,
-              onPanStart: (event: any, info: any) => {
-                panPositionXRef.current = 0;
-                panActive.current = true;
-              },
-              onPan: (event: any, info: any) => {
-                if (isAnimationRunningRef.current) return;
-
-                if (Math.abs(info.offset.y) > Math.abs(info.offset.x)) {
+        {...{
+          onTap: !isDrawerOpen
+            ? (event: any) => {
+                if (
+                  isAnimationRunningRef.current ||
+                  panActive.current ||
+                  !isMainContentActive
+                )
                   return;
-                }
+                event.preventDefault();
+                open();
+              }
+            : undefined,
+          animate: controls,
+          ...(isDrawer && primaryInput === "touch"
+            ? {
+                onPanStart: (event: any, info: any) => {
+                  panPositionXRef.current = 0;
+                  panActive.current = true;
+                },
+                onPan: (event: any, info: any) => {
+                  if (isAnimationRunningRef.current) return;
 
-                if (!isDrawerOpen) {
-                  panPositionXRef.current = -dragLeft + info.offset.x;
-                  if (info.offset.x > 30) {
-                    open();
+                  if (Math.abs(info.offset.y) > Math.abs(info.offset.x)) {
+                    return;
+                  }
+
+                  if (!isDrawerOpen) {
+                    panPositionXRef.current = -dragLeft + info.offset.x;
+                    if (info.offset.x > 30) {
+                      open();
+                    } else {
+                      controls.set({
+                        translateX: -dragLeft + info.offset.x,
+                      });
+                    }
                   } else {
+                    panPositionXRef.current = Math.min(info.offset.x, 0);
                     controls.set({
-                      translateX: -dragLeft + info.offset.x,
+                      translateX: Math.min(info.offset.x, 0),
                     });
                   }
-                } else {
-                  panPositionXRef.current = Math.min(info.offset.x, 0);
-                  controls.set({
-                    translateX: Math.min(info.offset.x, 0),
-                  });
-                }
-              },
-              onPanEnd: (_event: any, info: any) => {
-                setTimeout(() => {
-                  panActive.current = false;
-                }, 100);
+                },
+                onPanEnd: (_event: any, info: any) => {
+                  setTimeout(() => {
+                    panActive.current = false;
+                  }, 100);
 
-                if (isAnimationRunningRef.current) return;
+                  if (isAnimationRunningRef.current) return;
 
-                if (
-                  Math.abs(info.offset.y) > Math.abs(panPositionXRef.current)
-                ) {
-                  return;
-                }
-
-                if (Math.abs(panPositionXRef.current) > dragLeft * 0.25) {
-                  if (panPositionXRef.current < 0) {
-                    close();
-                  } else {
-                    open();
+                  if (
+                    Math.abs(info.offset.y) > Math.abs(panPositionXRef.current)
+                  ) {
+                    return;
                   }
-                } else {
-                  if (panPositionXRef.current < 0) {
-                    open();
+
+                  if (Math.abs(panPositionXRef.current) > dragLeft * 0.25) {
+                    if (panPositionXRef.current < 0) {
+                      close();
+                    } else {
+                      open();
+                    }
                   } else {
-                    close();
+                    if (panPositionXRef.current < 0) {
+                      open();
+                    } else {
+                      close();
+                    }
                   }
-                }
-              },
-              animate: controls,
-            }
-          : {})}
+                },
+              }
+            : undefined),
+        }}
       >
         <Box
           position="relative"
