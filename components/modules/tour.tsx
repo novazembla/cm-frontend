@@ -38,7 +38,7 @@ import { PageTitle } from "../ui/PageTitle";
 
 const MOBILE_CARD_WIDTH = 275;
 
-export const ModuleComponentTour = ({ tour }: { tour: any }) => {
+export const ModuleComponentTour = ({ tour }: { tour: any; }) => {
   const cultureMap = useMapContext();
   const router = useRouter();
   const { isMobile, isTablet, isDesktopAndUp } = useIsBreakPoint();

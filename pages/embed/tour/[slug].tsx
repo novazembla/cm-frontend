@@ -4,18 +4,18 @@ import { GetStaticPaths, GetStaticProps } from "next";
 import {
   ModuleTourGetStaticProps,
   ModuleTourGetStaticPaths,
-  ModuleComponentTour,
 } from "~/components/modules/tour";
-import LayoutFull from "~/components/app/LayoutFull";
+import { ModuleComponentTourEmbed } from "~/components/modules/tourEmbed";
+
+import LayoutLight from "~/components/app/LayoutLight";
 
 const Tour = ({ ...props }) => {
-  return <ModuleComponentTour tour={props.tour} {...props} />;
+  return <ModuleComponentTourEmbed tour={props.tour} {...props} />;
 };
 
 export const getStaticPaths: GetStaticPaths = async (context) => {
   return ModuleTourGetStaticPaths(context);
 };
-
 
 export const getStaticProps: GetStaticProps = async (context) => {
   const {
@@ -35,9 +35,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 };
 
 Tour.getLayout = function getLayout(page: ReactElement) {
-  return <LayoutFull>{page}</LayoutFull>;
+  return <LayoutLight>{page}</LayoutLight>;
 };
 
 export default Tour;
-
-
