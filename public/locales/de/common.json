@@ -366,6 +366,11 @@
       "tourStops": "Stops"
     }
   },
+  "tours": {
+    "embed": {
+      "chooseTour": "Bitte wählen Sie eine Tour zum einbetten aus"
+    }
+  },
   "apiimage": {
     "uploaded": "Bild wird auf dem Server verarbeitet"
   },
