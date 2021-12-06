@@ -97,7 +97,7 @@ export const Footer = ({
         <Flex
           sx={{
             a: {
-              marginBottom: "0.3em",
+              mb: "0.6em",
               _last: {
                 marginBottom: 0,
               },
@@ -119,9 +119,8 @@ export const Footer = ({
           >
             <Flex
               direction="column"
-              mb="1em"
+              mb="1.6em"
               sx={{
-                lineHeight: "1.5em",
                 a: {
                   mb: "0.6em"
                 }
@@ -138,9 +137,9 @@ export const Footer = ({
             </Flex>
             <Flex
               direction="column"
-              sx={{
-                lineHeight: "1.5em",
-              }}
+              // sx={{
+              //   lineHeight: "1.5em",
+              // }}
             >
               {config.nav.footer.map((link: any, index: number) => (
                 <ActiveLink
