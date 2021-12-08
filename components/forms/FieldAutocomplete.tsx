@@ -281,7 +281,7 @@ export const FieldAutocomplete = ({
                       >
                         {t(
                           "forms.select.autocomplete.search.loading",
-                          "Serching the database"
+                          "Searching the database"
                         )}
                       </chakra.li>
                     )}

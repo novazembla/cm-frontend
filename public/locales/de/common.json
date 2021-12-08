@@ -48,6 +48,16 @@
     "buttonNo": "Nein, danke",
     "buttonYes": "Ja, gerne"
   },
+  "forms": {
+    "select": {
+      "autocomplete": {
+        "search": {
+          "notfound": "Keine Einträge gefunden",
+          "loading": "Wir durchsuchen unsere Datenbank"
+        }
+      }
+    }
+  },
   "imageuploader": {
     "filesizebetween": "Dateigrösse zwischen {{minFileSize}} und {{maxFileSize}}",
     "filesizebelow": "Max. Dateigrösse {{maxFileSize}}",
@@ -135,7 +145,18 @@
       },
       "button": {
         "copy": "HTML kopieren"
-      }
+      },
+      "select": {
+        "searchForLocations": "Bitte suche Sie nach Orten und wählen diese dann aus",
+        "searchField": "Ortsname",
+        "title": {
+          "selectedLocations": "Ausgewählte Orte"
+        },
+        "button": {
+          "removeLocation": "Ort von der Liste entfernen"
+        }
+      },
+      "noLocationSelected": "Bitte wählen Sie einen oder mehrere Orte mit der Hilfe des obrigen Formularfelds aus"
     },
     "totalCount": "{{count}} Ort(e) gefunden",
     "totalCount_plural": "{{count}} Orte gefunden",
@@ -177,6 +198,11 @@
     },
     "label": {
       "agency": "Träger"
+    },
+    "embed": {
+      "title": {
+        "select": "Individuell ausgewählte Orte einbetten"
+      }
     }
   },
   "taxonomy": {

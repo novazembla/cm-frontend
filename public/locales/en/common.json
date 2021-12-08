@@ -48,6 +48,16 @@
     "buttonNo": "No, thanks",
     "buttonYes": "Okay"
   },
+  "forms": {
+    "select": {
+      "autocomplete": {
+        "search": {
+          "notfound": "Nothing found",
+          "loading": "Searching the database"
+        }
+      }
+    }
+  },
   "imageuploader": {
     "filesizebetween": "Size must be between {{minFileSize}} and {{maxFileSize}}",
     "filesizebelow": "Size max. {{maxFileSize}}",
@@ -135,7 +145,18 @@
       },
       "button": {
         "copy": "Copy HTML"
-      }
+      },
+      "select": {
+        "searchForLocations": "Please search and select your locations",
+        "searchField": "location name",
+        "title": {
+          "selectedLocations": "Selected locations"
+        },
+        "button": {
+          "removeLocation": "Remove location from list"
+        }
+      },
+      "noLocationSelected": "Please select some locations via the search form above"
     },
     "totalCount": "{{count}} Locations found",
     "totalCount_plural": "{{count}} Locations found",
@@ -177,6 +198,11 @@
     },
     "label": {
       "agency": "Agency"
+    },
+    "embed": {
+      "title": {
+        "select": "Select locations"
+      }
     }
   },
   "taxonomy": {
