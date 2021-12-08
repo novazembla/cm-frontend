@@ -9,7 +9,7 @@
       "zoomIntoMap": "Karte vergrößern",
       "zoomOutOfMap": "Karte verkleinern",
       "findMyLocation": "Mein Standort anzeigen",
-      "suggestLocation": "Kartenpunktvorschlag"
+      "suggestLocation": "Kulturellen Ort vorschlagen"
     },
     "title": "Menü"
   },
@@ -31,8 +31,8 @@
     "noResult": "Für Ihr Stichwort konnten keine Einträge gefunden werden",
     "module": {
       "title": {
-        "location": "Kartenpunkte",
-        "singLocation": "Kartenpunkt",
+        "location": "Kulturelle Orte",
+        "singLocation": "Kultureller Ort",
         "event": "Veranstaltungen",
         "singEvent": "Veranstaltung",
         "tour": "Touren",
@@ -91,7 +91,7 @@
       "title": "Veranstaltung"
     },
     "title": {
-      "location": "Kartenpunkt"
+      "location": "Ort"
     },
     "calendar": {
       "previousMonth": "Vorheriger Monat",
@@ -137,10 +137,10 @@
         "copy": "HTML kopieren"
       }
     },
-    "totalCount": "{{count}} Kartenpunkt(e) gefunden",
-    "totalCount_plural": "{{count}} Kartenpunkte gefunden",
-    "totalCountPlural": "{{count}} Kartenpunkte gefunden",
-    "totalCountPlural_plural": "{{count}} Kartenpunkte gefunden",
+    "totalCount": "{{count}} Ort(e) gefunden",
+    "totalCount_plural": "{{count}} Orte gefunden",
+    "totalCountPlural": "{{count}} Orte gefunden",
+    "totalCountPlural_plural": "{{count}} Orte gefunden",
     "filter": {
       "title": {
         "keyword": "Nach Stichwort suchen",
@@ -150,17 +150,17 @@
         "settings": "Weitere Einstellungen"
       },
       "andRelationship": "Alle gewählten Begriffe müssen zugewiesen sein",
-      "clusterResult": "Naheliegende Kartenpunkte gruppieren"
+      "clusterResult": "Naheliegende Orte gruppieren"
     },
-    "loadMore": "Weitere Kartenpunkte laden",
-    "totalCount_plural_plural": "{{count}} Kartenpunkte gefunden"
+    "loadMore": "Weitere Orte laden",
+    "totalCount_plural_plural": "{{count}} Orte gefunden"
   },
   "page": {
     "title": "Veranstaltungen"
   },
   "card": {
     "meta": {
-      "location": "Kartenpunkt",
+      "location": "Ort",
       "tour": "Tour",
       "event": "Veranstaltung",
       "tourStop": "Tourstop"
@@ -168,7 +168,7 @@
   },
   "location": {
     "detail": {
-      "title": "Kartenpunkt"
+      "title": "Ort"
     },
     "title": {
       "offers": "Angebot",
@@ -243,17 +243,17 @@
     "tAndC": {
       "required": "Bitte stimmen Sie zu"
     },
-    "writeError": "Entschuldigung, wir konnten leider Ihren Kartenpunktvorschlag nicht speichern. Bitte versuchen Sie es zu einem späteren Zeitpunkt noch einmal.",
-    "successfullySubmitted": "Vielen Dank! Ihr Kartenpunktvorschlag wurde gespeichert",
+    "writeError": "Entschuldigung, wir konnten leider Ihren Ortsvorschlag nicht speichern. Bitte versuchen Sie es zu einem späteren Zeitpunkt noch einmal.",
+    "successfullySubmitted": "Vielen Dank! Ihr Ortsvorschlag wurde gespeichert",
     "successfullySubmittedReviewInfor": "Wir werden diesen schnellstmöglich veröffentlichen",
     "section": {
       "about": {
-        "title": "Über den Kartenpunkt",
-        "description": "Bitte beschreiben Sie den Kartenpunkt"
+        "title": "Über den Ort",
+        "description": "Bitte beschreiben Sie den Ort"
       },
       "address": {
         "title": "Adresse",
-        "description": "Bitte geben Sie die Adresse des vorgeschlagenen Kartenpunktes an. Wir nutzen diese um den Kartenpunkt auf der Karte zu lokalisieren."
+        "description": "Bitte geben Sie die Adresse des vorgeschlagenen Ortes an. Wir nutzen diese um den Ort auf der Karte zu lokalisieren."
       },
       "contact": {
         "title": "Kontaktinformationen",
@@ -278,7 +278,7 @@
     },
     "field": {
       "label": {
-        "title": "Name des Kartenpunktes",
+        "title": "Name des Ortes",
         "mandatoryDescriptionInEnglish": "Englische Kurzbeschreibung",
         "mandatoryDescriptionInGerman": "Deutsche Kurzbeschreibung",
         "otherLanguageDescriptionInGerman": "Deutsche Kurzbeschreibung",
@@ -302,13 +302,13 @@
         "suggestionSubmittersEmail": "Ihre Emailadresse",
         "comments": "Weitere Anmerkungen",
         "suggestionSubmittersTandCAcceptance": "Ich bestätige die Richtigkeit der oben angegebenen Daten.",
-        "ownerOfLocation": "Ich bin der/die rechtlich Verantwortliche für den übermittelten Kartenpunkt."
+        "ownerOfLocation": "Ich bin der/die rechtlich Verantwortliche für den übermittelten Ort."
       },
       "placeholder": {
         "title": "Bitte geben Sie den Namen der Organisation an",
         "description": "Bitte beschreiben Sie die Organisation",
-        "otherLanguageDescriptionInGerman": "Falls möglich beschreiben Sie bitte den Kartenpunkt auch auf deutsch",
-        "otherLanguageDescriptionInEnglish": "Falls möglich beschreiben Sie bitte den Kartenpunkt auch auf englisch",
+        "otherLanguageDescriptionInGerman": "Falls möglich beschreiben Sie bitte den Ort auch auf deutsch",
+        "otherLanguageDescriptionInEnglish": "Falls möglich beschreiben Sie bitte den Ort auch auf englisch",
         "street1": "Siegfriedstr.",
         "houseNumber": "11",
         "postcode": "12345",
@@ -334,7 +334,7 @@
     }
   },
   "suggest": {
-    "title": "Kartenpunktvorschlag"
+    "title": "Kulturellen Ort vorschlagen"
   },
   "tour": {
     "title": {
@@ -408,7 +408,7 @@
     }
   },
   "map": {
-    "popupviewLocation": "Kartenpunkt ansehen",
+    "popupviewLocation": "Ort ansehen",
     "popupclose": "Popup schließen"
   }
 }

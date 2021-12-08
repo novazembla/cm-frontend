@@ -113,7 +113,7 @@
       "title": "Startseite"
     },
     "locations": {
-      "title": "Kartenpunkte"
+      "title": "Orte"
     },
     "events": {
       "title": "Veranstaltungen"
@@ -141,7 +141,7 @@
   "map": {
     "title": "Map",
     "popup": {
-      "viewLocation": "Kartenpunkt anzeigen",
+      "viewLocation": "Ort anzeigen",
       "close": "Schließen"
     },
     "this": {
