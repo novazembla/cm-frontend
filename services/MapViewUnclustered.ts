@@ -31,12 +31,10 @@ export class MapViewUnclustered {
           type: "geojson",
           data: data ?? this.cultureMap.geoJsonAllData ?? {},
         });
-        console.log("unclustered all data");
       } else {
         (
           this.cultureMap?.map?.getSource("unclustered-locations") as any
         )?.setData(data ?? this.cultureMap.geoJsonAllData ?? {});
-        console.log("unclustered filtered data");
       }
 
       let bounds: maplibregl.LngLatBounds | undefined;
@@ -48,7 +46,6 @@ export class MapViewUnclustered {
           (data ?? this.cultureMap.geoJsonAllData ?? {})?.features?.length;
           i++
         ) {
-          console.log(i)
           const coordinates = (data ?? this.cultureMap.geoJsonAllData ?? {})
             ?.features[i]?.geometry?.coordinates ?? [
             this.cultureMap.config.lng,

@@ -53,7 +53,6 @@ export class CultureMap {
     tHelper: AppTranslationHelper,
     config: AppConfig
   ) {
-    console.log("new culturemap");
     this.map = null;
     this.mapContainerRef = null;
     this.locationId = null;
@@ -75,8 +74,6 @@ export class CultureMap {
   }
 
   init(ref: HTMLDivElement, setIsLoaded: Function, isEmbed: boolean) {
-    console.log("loading init", ref);
-    
     this.mapContainerRef = null;
     this.isEmbed = isEmbed;
 
@@ -106,10 +103,8 @@ export class CultureMap {
 
     this.onLoadJobs.push(async (resolve?: any) => {
       if (this.currentView in this.views) {
-        console.log("process 1");
         this.views[this.currentView].setData();
         setTimeout(() => {
-          console.log("process 2");
           this.views[this.currentView].render();
           this.views[this.currentView].fitToBounds();
           if (typeof resolve !== "undefined") resolve(true);
@@ -123,22 +118,18 @@ export class CultureMap {
 
       if (typeof setIsLoaded === "function") setIsLoaded.call(null, true);
 
-      console.log(this.onLoadJobs);
       this.onLoadJobs.forEach(async (f) => {
         await new Promise(f);
       });
-      console.log("processed all unload jobs");
     };
 
     const maybeProcess = async () => {
-      console.log("maybe process");
       if (this.baseDataLoaded && this.styleLoaded && this.loaded)
         await process();
     };
 
     this.map.once("style.load", () => {
       this.styleLoaded = true;
-      console.log("mb process 1");
       maybeProcess();
     });
     this.map.once("load", () => {
@@ -161,7 +152,6 @@ export class CultureMap {
           );
         }
       });
-      console.log("mb process 2");
       maybeProcess();
     });
 
@@ -178,7 +168,6 @@ export class CultureMap {
             this.geoJsonAllData = data;
             this.baseDataLoaded = true;
 
-            console.log("mb process 3");
             maybeProcess();
           }
         }
@@ -194,7 +183,6 @@ export class CultureMap {
   setView(view: string) {
     if (this.map) {
       const run = async (resolve?: any) => {
-        console.log("setView", view);
         Object.keys(this.views).forEach((v: string) => {
           if (v !== view) {
             this.views[v].clear();
@@ -227,7 +215,6 @@ export class CultureMap {
   hideCurrentView() {
     if (this.map) {
       const run = async (resolve?: any) => {
-        console.log("hideCurrentVIew", this.currentView);
         this.popup.hide();
         this.clusterDetail.hide();
         this.views[this.currentView].hide();
@@ -244,7 +231,6 @@ export class CultureMap {
   showCurrentView() {
     if (this.map) {
       const run = async (resolve?: any) => {
-        console.log("showCurrentView", this.currentView);
         this.popup.hide();
         this.clusterDetail.hide();
         this.views[this.currentView].show();
@@ -261,7 +247,6 @@ export class CultureMap {
   renderCurrentView() {
     if (this.map) {
       const run = async (resolve?: any) => {
-        console.log("renderCurrentView", this.currentView);
         this.popup.hide();
         this.clusterDetail.hide();
         this.views[this.currentView].render();
@@ -278,7 +263,6 @@ export class CultureMap {
   setCurrentViewData(data?: any, show?: boolean) {
     if (this.map) {
       const run = async (resolve?: any) => {
-        console.log("setCurrentViewData", this.currentView);
         this.popup.hide();
         this.clusterDetail.hide();
         this.views[this.currentView].setData(data);
@@ -302,12 +286,10 @@ export class CultureMap {
   setFilteredViewData(ids: any[]) {
     if (this.map) {
       const run = async (resolve?: any) => {
-        console.log("setFilteredViewData", this.currentView);
         this.popup.hide();
         this.clusterDetail.hide();
 
         if (this.geoJsonAllData && this.geoJsonAllData?.features?.length) {
-          console.log(4444);
           this.views[this.currentView].setData({
             type: "FeatureCollection",
             features: this.geoJsonAllData?.features.filter((f: any) =>
@@ -316,13 +298,11 @@ export class CultureMap {
           });
           if (typeof resolve !== "undefined") resolve(true);
         } else {
-          console.log(5555);
           this.views[this.currentView].setData({
             type: "FeatureCollection",
             features: [],
           });
           setTimeout(() => {
-            console.log(6666);
             this.views[this.currentView].show();
             if (typeof resolve !== "undefined") resolve(true);
           }, 100);
@@ -340,7 +320,6 @@ export class CultureMap {
   fitToCurrentViewBounds() {
     if (this.map) {
       const run = async (resolve?: any) => {
-        console.log("fitToCurrentViewBounds", this.currentView);
         this.popup.hide();
         this.clusterDetail.hide();
         this.views[this.currentView].fitToBounds();
@@ -370,7 +349,6 @@ export class CultureMap {
   setTourStops(stops: MapTourType[]) {
     if (this.map) {
       const run = async (resolve?: any) => {
-        console.log("setTourStops", this.currentView);
         const stopsGeoJSON = {
           features: [
             ...stops.reduce((features: any, tourStop: any, index: number) => {
@@ -424,7 +402,6 @@ export class CultureMap {
   setTourPath(path: any) {
     if (this.map) {
       const run = async (resolve?: any) => {
-        console.log("setTourPath", this.currentView);
         this.tour.setTourPathData(path);
         this.tour.renderPath();
         if (typeof resolve !== "undefined") resolve(true);
@@ -440,7 +417,6 @@ export class CultureMap {
   fitToCurrentTourBounds() {
     if (this.map) {
       const run = async (resolve?: any) => {
-        console.log("fitToCurrentTourBounds", this.currentView);
         this.popup.hide();
         this.clusterDetail.hide();
         this.tour.fitToBounds();
@@ -458,7 +434,6 @@ export class CultureMap {
   clearTour() {
     if (this.map) {
       const run = async (resolve?: any) => {
-        console.log("clearTour", this.currentView);
         this.tour.clear();
         if (typeof resolve !== "undefined") resolve(true);
       };
@@ -473,7 +448,6 @@ export class CultureMap {
   setHighlights(highlights: MapHighlightType[]) {
     if (this.map) {
       const run = async (resolve?: any) => {
-        console.log("setHighlights", this.currentView);
         const data = {
           features: highlights.reduce((features: any, highlight: any) => {
             features.push({
@@ -526,7 +500,6 @@ export class CultureMap {
   clearHighlights() {
     if (this.map) {
       const run = async (resolve?: any) => {
-        console.log("clearHighlights", this.currentView);
         this.highlights.clear();
         if (typeof resolve !== "undefined") resolve(true);
       };
@@ -541,7 +514,6 @@ export class CultureMap {
   setUserLocation(lng: number, lat: number) {
     if (this.map) {
       const run = async (resolve?: any) => {
-        console.log("setUserLocation", this.currentView);
         this.userLocation.setData(lng, lat);
         this.userLocation.render();
         if (typeof resolve !== "undefined") resolve(true);
@@ -557,7 +529,6 @@ export class CultureMap {
   clearUserLocation() {
     if (this.map) {
       const run = async (resolve?: any) => {
-        console.log("clearUserLocation", this.currentView);
         this.userLocation.clear();
         if (typeof resolve !== "undefined") resolve(true);
       };
@@ -669,7 +640,6 @@ export class CultureMap {
   ) {
     if (this.map) {
       const run = async (resolve?: any) => {
-        console.log("panTo", this.currentView);
         if (isNaN(lng) || isNaN(lat)) return;
         this.map?.stop();
         this.map?.panTo(
@@ -703,7 +673,6 @@ export class CultureMap {
   ) {
     if (this.map) {
       const run = async (resolve?: any) => {
-        console.log("moveTo", this.currentView);
         if (isNaN(lng) || isNaN(lat)) return;
         this.map?.stop();
         this.map?.panTo(

@@ -21,6 +21,7 @@
     "@veccu/react-calendar": "^2.3.3",
     "axios": "^0.24.0",
     "detect-it": "^4.0.1",
+    "downshift": "^6.1.7",
     "framer-motion": "^5.3.1",
     "js-cookie": "^3.0.1",
     "lodash": "^4.17.21",

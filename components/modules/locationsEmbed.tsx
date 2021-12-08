@@ -78,6 +78,7 @@ export const ModuleComponentLocationsEmbed = ({
       ? urlParams.get("ta")?.split(",") ?? []
       : [];
 
+    
     if (termsToI?.length) {
       allTerms = [...allTerms, ...termsToI.map((t: string) => parseInt(t))];
       if (urlParams.get("and") === "1") {
@@ -132,6 +133,8 @@ export const ModuleComponentLocationsEmbed = ({
       }
     }
 
+    
+
     if (
       allTerms?.length &&
       (urlParams.get("and") === "0" || !urlParams.get("and"))
@@ -156,6 +159,27 @@ export const ModuleComponentLocationsEmbed = ({
           mode: "insensitive",
         },
       });
+    }
+
+    const ids: string[] = urlParams.get("ids")
+      ? urlParams.get("ids")?.split(",") ?? []
+      : [];
+
+    if (ids?.length > 0) {
+
+      where.push({
+        id: {
+          in: ids.map((id: string) => parseInt(id))
+        }
+      })       
+    }
+
+    if (urlParams.get("ids") === "") {
+      where.push({
+        id: {
+          in: 0
+        }
+      })
     }
 
     let newQueryState = {};

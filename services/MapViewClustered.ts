@@ -38,8 +38,6 @@ export class MapViewClustered {
         )?.setData(data ?? this.cultureMap.geoJsonAllData ?? {});
       }
 
-      console.log("setting clustered data", data ?? this.cultureMap.geoJsonAllData ?? {});
-      
       let bounds: maplibregl.LngLatBounds | undefined;
 
       if ((data ?? this.cultureMap.geoJsonAllData ?? {})?.features?.length) {
