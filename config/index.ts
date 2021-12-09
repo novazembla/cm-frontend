@@ -114,7 +114,7 @@ export const appConfig: AppConfig = {
   bounds: [[12.583801,52.154557],[14.117298,52.869959]],
   minZoom: 10,
   zoom: 12,
-  maxZoom: 19,
+  maxZoom: 20,
   nav: {
     main: appConfigMainNav,
     footer: appConfigFooterNav,
