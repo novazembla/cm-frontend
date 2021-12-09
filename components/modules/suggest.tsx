@@ -755,7 +755,7 @@ export const ModuleComponentSuggest = () => {
                       <Text textStyle="formOptions" mb="1em">
                         {t(
                           "suggestion.section.image.description",
-                          "Would you have an image of the location at hand? TODO: better text"
+                          "Would you have an image of the location at hand?"
                         )}
                       </Text>
                       <FieldRow>
@@ -766,7 +766,7 @@ export const ModuleComponentSuggest = () => {
                             <span>
                               {t(
                                 "suggestion.field.label.suggestionSubmittersImageRightsConfirmation",
-                                "I confirm that the uploaded image can be used freely on the website TODO:"
+                                "I confirm that the uploaded image can be used freely on the website"
                               )}
                             </span>
                           }

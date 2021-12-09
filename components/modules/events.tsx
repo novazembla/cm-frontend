@@ -633,7 +633,6 @@ export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
                             "events.filter.title.eventDateRange",
                             "Date range"
                           )}
-                          type="checkbox"
                           defaultValue={
                             (urlParams.get("date") as string) ?? "all"
                           }

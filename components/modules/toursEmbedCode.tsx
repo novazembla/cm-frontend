@@ -111,7 +111,6 @@ export const ModuleComponentToursEmbedCode = ({
                       "events.filter.title.eventDateRange",
                       "Date range"
                     )}
-                    type="checkbox"
                     defaultValue={
                       tours?.length > 0 ? getMultilangValue(tours[0].slug) : ""
                     }

@@ -79,9 +79,6 @@ export const SearchFormSchema = object().shape({
   search: string().min(3).required(),
 });
 
-// TODO: You can now use inputmode=“none” on up to date browsers. See:
-// https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/inputmode
-
 export const QuickSearchForm = () => {
   const { t, i18n } = useAppTranslations();
   const inputFieldRef = useRef<HTMLInputElement | null>(null);

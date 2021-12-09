@@ -194,7 +194,7 @@ export const UserTracking = () => {
                 <Flex flexDirection="column">
                   <Button
                     onClick={() => {
-                      Cookies.set(COOKIE_NAME, "no");
+                      Cookies.set(COOKIE_NAME, "no", { expires: 365 });
                       setTrackUser(false);
                       trackUserRef.current = false;
                       fadeOut();
@@ -208,7 +208,7 @@ export const UserTracking = () => {
                   </Button>
                   <Button
                     onClick={() => {
-                      Cookies.set(COOKIE_NAME, "yes");
+                      Cookies.set(COOKIE_NAME, "yes", { expires: 365 });
                       setTrackUser(true);
                       trackUserRef.current = true;
                       fadeOut();
