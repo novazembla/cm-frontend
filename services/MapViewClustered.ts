@@ -29,6 +29,7 @@ export class MapViewClustered {
           type: "geojson",
           data: data ?? this.cultureMap.geoJsonAllData ?? {},
           cluster: true,
+          maxzoom: this.cultureMap.config.maxZoom,
           clusterMaxZoom: this.cultureMap.config.maxZoom, // Max zoom to cluster points on
           clusterRadius: 50, // Radius of each cluster when clustering points (defaults to 50)
         });
@@ -198,13 +199,13 @@ export class MapViewClustered {
                 if (err || !this.cultureMap?.map) return;
                 if (
                   (children?.length > 1 && children[0].properties?.cluster) ||
-                  Math.floor(zoom) !== this.cultureMap.config.maxZoom - 1
+                  Math.floor(zoom) < this.cultureMap.config.maxZoom - 2
                 ) {
                   this.cultureMap.map.easeTo(
                     {
                       center: features[0].geometry.coordinates,
                       offset: this.cultureMap.getCenterOffset() ?? [0, 0],
-                      zoom: Math.min(zoom, this.cultureMap.config.maxZoom - 1),
+                      zoom: Math.min(zoom, this.cultureMap.config.maxZoom - 2),
                     },
                     {
                       cmAnimation: true,
@@ -217,7 +218,7 @@ export class MapViewClustered {
                       center: features[0].geometry.coordinates,
                       offset: this.cultureMap.getCenterOffset() ?? [0, 0],
                       zoom: Math.max(
-                        16.5,
+                        17.5,
                         Math.min(
                           this.cultureMap.map.getZoom(),
                           this.cultureMap.config.maxZoom - 1.1
