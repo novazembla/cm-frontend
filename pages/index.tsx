@@ -18,6 +18,7 @@ import {
   chakra,
   Collapse,
   Grid,
+  Portal,
 } from "@chakra-ui/react";
 import { gql } from "@apollo/client";
 
@@ -43,7 +44,7 @@ import {
 import debounce from "lodash/debounce";
 import NextHeadSeo from "next-head-seo";
 import { PageTitle } from "~/components/ui/PageTitle";
-import {settingsQueryPartial} from "~/graphql";
+import { settingsQueryPartial } from "~/graphql";
 
 const homepageQuery = gql`
   query {
@@ -269,8 +270,96 @@ export const Home = ({ homepage }: { homepage: any }) => {
 
   if (!homepage) return <></>;
 
+  const missionStatement = homepage?.missionStatement && (
+    <Collapse in={isMSOpen}>
+      <Box
+        layerStyle="white"
+        borderBottom="1px solid"
+        borderColor="cm.accentDark"
+        position={isMobile ? "fixed" : "static"}
+        top="60px"
+        zIndex="2"
+        p={{ base: "20px", md: "40px", "2xl": "50px" }}
+        transform="translate3d(0,0,0)"
+      >
+        <Box px={!isMobile ? "10px" : 0}>
+          <Box
+            textStyle={!isMobile ? "larger" : undefined}
+            className={isMobile ? "clampThreeLines" : undefined}
+          >
+            <b>
+              <MultiLangHtml json={homepage?.missionStatement} />
+            </b>
+          </Box>
+          <Flex
+            w="100%"
+            alignItems="center"
+            justifyContent={isMobile ? "space-between" : "flex-end"}
+            mt="1em"
+          >
+            {homepage?.missionStatementPage?.slug && (
+              <NextLink
+                href={`/page/${getMultilangValue(
+                  homepage?.missionStatementPage?.slug
+                )}/`}
+                passHref
+              >
+                <chakra.a
+                  w={isMobile ? "30px" : "40px"}
+                  h={isMobile ? "17px" : "22px"}
+                  p="0"
+                  paddingInlineStart="0"
+                  paddingInlineEnd="0"
+                  className="svgHover"
+                  minW="0"
+                  display="inline-block"
+                  title={t("mission.statement.read", "read mission statement")}
+                >
+                  <SVG
+                    type="arrow-right"
+                    width={isMobile ? "30px" : "40px"}
+                    height={isMobile ? "17px" : "22px"}
+                  />
+                </chakra.a>
+              </NextLink>
+            )}
+            {isMobile && (
+              <IconButton
+                icon={<SVG type="cross" width="200%" height="200%" />}
+                w={isMobile ? "30px" : "40px"}
+                h={isMobile ? "30px" : "40px"}
+                minW="30px"
+                borderRadius="0"
+                p="0"
+                className="svgHover tabbedFocus"
+                _focus={{
+                  bg: "transparent",
+                  boxShadow: "none",
+                }}
+                paddingInlineStart="0"
+                paddingInlineEnd="0"
+                padding="0"
+                bg="transparent"
+                overflow="hidden"
+                transition="all 0.3s"
+                _hover={{
+                  bg: "transparent",
+                }}
+                _active={{
+                  bg: "transparent",
+                }}
+                aria-label={t("mission.statement.close", "close")}
+                onClick={() => setIsMSOpen(!isMSOpen)}
+              />
+            )}
+          </Flex>
+        </Box>
+      </Box>
+    </Collapse>
+  );
+
   return (
-    <MainContent
+    <MainContent 
       isDrawer={isTablet || isDesktopAndUp}
       isVerticalContent={!isTablet && !isDesktopAndUp}
     >
@@ -278,96 +367,8 @@ export const Home = ({ homepage }: { homepage: any }) => {
         description={getMultilangValue(homepage?.missionStatement)}
       />
       <Box>
-        {homepage?.missionStatement && (
-          <Collapse in={isMSOpen}>
-            <Box
-              layerStyle="white"
-              borderBottom="1px solid"
-              borderColor="cm.accentDark"
-              position={isMobile ? "fixed" : "static"}
-              top="60px"
-              zIndex="2"
-              p={{ base: "20px", md: "40px", "2xl": "50px" }}
-              transform="translate3d(0,0,0)"
-            >
-              <Box px={!isMobile ? "10px" : 0}>
-                <Box
-                  textStyle={!isMobile ? "larger" : undefined}
-                  className={isMobile ? "clampThreeLines" : undefined}
-                >
-                  <b>
-                    <MultiLangHtml json={homepage?.missionStatement} />
-                  </b>
-                </Box>
-                <Flex
-                  w="100%"
-                  alignItems="center"
-                  justifyContent={isMobile ? "space-between" : "flex-end"}
-                  mt="1em"
-                >
-                  {homepage?.missionStatementPage?.slug && (
-                    <NextLink
-                      href={`/page/${getMultilangValue(
-                        homepage?.missionStatementPage?.slug
-                      )}/`}
-                      passHref
-                    >
-                      <chakra.a
-                        w={isMobile ? "30px" : "40px"}
-                        h={isMobile ? "17px" : "22px"}
-                        p="0"
-                        paddingInlineStart="0"
-                        paddingInlineEnd="0"
-                        className="svgHover"
-                        minW="0"
-                        display="inline-block"
-                        title={t(
-                          "mission.statement.read",
-                          "read mission statement"
-                        )}
-                      >
-                        <SVG
-                          type="arrow-right"
-                          width={isMobile ? "30px" : "40px"}
-                          height={isMobile ? "17px" : "22px"}
-                        />
-                      </chakra.a>
-                    </NextLink>
-                  )}
-                  {isMobile && (
-                    <IconButton
-                      icon={<SVG type="cross" width="200%" height="200%" />}
-                      w={isMobile ? "30px" : "40px"}
-                      h={isMobile ? "30px" : "40px"}
-                      minW="30px"
-                      borderRadius="0"
-                      p="0"
-                      className="svgHover tabbedFocus"
-                      _focus={{
-                        bg: "transparent",
-                        boxShadow: "none",
-                      }}
-                      paddingInlineStart="0"
-                      paddingInlineEnd="0"
-                      padding="0"
-                      bg="transparent"
-                      overflow="hidden"
-                      transition="all 0.3s"
-                      _hover={{
-                        bg: "transparent",
-                      }}
-                      _active={{
-                        bg: "transparent",
-                      }}
-                      aria-label={t("mission.statement.close", "close")}
-                      onClick={() => setIsMSOpen(!isMSOpen)}
-                    />
-                  )}
-                </Flex>
-              </Box>
-            </Box>
-          </Collapse>
-        )}
+        {missionStatement &&
+          (isMobile ? <Portal>{missionStatement}</Portal> : missionStatement)}
         {homepage?.highlights?.length > 0 && (
           <Box
             layerStyle="lightGray"
@@ -512,7 +513,6 @@ export const Home = ({ homepage }: { homepage: any }) => {
     </MainContent>
   );
 };
-
 
 export const getStaticProps: GetStaticProps = async (context) => {
   const {
