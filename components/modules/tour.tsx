@@ -51,7 +51,7 @@ export const ModuleComponentTour = ({ tour }: { tour: any; }) => {
   const observeVScrollPositionRef = useRef<boolean>(false);
   const containersRef = useRef<any>(null);
   const parsedTourStopsRef = useRef<any>(null);
-  const currentHightlightIndexRef = useRef<number>(-2);
+  const currentHighlightIndexRef = useRef<number>(-2);
   const footerRef = useRef<HTMLDivElement>(null);
   const tourStopsCardsContainerRef = useRef<HTMLDivElement>(null);
 
@@ -149,7 +149,7 @@ export const ModuleComponentTour = ({ tour }: { tour: any; }) => {
         -1
       );
 
-      if (currentHightlightIndexRef.current !== newIndex) {
+      if (currentHighlightIndexRef.current !== newIndex) {
         const stops = createTourStops(
           tour?.tourStops,
           getMultilangValue(tour?.slug),
@@ -167,7 +167,7 @@ export const ModuleComponentTour = ({ tour }: { tour: any; }) => {
           );
         }
 
-        currentHightlightIndexRef.current = newIndex;
+        currentHighlightIndexRef.current = newIndex;
       }
     }
   };
@@ -192,7 +192,7 @@ export const ModuleComponentTour = ({ tour }: { tour: any; }) => {
         );
       }
 
-      if (currentHightlightIndexRef.current !== newIndex) {
+      if (currentHighlightIndexRef.current !== newIndex) {
         const stops = createTourStops(
           tour?.tourStops,
           getMultilangValue(tour?.slug),
@@ -209,7 +209,7 @@ export const ModuleComponentTour = ({ tour }: { tour: any; }) => {
             isMobileRef.current
           );
         }
-        currentHightlightIndexRef.current = newIndex;
+        currentHighlightIndexRef.current = newIndex;
       }
     }
   };
@@ -255,7 +255,7 @@ export const ModuleComponentTour = ({ tour }: { tour: any; }) => {
       cultureMap.clearOnloadJobs();
       cultureMap.hideCurrentView();
     }
-    currentHightlightIndexRef.current = -2;
+    currentHighlightIndexRef.current = -2;
 
     // As next.js doesn't unmount/remount if only components route changes we
     // need to rely on router.asPath to trigger in between tour change actions
