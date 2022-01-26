@@ -30,48 +30,50 @@ export class MapTour {
   }
 
   setTourPathData(path: any) {
-    if (this.cultureMap?.map) {
-      if (!this.cultureMap?.map) return;
+    const self = this;
+    if (self.cultureMap?.map) {
+      if (!self.cultureMap?.map) return;
 
-      if (!this.cultureMap.map.getSource("tourPath")) {
-        this.cultureMap.map.addSource("tourPath", {
+      if (!self.cultureMap.map.getSource("tourPath")) {
+        self.cultureMap.map.addSource("tourPath", {
           type: "geojson",
           data: path,
         });
       } else {
-        (this.cultureMap?.map?.getSource("tourPath") as any)?.setData(path);
+        (self.cultureMap?.map?.getSource("tourPath") as any)?.setData(path);
       }
     }
   }
 
   setTourStopsData(stops: any) {
-    if (this.cultureMap?.map) {
-      if (!this.cultureMap?.map) return;
+    const self = this;
+    if (self.cultureMap?.map) {
+      if (!self.cultureMap?.map) return;
 
-      if (!this.cultureMap.map.getSource("tourStops")) {
-        this.cultureMap.map.addSource("tourStops", {
+      if (!self.cultureMap.map.getSource("tourStops")) {
+        self.cultureMap.map.addSource("tourStops", {
           type: "geojson",
           data: stops,
         });
       } else {
-        (this.cultureMap?.map?.getSource("tourStops") as any)?.setData(stops);
+        (self.cultureMap?.map?.getSource("tourStops") as any)?.setData(stops);
       }
 
-      this.bounds = new maplibregl.LngLatBounds(
-        [this.cultureMap.config.lng, this.cultureMap.config.lat],
-        [this.cultureMap.config.lng, this.cultureMap.config.lat]
+      self.bounds = new maplibregl.LngLatBounds(
+        [self.cultureMap.config.lng, self.cultureMap.config.lat],
+        [self.cultureMap.config.lng, self.cultureMap.config.lat]
       );
 
       if (stops?.features?.length) {
         for (let i = 0; i < stops?.features?.length; i++) {
           if (stops?.features[i]?.geometry?.coordinates) {
             const coordinates = stops?.features[i]?.geometry?.coordinates ?? [
-              this.cultureMap.config.lng,
-              this.cultureMap.config.lat,
+              self.cultureMap.config.lng,
+              self.cultureMap.config.lat,
             ];
 
             if (coordinates[0] !== 0 && coordinates[1] !== 0) {
-              this.bounds.extend(coordinates);
+              self.bounds.extend(coordinates);
             }
           }
         }
@@ -80,13 +82,14 @@ export class MapTour {
   }
 
   renderPath() {
-    if (this.cultureMap?.map) {
-      if (!this.cultureMap?.map || !this.cultureMap.map.getSource("tourPath"))
+    const self = this;
+    if (self.cultureMap?.map) {
+      if (!self.cultureMap?.map || !self.cultureMap.map.getSource("tourPath"))
         return;
 
-      if (this.cultureMap?.map?.getLayer("tourPath")) return;
+      if (self.cultureMap?.map?.getLayer("tourPath")) return;
 
-      this.cultureMap?.map?.addLayer({
+      self.cultureMap?.map?.addLayer({
         id: "tourPath",
         type: "line",
         source: "tourPath",
@@ -95,7 +98,7 @@ export class MapTour {
           "line-cap": "round",
         },
         paint: {
-          "line-color": this.cultureMap.config.colorDark,
+          "line-color": self.cultureMap.config.colorDark,
           "line-width": 2,
         },
       });
@@ -103,13 +106,14 @@ export class MapTour {
   }
 
   renderStops() {
-    if (this.cultureMap?.map) {
-      if (!this.cultureMap?.map || !this.cultureMap.map.getSource("tourStops"))
+    const self = this;
+    if (self.cultureMap?.map) {
+      if (!self.cultureMap?.map || !self.cultureMap.map.getSource("tourStops"))
         return;
 
-      if (this.cultureMap?.map?.getLayer("tourStops")) return;
+      if (self.cultureMap?.map?.getLayer("tourStops")) return;
 
-      this.cultureMap.map.addLayer({
+      self.cultureMap.map.addLayer({
         id: "tourStops",
         type: "circle",
         source: "tourStops",
@@ -120,7 +124,7 @@ export class MapTour {
         },
       });
 
-      this.cultureMap.map.addLayer({
+      self.cultureMap.map.addLayer({
         id: "tourStopNumbers",
         type: "symbol",
         source: "tourStops",
@@ -137,7 +141,7 @@ export class MapTour {
         },
       });
 
-      this.cultureMap.map.addLayer({
+      self.cultureMap.map.addLayer({
         id: "tourStopsHighlight",
         type: "circle",
         source: "tourStops",
@@ -150,7 +154,7 @@ export class MapTour {
         },
       });
 
-      this.cultureMap.map.addLayer({
+      self.cultureMap.map.addLayer({
         id: "tourStopsHighlightDot",
         type: "circle",
         source: "tourStops",
@@ -161,7 +165,7 @@ export class MapTour {
         },
       });
 
-      this.cultureMap.map.addLayer({
+      self.cultureMap.map.addLayer({
         id: "tourStopsHighlightNumber",
         type: "symbol",
         source: "tourStops",
@@ -182,10 +186,10 @@ export class MapTour {
         },
       });
 
-      this.cultureMap.map.moveLayer("tourStops");
-      this.cultureMap.map.moveLayer("tourStopNumbers");
-      this.cultureMap.map.moveLayer("tourStopsHighlightDot");
-      this.cultureMap.map.moveLayer("tourStopsHighlightNumber");
+      self.cultureMap.map.moveLayer("tourStops");
+      self.cultureMap.map.moveLayer("tourStopNumbers");
+      self.cultureMap.map.moveLayer("tourStopsHighlightDot");
+      self.cultureMap.map.moveLayer("tourStopsHighlightNumber");
 
       const showMapPop = (e: any) => {
         const feature = e?.features?.[0];
@@ -200,9 +204,9 @@ export class MapTour {
         try {
           const titles = JSON.parse(feature?.properties?.title);
 
-          this.cultureMap.popup.show(
+          self.cultureMap.popup.show(
             coordinates,
-            this.cultureMap.tHelper.getMultilangValue(titles),
+            self.cultureMap.tHelper.getMultilangValue(titles),
             feature?.properties?.color,
             feature?.properties?.slug
           );
@@ -211,60 +215,60 @@ export class MapTour {
         }
       };
 
-      this.events["zoom"] = () => {
-        if (this.cultureMap.isAnimating) return;
+      self.events["zoom"] = () => {
+        if (self.cultureMap.isAnimating) return;
 
         if (
-          this.cultureMap.map &&
-          (this.cultureMap.map.getZoom() <
-            this.cultureMap.overlayZoomLevel -
-              this.cultureMap.ZOOM_LEVEL_HIDE_ADJUSTOR ||
-            this.cultureMap.map.getZoom() >
-              this.cultureMap.overlayZoomLevel +
-                this.cultureMap.ZOOM_LEVEL_HIDE_ADJUSTOR)
+          self.cultureMap.map &&
+          (self.cultureMap.map.getZoom() <
+            self.cultureMap.overlayZoomLevel -
+              self.cultureMap.ZOOM_LEVEL_HIDE_ADJUSTOR ||
+            self.cultureMap.map.getZoom() >
+              self.cultureMap.overlayZoomLevel +
+                self.cultureMap.ZOOM_LEVEL_HIDE_ADJUSTOR)
         ) {
-          this.cultureMap.overlayZoomLevel = 0;
-          this.cultureMap.popup.hide();
+          self.cultureMap.overlayZoomLevel = 0;
+          self.cultureMap.popup.hide();
         }
       };
-      this.cultureMap.map.on("zoom", this.events["zoom"]);
+      self.cultureMap.map.on("zoom", self.events["zoom"]);
 
       if (primaryInput !== "touch") {
-        this.events["mouseenter-tourStops"] = (e: any) => {
-          if (this.cultureMap.isAnimating) return;
-          if (this.cultureMap.map) {
+        self.events["mouseenter-tourStops"] = (e: any) => {
+          if (self.cultureMap.isAnimating) return;
+          if (self.cultureMap.map) {
             // Change the cursor style as a UI indicator.
-            this.cultureMap.map.getCanvas().style.cursor = "pointer";
+            self.cultureMap.map.getCanvas().style.cursor = "pointer";
             if (e?.features?.[0]) showMapPop(e);
           }
         };
 
-        this.cultureMap.map.on(
+        self.cultureMap.map.on(
           "mouseenter",
           "tourStops",
-          this.events["mouseenter-tourStops"]
+          self.events["mouseenter-tourStops"]
         );
 
-        this.events["mouseleave-tourStops"] = () => {
-          if (this.cultureMap.map) {
-            this.cultureMap.map.getCanvas().style.cursor = "";
-            this.cultureMap.popup.hide();
+        self.events["mouseleave-tourStops"] = () => {
+          if (self.cultureMap.map) {
+            self.cultureMap.map.getCanvas().style.cursor = "";
+            self.cultureMap.popup.hide();
           }
         };
 
-        this.cultureMap.map.on(
+        self.cultureMap.map.on(
           "mouseleave",
           "tourStops",
-          this.events["mouseleave-tourStops"]
+          self.events["mouseleave-tourStops"]
         );
       }
 
-      this.events["click-tourStops"] = (e: any) => {
+      self.events["click-tourStops"] = (e: any) => {
         if (primaryInput !== "touch") {
-          this.cultureMap.clusterDetail.hide();
+          self.cultureMap.clusterDetail.hide();
           if (e?.features?.[0]?.properties?.slug) {
             try {
-              this.cultureMap.onMapPointNavigate(
+              self.cultureMap.onMapPointNavigate(
                 e?.features?.[0]?.properties?.slug
               );
             } catch (err) {}
@@ -274,72 +278,78 @@ export class MapTour {
         }
       };
 
-      this.cultureMap.map.on(
+      self.cultureMap.map.on(
         "click",
         "tourStops",
-        this.events["click-tourStops"]
+        self.events["click-tourStops"]
       );
     }
   }
 
   fitToBounds() {
-    if (this.cultureMap?.map) {
-      this.cultureMap.map?.fitBounds(this.bounds, {
-        maxZoom: this.cultureMap.MAX_BOUNDS_ZOOM,
+    const self = this;
+    if (self.cultureMap?.map) {
+      self.cultureMap.map?.fitBounds(self.bounds, {
+        maxZoom: self.cultureMap.MAX_BOUNDS_ZOOM,
         linear: true,
-        padding: this.cultureMap.getBoundsPadding(),
+        padding: self.cultureMap.getBoundsPadding(),
         animate: false,
       });
     }
   }
 
   hide() {
-    if (!this.isVisible) return;
+    const self = this;
+    if (!self.isVisible) return;
 
-    this.cultureMap.toggleLayersVisibility([...this.layers, "tourPath"], "none");
+    self.cultureMap.toggleLayersVisibility([...self.layers, "tourPath"], "none");
 
-    this.isVisible = false;
+    self.isVisible = false;
   }
 
   show() {
-    if (this.isVisible) return;
+    const self = this;
+    if (self.isVisible) return;
 
-    this.cultureMap.toggleLayersVisibility([...this.layers, "tourPath"], "visible");
+    self.cultureMap.toggleLayersVisibility([...self.layers, "tourPath"], "visible");
 
-    this.isVisible = true;    
+    self.isVisible = true;    
   }
 
   clear() {
-    this.clearPath();
-    this.clearStops();
-    this.isVisible = false;
+    const self = this;
+    self.clearPath();
+    self.clearStops();
+    self.isVisible = false;
   }
 
   clearPath() {
-    this.cultureMap.removeLayers(["tourPath"]);
+    const self = this;
+    self.cultureMap.removeLayers(["tourPath"]);
   }
 
   clearStops() {
-    if (this.cultureMap?.map) {
+    const self = this;
+    if (self.cultureMap?.map) {
 
-      this.cultureMap.removeLayers(this.layers);
+      self.cultureMap.removeLayers(self.layers);
 
-      if (Object.keys(this.events).length) {
-        Object.keys(this.events).forEach((key) => {
-          if (this.cultureMap?.map) {
+      if (Object.keys(self.events).length) {
+        Object.keys(self.events).forEach((key) => {
+          if (self.cultureMap?.map) {
             const params: string[] = key.split("-");
             if (params.length > 1) {
-              this.cultureMap.map.off(
+              self.cultureMap.map.off(
                 params[0] as any,
                 params[1],
-                this.events[key]
+                self.events[key]
               );
             } else {
-              this.cultureMap.map.off(key, this.events[key]);
+              self.cultureMap.map.off(key as any, self.events[key]);
             }
           }
         });
-        this.events = {};
+        self.events = {};
       }
     }
   }

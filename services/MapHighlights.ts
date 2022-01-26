@@ -23,16 +23,17 @@ export class MapHighlights {
   }
 
   setData(data?: any) {
-    if (this.cultureMap?.map) {
-      if (!this.cultureMap?.map) return;
+    const self = this;
+    if (self.cultureMap?.map) {
+      if (!self.cultureMap?.map) return;
 
-      if (!this.cultureMap.map.getSource("highlights")) {
-        this.cultureMap.map.addSource("highlights", {
+      if (!self.cultureMap.map.getSource("highlights")) {
+        self.cultureMap.map.addSource("highlights", {
           type: "geojson",
           data: data ?? {},
         });
       } else {
-        (this.cultureMap?.map?.getSource("highlights") as any)?.setData(
+        (self.cultureMap?.map?.getSource("highlights") as any)?.setData(
           data ?? {}
         );
       }
@@ -40,13 +41,14 @@ export class MapHighlights {
   }
 
   render() {
-    if (this.cultureMap?.map) {
-      if (!this.cultureMap?.map || !this.cultureMap.map.getSource("highlights"))
+    const self = this;
+    if (self.cultureMap?.map) {
+      if (!self.cultureMap?.map || !self.cultureMap.map.getSource("highlights"))
         return;
 
-      this.clear();
+      self.clear();
 
-      this.cultureMap?.map?.addLayer({
+      self.cultureMap?.map?.addLayer({
         id: "highlights",
         type: "circle",
         source: "highlights",
@@ -72,16 +74,16 @@ export class MapHighlights {
           const titles = JSON.parse(feature?.properties?.title);
 
           const slug = `/${
-            this.cultureMap.tHelper.i18n?.language === "en"
+            self.cultureMap.tHelper.i18n?.language === "en"
               ? "location"
               : "ort"
-          }/${this.cultureMap.tHelper.getMultilangValue(
+          }/${self.cultureMap.tHelper.getMultilangValue(
             JSON.parse(feature?.properties?.slug)
           )}`;
 
-          this.cultureMap.popup.show(
+          self.cultureMap.popup.show(
             coordinates,
-            this.cultureMap.tHelper.getMultilangValue(titles),
+            self.cultureMap.tHelper.getMultilangValue(titles),
             feature?.properties?.strokeColor ?? feature?.properties?.color,
             slug
           );
@@ -90,68 +92,68 @@ export class MapHighlights {
         }
       };
 
-      this.events["zoom"] = () => {
-        if (this.cultureMap.isAnimating) return;
+      self.events["zoom"] = () => {
+        if (self.cultureMap.isAnimating) return;
 
         if (
-          this.cultureMap.map &&
-          (this.cultureMap.map.getZoom() <
-            this.cultureMap.overlayZoomLevel -
-              this.cultureMap.ZOOM_LEVEL_HIDE_ADJUSTOR ||
-            this.cultureMap.map.getZoom() >
-              this.cultureMap.overlayZoomLevel +
-                this.cultureMap.ZOOM_LEVEL_HIDE_ADJUSTOR)
+          self.cultureMap.map &&
+          (self.cultureMap.map.getZoom() <
+            self.cultureMap.overlayZoomLevel -
+              self.cultureMap.ZOOM_LEVEL_HIDE_ADJUSTOR ||
+            self.cultureMap.map.getZoom() >
+              self.cultureMap.overlayZoomLevel +
+                self.cultureMap.ZOOM_LEVEL_HIDE_ADJUSTOR)
         ) {
-          this.cultureMap.overlayZoomLevel = 0;
-          this.cultureMap.popup.hide();
+          self.cultureMap.overlayZoomLevel = 0;
+          self.cultureMap.popup.hide();
         }
       };
-      this.cultureMap.map.on("zoom", this.events["zoom"]);
+      self.cultureMap.map.on("zoom", self.events["zoom"]);
 
       if (primaryInput !== "touch") {
-        this.events["mouseenter-highlights"] = (e: any) => {
-          if (this.cultureMap.isAnimating) return;
-          if (this.cultureMap.map) {
+        self.events["mouseenter-highlights"] = (e: any) => {
+          if (self.cultureMap.isAnimating) return;
+          if (self.cultureMap.map) {
             // Change the cursor style as a UI indicator.
-            this.cultureMap.map.getCanvas().style.cursor = "pointer";
+            self.cultureMap.map.getCanvas().style.cursor = "pointer";
             if (e?.features?.[0]) showMapPop(e);
           }
         };
 
-        this.cultureMap.map.on(
+        self.cultureMap.map.on(
           "mouseenter",
           "highlights",
-          this.events["mouseenter-highlights"]
+          self.events["mouseenter-highlights"]
         );
 
-        this.events["mouseleave-highlights"] = () => {
-          if (this.cultureMap.map) {
-            this.cultureMap.map.getCanvas().style.cursor = "";
-            this.cultureMap.popup.hide();
+        self.events["mouseleave-highlights"] = () => {
+          if (self.cultureMap.map) {
+            self.cultureMap.map.getCanvas().style.cursor = "";
+            self.cultureMap.popup.hide();
           }
         };
 
-        this.cultureMap.map.on(
+        self.cultureMap.map.on(
           "mouseleave",
           "highlights",
-          this.events["mouseleave-highlights"]
+          self.events["mouseleave-highlights"]
         );
       }
 
-      this.events["click-highlights"] = (e: any) => {
+      self.events["click-highlights"] = (e: any) => {
         if (primaryInput !== "touch") {
-          this.cultureMap.clusterDetail.hide();
+          self.cultureMap.clusterDetail.hide();
           if (e?.features?.[0]?.properties?.slug) {
             try {
               const slug = `/${
-                this.cultureMap.tHelper.i18n?.language === "en"
+                self.cultureMap.tHelper.i18n?.language === "en"
                   ? "location"
                   : "ort"
-              }/${this.cultureMap.tHelper.getMultilangValue(
+              }/${self.cultureMap.tHelper.getMultilangValue(
                 JSON.parse(e?.features?.[0]?.properties?.slug)
               )}`;
 
-              this.cultureMap.onMapPointNavigate(slug);
+              self.cultureMap.onMapPointNavigate(slug);
             } catch (err) {}
           }
         } else {
@@ -159,52 +161,55 @@ export class MapHighlights {
         }
       };
 
-      this.cultureMap.map.on(
+      self.cultureMap.map.on(
         "click",
         "highlights",
-        this.events["click-highlights"]
+        self.events["click-highlights"]
       );
     }
   }
 
   hide() {
-    if (!this.isVisible) return;
+    const self = this;
+    if (!self.isVisible) return;
     
-    this.cultureMap.toggleLayersVisibility(this.layers, "none");
+    self.cultureMap.toggleLayersVisibility(self.layers, "none");
 
-    this.isVisible = false;
+    self.isVisible = false;
   }
 
   show() {
-    if (this.isVisible) return;
+    const self = this;
+    if (self.isVisible) return;
 
-    this.cultureMap.toggleLayersVisibility(this.layers, "visible");
+    self.cultureMap.toggleLayersVisibility(self.layers, "visible");
 
-    this.isVisible = true;
+    self.isVisible = true;
   }
 
   clear() {
-    if (this.cultureMap?.map) {
-      this.isVisible = false;
+    const self = this;
+    if (self.cultureMap?.map) {
+      self.isVisible = false;
 
-      this.cultureMap.removeLayers(this.layers);
+      self.cultureMap.removeLayers(self.layers);
       
-      if (Object.keys(this.events).length) {
-        Object.keys(this.events).forEach((key) => {
-          if (this.cultureMap?.map) {
+      if (Object.keys(self.events).length) {
+        Object.keys(self.events).forEach((key) => {
+          if (self.cultureMap?.map) {
             const params: string[] = key.split("-");
             if (params.length > 1) {
-              this.cultureMap.map.off(
+              self.cultureMap.map.off(
                 params[0] as any,
                 params[1],
-                this.events[key]
+                self.events[key]
               );
             } else {
-              this.cultureMap.map.off(key, this.events[key]);
+              self.cultureMap.map.off(key as any, self.events[key]);
             }
           }
         });
-        this.events = {};
+        self.events = {};
       }
     }
   }

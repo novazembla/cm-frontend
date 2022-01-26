@@ -27,24 +27,25 @@ export class MapPopup {
     slug: string,
     offset?: any
   ) {
-    if (!this?.cultureMap?.map) return;
+    const self = this;
+    if (!self?.cultureMap?.map) return;
 
     const hash = `${coordinates[0].toFixed(6)}-${coordinates[1].toFixed(6)}`;
 
-    if (this.popupAttached && this.locationHash === hash) return;
+    if (self.popupAttached && self.locationHash === hash) return;
 
-    clearTimeout(this.closeTimeout1);
-    clearTimeout(this.closeTimeout2);
+    clearTimeout(self.closeTimeout1);
+    clearTimeout(self.closeTimeout2);
 
     try {
-      this.popupAnimating = true;
+      self.popupAnimating = true;
 
-      this.popup.setOffset(
+      self.popup.setOffset(
         offset?.length
           ? offset
           : primaryInput === "mouse"
-          ? this.cultureMap.POPUP_OFFSET_MOUSE
-          : this.cultureMap.POPUP_OFFSET_TOUCH
+          ? self.cultureMap.POPUP_OFFSET_MOUSE
+          : self.cultureMap.POPUP_OFFSET_TOUCH
       );
 
       const containerElem: any = document.createElement("div");
@@ -62,8 +63,8 @@ export class MapPopup {
       arrowElem.addEventListener("click", (e: any) => {
         if (!this?.cultureMap?.map) return;
         e.preventDefault();
-        this.cultureMap.onMapPointNavigate(slug);
-        this.hide();
+        self.cultureMap.onMapPointNavigate(slug);
+        self.hide();
       });
       containerElem.className = "popup";
       containerElem.style.borderColor = color;
@@ -78,16 +79,16 @@ export class MapPopup {
 
         containerElem.className = "popup mouse";
         containerElem.addEventListener("mouseenter", () => {
-          clearTimeout(this.closeTimeout1);
-          clearTimeout(this.closeTimeout2);
+          clearTimeout(self.closeTimeout1);
+          clearTimeout(self.closeTimeout2);
         });
         containerElem.addEventListener("mouseleave", () => {
-          this.hide();
+          self.hide();
         });
         containerElem.addEventListener("click", () => {
           if (!this?.cultureMap?.map) return;
           this?.cultureMap.onMapPointNavigate(slug);
-          this.hide();
+          self.hide();
         });
       } else {
         containerElem.className = "popup touch";
@@ -101,52 +102,53 @@ export class MapPopup {
         );
         closeElem.addEventListener("click", (e: any) => {
           e.preventDefault();
-          this.hide();
+          self.hide();
         });
         flexElem.appendChild(closeElem);
       }
 
       flexElem.appendChild(arrowElem);
 
-      this.locationHash = hash;
+      self.locationHash = hash;
       // Populate the popup and set its coordinates
       // based on the feature found.
-      this.popup
+      self.popup
         .setLngLat(coordinates)
         .setDOMContent(containerElem)
-        .addTo(this.cultureMap.map);
-      this.popupAttached = true;
-      this.cultureMap.overlayZoomLevel = this?.cultureMap?.map?.getZoom() ?? 0;
+        .addTo(self.cultureMap.map);
+      self.popupAttached = true;
+      self.cultureMap.overlayZoomLevel = this?.cultureMap?.map?.getZoom() ?? 0;
 
       setTimeout(() => {
         containerElem.classList.add("fadeIn");
         setTimeout(() => {
-          this.popupAnimating = false;
+          self.popupAnimating = false;
         }, 125);
       }, 20);
     } catch (err) {}
   }
 
   hide() {
+    const self = this;
     if (!this?.cultureMap?.map) return;
 
-    if (!this.popupAttached) return;
+    if (!self.popupAttached) return;
 
-    clearTimeout(this.closeTimeout1);
-    clearTimeout(this.closeTimeout2);
+    clearTimeout(self.closeTimeout1);
+    clearTimeout(self.closeTimeout2);
 
-    this.closeTimeout1 = setTimeout(() => {
-      this.popupAnimating = true;
-      this.popup
+    self.closeTimeout1 = setTimeout(() => {
+      self.popupAnimating = true;
+      self.popup
         .getElement()
         ?.querySelector(".popup")
         ?.classList.add("fadeOut");
     }, 60);
-    this.closeTimeout2 = setTimeout(() => {
-      this.popupAnimating = false;
-      this.popup.remove();
-      this.popupAttached = false;
-      this.locationHash = "";
+    self.closeTimeout2 = setTimeout(() => {
+      self.popupAnimating = false;
+      self.popup.remove();
+      self.popupAttached = false;
+      self.locationHash = "";
     }, 185);
   }
 }

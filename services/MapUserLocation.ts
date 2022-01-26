@@ -20,8 +20,9 @@ export class MapUserLocation {
   }
 
   render() {
-    if (this.cultureMap?.map && this.lat !== null && this.lng !== null) {
-      this.clear();
+    const self = this;
+    if (self.cultureMap?.map && self.lat !== null && self.lng !== null) {
+      self.clear();
 
       const el = document.createElement("div");
       el.className = "userlocation";
@@ -35,17 +36,18 @@ export class MapUserLocation {
       
       el.appendChild(dot);
 
-      this.marker = new maplibregl.Marker(el)
-        .setLngLat([this.lng, this.lat])
-        .addTo(this.cultureMap?.map);
+      self.marker = new maplibregl.Marker(el)
+        .setLngLat([self.lng, self.lat])
+        .addTo(self.cultureMap?.map);
     }
   }
 
   clear() {
-    if (this.cultureMap?.map && this.marker) {
-      this.marker.remove();
-      this.lat = null;
-      this.lng = null;
+    const self = this;
+    if (self.cultureMap?.map && self.marker) {
+      self.marker.remove();
+      self.lat = null;
+      self.lng = null;
     }
   }
 }

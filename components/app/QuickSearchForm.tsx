@@ -9,7 +9,6 @@ import {
   FormControl,
   FormLabel,
   Input,
-  chakra,
   IconButton,
   HStack,
   useBreakpointValue,
@@ -24,8 +23,7 @@ import { useForm, Controller } from "react-hook-form";
 import { useMapContext } from "~/provider";
 
 import { yupResolver } from "@hookform/resolvers/yup";
-import { object, string } from "yup";
-import type * as yup from "yup";
+import { object, string, InferType } from "yup";
 
 import { LoadingIcon } from "~/components/ui/LoadingIcon";
 import { ErrorMessage } from "~/components/ui/ErrorMessage";
@@ -75,7 +73,7 @@ const searchQuery = gql`
   }
 `;
 
-export const SearchFormSchema = object().shape({
+export const SearchFormSchema = object({
   search: string().min(3).required(),
 });
 
@@ -104,6 +102,9 @@ export const QuickSearchForm = () => {
   } = useForm({
     mode: "onChange",
     resolver: yupResolver(SearchFormSchema),
+    defaultValues: {
+      search: "",
+    },
   });
 
   const cultureMap = useMapContext();
@@ -166,7 +167,7 @@ export const QuickSearchForm = () => {
     }
   }, [loading, isActiveSearch]);
 
-  const onSubmit = async (newData: yup.InferType<typeof SearchFormSchema>) => {
+  const onSubmit = async (newData: InferType<typeof SearchFormSchema>) => {
     setSearchTerm(newData.search);
     if (!loading) {
       triggerSearch({

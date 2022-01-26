@@ -43,12 +43,13 @@ export class MapCustomSpiderfier {
   }
 
   spiderfy(latLng: any, features: any) {
-    var spiderLegParams = this.generateSpiderLegParams(features.length);
+    const self = this;
+    var spiderLegParams = self.generateSpiderLegParams(features.length);
     var spiderLegs: any;
 
     spiderLegs = features.map((feature: any, index: number) => {
       var spiderLegParam = spiderLegParams[index];
-      var elements = this.createMarkerElements(spiderLegParam, feature);
+      var elements = self.createMarkerElements(spiderLegParam, feature);
       var maplibreMarker;
       var spiderLeg: any;
 
@@ -66,50 +67,53 @@ export class MapCustomSpiderfier {
 
       spiderLeg = {
         ...spiderLeg,
-        popupOffset: this.popupOffsetForSpiderLeg(spiderLeg),
+        popupOffset: self.popupOffsetForSpiderLeg(spiderLeg),
       };
 
-      this.options.initializeLeg(spiderLeg);
+      self.options.initializeLeg(spiderLeg);
 
       elements.container.onclick = (e: any) => {
-        this.options.onClick(e, spiderLeg);
+        self.options.onClick(e, spiderLeg);
       };
 
       return spiderLeg;
     });
 
-    this.each((spiderLeg: any) => {
-      spiderLeg.maplibreMarker.addTo(this.map);
+    self.each((spiderLeg: any) => {
+      spiderLeg.maplibreMarker.addTo(self.map);
     }, spiderLegs.reverse());
 
-    this.previousSpiderLegs = spiderLegs;
+    self.previousSpiderLegs = spiderLegs;
 
     return spiderLegs;
   }
 
   unspiderfy() {
-    this.each((spiderLeg: any, index: any) => {
+    const self = this;
+    self.each((spiderLeg: any, index: any) => {
       spiderLeg.maplibreMarker.remove();
-    }, this.previousSpiderLegs.reverse());
-    this.previousSpiderLegs = [];
+    }, self.previousSpiderLegs.reverse());
+    self.previousSpiderLegs = [];
   }
 
   generateSpiderLegParams(count: any) {
-    if (count >= this.options.circleSpiralSwitchover) {
-      return this.generateSpiralParams(count);
+    const self = this;
+    if (count >= self.options.circleSpiralSwitchover) {
+      return self.generateSpiralParams(count);
     } else {
-      return this.generateCircleParams(count);
+      return self.generateCircleParams(count);
     }
   }
 
   generateSpiralParams(count: any) {
-    var legLength = this.options.spiralLengthStart,
+    const self = this;
+    var legLength = self.options.spiralLengthStart,
       angle = 0;
-    return this.mapTimes(count, (index: any) => {
+    return self.mapTimes(count, (index: any) => {
       var pt;
       angle =
         angle +
-        (this.options.spiralFootSeparation / legLength + index * 0.0005);
+        (self.options.spiralFootSeparation / legLength + index * 0.0005);
       pt = {
         x: legLength * Math.cos(angle),
         y: legLength * Math.sin(angle),
@@ -118,23 +122,24 @@ export class MapCustomSpiderfier {
         index: index,
       };
       legLength =
-        legLength + (this.twoPi * this.options.spiralLengthFactor) / angle;
+        legLength + (self.twoPi * self.options.spiralLengthFactor) / angle;
       return pt;
     });
   }
 
   generateCircleParams(count: any) {
+    const self = this;
     const circumference =
-        (this.options.clusterRadius +
-          this.options.dotRadius +
+        (self.options.clusterRadius +
+          self.options.dotRadius +
           12 +
-          (count > 6 ? this.options.dotRadius : 0)) *
+          (count > 6 ? self.options.dotRadius : 0)) *
         2 *
-        (this.twoPi / 2),
-      legLength = circumference / this.twoPi, // = radius from circumference
-      angleStep = this.twoPi / count;
+        (self.twoPi / 2),
+      legLength = circumference / self.twoPi, // = radius from circumference
+      angleStep = self.twoPi / count;
 
-    return this.mapTimes(count, function (index: any) {
+    return self.mapTimes(count, function (index: any) {
       var angle = index * angleStep;
       return {
         x: legLength * Math.cos(angle),
@@ -147,6 +152,7 @@ export class MapCustomSpiderfier {
   }
 
   createMarkerElements(spiderLegParam: any, feature: any) {
+    const self = this;
     const containerElem: any = document.createElement("div"),
       pinElem: any = document.createElement("div");
     // , lineElem: any = document.createElement("div")
@@ -154,12 +160,12 @@ export class MapCustomSpiderfier {
     containerElem.className = "spider-leg-container";
     // lineElem.className = "spider-leg-line";
     pinElem.className =
-      "spider-leg-pin" + (this.options.customPin ? "" : " default-spider-pin");
+      "spider-leg-pin" + (self.options.customPin ? "" : " default-spider-pin");
 
     // containerElem.appendChild(lineElem);
     containerElem.appendChild(pinElem);
 
-    pinElem.style["background-color"] = feature?.color ?? this.options.color;
+    pinElem.style["background-color"] = feature?.color ?? self.options.color;
 
     containerElem.style["margin-left"] = spiderLegParam.x + "px";
     containerElem.style["margin-top"] = spiderLegParam.y + "px";
@@ -178,7 +184,8 @@ export class MapCustomSpiderfier {
 
   // Utility
   each(callback: any, arr?: any) {
-    (arr ?? this.previousSpiderLegs).forEach(callback);
+    const self = this;
+    (arr ?? self.previousSpiderLegs).forEach(callback);
   }
 
   eachFn(arr: any, iterator: any) {
@@ -201,16 +208,18 @@ export class MapCustomSpiderfier {
   }
 
   mapFn(arr: any, iterator: any) {
+    const self = this;
     const result: any = [];
-    this.eachFn(arr, function (item: any, i: any) {
+    self.eachFn(arr, function (item: any, i: any) {
       result.push(iterator(item, i));
     });
     return result;
   }
 
   mapTimes(count: any, iterator: any) {
+    const self = this;
     const result: any[] = [];
-    this.eachTimesFn(count, function (i: number) {
+    self.eachTimesFn(count, function (i: number) {
       result.push(iterator(i));
     });
     return result;

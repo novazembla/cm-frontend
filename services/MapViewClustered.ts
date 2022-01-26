@@ -19,38 +19,39 @@ export class MapViewClustered {
   }
 
   setData(data?: any) {
-    if (this.cultureMap?.map) {
-      if (!this.cultureMap?.map) return;
+    const self = this;
+    if (self.cultureMap?.map) {
+      if (!self.cultureMap?.map) return;
 
-      this.hide();
+      self.hide();
 
-      if (!this.cultureMap.map.getSource("clustered-locations")) {
-        this.cultureMap.map.addSource("clustered-locations", {
+      if (!self.cultureMap.map.getSource("clustered-locations")) {
+        self.cultureMap.map.addSource("clustered-locations", {
           type: "geojson",
-          data: data ?? this.cultureMap.geoJsonAllData ?? {},
+          data: data ?? self.cultureMap.geoJsonAllData ?? {},
           cluster: true,
-          maxzoom: this.cultureMap.config.maxZoom,
-          clusterMaxZoom: this.cultureMap.config.maxZoom, // Max zoom to cluster points on
+          maxzoom: self.cultureMap.config.maxZoom,
+          clusterMaxZoom: self.cultureMap.config.maxZoom, // Max zoom to cluster points on
           clusterRadius: 50, // Radius of each cluster when clustering points (defaults to 50)
         });
       } else {
         (
-          this.cultureMap?.map?.getSource("clustered-locations") as any
-        )?.setData(data ?? this.cultureMap.geoJsonAllData ?? {});
+          self.cultureMap?.map?.getSource("clustered-locations") as any
+        )?.setData(data ?? self.cultureMap.geoJsonAllData ?? {});
       }
 
       let bounds: maplibregl.LngLatBounds | undefined;
 
-      if ((data ?? this.cultureMap.geoJsonAllData ?? {})?.features?.length) {
+      if ((data ?? self.cultureMap.geoJsonAllData ?? {})?.features?.length) {
         for (
           let i = 0;
-          i < (data ?? this.cultureMap.geoJsonAllData ?? {})?.features?.length;
+          i < (data ?? self.cultureMap.geoJsonAllData ?? {})?.features?.length;
           i++
         ) {
-          const coordinates = (data ?? this.cultureMap.geoJsonAllData ?? {})
+          const coordinates = (data ?? self.cultureMap.geoJsonAllData ?? {})
             ?.features[i]?.geometry?.coordinates ?? [
-            this.cultureMap.config.lng,
-            this.cultureMap.config.lat,
+            self.cultureMap.config.lng,
+            self.cultureMap.config.lat,
           ];
 
           if (coordinates[0] !== 0 && coordinates[1] !== 0) {
@@ -63,27 +64,28 @@ export class MapViewClustered {
         }
       }
       if (bounds) {
-        this.bounds = bounds;
+        self.bounds = bounds;
       } else {
-        this.bounds = new maplibregl.LngLatBounds(
-          [this.cultureMap.config.lng, this.cultureMap.config.lat],
-          [this.cultureMap.config.lng, this.cultureMap.config.lat]
+        self.bounds = new maplibregl.LngLatBounds(
+          [self.cultureMap.config.lng, self.cultureMap.config.lat],
+          [self.cultureMap.config.lng, self.cultureMap.config.lat]
         );
       }
     }
   }
 
   render() {
-    if (this.cultureMap?.map) {
+    const self = this;
+    if (self.cultureMap?.map) {
       if (
-        !this.cultureMap?.map ||
-        !this.cultureMap.map.getSource("clustered-locations")
+        !self.cultureMap?.map ||
+        !self.cultureMap.map.getSource("clustered-locations")
       )
         return;
 
-      this.clear();
+      self.clear();
 
-      this.cultureMap.map.addLayer({
+      self.cultureMap.map.addLayer({
         id: "clusters",
         type: "circle",
 
@@ -98,7 +100,7 @@ export class MapViewClustered {
           //   * Blue, 20px circles when point count is less than 100
           //   * Yellow, 30px circles when point count is between 100 and 750
           //   * Pink, 40px circles when point count is greater than or equal to 750
-          "circle-color": this.cultureMap.config.colorDark,
+          "circle-color": self.cultureMap.config.colorDark,
           // "circle-color": [
           //   "step",
           //   ["get", "point_count"],
@@ -121,7 +123,7 @@ export class MapViewClustered {
         },
       });
 
-      this.cultureMap.map.addLayer({
+      self.cultureMap.map.addLayer({
         id: "cluster-count",
         type: "symbol",
         source: "clustered-locations",
@@ -137,7 +139,7 @@ export class MapViewClustered {
         },
       });
 
-      this.cultureMap.map.addLayer({
+      self.cultureMap.map.addLayer({
         id: "clustered-locations",
         type: "circle",
         source: "clustered-locations",
@@ -162,28 +164,28 @@ export class MapViewClustered {
         },
       });
 
-      this.cultureMap.map.on("click", "clusters", (e) => {
-        if (this.cultureMap.clickBlock || !this.cultureMap.map) return;
+      self.cultureMap.map.on("click", "clusters", (e) => {
+        if (self.cultureMap.clickBlock || !self.cultureMap.map) return;
 
-        const features = this.cultureMap.map.queryRenderedFeatures(e.point, {
+        const features = self.cultureMap.map.queryRenderedFeatures(e.point, {
           layers: ["clusters"],
         });
         if (!features?.length) {
-          this.cultureMap.clusterDetail.hide();
+          self.cultureMap.clusterDetail.hide();
         }
       });
 
       // inspect a cluster on click
-      this.events["click-clusters"] = (e: any) => {
-        if (!this.cultureMap?.map) return;
+      self.events["click-clusters"] = (e: any) => {
+        if (!self.cultureMap?.map) return;
 
-        var features = this.cultureMap.map.queryRenderedFeatures(e.point, {
+        var features = self.cultureMap.map.queryRenderedFeatures(e.point, {
           layers: ["clusters"],
         });
         if (!features?.length) return;
         var clusterId = features[0].properties.cluster_id;
         if (!clusterId) return;
-        const clusterSource = (this.cultureMap.map as any).getSource(
+        const clusterSource = (self.cultureMap.map as any).getSource(
           "clustered-locations"
         );
 
@@ -196,32 +198,32 @@ export class MapViewClustered {
             clusterSource.getClusterExpansionZoom(
               clusterId,
               (err: any, zoom: any) => {
-                if (err || !this.cultureMap?.map) return;
+                if (err || !self.cultureMap?.map) return;
                 if (
                   (children?.length > 1 && children[0].properties?.cluster) ||
-                  Math.floor(zoom) < this.cultureMap.config.maxZoom - 2
+                  Math.floor(zoom) < self.cultureMap.config.maxZoom - 2
                 ) {
-                  this.cultureMap.map.easeTo(
+                  self.cultureMap.map.easeTo(
                     {
                       center: features[0].geometry.coordinates,
-                      offset: this.cultureMap.getCenterOffset() ?? [0, 0],
-                      zoom: Math.min(zoom, this.cultureMap.config.maxZoom - 2),
+                      offset: self.cultureMap.getCenterOffset() ?? [0, 0],
+                      zoom: Math.min(zoom, self.cultureMap.config.maxZoom - 2),
                     },
                     {
                       cmAnimation: true,
                     }
                   );
-                  this.cultureMap.clusterDetail.hide();
+                  self.cultureMap.clusterDetail.hide();
                 } else {
-                  this.cultureMap.map.easeTo(
+                  self.cultureMap.map.easeTo(
                     {
                       center: features[0].geometry.coordinates,
-                      offset: this.cultureMap.getCenterOffset() ?? [0, 0],
+                      offset: self.cultureMap.getCenterOffset() ?? [0, 0],
                       zoom: Math.max(
                         17.5,
                         Math.min(
-                          this.cultureMap.map.getZoom(),
-                          this.cultureMap.config.maxZoom - 1.1
+                          self.cultureMap.map.getZoom(),
+                          self.cultureMap.config.maxZoom - 1.1
                         )
                       ),
                     },
@@ -229,8 +231,8 @@ export class MapViewClustered {
                       cmAnimation: true,
                     }
                   );
-                  this.cultureMap.overlayZoomLevel =
-                    this.cultureMap.map.getZoom();
+                  self.cultureMap.overlayZoomLevel =
+                    self.cultureMap.map.getZoom();
                   clusterSource.getClusterLeaves(
                     clusterId,
                     100,
@@ -239,7 +241,7 @@ export class MapViewClustered {
                       if (err || !leafFeatures?.length) return;
                       const coordinates =
                         features[0].geometry.coordinates.slice();
-                      this.cultureMap.clusterDetail.show(
+                      self.cultureMap.clusterDetail.show(
                         coordinates,
                         leafFeatures
                       );
@@ -251,30 +253,30 @@ export class MapViewClustered {
           }
         );
       };
-      this.cultureMap.map.on(
+      self.cultureMap.map.on(
         "click",
         "clusters",
-        this.events["click-clusters"]
+        self.events["click-clusters"]
       );
 
-      this.events["mouseenter-clusters"] = () => {
-        if (!this.cultureMap.map) return;
-        this.cultureMap.map.getCanvas().style.cursor = "pointer";
+      self.events["mouseenter-clusters"] = () => {
+        if (!self.cultureMap.map) return;
+        self.cultureMap.map.getCanvas().style.cursor = "pointer";
       };
-      this.cultureMap.map.on(
+      self.cultureMap.map.on(
         "mouseenter",
         "clusters",
-        this.events["mouseenter-clusters"]
+        self.events["mouseenter-clusters"]
       );
 
-      this.events["mouseleave-clusters"] = () => {
-        if (!this.cultureMap.map) return;
-        this.cultureMap.map.getCanvas().style.cursor = "";
+      self.events["mouseleave-clusters"] = () => {
+        if (!self.cultureMap.map) return;
+        self.cultureMap.map.getCanvas().style.cursor = "";
       };
-      this.cultureMap.map.on(
+      self.cultureMap.map.on(
         "mouseleave",
         "clusters",
-        this.events["mouseleave-clusters"]
+        self.events["mouseleave-clusters"]
       );
 
       const showMapPop = (e: any) => {
@@ -291,83 +293,83 @@ export class MapViewClustered {
           const titles = JSON.parse(feature?.properties?.title);
 
           const slug = `/${
-            this.cultureMap.tHelper.i18n?.language === "en" ? "location" : "ort"
-          }/${this.cultureMap.tHelper.getMultilangValue(
+            self.cultureMap.tHelper.i18n?.language === "en" ? "location" : "ort"
+          }/${self.cultureMap.tHelper.getMultilangValue(
             JSON.parse(feature?.properties?.slug)
           )}`;
 
-          this.cultureMap.popup.show(
+          self.cultureMap.popup.show(
             coordinates,
-            this.cultureMap.tHelper.getMultilangValue(titles),
+            self.cultureMap.tHelper.getMultilangValue(titles),
             feature?.properties?.color,
             slug
           );
         } catch (err) {}
       };
 
-      this.events["zoom"] = () => {
-        if (this.cultureMap.isAnimating) return;
+      self.events["zoom"] = () => {
+        if (self.cultureMap.isAnimating) return;
 
         if (
-          this.cultureMap.map &&
-          (this.cultureMap.map.getZoom() <
-            this.cultureMap.overlayZoomLevel -
-              this.cultureMap.ZOOM_LEVEL_HIDE_ADJUSTOR ||
-            this.cultureMap.map.getZoom() >
-              this.cultureMap.overlayZoomLevel +
-                this.cultureMap.ZOOM_LEVEL_HIDE_ADJUSTOR)
+          self.cultureMap.map &&
+          (self.cultureMap.map.getZoom() <
+            self.cultureMap.overlayZoomLevel -
+              self.cultureMap.ZOOM_LEVEL_HIDE_ADJUSTOR ||
+            self.cultureMap.map.getZoom() >
+              self.cultureMap.overlayZoomLevel +
+                self.cultureMap.ZOOM_LEVEL_HIDE_ADJUSTOR)
         ) {
-          this.cultureMap.overlayZoomLevel = 0;
-          this.cultureMap.clusterDetail.hide();
-          this.cultureMap.popup.hide();
+          self.cultureMap.overlayZoomLevel = 0;
+          self.cultureMap.clusterDetail.hide();
+          self.cultureMap.popup.hide();
         }
       };
-      this.cultureMap.map.on("zoom", this.events["zoom"]);
+      self.cultureMap.map.on("zoom", self.events["zoom"]);
 
       if (primaryInput !== "touch") {
-        this.events["mouseenter-clustered-locations"] = (e: any) => {
-          if (this.cultureMap.isAnimating) return;
-          if (this.cultureMap.map) {
+        self.events["mouseenter-clustered-locations"] = (e: any) => {
+          if (self.cultureMap.isAnimating) return;
+          if (self.cultureMap.map) {
             // Change the cursor style as a UI indicator.
-            this.cultureMap.map.getCanvas().style.cursor = "pointer";
+            self.cultureMap.map.getCanvas().style.cursor = "pointer";
             if (e?.features?.[0]) showMapPop(e);
           }
         };
 
-        this.cultureMap.map.on(
+        self.cultureMap.map.on(
           "mouseenter",
           "clustered-locations",
-          this.events["mouseenter-clustered-locations"]
+          self.events["mouseenter-clustered-locations"]
         );
 
-        this.events["mouseleave-clustered-locations"] = () => {
-          if (this.cultureMap.map) {
-            this.cultureMap.map.getCanvas().style.cursor = "";
-            this.cultureMap.popup.hide();
+        self.events["mouseleave-clustered-locations"] = () => {
+          if (self.cultureMap.map) {
+            self.cultureMap.map.getCanvas().style.cursor = "";
+            self.cultureMap.popup.hide();
           }
         };
 
-        this.cultureMap.map.on(
+        self.cultureMap.map.on(
           "mouseleave",
           "clustered-locations",
-          this.events["mouseleave-clustered-locations"]
+          self.events["mouseleave-clustered-locations"]
         );
       }
 
-      this.events["click-clustered-locations"] = (e: any) => {
+      self.events["click-clustered-locations"] = (e: any) => {
         if (primaryInput !== "touch") {
-          this.cultureMap.clusterDetail.hide();
+          self.cultureMap.clusterDetail.hide();
           if (e?.features?.[0]?.properties?.slug) {
             try {
               const slug = `/${
-                this.cultureMap.tHelper.i18n?.language === "en"
+                self.cultureMap.tHelper.i18n?.language === "en"
                   ? "location"
                   : "ort"
-              }/${this.cultureMap.tHelper.getMultilangValue(
+              }/${self.cultureMap.tHelper.getMultilangValue(
                 JSON.parse(e?.features?.[0]?.properties?.slug)
               )}`;
 
-              this.cultureMap.onMapPointNavigate(slug);
+              self.cultureMap.onMapPointNavigate(slug);
             } catch (err) {}
           }
         } else {
@@ -375,72 +377,77 @@ export class MapViewClustered {
         }
       };
 
-      this.cultureMap.map.on(
+      self.cultureMap.map.on(
         "click",
         "clustered-locations",
-        this.events["click-clustered-locations"]
+        self.events["click-clustered-locations"]
       );
 
-      this.show();
+      self.show();
     }
   }
 
   setFilter(filter: any) {
-    if (this.cultureMap?.map) {
-      if (this.cultureMap.map?.getLayer("unclustered-locations"))
-        this.cultureMap.map.setFilter("unclustered-locations", filter);
+    const self = this;
+    if (self.cultureMap?.map) {
+      if (self.cultureMap.map?.getLayer("unclustered-locations"))
+        self.cultureMap.map.setFilter("unclustered-locations", filter);
       //["match", ["get", "id"], ["loc-1", "loc-2", "loc-3", "loc-4", "loc-5", "loc-8", "loc-10"], true, false]
     }
   }
 
   fitToBounds() {
-    if (this.cultureMap?.map) {
-      this.cultureMap.map?.fitBounds(this.bounds, {
-        maxZoom: this.cultureMap.MAX_BOUNDS_ZOOM,
+    const self = this;
+    if (self.cultureMap?.map) {
+      self.cultureMap.map?.fitBounds(self.bounds, {
+        maxZoom: self.cultureMap.MAX_BOUNDS_ZOOM,
         linear: true,
-        padding: this.cultureMap.getBoundsPadding(),
+        padding: self.cultureMap.getBoundsPadding(),
       });
     }
   }
 
   hide() {
-    if (!this.isVisible) return;
+    const self = this;
+    if (!self.isVisible) return;
 
-    this.cultureMap.toggleLayersVisibility(this.layers, "none");
+    self.cultureMap.toggleLayersVisibility(self.layers, "none");
 
-    this.isVisible = false;
+    self.isVisible = false;
   }
 
   show() {
-    if (this.isVisible) return;
+    const self = this;
+    if (self.isVisible) return;
 
-    this.cultureMap.toggleLayersVisibility(this.layers, "visible");
+    self.cultureMap.toggleLayersVisibility(self.layers, "visible");
 
-    this.isVisible = true;
+    self.isVisible = true;
   }
 
   clear() {
-    if (this.cultureMap?.map) {
-      this.isVisible = false;
+    const self = this;
+    if (self.cultureMap?.map) {
+      self.isVisible = false;
 
-      this.cultureMap.removeLayers(this.layers);
+      self.cultureMap.removeLayers(self.layers);
 
-      if (Object.keys(this.events).length) {
-        Object.keys(this.events).forEach((key) => {
-          if (this.cultureMap?.map) {
+      if (Object.keys(self.events).length) {
+        Object.keys(self.events).forEach((key) => {
+          if (self.cultureMap?.map) {
             const params: string[] = key.split("-");
             if (params.length > 1) {
-              this.cultureMap.map.off(
+              self.cultureMap.map.off(
                 params[0] as any,
                 params[1],
-                this.events[key]
+                self.events[key]
               );
             } else {
-              this.cultureMap.map.off(key, this.events[key]);
+              self.cultureMap.map.off(key as any, self.events[key]);
             }
           }
         });
-        this.events = {};
+        self.events = {};
       }
     }
   }

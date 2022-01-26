@@ -17,56 +17,57 @@ export class MapClusterDetail {
   }
 
   init() {
-    if (!this.cultureMap.map) return;
+    const self = this;
+    if (!self.cultureMap.map) return;
 
-    this.spiderfier = new MapSpiderfier(this.cultureMap.map, {
-      color: this.cultureMap.config.colorDark,
+    self.spiderfier = new MapSpiderfier(self.cultureMap.map, {
+      color: self.cultureMap.config.colorDark,
       dotRadius: 16,
       clusterRadius: 24,
       onClick: (e: any, spiderLeg: any) => {
         if (primaryInput === "mouse") {
           const slug = `/${
-            this.cultureMap.tHelper.i18n?.language === "en"
+            self.cultureMap.tHelper.i18n?.language === "en"
               ? "location"
               : "ort"
-          }/${this.cultureMap.tHelper.getMultilangValue(
+          }/${self.cultureMap.tHelper.getMultilangValue(
             spiderLeg?.feature?.slug
           )}`;
 
-          this.cultureMap.onMapPointNavigate(slug);
+          self.cultureMap.onMapPointNavigate(slug);
         }
       },
       initializeLeg: (spiderLeg: any) => {
         const showLegPopup = (e: any) => {
-          if (this.cultureMap.isAnimating) return;
+          if (self.cultureMap.isAnimating) return;
 
-          this.cultureMap.clickBlock = true;
+          self.cultureMap.clickBlock = true;
           e.preventDefault();
 
-          this.cultureMap.overlayZoomLevel =
-            this.cultureMap?.map?.getZoom() ?? 0;
+          self.cultureMap.overlayZoomLevel =
+            self.cultureMap?.map?.getZoom() ?? 0;
 
-          this.cultureMap.popup.show(
+          self.cultureMap.popup.show(
             spiderLeg.latLng,
-            this.cultureMap.tHelper.getMultilangValue(
+            self.cultureMap.tHelper.getMultilangValue(
               spiderLeg?.feature?.title
             ),
             spiderLeg?.feature?.color,
-            this.cultureMap.tHelper.getMultilangValue(spiderLeg?.feature?.slug),
+            self.cultureMap.tHelper.getMultilangValue(spiderLeg?.feature?.slug),
             [
               spiderLeg.popupOffset.bottom[0] +
                 (primaryInput === "mouse"
-                  ? this.cultureMap.POPUP_OFFSET_MOUSE[0]
-                  : this.cultureMap.POPUP_OFFSET_TOUCH[0]),
+                  ? self.cultureMap.POPUP_OFFSET_MOUSE[0]
+                  : self.cultureMap.POPUP_OFFSET_TOUCH[0]),
               spiderLeg.popupOffset.bottom[1] +
                 (primaryInput === "mouse"
-                  ? this.cultureMap.POPUP_OFFSET_MOUSE[1]
-                  : this.cultureMap.POPUP_OFFSET_TOUCH[1]),
+                  ? self.cultureMap.POPUP_OFFSET_MOUSE[1]
+                  : self.cultureMap.POPUP_OFFSET_TOUCH[1]),
             ]
           );
 
           setTimeout(() => {
-            this.cultureMap.clickBlock = false;
+            self.cultureMap.clickBlock = false;
           }, 100);
         };
 
@@ -74,7 +75,7 @@ export class MapClusterDetail {
           spiderLeg.elements.pin.addEventListener("mouseenter", showLegPopup);
 
           spiderLeg.elements.pin.addEventListener("mouseleave", () => {
-            this.cultureMap.popup.hide();
+            self.cultureMap.popup.hide();
           });
         } else {
           spiderLeg.elements.pin.addEventListener("click", showLegPopup);
@@ -84,54 +85,56 @@ export class MapClusterDetail {
   }
 
   show(coordinates: [number, number], leafFeatures: any) {
-    if (!this.spiderfier) return;
+    const self = this;
+    if (!self.spiderfier) return;
 
     const newHash = `${coordinates[0].toFixed(6)}-${coordinates[1].toFixed(6)}`;
-    if (this.clusterDetailOpen && this.clusterDetailClusterHash !== newHash) {
-      this.spiderfier.unspiderfy();
-      this.clusterDetailOpen = false;
-      this.clusterDetailAnimating = false;
+    if (self.clusterDetailOpen && self.clusterDetailClusterHash !== newHash) {
+      self.spiderfier.unspiderfy();
+      self.clusterDetailOpen = false;
+      self.clusterDetailAnimating = false;
     }
 
     if (
-      !this.clusterDetailClusterHash ||
-      (!this.clusterDetailOpen && !this.clusterDetailAnimating)
+      !self.clusterDetailClusterHash ||
+      (!self.clusterDetailOpen && !self.clusterDetailAnimating)
     ) {
-      this.clusterDetail = this.spiderfier.spiderfy(
+      self.clusterDetail = self.spiderfier.spiderfy(
         coordinates,
         leafFeatures.map((leafFeature: any) => {
           return leafFeature.properties;
         })
       );
-      this.clusterDetailClusterHash = newHash;
+      self.clusterDetailClusterHash = newHash;
 
       setTimeout(() => {
-        this.clusterDetail?.map((e: any) =>
+        self.clusterDetail?.map((e: any) =>
           e?.elements?.container?.classList.add("fadeIn")
         );
         setTimeout(() => {
-          this.clusterDetailAnimating = true;
+          self.clusterDetailAnimating = true;
         }, 200);
       }, 20);
-      this.clusterDetailOpen = true;
+      self.clusterDetailOpen = true;
     }
   }
 
   hide() {
-    const currentHash = this.clusterDetailClusterHash;
-    if (!this.spiderfier || !this.clusterDetailOpen) return;
+    const self = this;
+    const currentHash = self.clusterDetailClusterHash;
+    if (!self.spiderfier || !self.clusterDetailOpen) return;
 
-    this.clusterDetail?.map((e: any) =>
+    self.clusterDetail?.map((e: any) =>
       e?.elements?.container?.classList.add("fadeOut")
     );
 
     setTimeout(() => {
-      if (this.clusterDetailClusterHash === currentHash) {
-        this.clusterDetailAnimating = false;
-        this.spiderfier?.unspiderfy();
-        this.clusterDetailOpen = false;
-        this.clusterDetailClusterHash = null;
-        this.clusterDetail = null;
+      if (self.clusterDetailClusterHash === currentHash) {
+        self.clusterDetailAnimating = false;
+        self.spiderfier?.unspiderfy();
+        self.clusterDetailOpen = false;
+        self.clusterDetailClusterHash = null;
+        self.clusterDetail = null;
       }
     }, 200);
   }

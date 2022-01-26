@@ -19,37 +19,38 @@ export class MapViewUnclustered {
   }
 
   setData(data?: any) {
-    if (this.cultureMap?.map) {
-      if (!this.cultureMap?.map) return;
+    const self = this;
+    if (self.cultureMap?.map) {
+      if (!self.cultureMap?.map) return;
 
-      this.hide();
+      self.hide();
 
-      if (!this.cultureMap?.map) return;
+      if (!self.cultureMap?.map) return;
 
-      if (!this.cultureMap.map.getSource("unclustered-locations")) {
-        this.cultureMap.map.addSource("unclustered-locations", {
+      if (!self.cultureMap.map.getSource("unclustered-locations")) {
+        self.cultureMap.map.addSource("unclustered-locations", {
           type: "geojson",
-          data: data ?? this.cultureMap.geoJsonAllData ?? {},
+          data: data ?? self.cultureMap.geoJsonAllData ?? {},
         });
       } else {
         (
-          this.cultureMap?.map?.getSource("unclustered-locations") as any
-        )?.setData(data ?? this.cultureMap.geoJsonAllData ?? {});
+          self.cultureMap?.map?.getSource("unclustered-locations") as any
+        )?.setData(data ?? self.cultureMap.geoJsonAllData ?? {});
       }
 
       let bounds: maplibregl.LngLatBounds | undefined;
 
-      if ((data ?? this.cultureMap.geoJsonAllData ?? {})?.features?.length) {
+      if ((data ?? self.cultureMap.geoJsonAllData ?? {})?.features?.length) {
         for (
           let i = 0;
           i <
-          (data ?? this.cultureMap.geoJsonAllData ?? {})?.features?.length;
+          (data ?? self.cultureMap.geoJsonAllData ?? {})?.features?.length;
           i++
         ) {
-          const coordinates = (data ?? this.cultureMap.geoJsonAllData ?? {})
+          const coordinates = (data ?? self.cultureMap.geoJsonAllData ?? {})
             ?.features[i]?.geometry?.coordinates ?? [
-            this.cultureMap.config.lng,
-            this.cultureMap.config.lat,
+            self.cultureMap.config.lng,
+            self.cultureMap.config.lat,
           ];
 
           if (coordinates[0] !== 0 && coordinates[1] !== 0) {
@@ -63,27 +64,28 @@ export class MapViewUnclustered {
       }
       
       if (bounds) {
-        this.bounds = bounds;
+        self.bounds = bounds;
       } else {
-        this.bounds = new maplibregl.LngLatBounds(
-          [this.cultureMap.config.lng, this.cultureMap.config.lat],
-          [this.cultureMap.config.lng, this.cultureMap.config.lat]
+        self.bounds = new maplibregl.LngLatBounds(
+          [self.cultureMap.config.lng, self.cultureMap.config.lat],
+          [self.cultureMap.config.lng, self.cultureMap.config.lat]
         );
       }
     }
   }
 
   render() {
-    if (this.cultureMap?.map) {
+    const self = this;
+    if (self.cultureMap?.map) {
       if (
-        !this.cultureMap?.map ||
-        !this.cultureMap.map.getSource("unclustered-locations")
+        !self.cultureMap?.map ||
+        !self.cultureMap.map.getSource("unclustered-locations")
       )
         return;
 
-      this.clear();
+      self.clear();
 
-      this.cultureMap.map.addLayer({
+      self.cultureMap.map.addLayer({
         id: "unclustered-locations",
         type: "circle",
         source: "unclustered-locations",
@@ -110,96 +112,96 @@ export class MapViewUnclustered {
           const titles = JSON.parse(feature?.properties?.title);
 
           const slug = `/${
-            this.cultureMap.tHelper.i18n?.language === "en" ? "location" : "ort"
-          }/${this.cultureMap.tHelper.getMultilangValue(
+            self.cultureMap.tHelper.i18n?.language === "en" ? "location" : "ort"
+          }/${self.cultureMap.tHelper.getMultilangValue(
             JSON.parse(feature?.properties?.slug)
           )}`;
 
-          this.cultureMap.popup.show(
+          self.cultureMap.popup.show(
             coordinates,
-            this.cultureMap.tHelper.getMultilangValue(titles),
+            self.cultureMap.tHelper.getMultilangValue(titles),
             feature?.properties?.color,
             slug
           );
         } catch (err) {}
       };
 
-      this.events["zoom"] = () => {
-        if (this.cultureMap.isAnimating) return;
+      self.events["zoom"] = () => {
+        if (self.cultureMap.isAnimating) return;
 
         if (
-          this.cultureMap.map &&
-          (this.cultureMap.map.getZoom() <
-            this.cultureMap.overlayZoomLevel -
-              this.cultureMap.ZOOM_LEVEL_HIDE_ADJUSTOR ||
-            this.cultureMap.map.getZoom() >
-              this.cultureMap.overlayZoomLevel +
-                this.cultureMap.ZOOM_LEVEL_HIDE_ADJUSTOR)
+          self.cultureMap.map &&
+          (self.cultureMap.map.getZoom() <
+            self.cultureMap.overlayZoomLevel -
+              self.cultureMap.ZOOM_LEVEL_HIDE_ADJUSTOR ||
+            self.cultureMap.map.getZoom() >
+              self.cultureMap.overlayZoomLevel +
+                self.cultureMap.ZOOM_LEVEL_HIDE_ADJUSTOR)
         ) {
-          this.cultureMap.overlayZoomLevel = 0;
-          this.cultureMap.popup.hide();
+          self.cultureMap.overlayZoomLevel = 0;
+          self.cultureMap.popup.hide();
         }
       };
-      this.cultureMap.map.on("zoom", this.events["zoom"]);
+      self.cultureMap.map.on("zoom", self.events["zoom"]);
 
       if (primaryInput !== "touch") {
-        this.events["mouseenter-unclustered-locations"] = (e: any) => {
-          if (this.cultureMap.isAnimating) return;
-          if (this.cultureMap.map) {
+        self.events["mouseenter-unclustered-locations"] = (e: any) => {
+          if (self.cultureMap.isAnimating) return;
+          if (self.cultureMap.map) {
             // Change the cursor style as a UI indicator.
-            this.cultureMap.map.getCanvas().style.cursor = "pointer";
+            self.cultureMap.map.getCanvas().style.cursor = "pointer";
             if (e?.features?.[0]) showMapPop(e);
           }
         };
 
-        this.cultureMap.map.on(
+        self.cultureMap.map.on(
           "mouseenter",
           "unclustered-locations",
-          this.events["mouseenter-unclustered-locations"]
+          self.events["mouseenter-unclustered-locations"]
         );
 
-        this.events["mousemove-unclustered-locations"] = (e: any) => {
-          if (this.cultureMap.isAnimating) return;
-          if (this.cultureMap.map) {
+        self.events["mousemove-unclustered-locations"] = (e: any) => {
+          if (self.cultureMap.isAnimating) return;
+          if (self.cultureMap.map) {
             // Change the cursor style as a UI indicator.
-            this.cultureMap.map.getCanvas().style.cursor = "pointer";
+            self.cultureMap.map.getCanvas().style.cursor = "pointer";
             if (e?.features?.[0]) showMapPop(e);
           }
         };
-        this.cultureMap.map.on(
+        self.cultureMap.map.on(
           "mousemove",
           "unclustered-locations",
-          this.events["mousemove-unclustered-locations"]
+          self.events["mousemove-unclustered-locations"]
         );
 
-        this.events["mouseleave-unclustered-locations"] = () => {
-          if (this.cultureMap.map) {
-            this.cultureMap.map.getCanvas().style.cursor = "";
-            this.cultureMap.popup.hide();
+        self.events["mouseleave-unclustered-locations"] = () => {
+          if (self.cultureMap.map) {
+            self.cultureMap.map.getCanvas().style.cursor = "";
+            self.cultureMap.popup.hide();
           }
         };
 
-        this.cultureMap.map.on(
+        self.cultureMap.map.on(
           "mouseleave",
           "unclustered-locations",
-          this.events["mouseleave-unclustered-locations"]
+          self.events["mouseleave-unclustered-locations"]
         );
       }
 
-      this.events["click-unclustered-locations"] = (e: any) => {
+      self.events["click-unclustered-locations"] = (e: any) => {
         if (primaryInput !== "touch") {
-          this.cultureMap.clusterDetail.hide();
+          self.cultureMap.clusterDetail.hide();
           if (e?.features?.[0]?.properties?.slug) {
             try {
               const slug = `/${
-                this.cultureMap.tHelper.i18n?.language === "en"
+                self.cultureMap.tHelper.i18n?.language === "en"
                   ? "location"
                   : "ort"
-              }/${this.cultureMap.tHelper.getMultilangValue(
+              }/${self.cultureMap.tHelper.getMultilangValue(
                 JSON.parse(e?.features?.[0]?.properties?.slug)
               )}`;
 
-              this.cultureMap.onMapPointNavigate(slug);
+              self.cultureMap.onMapPointNavigate(slug);
             } catch (err) {}
           }
         } else {
@@ -207,72 +209,77 @@ export class MapViewUnclustered {
         }
       };
 
-      this.cultureMap.map.on(
+      self.cultureMap.map.on(
         "click",
         "unclustered-locations",
-        this.events["click-unclustered-locations"]
+        self.events["click-unclustered-locations"]
       );
 
-      this.show();
+      self.show();
     }
   }
 
   setFilter(filter: any) {
-    if (this.cultureMap?.map) {
-      if (this.cultureMap.map?.getLayer("unclustered-locations"))
-        this.cultureMap.map.setFilter("unclustered-locations", filter);
+    const self = this;
+    if (self.cultureMap?.map) {
+      if (self.cultureMap.map?.getLayer("unclustered-locations"))
+        self.cultureMap.map.setFilter("unclustered-locations", filter);
       //["match", ["get", "id"], ["loc-1", "loc-2", "loc-3", "loc-4", "loc-5", "loc-8", "loc-10"], true, false]
     }
   }
 
   fitToBounds() {
-    if (this.cultureMap?.map) {
-      this.cultureMap.map?.fitBounds(this.bounds, {
-        maxZoom: this.cultureMap.MAX_BOUNDS_ZOOM,
+    const self = this;
+    if (self.cultureMap?.map) {
+      self.cultureMap.map?.fitBounds(self.bounds, {
+        maxZoom: self.cultureMap.MAX_BOUNDS_ZOOM,
         linear: true,
-        padding: this.cultureMap.getBoundsPadding(),
+        padding: self.cultureMap.getBoundsPadding(),
       });
     }
   }
 
   hide() {
-    if (!this.isVisible) return;
+    const self = this;
+    if (!self.isVisible) return;
 
-    this.cultureMap.toggleLayersVisibility(this.layers, "none");
+    self.cultureMap.toggleLayersVisibility(self.layers, "none");
 
-    this.isVisible = false;
+    self.isVisible = false;
   }
 
   show() {
-    if (this.isVisible) return;
+    const self = this;
+    if (self.isVisible) return;
 
-    this.cultureMap.toggleLayersVisibility(this.layers, "visible");
+    self.cultureMap.toggleLayersVisibility(self.layers, "visible");
 
-    this.isVisible = true;
+    self.isVisible = true;
   }
 
   clear() {
-    if (this.cultureMap?.map) {
-      this.isVisible = false;
+    const self = this;
+    if (self.cultureMap?.map) {
+      self.isVisible = false;
 
-      this.cultureMap.removeLayers(this.layers);
+      self.cultureMap.removeLayers(self.layers);
 
-      if (Object.keys(this.events).length) {
-        Object.keys(this.events).forEach((key) => {
-          if (this.cultureMap?.map) {
+      if (Object.keys(self.events).length) {
+        Object.keys(self.events).forEach((key) => {
+          if (self.cultureMap?.map) {
             const params: string[] = key.split("-");
             if (params.length > 1) {
-              this.cultureMap.map.off(
+              self.cultureMap.map.off(
                 params[0] as any,
                 params[1],
-                this.events[key]
+                self.events[key]
               );
             } else {
-              this.cultureMap.map.off(key, this.events[key]);
+              self.cultureMap.map.off(key as any, self.events[key]);
             }
           }
         });
-        this.events = {};
+        self.events = {};
       }
     }
   }

@@ -74,77 +74,79 @@ export class CultureMap {
   }
 
   init(ref: HTMLDivElement, setIsLoaded: Function, isEmbed: boolean) {
-    this.mapContainerRef = null;
-    this.isEmbed = isEmbed;
+    const self = this;
 
-    this.ready = false;
-    this.styleLoaded = false;
-    this.loaded = false;
-    this.onLoadJobs = [];
+    self.mapContainerRef = null;
+    self.isEmbed = isEmbed;
 
-    this.map = new maplibregl.Map({
+    self.ready = false;
+    self.styleLoaded = false;
+    self.loaded = false;
+    self.onLoadJobs = [];
+
+    self.map = new maplibregl.Map({
       container: ref,
-      style: this.config.mapStyleJsonUrl,
-      center: [this.config.lng, this.config.lat],
-      zoom: this.config.zoom,
-      maxBounds: this.config.bounds,
-      minZoom: this.config.minZoom,
-      maxZoom: this.config.maxZoom,
+      style: self.config.mapStyleJsonUrl,
+      center: [self.config.lng, self.config.lat],
+      zoom: self.config.zoom,
+      maxBounds: self.config.bounds,
+      minZoom: self.config.minZoom,
+      maxZoom: self.config.maxZoom,
       attributionControl: false,
     });
-    this.map.addControl(
+    self.map.addControl(
       new maplibregl.AttributionControl({
         customAttribution:
           '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="nofollow noreferrer">OpenStreetMap contributors</a>',
       }),
       "bottom-right"
     );
-    this.clusterDetail.init();
+    self.clusterDetail.init();
 
-    this.onLoadJobs.push(async (resolve?: any) => {
-      if (this.currentView in this.views) {
-        this.views[this.currentView].setData();
+    self.onLoadJobs.push(async (resolve?: any) => {
+      if (self.currentView in self.views) {
+        self.views[self.currentView].setData();
         setTimeout(() => {
-          this.views[this.currentView].render();
-          this.views[this.currentView].fitToBounds();
+          self.views[self.currentView].render();
+          self.views[self.currentView].fitToBounds();
           if (typeof resolve !== "undefined") resolve(true);
         }, 100);
       }
     });
 
     const process = async () => {
-      if (this.ready) return;
-      this.ready = true;
+      if (self.ready) return;
+      self.ready = true;
 
       if (typeof setIsLoaded === "function") setIsLoaded.call(null, true);
 
-      this.onLoadJobs.forEach(async (f) => {
+      self.onLoadJobs.forEach(async (f) => {
         await new Promise(f);
       });
     };
 
     const maybeProcess = async () => {
-      if (this.baseDataLoaded && this.styleLoaded && this.loaded)
+      if (self.baseDataLoaded && self.styleLoaded && self.loaded)
         await process();
     };
 
-    this.map.once("style.load", () => {
-      this.styleLoaded = true;
+    self.map.once("style.load", () => {
+      self.styleLoaded = true;
       maybeProcess();
     });
-    this.map.once("load", () => {
-      this.loaded = true;
+    self.map.once("load", () => {
+      self.loaded = true;
 
-      this?.map?.on("movestart", (e) => {
-        this.isAnimating = e?.cmAnimation === true;
+      self?.map?.on("movestart", (e) => {
+        self.isAnimating = (e as any)?.cmAnimation === true;
       });
 
-      this?.map?.on("moveend", (e) => {
-        if (!this.map) return;
-        this.isAnimating = false;
-        if (this.map.getZoom() > this.config.maxZoom - 1) {
-          this.map.zoomTo(
-            this.config.maxZoom - 1.1,
+      self?.map?.on("moveend", (e) => {
+        if (!self.map) return;
+        self.isAnimating = false;
+        if (self.map.getZoom() > self.config.maxZoom - 1) {
+          self.map.zoomTo(
+            self.config.maxZoom - 1.1,
             {},
             {
               cmAnimation: true,
@@ -156,7 +158,7 @@ export class CultureMap {
     });
 
     if (typeof window !== "undefined") {
-      fetch(`${this.config.apiUrl}/geojson`).then(async (response) => {
+      fetch(`${self.config.apiUrl}/geojson`).then(async (response) => {
         if (response.ok) {
           const data = await response.json();
           if (
@@ -165,8 +167,8 @@ export class CultureMap {
             data?.type === "FeatureCollection" &&
             Array.isArray(data?.features)
           ) {
-            this.geoJsonAllData = data;
-            this.baseDataLoaded = true;
+            self.geoJsonAllData = data;
+            self.baseDataLoaded = true;
 
             maybeProcess();
           }
@@ -181,31 +183,32 @@ export class CultureMap {
     (this.intitiallyFitToBounds = flag);
 
   setView(view: string) {
-    if (this.map) {
+    const self = this;
+    if (self.map) {
       const run = async (resolve?: any) => {
-        Object.keys(this.views).forEach((v: string) => {
+        Object.keys(self.views).forEach((v: string) => {
           if (v !== view) {
-            this.views[v].clear();
+            self.views[v].clear();
           }
         });
-        this.popup.hide();
-        this.clusterDetail.hide();
-        this.views[view].setData();
+        self.popup.hide();
+        self.clusterDetail.hide();
+        self.views[view].setData();
 
         setTimeout(() => {
-          this.views[view].render();
-          this.views[view].show();
+          self.views[view].render();
+          self.views[view].show();
           if (typeof resolve !== "undefined") resolve(true);
         }, 100);
 
-        this.currentView = view;
+        self.currentView = view;
       };
 
-      if (view === this.currentView) return;
+      if (view === self.currentView) return;
 
-      if (!this.ready) {
-        this.currentView = view;
-        this.onLoadJobs.push(run);
+      if (!self.ready) {
+        self.currentView = view;
+        self.onLoadJobs.push(run);
       } else {
         run();
       }
@@ -213,15 +216,16 @@ export class CultureMap {
   }
 
   hideCurrentView() {
-    if (this.map) {
+    const self = this;
+    if (self.map) {
       const run = async (resolve?: any) => {
-        this.popup.hide();
-        this.clusterDetail.hide();
-        this.views[this.currentView].hide();
+        self.popup.hide();
+        self.clusterDetail.hide();
+        self.views[self.currentView].hide();
         if (typeof resolve !== "undefined") resolve(true);
       };
-      if (!this.ready) {
-        this.onLoadJobs.push(run);
+      if (!self.ready) {
+        self.onLoadJobs.push(run);
       } else {
         run();
       }
@@ -229,15 +233,16 @@ export class CultureMap {
   }
 
   showCurrentView() {
-    if (this.map) {
+    const self = this;
+    if (self.map) {
       const run = async (resolve?: any) => {
-        this.popup.hide();
-        this.clusterDetail.hide();
-        this.views[this.currentView].show();
+        self.popup.hide();
+        self.clusterDetail.hide();
+        self.views[self.currentView].show();
         if (typeof resolve !== "undefined") resolve(true);
       };
-      if (!this.ready) {
-        this.onLoadJobs.push(run);
+      if (!self.ready) {
+        self.onLoadJobs.push(run);
       } else {
         run();
       }
@@ -245,15 +250,16 @@ export class CultureMap {
   }
 
   renderCurrentView() {
-    if (this.map) {
+    const self = this;
+    if (self.map) {
       const run = async (resolve?: any) => {
-        this.popup.hide();
-        this.clusterDetail.hide();
-        this.views[this.currentView].render();
+        self.popup.hide();
+        self.clusterDetail.hide();
+        self.views[self.currentView].render();
         if (typeof resolve !== "undefined") resolve(true);
       };
-      if (!this.ready) {
-        this.onLoadJobs.push(run);
+      if (!self.ready) {
+        self.onLoadJobs.push(run);
       } else {
         run();
       }
@@ -261,22 +267,23 @@ export class CultureMap {
   }
 
   setCurrentViewData(data?: any, show?: boolean) {
-    if (this.map) {
+    const self = this;
+    if (self.map) {
       const run = async (resolve?: any) => {
-        this.popup.hide();
-        this.clusterDetail.hide();
-        this.views[this.currentView].setData(data);
+        self.popup.hide();
+        self.clusterDetail.hide();
+        self.views[self.currentView].setData(data);
 
         if (show) {
           setTimeout(() => {
-            this.views[this.currentView].show();
+            self.views[self.currentView].show();
             if (typeof resolve !== "undefined") resolve(true);
           }, 100);
         }
       };
 
-      if (!this.ready) {
-        this.onLoadJobs.push(run);
+      if (!self.ready) {
+        self.onLoadJobs.push(run);
       } else {
         run();
       }
@@ -284,33 +291,34 @@ export class CultureMap {
   }
 
   setFilteredViewData(ids: any[]) {
-    if (this.map) {
+    const self = this;
+    if (self.map) {
       const run = async (resolve?: any) => {
-        this.popup.hide();
-        this.clusterDetail.hide();
+        self.popup.hide();
+        self.clusterDetail.hide();
 
-        if (this.geoJsonAllData && this.geoJsonAllData?.features?.length) {
-          this.views[this.currentView].setData({
+        if (self.geoJsonAllData && self.geoJsonAllData?.features?.length) {
+          self.views[self.currentView].setData({
             type: "FeatureCollection",
-            features: this.geoJsonAllData?.features.filter((f: any) =>
+            features: self.geoJsonAllData?.features.filter((f: any) =>
               ids.includes(f?.properties?.id)
             ),
           });
           if (typeof resolve !== "undefined") resolve(true);
         } else {
-          this.views[this.currentView].setData({
+          self.views[self.currentView].setData({
             type: "FeatureCollection",
             features: [],
           });
           setTimeout(() => {
-            this.views[this.currentView].show();
+            self.views[self.currentView].show();
             if (typeof resolve !== "undefined") resolve(true);
           }, 100);
         }
       };
 
-      if (!this.ready) {
-        this.onLoadJobs.push(run);
+      if (!self.ready) {
+        self.onLoadJobs.push(run);
       } else {
         run();
       }
@@ -318,16 +326,17 @@ export class CultureMap {
   }
 
   fitToCurrentViewBounds() {
-    if (this.map) {
+    const self = this;
+    if (self.map) {
       const run = async (resolve?: any) => {
-        this.popup.hide();
-        this.clusterDetail.hide();
-        this.views[this.currentView].fitToBounds();
+        self.popup.hide();
+        self.clusterDetail.hide();
+        self.views[self.currentView].fitToBounds();
         if (typeof resolve !== "undefined") resolve(true);
       };
 
-      if (!this.ready) {
-        this.onLoadJobs.push(run);
+      if (!self.ready) {
+        self.onLoadJobs.push(run);
       } else {
         run();
       }
@@ -335,19 +344,22 @@ export class CultureMap {
   }
 
   onMapPointNavigate(slug: any) {
+    const self = this;
+
     if (!slug) return null;
 
-    this.popup.hide();
+    self.popup.hide();
 
-    if (this.isEmbed && typeof window !== "undefined") {
-      window.open(`${this.config.baseUrl}${slug}`, "_ blank");
+    if (self.isEmbed && typeof window !== "undefined") {
+      window.open(`${self.config.baseUrl}${slug}`, "_ blank");
     } else {
-      this.router.push(slug);
+      self.router.push(slug);
     }
   }
 
   setTourStops(stops: MapTourType[]) {
-    if (this.map) {
+    const self = this;
+    if (self.map) {
       const run = async (resolve?: any) => {
         const stopsGeoJSON = {
           features: [
@@ -387,12 +399,12 @@ export class CultureMap {
           type: "FeatureCollection",
         };
 
-        this.tour.setTourStopsData(stopsGeoJSON);
-        this.tour.renderStops();
+        self.tour.setTourStopsData(stopsGeoJSON);
+        self.tour.renderStops();
         if (typeof resolve !== "undefined") resolve(true);
       };
-      if (!this.ready) {
-        this.onLoadJobs.push(run);
+      if (!self.ready) {
+        self.onLoadJobs.push(run);
       } else {
         run();
       }
@@ -400,14 +412,15 @@ export class CultureMap {
   }
 
   setTourPath(path: any) {
-    if (this.map) {
+    const self = this;
+    if (self.map) {
       const run = async (resolve?: any) => {
-        this.tour.setTourPathData(path);
-        this.tour.renderPath();
+        self.tour.setTourPathData(path);
+        self.tour.renderPath();
         if (typeof resolve !== "undefined") resolve(true);
       };
-      if (!this.ready) {
-        this.onLoadJobs.push(run);
+      if (!self.ready) {
+        self.onLoadJobs.push(run);
       } else {
         run();
       }
@@ -415,16 +428,17 @@ export class CultureMap {
   }
 
   fitToCurrentTourBounds() {
-    if (this.map) {
+    const self = this;
+    if (self.map) {
       const run = async (resolve?: any) => {
-        this.popup.hide();
-        this.clusterDetail.hide();
-        this.tour.fitToBounds();
+        self.popup.hide();
+        self.clusterDetail.hide();
+        self.tour.fitToBounds();
         if (typeof resolve !== "undefined") resolve(true);
       };
 
-      if (!this.ready) {
-        this.onLoadJobs.push(run);
+      if (!self.ready) {
+        self.onLoadJobs.push(run);
       } else {
         run();
       }
@@ -432,13 +446,14 @@ export class CultureMap {
   }
 
   clearTour() {
-    if (this.map) {
+    const self = this;
+    if (self.map) {
       const run = async (resolve?: any) => {
-        this.tour.clear();
+        self.tour.clear();
         if (typeof resolve !== "undefined") resolve(true);
       };
-      if (!this.ready) {
-        this.onLoadJobs.push(run);
+      if (!self.ready) {
+        self.onLoadJobs.push(run);
       } else {
         run();
       }
@@ -446,7 +461,8 @@ export class CultureMap {
   }
 
   setHighlights(highlights: MapHighlightType[]) {
-    if (this.map) {
+    const self = this;
+    if (self.map) {
       const run = async (resolve?: any) => {
         const data = {
           features: highlights.reduce((features: any, highlight: any) => {
@@ -485,12 +501,12 @@ export class CultureMap {
           type: "FeatureCollection",
         };
 
-        this.highlights.setData(data);
-        this.highlights.render();
+        self.highlights.setData(data);
+        self.highlights.render();
         if (typeof resolve !== "undefined") resolve(true);
       };
-      if (!this.ready) {
-        this.onLoadJobs.push(run);
+      if (!self.ready) {
+        self.onLoadJobs.push(run);
       } else {
         run();
       }
@@ -498,13 +514,14 @@ export class CultureMap {
   }
 
   clearHighlights() {
-    if (this.map) {
+    const self = this;
+    if (self.map) {
       const run = async (resolve?: any) => {
-        this.highlights.clear();
+        self.highlights.clear();
         if (typeof resolve !== "undefined") resolve(true);
       };
-      if (!this.ready) {
-        this.onLoadJobs.push(run);
+      if (!self.ready) {
+        self.onLoadJobs.push(run);
       } else {
         run();
       }
@@ -512,14 +529,15 @@ export class CultureMap {
   }
 
   setUserLocation(lng: number, lat: number) {
-    if (this.map) {
+    const self = this;
+    if (self.map) {
       const run = async (resolve?: any) => {
-        this.userLocation.setData(lng, lat);
-        this.userLocation.render();
+        self.userLocation.setData(lng, lat);
+        self.userLocation.render();
         if (typeof resolve !== "undefined") resolve(true);
       };
-      if (!this.ready) {
-        this.onLoadJobs.push(run);
+      if (!self.ready) {
+        self.onLoadJobs.push(run);
       } else {
         run();
       }
@@ -527,13 +545,14 @@ export class CultureMap {
   }
 
   clearUserLocation() {
-    if (this.map) {
+    const self = this;
+    if (self.map) {
       const run = async (resolve?: any) => {
-        this.userLocation.clear();
+        self.userLocation.clear();
         if (typeof resolve !== "undefined") resolve(true);
       };
-      if (!this.ready) {
-        this.onLoadJobs.push(run);
+      if (!self.ready) {
+        self.onLoadJobs.push(run);
       } else {
         run();
       }
@@ -638,17 +657,18 @@ export class CultureMap {
     withDrawer?: boolean,
     withVerticalScroller?: boolean
   ) {
-    if (this.map) {
+    const self = this;
+    if (self.map) {
       const run = async (resolve?: any) => {
         if (isNaN(lng) || isNaN(lat)) return;
-        this.map?.stop();
-        this.map?.panTo(
+        self.map?.stop();
+        self.map?.panTo(
           [lng, lat],
           {
             animate: true,
             duration: 1000,
             essential: true,
-            offset: this.getCenterOffset(withDrawer, withVerticalScroller),
+            offset: self.getCenterOffset(withDrawer, withVerticalScroller),
           },
           {
             cmAnimation: true,
@@ -657,8 +677,8 @@ export class CultureMap {
         if (typeof resolve !== "undefined") resolve(true);
       };
 
-      if (!this.ready) {
-        this.onLoadJobs.push(run);
+      if (!self.ready) {
+        self.onLoadJobs.push(run);
       } else {
         run();
       }
@@ -671,17 +691,18 @@ export class CultureMap {
     withDrawer?: boolean,
     withVerticalScroller?: boolean
   ) {
-    if (this.map) {
+    const self = this;
+    if (self.map) {
       const run = async (resolve?: any) => {
         if (isNaN(lng) || isNaN(lat)) return;
-        this.map?.stop();
-        this.map?.panTo(
+        self.map?.stop();
+        self.map?.panTo(
           [lng, lat],
           {
             animate: false,
             duration: 0,
             essential: false,
-            offset: this.getCenterOffset(withDrawer, withVerticalScroller),
+            offset: self.getCenterOffset(withDrawer, withVerticalScroller),
           },
           {
             cmAnimation: true,
@@ -690,8 +711,8 @@ export class CultureMap {
         if (typeof resolve !== "undefined") resolve(true);
       };
 
-      if (!this.ready) {
-        this.onLoadJobs.push(run);
+      if (!self.ready) {
+        self.onLoadJobs.push(run);
       } else {
         run();
       }
@@ -699,7 +720,8 @@ export class CultureMap {
   }
 
   toggleLayersVisibility = (layers: string[], visibility: string) => {
-    if (!this.map) return;
+    const self = this;
+    if (!self.map) return;
 
     layers.forEach((l) => {
       if (this?.map?.getLayer(l)) {
@@ -709,11 +731,12 @@ export class CultureMap {
   };
 
   removeLayers = (layers: string[]) => {
-    if (!this.map) return;
+    const self = this;
+    if (!self.map) return;
 
     layers.forEach((l) => {
       if (this?.map?.getLayer(l)) {
-        this.map?.removeLayer(l);
+        self.map?.removeLayer(l);
       }
     });
   };
