@@ -188,6 +188,7 @@ export class MapTour {
 
       self.cultureMap.map.moveLayer("tourStops");
       self.cultureMap.map.moveLayer("tourStopNumbers");
+      self.cultureMap.map.moveLayer("tourStopsHighlight");
       self.cultureMap.map.moveLayer("tourStopsHighlightDot");
       self.cultureMap.map.moveLayer("tourStopsHighlightNumber");
 
