@@ -249,27 +249,27 @@ export const ModuleComponentLocation = ({
   const links = `
     ${
       location?.socialMedia?.website
-        ? `<a href="${location?.socialMedia?.website}" rel="no-referral">${location?.socialMedia?.website}</a><br/>`
+        ? `<a href="${location?.socialMedia?.website}" target="_blank" rel="no-referral">${location?.socialMedia?.website}</a><br/>`
         : ""
     }   
     ${
       location?.socialMedia?.facebook
-        ? `<a href="${location?.socialMedia?.facebook}" rel="no-referral">${location?.socialMedia?.facebook}</a><br/>`
+        ? `<a href="${location?.socialMedia?.facebook}" target="_blank" rel="no-referral">${location?.socialMedia?.facebook}</a><br/>`
         : ""
     }   
     ${
       location?.socialMedia?.instagram
-        ? `<a href="${location?.socialMedia?.instagram}" rel="no-referral">${location?.socialMedia?.instagram}</a><br/>`
+        ? `<a href="${location?.socialMedia?.instagram}" target="_blank" rel="no-referral">${location?.socialMedia?.instagram}</a><br/>`
         : ""
     }   
     ${
       location?.socialMedia?.twitter
-        ? `<a href="${location?.socialMedia?.twitter}" rel="no-referral">${location?.socialMedia?.twitter}</a><br/>`
+        ? `<a href="${location?.socialMedia?.twitter}" target="_blank" rel="no-referral">${location?.socialMedia?.twitter}</a><br/>`
         : ""
     }   
     ${
       location?.socialMedia?.youtube
-        ? `<a href="${location?.socialMedia?.youtube}" rel="no-referral">${location?.socialMedia?.youtube}</a><br/>`
+        ? `<a href="${location?.socialMedia?.youtube}" target="_blank" rel="no-referral">${location?.socialMedia?.youtube}</a><br/>`
         : ""
     }   
   `;
