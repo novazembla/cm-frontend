@@ -8,9 +8,11 @@ import { useRouter } from "next/router";
 export const MultiLangHtml = ({
   json,
   addMissingTranslationInfo,
+  replace,
 }: {
   json?: Record<string, string> | string;
   addMissingTranslationInfo?: boolean;
+  replace?: Record<string, string>[]
 }) => {
   const { t, i18n } = useAppTranslations();
   const config = useConfigContext();
@@ -61,6 +63,11 @@ export const MultiLangHtml = ({
     }
   };
 
+  if (replace?.length) {
+    value = replace.reduce((v: string, r: any) => {
+      return v.replaceAll(r.key, r.value);
+    }, value)
+  }
   return (
     <Box
       onClick={handleAnchorClick}

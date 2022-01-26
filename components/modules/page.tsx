@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { gql } from "@apollo/client";
 import { ApiImage } from "~/components/ui/ApiImage";
 import { MultiLangValue } from "~/components/ui/MultiLangValue";
@@ -6,9 +6,13 @@ import { MultiLangHtml } from "~/components/ui/MultiLangHtml";
 import { MainContent } from "~/components/app/MainContent";
 import { Footer } from "~/components/app/Footer";
 import { getApolloClient } from "~/services";
-import { Box, Text, chakra, Grid } from "@chakra-ui/react";
+import { Box, Text, chakra, Grid, Flex } from "@chakra-ui/react";
 import { GetStaticPaths, GetStaticProps } from "next";
-import { useConfigContext, useMapContext } from "~/provider";
+import {
+  useConfigContext,
+  useMapContext,
+  useSettingsContext,
+} from "~/provider";
 import { useRouter } from "next/router";
 import { getSeoAppTitle, getSeoImage } from "~/utils";
 import NextHeadSeo from "next-head-seo";
@@ -41,10 +45,42 @@ export const ModuleComponentPage = ({ page }: { page: any }) => {
   const router = useRouter();
   const cultureMap = useMapContext();
   const config = useConfigContext();
+  const settings = useSettingsContext();
+
   const { getMultilangValue, i18n, t } = useAppTranslations();
+
+  const [typesOfOrganisation, setTypesOfOrganisation] = useState<any[]>([]);
   useEffect(() => {
     if (cultureMap) cultureMap.showCurrentView();
   }, [router.asPath, cultureMap]);
+
+  useEffect(() => {
+    console.log(settings);
+
+    if (settings?.taxonomies?.typeOfInstitution?.terms?.length) {
+      setTypesOfOrganisation(
+        settings?.taxonomies?.typeOfInstitution?.terms
+          .sort((t1: any, t2: any) => {
+            if (getMultilangValue(t1.name) < getMultilangValue(t2.name))
+              return -1;
+            if (getMultilangValue(t1.name) > getMultilangValue(t2.name))
+              return 1;
+            return 0;
+          })
+          .map((type: any) => {
+            return `
+          <div style="display:flex;align-items:center;margin: 0.2em 0;">
+            <div style="width: 20px; height: 20px; border-radius: 20px; transform: translateY(-1px); background: ${
+              type.color
+            }; margin-right: 0.35em"></div>
+            ${getMultilangValue(type.name)}
+          </div>
+        
+        `;
+          })
+      );
+    }
+  }, [settings, getMultilangValue]);
 
   return (
     <MainContent isDrawer>
@@ -94,15 +130,26 @@ export const ModuleComponentPage = ({ page }: { page: any }) => {
               )}
               {page.intro && (
                 <Box textStyle="larger" mb="3em" fontWeight="bold">
-                  <MultiLangHtml json={page.intro} addMissingTranslationInfo/>
+                  <MultiLangHtml json={page.intro} addMissingTranslationInfo />
                 </Box>
               )}
 
-              <MultiLangHtml json={page.content} addMissingTranslationInfo/>
+              <MultiLangHtml
+                json={page.content}
+                addMissingTranslationInfo
+                replace={[
+                  {
+                    key: "[list-type-of-institutions]",
+                    value: typesOfOrganisation.join(""),
+                  },
+                ]}
+              />
             </Box>
           </Box>
         </Box>
-        <Box><Footer /></Box>
+        <Box>
+          <Footer />
+        </Box>
       </Grid>
     </MainContent>
   );
