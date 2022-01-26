@@ -83,6 +83,7 @@ export const Map = ({ layout }: { layout: string }) => {
     useState(false);
 
   const geolocationError = (err: GeolocationPositionError) => {
+    console.error(err);
     setGeolocationActive(false);
     setGeolocationFirstPosition(false);
     cultureMap?.clearUserLocation();
@@ -96,14 +97,15 @@ export const Map = ({ layout }: { layout: string }) => {
         position?.coords?.latitude >= config.bounds[0][1] &&
         position?.coords?.latitude <= config.bounds[1][1]
       ) {
+
         cultureMap?.setUserLocation(
-          position?.coords?.latitude,
-          position?.coords?.longitude
+          position?.coords?.longitude,
+          position?.coords?.latitude
         );
-        if (geolocationFirstPosition) {
+        if (!geolocationFirstPosition) {
           cultureMap?.panTo(
-            position?.coords?.latitude,
-            position?.coords?.longitude
+            position?.coords?.longitude,
+            position?.coords?.latitude
           );
           setGeolocationFirstPosition(true);
         }
@@ -414,6 +416,7 @@ export const Map = ({ layout }: { layout: string }) => {
       >
         <Box
           ref={mapContainer}
+          position="relative"
           className="map"
           w="100%"
           h="100%"

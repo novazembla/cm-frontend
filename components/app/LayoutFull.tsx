@@ -116,12 +116,14 @@ export const LayoutFull = ({ children }: AppProps) => {
                 href="/fonts/BerlinType/BerlinTypeWeb-Regular.woff2"
                 as="font"
                 type="font/woff2"
+                crossOrigin="anonymous"
               />
               <link
                 rel="preload"
                 href="/fonts/BerlinType/BerlinTypeWeb-Bold.woff2"
                 as="font"
                 type="font/woff2"
+                crossOrigin="anonymous"
               />
               <link rel="preconnect" href={config.apiUrl} />
               {mapJsonBaseUrl && (
