@@ -24,7 +24,7 @@ type AppPropsWithLayout = AppProps & {
 };
 
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
-  if (typeof window !== "undefined") console.log(chakraTheme);
+  if (typeof window !== "undefined" && process.env.NODE_ENV === "development") console.log(chakraTheme);
 
   const getLayout = Component.getLayout || ((page) => page);
 
