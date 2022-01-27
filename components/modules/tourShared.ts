@@ -53,6 +53,7 @@ export const tourQuery = gql`
           description
           lat
           lng
+          status
           primaryTerms {
             id
             name
