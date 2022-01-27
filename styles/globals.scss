@@ -27,6 +27,15 @@ body {
   -ms-overflow-style: -ms-autohiding-scrollbar;
 }
 
+.with-ellipsis {
+  display: inline-block;
+  overflow: hidden;
+  // hyphens: auto;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
 .clampTwoLines {
   overflow: hidden;
   // hyphens: auto;
