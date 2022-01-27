@@ -531,7 +531,6 @@ export const ModuleComponentTour = ({ tour }: { tour: any; }) => {
                           "2xl": "35px",
                         }}
                         pb={isMobile ? "12px" : "20px"}
-                        w={isMobile ? "100%" : "66.66%"}
                       >
                         {!isMobile && (
                           <>

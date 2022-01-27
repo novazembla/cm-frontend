@@ -361,14 +361,14 @@ export const ModuleComponentLocation = ({
                 "2xl": "35px",
               }}
               pb={isMobile ? "20px" : "1em"}
-              w={isMobile ? "100%" : "66.66%"}
+              w="100%"
             >
               {meta && (
                 <Flex
                   textStyle="categoriesHighlight"
                   color={colorDark}
                   alignItems="flex-end"
-                  width="66.66%"
+                  
                 >
                   {meta}
                 </Flex>

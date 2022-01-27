@@ -82,13 +82,6 @@ export const ModuleComponentTourIntroduction = ({ tour }: { tour: any }) => {
 
         cultureMap.setTourPath(tour?.path);
         cultureMap.setTourStops(stops);
-
-        // setTimeout(() => {
-        //   cultureMap.panTo(
-        //     stops[0]?.lng, stops[0]?.lat,
-        //     true
-        //   );
-        // }, 500);
       }
     }
 
