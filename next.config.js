@@ -33,12 +33,18 @@ module.exports = withBundleAnalyzer(
     experimental: {
       scrollRestoration: true,
     },
-    headers: [
-      {
-        key: 'Access-Control-Allow-Origin',
-        value: '*',
-      },
-    ],
+
+    async headers() {
+      return [
+        {
+          // matching all API routes
+          source: "/:path*",
+          headers: [
+            { key: "Access-Control-Allow-Origin", value: "*" },
+          ]
+        }
+      ]
+    },
 
     webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
       // config.infrastructureLogging = {
