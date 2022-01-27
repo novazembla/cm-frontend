@@ -33,6 +33,13 @@ module.exports = withBundleAnalyzer(
     experimental: {
       scrollRestoration: true,
     },
+    headers: [
+      {
+        key: 'Access-Control-Allow-Origin',
+        value: '*',
+      },
+    ],
+
     webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
       // config.infrastructureLogging = {
       //   appendOnly: true,
