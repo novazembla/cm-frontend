@@ -1,5 +1,5 @@
 export const getSeoAppTitle = (t: Function) => {
-  return `${t("logo.culturemap1", "CULTUREMAP")} ${t(
+  return `${t("logo.culturemap1", "CULTURE MAP")} ${t(
     "logo.culturemap2",
     "Lichtenberg"
   )}`;

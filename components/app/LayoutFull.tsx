@@ -132,14 +132,14 @@ export const LayoutFull = ({ children }: AppProps) => {
             </Head>
             <UserTracking />
             <NextHeadSeo
-              title={`${t("logo.culturemap1", "CULTUREMAP")} ${t(
+              title={`${t("logo.culturemap1", "CULTURE MAP")} ${t(
                 "logo.culturemap2",
                 "Lichtenberg"
               )}`}
               og={{
                 image: "https://example.com/default-og.png", // TOOD: default image
                 type: "article",
-                siteName: `${t("logo.culturemap1", "CULTUREMAP")} ${t(
+                siteName: `${t("logo.culturemap1", "CULTURE MAP")} ${t(
                   "logo.culturemap2",
                   "Lichtenberg"
                 )}`,
