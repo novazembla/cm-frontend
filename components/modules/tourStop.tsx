@@ -146,6 +146,13 @@ export const ModuleComponentTourStop = ({
   ]);
 
   let meta: any = t("card.meta.tour", "Tour");
+
+  const image = (tourStop?.heroImage && tourStop?.heroImage.id) ? 
+      tourStop?.heroImage : 
+      (tourStop?.location?.heroImage && tourStop?.location?.heroImage.id) 
+        ? tourStop?.location?.heroImage
+        : null;
+
   return (
     <MainContent layerStyle="lightGray">
       <NextHeadSeo
@@ -174,20 +181,20 @@ export const ModuleComponentTourStop = ({
             <PageTitle title={getMultilangValue(tour?.title)} type="short" />
 
             <Box bg="#fff" borderRadius="lg" overflow="hidden">
-              {tourStop?.heroImage?.id && (
+              {image?.id && (
                 <Box>
                   <AspectRatio w="100%" ratio={16 / 9}>
                     <Box bg={color}>
-                      {tourStop?.heroImage && tourStop?.heroImage?.id && (
+                      {image.id && (
                         <Box w="100%" h="100%">
                           <ApiImage
-                            id={tourStop?.heroImage?.id}
-                            alt={getMultilangValue(tourStop?.heroImage.alt)}
-                            meta={tourStop?.heroImage?.meta}
+                            id={image?.id}
+                            alt={getMultilangValue(image.alt)}
+                            meta={image?.meta}
                             forceAspectRatioPB={56.25}
-                            status={tourStop?.heroImage?.status}
+                            status={image?.status}
                             sizes="(min-width: 45rem) 700px, 100vw"
-                            cropPosition={tourStop?.heroImage?.cropPosition}
+                            cropPosition={image?.cropPosition}
                             objectFit="cover"
                           />
                         </Box>
@@ -209,7 +216,7 @@ export const ModuleComponentTourStop = ({
                   )}
                 </Box>
               )}
-              {!tourStop?.heroImage?.id && (
+              {!image?.id && (
                 <Flex justifyContent="flex-end">
                   <Box w="40%">
                     <AspectRatio w="100%" ratio={4 / 3}>

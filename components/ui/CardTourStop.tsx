@@ -52,6 +52,12 @@ export const CardTourStop = ({
     200
   );
 
+  const image = (tourStop?.heroImage && tourStop?.heroImage.id) ? 
+      tourStop?.heroImage : 
+      (tourStop?.location?.heroImage && tourStop?.location?.heroImage.id) 
+        ? tourStop?.location?.heroImage
+        : null;
+  
   return (
     <LinkBox
       as="article"
@@ -75,7 +81,7 @@ export const CardTourStop = ({
         >
           <AspectRatio w="100%" ratio={3 / 2}>
             <Box bg={color}>
-              {tourStop?.heroImage && tourStop?.heroImage.id && (
+              {image?.id && (
                 <Box
                   w="100%"
                   h="100%"
@@ -88,14 +94,14 @@ export const CardTourStop = ({
                   }}
                 >
                   <ApiImage
-                    id={tourStop?.heroImage.id}
+                    id={image.id}
                     alt=""
-                    meta={tourStop?.heroImage.meta}
+                    meta={image.meta}
                     forceAspectRatioPB={66.66}
-                    status={tourStop?.heroImage.status}
+                    status={image.status}
                     sizes="(min-width: 45rem) 400px, 40vw"
                     objectFit="cover"
-                    cropPosition={tourStop?.heroImage?.cropPosition}
+                    cropPosition={image?.cropPosition}
                     imgCssProps={{
                       borderTopRightRadius: "var(--chakra-radii-lg)",
                     }}
