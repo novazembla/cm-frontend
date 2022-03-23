@@ -55,6 +55,7 @@ export const locationsQuery = gql`
           meta
           alt
           credits
+          cropPosition
         }
       }
     }
