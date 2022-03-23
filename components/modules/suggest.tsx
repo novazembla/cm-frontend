@@ -380,23 +380,20 @@ export const ModuleComponentSuggest = () => {
         if (settings?.taxonomies?.targetAudience?.terms?.length) {
           resetVars = {
             ...resetVars,
-            s: "",
-            cluster: true,
-            and: false,
             ...settings?.taxonomies?.targetAudience?.terms.reduce(
               (acc: any, t: any) => ({
                 ...acc,
                 [`targetAudience_${t.id}`]: false,
               }),
-              {}
+              {} 
             ),
           };
         }
       }
-
+ 
       reset(resetVars);
     }
-  }, [settings?.taxonomies, reset]);
+  }, [settings?.taxonomies, reset]); 
 
   const heroImage = watch("heroImage");
   const suggestionSubmittersImageRightsConfirmation = watch(

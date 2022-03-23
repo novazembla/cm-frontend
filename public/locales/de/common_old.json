@@ -177,7 +177,7 @@
         "label": {
           "typeOfInstitution": "Einrichtungsart",
           "typeOfOrganisation": "Trägerart",
-          "targetAudience": "Zielgruppe",
+          "targetAudience": "Angebote für",
           "eventType": "Veranstaltungsart"
         }
       }
