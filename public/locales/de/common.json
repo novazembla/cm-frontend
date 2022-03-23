@@ -166,7 +166,7 @@
       "title": {
         "keyword": "Nach Stichwort suchen",
         "typeOfInstitution": "Einrichtungsart",
-        "targetAudience": "Zielgruppe",
+        "targetAudience": "Angebote für",
         "typeOfOrganisation": "Organisationsart",
         "settings": "Weitere Einstellungen"
       },
@@ -208,7 +208,7 @@
   "taxonomy": {
     "label": {
       "typeOfInstitution": "Einrichtungsart",
-      "targetAudience": "Zielgruppe",
+      "targetAudience": "Angebote für",
       "typeOfOrganisation": "Trägerart"
     }
   },
@@ -351,7 +351,7 @@
     "tax": {
       "title": {
         "typeOfInstitution": "Einrichtungsart",
-        "targetAudience": "Zielgruppe",
+        "targetAudience": "Angebote für",
         "typeOfOrganisation": "Organisationsart"
       }
     },
