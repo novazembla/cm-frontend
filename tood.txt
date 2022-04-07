@@ -1,3 +1,6 @@
 TODO: 
-- default seo image
+- default seo image - search for - https://example.com/default-og.png
 - wording suggest form
+
+
+- add robots.txt
