@@ -1,6 +1,11 @@
+BUG: 
+- Auf Map/Karte werden Cluster und Unclustered Punkte angezeigt. 
+
+
 TODO: 
 - default seo image - search for - https://example.com/default-og.png
 - wording suggest form
 
+- metaDesc output ... read new settings in DB.
 
 - add robots.txt
