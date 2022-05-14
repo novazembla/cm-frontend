@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://kultur-in-lichtenberg.de/sitemap_index.xml
