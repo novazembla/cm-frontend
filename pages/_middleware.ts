@@ -14,13 +14,16 @@ export async function middleware(req: NextRequest, ev: NextFetchEvent) {
 
         if (file.indexOf("sitemap") !== -1 && file.indexOf(".xml") !== -1) {
           let status = 200;
-          const contentType = "application/xml; charset=UTF-8";
+          let contentType = "application/xml; charset=UTF-8";
 
           let body = await fetch(`${appConfig.apiUrl}/sitemap/${file}`)
             .then((response: Response) => {
               if (response) {
                 status = response.status;
 
+                if (response.headers.has("content-type"))
+                  contentType =
+                    response.headers.get("content-type") ?? contentType;
                 return response.text();
               }
               return null;
