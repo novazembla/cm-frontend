@@ -94,7 +94,7 @@
       "website": "Website",
       "eventLocation": "Veranstaltungsort",
       "eventOrganiser": "Veranstalter",
-      "category": "Veranstaltungsart",
+      "category": "Art der Veranstaltung",
       "eventDatesMultiple": "Weitere Termine"
     },
     "detail": {
@@ -122,7 +122,7 @@
       "title": {
         "dateRange": "Zeitraum",
         "eventDateRange": "Zeitraum",
-        "eventType": "Veranstaltungsart"
+        "eventType": "Art der Veranstaltung"
       },
       "eventDateRange": {
         "all": "Alle",
