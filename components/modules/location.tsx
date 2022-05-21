@@ -139,8 +139,8 @@ export const ModuleComponentLocation = ({
   }, [router.asPath, cultureMap]);
 
   useEffect(() => {
-    
     if (typeof window !== "undefined" && highlight && cultureMap) {
+      cultureMap.setInitallyFitToBounds(false);
       cultureMap.setHighlights([highlight]);
       cultureMap.panTo(highlight.lng, highlight.lat, true);
     }

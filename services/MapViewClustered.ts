@@ -32,7 +32,7 @@ export class MapViewClustered {
           cluster: true,
           maxzoom: self.cultureMap.config.maxZoom,
           clusterMaxZoom: self.cultureMap.config.maxZoom, // Max zoom to cluster points on
-          clusterRadius: 50, // Radius of each cluster when clustering points (defaults to 50)
+          clusterRadius: self.cultureMap.config.clusterRadius, // Radius of each cluster when clustering points (defaults to 50)
         });
       } else {
         (
@@ -210,13 +210,14 @@ export class MapViewClustered {
               clusterId,
               (err: any, zoom: any) => {
                 if (err || !self.cultureMap?.map) return;
+
                 if (
                   (children?.length > 1 && children[0].properties?.cluster) ||
                   Math.floor(zoom) < self.cultureMap.config.maxZoom - 2
                 ) {
                   self.cultureMap.map.easeTo(
                     {
-                      center: features[0].geometry.coordinates,
+                      center: (features[0].geometry as any).coordinates,
                       offset: self.cultureMap.getCenterOffset() ?? [0, 0],
                       zoom: Math.min(zoom, self.cultureMap.config.maxZoom - 2),
                     },
@@ -228,7 +229,7 @@ export class MapViewClustered {
                 } else {
                   self.cultureMap.map.easeTo(
                     {
-                      center: features[0].geometry.coordinates,
+                      center: (features[0].geometry as any).coordinates,
                       offset: self.cultureMap.getCenterOffset() ?? [0, 0],
                       zoom: Math.max(
                         17.5,
@@ -250,8 +251,9 @@ export class MapViewClustered {
                     0,
                     (err: any, leafFeatures: any) => {
                       if (err || !leafFeatures?.length) return;
-                      const coordinates =
-                        features[0].geometry.coordinates.slice();
+                      const coordinates = (
+                        features[0].geometry as any
+                      ).coordinates.slice();
                       self.cultureMap.clusterDetail.show(
                         coordinates,
                         leafFeatures
@@ -410,9 +412,8 @@ export class MapViewClustered {
   fitToBounds() {
     const self = this;
     if (self.cultureMap?.map) {
-      self.cultureMap.map?.fitBounds(self.bounds, {
+      self.cultureMap.fitToBounds(self.bounds, {
         maxZoom: self.cultureMap.MAX_BOUNDS_ZOOM,
-        linear: true,
         padding: self.cultureMap.getBoundsPadding(),
       });
     }

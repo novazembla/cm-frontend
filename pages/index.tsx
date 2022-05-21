@@ -256,6 +256,7 @@ export const Home = ({ homepage }: { homepage: any }) => {
       cultureMap.showCurrentView();
 
       if (highlights.length) {
+        cultureMap.setInitallyFitToBounds(false);
         cultureMap.setHighlights(highlights);
         setHighlights(highlights);
         parsedHighlightsRef.current = highlights;

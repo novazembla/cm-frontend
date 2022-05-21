@@ -242,11 +242,10 @@ export class MapViewUnclustered {
   fitToBounds() {
     const self = this;
     if (self.cultureMap?.map) {
-      self.cultureMap.map?.fitBounds(self.bounds, {
+      self.cultureMap.fitToBounds(self.bounds, {
         maxZoom: self.cultureMap.MAX_BOUNDS_ZOOM,
-        linear: true,
         padding: self.cultureMap.getBoundsPadding(),
-      });
+      });      
     }
   }
 

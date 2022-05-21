@@ -108,7 +108,10 @@ export class CultureMap {
         self.views[self.currentView].setData();
         setTimeout(() => {
           self.views[self.currentView].render();
-          self.views[self.currentView].fitToBounds();
+          if (self.intitiallyFitToBounds) {
+            self.views[self.currentView].fitToBounds();
+          }
+          self.setInitallyFitToBounds(true);
           if (typeof resolve !== "undefined") resolve(true);
         }, 100);
       }
@@ -178,10 +181,45 @@ export class CultureMap {
   }
 
   inBounds = (coordinates: number[]) => {
-    if (coordinates[0] < this.config.bounds[0][0] || coordinates[0] > this.config.bounds[1][0]) return false;
-    if (coordinates[1] < this.config.bounds[0][1] || coordinates[1] > this.config.bounds[1][1]) return false;
+    if (
+      coordinates[0] < this.config.bounds[0][0] ||
+      coordinates[0] > this.config.bounds[1][0]
+    )
+      return false;
+    if (
+      coordinates[1] < this.config.bounds[0][1] ||
+      coordinates[1] > this.config.bounds[1][1]
+    )
+      return false;
     return true;
-  }
+  };
+
+  fitToBounds = (bounds: any, options: any = {}) => {
+    if (!this.map) return;
+
+    const calculatedOptions: any = this.map.cameraForBounds(bounds, options);
+
+    if (!calculatedOptions) return;
+
+    for (const k in options) {
+      calculatedOptions[k] = options[k];
+    }
+
+    calculatedOptions.zoom = Math.max(
+      calculatedOptions.zoom,
+      options?.minZoom ?? this.config.boundingBoxZoom
+    );
+
+    // Explictly remove the padding field because, calculatedOptions already accounts for padding by setting zoom and center accordingly.
+    // if (calculatedOptions?.padding)
+    //   delete calculatedOptions.padding;
+
+    console.log(calculatedOptions);
+
+    if (calculatedOptions?.minZoom) delete calculatedOptions.minZoom;
+
+    this.map.easeTo(options);
+  };
 
   clearOnloadJobs = () => (this.onLoadJobs = []);
 

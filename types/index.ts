@@ -9,6 +9,8 @@ export interface AppConfig {
   lng: number;
   minZoom: number;
   maxZoom: number;
+  boundingBoxZoom: number;
+  clusterRadius: number;
   bounds: [[number, number], [number, number]],
   zoom: number;
   contactEmail: string;
