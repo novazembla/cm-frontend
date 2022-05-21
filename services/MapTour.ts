@@ -19,7 +19,13 @@ export class MapTour {
   events: Record<string, any> = {};
   isVisible: boolean = false;
 
-  layers: string[] = ["tourStops", "tourStopsHighlight", "tourStopsHighlightDot", "tourStopsHighlightNumber", "tourStopNumbers"];
+  layers: string[] = [
+    "tourStops",
+    "tourStopsHighlight",
+    "tourStopsHighlightDot",
+    "tourStopsHighlightNumber",
+    "tourStopNumbers",
+  ];
 
   constructor(cultureMap: CultureMap) {
     this.cultureMap = cultureMap;
@@ -72,8 +78,18 @@ export class MapTour {
               self.cultureMap.config.lat,
             ];
 
-            if (coordinates[0] !== 0 && coordinates[1] !== 0) {
+            if (self.cultureMap.inBounds(coordinates)) {
               self.bounds.extend(coordinates);
+            } else {
+              const feature = stops?.features[i]?.features[i];
+              console.warn(
+                `Skipped location as it is out of bounds: ID(${feature.properties.id.replace(
+                  "loc-",
+                  ""
+                )}) - ${self.cultureMap.tHelper.getMultilangValue(
+                  feature?.properties?.title
+                )}`
+              );
             }
           }
         }
@@ -303,7 +319,10 @@ export class MapTour {
     const self = this;
     if (!self.isVisible) return;
 
-    self.cultureMap.toggleLayersVisibility([...self.layers, "tourPath"], "none");
+    self.cultureMap.toggleLayersVisibility(
+      [...self.layers, "tourPath"],
+      "none"
+    );
 
     self.isVisible = false;
   }
@@ -312,9 +331,12 @@ export class MapTour {
     const self = this;
     if (self.isVisible) return;
 
-    self.cultureMap.toggleLayersVisibility([...self.layers, "tourPath"], "visible");
+    self.cultureMap.toggleLayersVisibility(
+      [...self.layers, "tourPath"],
+      "visible"
+    );
 
-    self.isVisible = true;    
+    self.isVisible = true;
   }
 
   clear() {
@@ -332,7 +354,6 @@ export class MapTour {
   clearStops() {
     const self = this;
     if (self.cultureMap?.map) {
-
       self.cultureMap.removeLayers(self.layers);
 
       if (Object.keys(self.events).length) {

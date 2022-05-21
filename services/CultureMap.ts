@@ -177,6 +177,12 @@ export class CultureMap {
     }
   }
 
+  inBounds = (coordinates: number[]) => {
+    if (coordinates[0] < this.config.bounds[0][0] || coordinates[0] > this.config.bounds[1][0]) return false;
+    if (coordinates[1] < this.config.bounds[0][1] || coordinates[1] > this.config.bounds[1][1]) return false;
+    return true;
+  }
+
   clearOnloadJobs = () => (this.onLoadJobs = []);
 
   setInitallyFitToBounds = (flag: boolean) =>

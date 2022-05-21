@@ -47,7 +47,7 @@ export const SuggestionSchema = object().shape({
   street1: string().required(),
   houseNumber: string().required(),
   // t("validation.error.postcode", "Please provide a valid postcode")
-  postCode: number().typeError("validation.postcode").required(),
+  postCode: number().typeError("validation.error.postcode").required(),
   city: string().required(),
   phone1: string(),
   alt: mixed().when("heroImage", {

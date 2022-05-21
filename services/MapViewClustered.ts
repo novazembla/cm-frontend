@@ -54,12 +54,23 @@ export class MapViewClustered {
             self.cultureMap.config.lat,
           ];
 
-          if (coordinates[0] !== 0 && coordinates[1] !== 0) {
+          if (self.cultureMap.inBounds(coordinates)) {
             if (!bounds) {
               bounds = new maplibregl.LngLatBounds(coordinates, coordinates);
             } else {
               bounds.extend(coordinates);
             }
+          } else {
+            const feature = (data ?? self.cultureMap.geoJsonAllData ?? {})
+              ?.features[i];
+            console.warn(
+              `Skipped location as it is out of bounds: ID(${feature.properties.id.replace(
+                "loc-",
+                ""
+              )}) - ${self.cultureMap.tHelper.getMultilangValue(
+                feature?.properties?.title
+              )}`
+            );
           }
         }
       }
