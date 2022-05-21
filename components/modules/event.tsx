@@ -220,9 +220,11 @@ export const ModuleComponentEvent = ({
           )}`;
         } else {
           dateInfo = `${t(
-            "event.label.dateUntil",
-            "Until"
-          )} ${end.toLocaleDateString(
+            "event.label.dateFromVon",
+            "From"
+          )} ${begin.toLocaleDateString(
+            i18n.language === "de" ? "de-DE" : "en-GB"
+          )} ${t("event.label.dateUntil", "Until").toLowerCase()} ${end.toLocaleDateString(
             i18n.language === "de" ? "de-DE" : "en-GB"
           )}`;
         }
@@ -305,7 +307,8 @@ export const ModuleComponentEvent = ({
                   </Box>
                   {event.heroImage.credits !== "" && (
                     <Text textStyle="finePrint" mt="0.5">
-                      {t('text.photo.credits', 'Photo')}: <MultiLangValue json={event.heroImage.credits} />
+                      {t("text.photo.credits", "Photo")}:{" "}
+                      <MultiLangValue json={event.heroImage.credits} />
                     </Text>
                   )}
                 </Box>
