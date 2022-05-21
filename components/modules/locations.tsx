@@ -28,7 +28,7 @@ import { boolean, object, mixed, number } from "yup";
 import { MainContent } from "~/components/app/MainContent";
 import { Footer } from "~/components/app/Footer";
 import { useSettingsContext, useMapContext } from "~/provider";
-import { getMultilangSortedList, getSeoAppTitle } from "~/utils";
+import { getMetaDescriptionContent, getMultilangSortedList, getSeoAppTitle } from "~/utils";
 import NextHeadSeo from "next-head-seo";
 
 import {
@@ -674,11 +674,16 @@ export const ModuleComponentLocations = ({
     type === "embed"
       ? t("locations.embed.title.filter", "Filter")
       : t("locations.title", "Map");
+
   return (
     <MainContent layerStyle="lightGray">
       <NextHeadSeo
         canonical={`${i18n.language === "en" ? "/en/map" : "/karte"}`}
         title={`${title} - ${getSeoAppTitle(t)}`}
+         maxDescriptionCharacters={300}
+        description={getMetaDescriptionContent(
+          getMultilangValue(settings?.defaultMetaDesc)
+        )}
       />
 
       <Grid

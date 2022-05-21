@@ -1,6 +1,5 @@
 import type { NextFetchEvent, NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import { appConfig } from "~/config";
 
 export async function middleware(req: NextRequest, ev: NextFetchEvent) {
   if (req.url) {
@@ -16,7 +15,7 @@ export async function middleware(req: NextRequest, ev: NextFetchEvent) {
           let status = 200;
           let contentType = "application/xml; charset=UTF-8";
 
-          let body = await fetch(`${appConfig.apiUrl}/sitemap/${file}`)
+          let body = await fetch(`${process.env.NEXT_PUBLIC_API_URL ?? ""}/sitemap/${file}`)
             .then((response: Response) => {
               if (response) {
                 status = response.status;
