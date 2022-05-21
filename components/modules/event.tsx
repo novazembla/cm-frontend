@@ -298,7 +298,7 @@ export const ModuleComponentEvent = ({
                   </Box>
                   {event.heroImage.credits !== "" && (
                     <Text textStyle="finePrint" mt="0.5">
-                      <MultiLangValue json={event.heroImage.credits} />
+                      {t('text.photo.credits', 'Photo')}: <MultiLangValue json={event.heroImage.credits} />
                     </Text>
                   )}
                 </Box>

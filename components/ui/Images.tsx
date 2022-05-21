@@ -6,7 +6,7 @@ import { useAppTranslations } from "~/hooks/useAppTranslations";
 
 
 export const Images = ({ images }: { images: any }) => {
-  const { getMultilangValue } = useAppTranslations();
+  const { getMultilangValue, t } = useAppTranslations();
 
   if (!images && images?.length === 0) return <></>;
 
@@ -51,7 +51,7 @@ export const Images = ({ images }: { images: any }) => {
 
             {image.credits !== "" && (
               <Text textStyle="finePrint" mt="0.5">
-                <MultiLangValue json={image.credits} />
+                {t('text.photo.credits', 'Photo')}: <MultiLangValue json={image.credits} />
               </Text>
             )}
           </Box>

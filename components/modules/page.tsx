@@ -123,7 +123,7 @@ export const ModuleComponentPage = ({ page }: { page: any }) => {
                   </Box>
                   {page.heroImage.credits && (
                     <Text fontSize="xs" mt="0.5" color="cm.text">
-                      <MultiLangValue json={page.heroImage.credits} />
+                      {t('text.photo.credits', 'Photo')}: <MultiLangValue json={page.heroImage.credits} />
                     </Text>
                   )}
                 </Box>

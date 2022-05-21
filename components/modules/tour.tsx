@@ -513,7 +513,7 @@ export const ModuleComponentTour = ({ tour }: { tour: any; }) => {
                                 "2xl": "35px",
                               }}
                             >
-                              <MultiLangValue json={tour?.heroImage?.credits} />
+                              {t('text.photo.credits', 'Photo')}: <MultiLangValue json={tour?.heroImage?.credits} />
                             </Text>
                           )}
                         </Flex>

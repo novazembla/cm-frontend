@@ -211,7 +211,7 @@ export const ModuleComponentTourStop = ({
                         "2xl": "35px",
                       }}
                     >
-                      <MultiLangValue json={tourStop?.heroImage?.credits} />
+                      {t('text.photo.credits', 'Photo')}: <MultiLangValue json={tourStop?.heroImage?.credits} />
                     </Text>
                   )}
                 </Box>

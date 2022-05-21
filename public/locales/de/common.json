@@ -109,6 +109,11 @@
       "chooseDay": "Tag auswählen {{dayAndMonth}}"
     }
   },
+  "text": {
+    "photo": {
+      "credits": "Foto"
+    }
+  },
   "button": {
     "showLess": "Weniger anzeigen",
     "showMore": "Alle anzeigen"

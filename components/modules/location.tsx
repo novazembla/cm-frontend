@@ -333,7 +333,7 @@ export const ModuleComponentLocation = ({
                       "2xl": "35px",
                     }}
                   >
-                    <MultiLangValue json={location?.heroImage.credits} />
+                    {t('text.photo.credits', 'Photo')}: <MultiLangValue json={location?.heroImage.credits} />
                   </Text>
                 )}
               </Box>
