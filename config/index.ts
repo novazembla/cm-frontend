@@ -1,5 +1,9 @@
+import { setLocale } from "yup";
+
 import type { AppConfig } from "~/types";
-import "./translations";
+import translations from "./translations";
+
+setLocale(translations);
 
 export const appConfigMainNav = [
   {

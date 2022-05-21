@@ -1,5 +1,3 @@
-import { setLocale } from "yup";
-
 export interface i18nTranslationProps {
   path: string;
   type: string;
@@ -210,7 +208,7 @@ export let array = {
   }),
 };
 
-setLocale({
+const translations = {
   mixed,
   string,
   number,
@@ -218,4 +216,8 @@ setLocale({
   object,
   array,
   boolean,
-});
+};
+
+export default translations;
+
+

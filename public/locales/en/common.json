@@ -327,8 +327,8 @@
         "suggestionSubmittersName": "Your name",
         "suggestionSubmittersEmail": "Your email address",
         "comments": "Further comments",
-        "suggestionSubmittersTandCAcceptance": "I accept the terms and conditions",
-        "ownerOfLocation": "I am legally responsible for the location"
+        "suggestionSubmittersTandCAcceptance": "I agree to data processing of my information in accordance with the DSVGO/GDPR.",
+        "ownerOfLocation": "I confirm that the information I have given is correct."
       },
       "placeholder": {
         "title": "Please enter the name of the suggested location",

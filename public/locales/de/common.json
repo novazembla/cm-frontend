@@ -214,11 +214,11 @@
   },
   "validation": {
     "error": {
-      "postcode": "Please provide a valid postcode"
+      "postcode": "Bitte geben Sie Ihre Postleitzahl an"
     },
     "notunique": "Dieser Wert ist nicht einzigartig",
     "mixed": {
-      "default": "Dieses Feld ist nicht korrekt",
+      "default": "Dieses Feld ist nicht korrekt ausgefüllt",
       "required": "Bitte füllen Sie dieses Feld aus",
       "oneOf": "Dieses Feld muss einer der folgenden Werte haben: {{values}}",
       "notOneOf": "Dieses Feld muss einer der folgenden Typen sein: {{values}}",
@@ -327,8 +327,8 @@
         "suggestionSubmittersName": "Ihr Name",
         "suggestionSubmittersEmail": "Ihre Emailadresse",
         "comments": "Weitere Anmerkungen",
-        "suggestionSubmittersTandCAcceptance": "Ich bestätige die Richtigkeit der oben angegebenen Daten.",
-        "ownerOfLocation": "Ich bin der/die rechtlich Verantwortliche für den übermittelten Ort."
+        "suggestionSubmittersTandCAcceptance": "Ich stimme einer Datenverarbeitung im Sinne der DSVGO zu.",
+        "ownerOfLocation": " Ich bestätige die Richtigkeit der oben angegebenen Daten."
       },
       "placeholder": {
         "title": "Bitte geben Sie den Namen der Organisation an",
