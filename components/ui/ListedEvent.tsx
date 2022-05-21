@@ -31,6 +31,10 @@ export const ListedEvent = ({ event }: { event: any }) => {
         } else {
           dateInfo = (
             <>
+              {t("event.label.dateFromVon", "From")}{" "}
+              {begin.toLocaleDateString(
+                i18n.language === "de" ? "de-DE" : "en-GB"
+              )}<br/>
               {t("event.label.dateUntil", "Until")}{" "}
               {end.toLocaleDateString(
                 i18n.language === "de" ? "de-DE" : "en-GB"

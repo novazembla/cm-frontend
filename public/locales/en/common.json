@@ -95,7 +95,8 @@
       "eventLocation": "Event Location",
       "eventOrganiser": "Event Organiser",
       "category": "Category",
-      "eventDatesMultiple": "Upcoming dates"
+      "eventDatesMultiple": "Upcoming dates",
+      "dateFromVon": "From"
     },
     "detail": {
       "title": "Event"

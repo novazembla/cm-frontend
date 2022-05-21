@@ -95,7 +95,8 @@
       "eventLocation": "Veranstaltungsort",
       "eventOrganiser": "Veranstalter",
       "category": "Art der Veranstaltung",
-      "eventDatesMultiple": "Weitere Termine"
+      "eventDatesMultiple": "Weitere Termine",
+      "dateFromVon": "Von"
     },
     "detail": {
       "title": "Veranstaltung"
