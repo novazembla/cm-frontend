@@ -8,6 +8,7 @@ import {
   isEmptyHtml,
   convertToHtml,
   getSeoAppTitle,
+  getMetaDescriptionContent,
 } from "~/utils";
 import NextHeadSeo from "next-head-seo";
 import { useMutation, gql } from "@apollo/client";
@@ -399,6 +400,7 @@ export const ModuleComponentSuggest = () => {
   const suggestionSubmittersImageRightsConfirmation = watch(
     "suggestionSubmittersImageRightsConfirmation"
   );
+
   // t("suggestion.writeError", "We could unfortunately not save your suggestion at the moment. Please try again later.")
   return (
     <MainContent isDrawer>
@@ -411,6 +413,12 @@ export const ModuleComponentSuggest = () => {
         title={`${t("suggest.title", "Suggest a location")} - ${getSeoAppTitle(
           t
         )}`}
+
+        maxDescriptionCharacters={300}
+        description={getMetaDescriptionContent(
+          getMultilangValue(settings?.suggestionsMetaDesc),
+          getMultilangValue(settings?.suggestionsIntro)
+        )}
       />
       <Grid
         w="100%"

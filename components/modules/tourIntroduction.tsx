@@ -24,7 +24,7 @@ import {
 import { useIsBreakPoint } from "~/hooks/useIsBreakPoint";
 import { useAppTranslations } from "~/hooks/useAppTranslations";
 import { useRouter } from "next/router";
-import { getSeoAppTitle, getSeoImage } from "~/utils";
+import { getMetaDescriptionContent, getSeoAppTitle, getSeoImage } from "~/utils";
 import NextHeadSeo from "next-head-seo";
 import { createTourStops } from "./tourShared";
 import { PageTitle } from "~/components/ui/PageTitle";
@@ -105,7 +105,6 @@ export const ModuleComponentTourIntroduction = ({ tour }: { tour: any }) => {
   ]);
 
   let meta: any = t("card.meta.tour", "Tour");
-
   return (
     <MainContent layerStyle="lightGray">
       <NextHeadSeo
@@ -115,7 +114,11 @@ export const ModuleComponentTourIntroduction = ({ tour }: { tour: any }) => {
         title={`${t("tour.introduction", "Introduction")} - ${getMultilangValue(
           tour?.title
         )} - ${getSeoAppTitle(t)}`}
-        description={getMultilangValue(tour?.teaser)}
+        maxDescriptionCharacters={300}
+        description={getMetaDescriptionContent(
+          getMultilangValue(tour?.metaDesc),
+          getMultilangValue(tour?.description)
+        )}
         og={{
           image: getSeoImage(tour?.heroImage),
         }}

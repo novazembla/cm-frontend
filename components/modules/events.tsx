@@ -41,7 +41,7 @@ import {
   useMapContext,
   useConfigContext,
 } from "~/provider";
-import { getMultilangSortedList, getSeoAppTitle } from "~/utils";
+import { getMetaDescriptionContent, getMultilangSortedList, getSeoAppTitle } from "~/utils";
 import NextHeadSeo from "next-head-seo";
 import useCalendar from "@veccu/react-calendar";
 import { PageTitle } from "../ui/PageTitle";
@@ -583,6 +583,7 @@ export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
 
   const today = new Date(new Date().setHours(0, 0, 0, 0));
   const urlParams = new URLSearchParams(filter);
+
   return (
     <MainContent>
       <NextHeadSeo
@@ -590,6 +591,12 @@ export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
           i18n.language === "en" ? "/en/events" : "/veranstaltungen"
         }`}
         title={`${t("locations.title", "Map")} - ${getSeoAppTitle(t)}`}
+
+        maxDescriptionCharacters={300}
+        description={getMetaDescriptionContent(
+          getMultilangValue(settings?.defaultMetaDesc)
+        )}
+
       />
       <Grid
         w="100%"

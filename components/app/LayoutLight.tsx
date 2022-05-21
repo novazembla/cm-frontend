@@ -113,6 +113,7 @@ export const LayoutLight = ({ children }: AppProps) => {
           "logo.culturemap2",
           "Lichtenberg"
         )}`}
+        maxDescriptionCharacters={300}
         og={{
           image: "https://example.com/default-og.png", // TOOD: default image
           type: "article",

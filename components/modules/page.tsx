@@ -14,7 +14,11 @@ import {
   useSettingsContext,
 } from "~/provider";
 import { useRouter } from "next/router";
-import { getSeoAppTitle, getSeoImage } from "~/utils";
+import {
+  getMetaDescriptionContent,
+  getSeoAppTitle,
+  getSeoImage,
+} from "~/utils";
 import NextHeadSeo from "next-head-seo";
 import { useAppTranslations } from "~/hooks/useAppTranslations";
 import { PageTitle } from "~/components/ui/PageTitle";
@@ -29,6 +33,7 @@ const pageQuery = gql`
       slug
       intro
       content
+      metaDesc
       heroImage {
         id
         status
@@ -55,8 +60,6 @@ export const ModuleComponentPage = ({ page }: { page: any }) => {
   }, [router.asPath, cultureMap]);
 
   useEffect(() => {
-    console.log(settings);
-
     if (settings?.taxonomies?.typeOfInstitution?.terms?.length) {
       setTypesOfOrganisation(
         settings?.taxonomies?.typeOfInstitution?.terms
@@ -89,7 +92,11 @@ export const ModuleComponentPage = ({ page }: { page: any }) => {
           i18n.language === "en" ? "/en" : ""
         }/${getMultilangValue(page?.slug)}`}
         title={`${getMultilangValue(page?.title)} - ${getSeoAppTitle(t)}`}
-        description={getMultilangValue(page?.teaser)}
+        maxDescriptionCharacters={300}
+        description={getMetaDescriptionContent(
+          getMultilangValue(page?.metaDesc),
+          getMultilangValue(page?.intro)
+        )}
         og={{
           image: getSeoImage(page?.heroImage),
         }}
@@ -123,7 +130,8 @@ export const ModuleComponentPage = ({ page }: { page: any }) => {
                   </Box>
                   {page.heroImage.credits && (
                     <Text fontSize="xs" mt="0.5" color="cm.text">
-                      {t('text.photo.credits', 'Photo')}: <MultiLangValue json={page.heroImage.credits} />
+                      {t("text.photo.credits", "Photo")}:{" "}
+                      <MultiLangValue json={page.heroImage.credits} />
                     </Text>
                   )}
                 </Box>

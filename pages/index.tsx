@@ -32,7 +32,7 @@ import { SVG } from "~/components/ui/SVG";
 
 import { useIsBreakPoint } from "~/hooks/useIsBreakPoint";
 import { useAppTranslations } from "~/hooks/useAppTranslations";
-import { getLocationColors } from "~/utils";
+import { getLocationColors, getMetaDescriptionContent } from "~/utils";
 
 import { MainContent } from "~/components/app/MainContent";
 import { Footer } from "~/components/app/Footer";
@@ -358,14 +358,17 @@ export const Home = ({ homepage }: { homepage: any }) => {
       </Box>
     </Collapse>
   );
-
+  
   return (
     <MainContent 
       isDrawer={isTablet || isDesktopAndUp}
       isVerticalContent={!isTablet && !isDesktopAndUp}
     >
       <NextHeadSeo
-        description={getMultilangValue(homepage?.missionStatement)}
+        maxDescriptionCharacters={300}
+        description={getMetaDescriptionContent(
+          getMultilangValue(homepage?.missionStatement)
+        )}
       />
       <Box>
         {missionStatement &&

@@ -30,7 +30,7 @@ import { useIsBreakPoint } from "~/hooks/useIsBreakPoint";
 import { useAppTranslations } from "~/hooks/useAppTranslations";
 import { GetStaticProps } from "next";
 import { useRouter } from "next/router";
-import { getLocationColors, getSeoAppTitle, getSeoImage } from "~/utils";
+import { getLocationColors, getMetaDescriptionContent, getSeoAppTitle, getSeoImage } from "~/utils";
 
 import { tourQuery, createTourStops } from "./tourShared";
 
@@ -162,7 +162,11 @@ export const ModuleComponentTourStop = ({
         title={`${tourStop?.number} - ${getMultilangValue(
           tourStop?.title
         )} - ${getMultilangValue(tour?.title)} - ${getSeoAppTitle(t)}`}
-        description={getMultilangValue(tourStop?.teaser)}
+        maxDescriptionCharacters={300}
+        description={getMetaDescriptionContent(
+          getMultilangValue(tourStop?.metaDesc),
+          getMultilangValue(tourStop?.teaser)
+        )}
         og={{
           image: getSeoImage(tourStop?.heroImage),
         }}

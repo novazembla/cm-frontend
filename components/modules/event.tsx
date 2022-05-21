@@ -34,6 +34,7 @@ import {
   getLocationColors,
   getSeoAppTitle,
   getSeoImage,
+  getMetaDescriptionContent,
 } from "~/utils";
 import NextHeadSeo from "next-head-seo";
 import { PageTitle } from "~/components/ui/PageTitle";
@@ -52,6 +53,7 @@ const eventQuery = gql`
       meta
       isFree
       description
+      metaDesc
       firstEventDate
       lastEventDate
       terms {
@@ -265,7 +267,11 @@ export const ModuleComponentEvent = ({
           i18n.language === "en" ? "/en" : ""
         }/tour/${getMultilangValue(event?.slug)}`}
         title={`${getMultilangValue(event?.title)} - ${getSeoAppTitle(t)}`}
-        description={getMultilangValue(event?.teaser)}
+        maxDescriptionCharacters={300}
+        description={getMetaDescriptionContent(
+          getMultilangValue(event?.metaDesc),
+          getMultilangValue(event?.description)
+        )}
         og={{
           image: getSeoImage(event?.heroImage),
         }}

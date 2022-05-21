@@ -211,10 +211,8 @@ export class CultureMap {
     );
 
     // Explictly remove the padding field because, calculatedOptions already accounts for padding by setting zoom and center accordingly.
-    // if (calculatedOptions?.padding)
-    //   delete calculatedOptions.padding;
-
-    console.log(calculatedOptions);
+    if (calculatedOptions?.padding)
+      delete calculatedOptions.padding;
 
     if (calculatedOptions?.minZoom) delete calculatedOptions.minZoom;
 

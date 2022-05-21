@@ -25,7 +25,7 @@ import {
   chakra,
   Grid,
 } from "@chakra-ui/react";
-import { htmlToTrimmedString, getSeoAppTitle, getSeoImage } from "~/utils";
+import { htmlToTrimmedString, getSeoAppTitle, getSeoImage, getMetaDescriptionContent } from "~/utils";
 import NextHeadSeo from "next-head-seo";
 import { useIsBreakPoint } from "~/hooks/useIsBreakPoint";
 import { useAppTranslations } from "~/hooks/useAppTranslations";
@@ -366,7 +366,11 @@ export const ModuleComponentTour = ({ tour }: { tour: any; }) => {
           i18n.language === "en" ? "/en" : ""
         }/tour/${getMultilangValue(tour?.slug)}`}
         title={`${getMultilangValue(tour?.title)} - ${getSeoAppTitle(t)}`}
-        description={getMultilangValue(tour?.teaser)}
+        maxDescriptionCharacters={300}
+        description={getMetaDescriptionContent(
+          getMultilangValue(tour?.metaDesc),
+          getMultilangValue(tour?.description)
+        )}
         og={{
           image: getSeoImage(tour?.heroImage),
         }}

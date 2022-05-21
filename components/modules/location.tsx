@@ -31,6 +31,7 @@ import {
   getLocationColors,
   getSeoAppTitle,
   getSeoImage,
+  getMetaDescriptionContent,
 } from "~/utils";
 import NextHeadSeo from "next-head-seo";
 import { useIsBreakPoint } from "~/hooks/useIsBreakPoint";
@@ -44,7 +45,6 @@ import { ShareIcons } from "../ui/ShareIcons";
 
 const ONE_DAY = 1000 * 60 * 60 * 24;
 
-
 const locationQuery = gql`
   query ($slug: String!) {
     ${settingsQueryPartial}
@@ -53,6 +53,7 @@ const locationQuery = gql`
       title
       slug
       description
+      metaDesc
       offers
       accessibilityInformation
       address
@@ -273,7 +274,7 @@ export const ModuleComponentLocation = ({
         : ""
     }   
   `;
-
+  
   return (
     <MainContent layerStyle="lightGray">
       <NextHeadSeo
@@ -281,7 +282,11 @@ export const ModuleComponentLocation = ({
           i18n.language === "en" ? "/en" : ""
         }/tour/${getMultilangValue(location?.slug)}`}
         title={`${getMultilangValue(location?.title)} - ${getSeoAppTitle(t)}`}
-        description={getMultilangValue(location?.teaser)}
+        maxDescriptionCharacters={300}
+        description={getMetaDescriptionContent(
+          getMultilangValue(location?.metaDesc),
+          getMultilangValue(location?.description)
+        )}
         og={{
           image: getSeoImage(location?.heroImage),
         }}
@@ -333,7 +338,8 @@ export const ModuleComponentLocation = ({
                       "2xl": "35px",
                     }}
                   >
-                    {t('text.photo.credits', 'Photo')}: <MultiLangValue json={location?.heroImage.credits} />
+                    {t("text.photo.credits", "Photo")}:{" "}
+                    <MultiLangValue json={location?.heroImage.credits} />
                   </Text>
                 )}
               </Box>
@@ -368,7 +374,6 @@ export const ModuleComponentLocation = ({
                   textStyle="categoriesHighlight"
                   color={colorDark}
                   alignItems="flex-end"
-                  
                 >
                   {meta}
                 </Flex>
@@ -618,7 +623,7 @@ export const ModuleComponentLocation = ({
                 .filter((e: any) => {
                   const begin = new Date(e.firstEventDate);
                   const end = new Date(e.lastEventDate);
-  
+
                   return (
                     end >= new Date() &&
                     begin <=
@@ -627,13 +632,14 @@ export const ModuleComponentLocation = ({
                           ONE_DAY * config.eventLookAheadDays
                       )
                   );
-                }).sort((a: any, b: any) => {
+                })
+                .sort((a: any, b: any) => {
                   const aBegin = new Date(a.firstEventDate);
                   const bBegin = new Date(b.firstEventDate);
-                  
+
                   if (aBegin < bBegin) return -1;
                   if (aBegin > bBegin) return 1;
-                  return 0
+                  return 0;
                 })
                 .map((event: any, i: number) => (
                   <Box

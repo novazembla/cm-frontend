@@ -58,3 +58,32 @@ export const htmlToTrimmedString = (val: any, length: number) => {
 
   return str;
 };
+
+export const getMetaDescriptionContent = (desc: string, fallback?: string) => {
+  if (desc && desc.trim()) {
+    if (desc?.length > 300) {
+      const out = desc.split(" ");
+
+      if (out?.length > 1) {
+        out[out?.length - 1] = "...";
+        return out.join(" ");
+      }
+
+      return out.join(" ");
+    }
+    return desc;
+  }
+
+  if (fallback && fallback.trim()) {
+    const out = htmlToTrimmedString(htmlToText(fallback), 300).split(" ");
+
+    if (out?.length > 1) {
+      out[out?.length - 1] = "...";
+      return out.join(" ");
+    }
+
+    return out.join(" ");
+  }
+
+  return "";
+};

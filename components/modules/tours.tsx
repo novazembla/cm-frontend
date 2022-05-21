@@ -10,8 +10,12 @@ import { useAppTranslations } from "~/hooks/useAppTranslations";
 
 import { PageTitle } from "~/components/ui/PageTitle";
 import { useRouter } from "next/router";
-import { useConfigContext, useMapContext } from "~/provider";
-import { getSeoAppTitle } from "~/utils";
+import {
+  useConfigContext,
+  useMapContext,
+  useSettingsContext,
+} from "~/provider";
+import { getMetaDescriptionContent, getSeoAppTitle } from "~/utils";
 import NextHeadSeo from "next-head-seo";
 import { settingsQueryPartial } from "~/graphql";
 
@@ -71,7 +75,8 @@ export const ModuleComponentTours = ({
   totalCount: number;
   props: any;
 }) => {
-  const { t, i18n } = useAppTranslations();
+  const { t, i18n, getMultilangValue } = useAppTranslations();
+  const settings = useSettingsContext();
   const router = useRouter();
   const cultureMap = useMapContext();
   const config = useConfigContext();
@@ -87,6 +92,10 @@ export const ModuleComponentTours = ({
           i18n.language === "en" ? "/en/tours" : "/touren"
         }`}
         title={`${t("tour.listings.title", "Tours")} - ${getSeoAppTitle(t)}`}
+        maxDescriptionCharacters={300}
+        description={getMetaDescriptionContent(
+          getMultilangValue(settings?.defaultMetaDesc)
+        )}
       />
       <Grid
         w="100%"
@@ -118,7 +127,6 @@ export const ModuleComponentTours = ({
     </MainContent>
   );
 };
-
 
 export const ModuleToursGetStaticProps: GetStaticProps = async (context) => {
   const client = getApolloClient();

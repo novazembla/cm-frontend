@@ -13,6 +13,7 @@ export const tourQuery = gql`
       duration
       teaser
       description
+      metaDesc
       orderNumber
       ownerId
       path
@@ -31,6 +32,7 @@ export const tourQuery = gql`
         number
         teaser
         description
+        metaDesc
         images {
           id
           status

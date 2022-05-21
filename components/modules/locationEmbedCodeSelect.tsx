@@ -14,8 +14,8 @@ import {
 import { useAppTranslations } from "~/hooks/useAppTranslations";
 import { PageTitle } from "~/components/ui/PageTitle";
 import { useRouter } from "next/router"; 
-import { useConfigContext, useMapContext } from "~/provider";
-import { getSeoAppTitle } from "~/utils";
+import { useConfigContext, useMapContext, useSettingsContext } from "~/provider";
+import { getMetaDescriptionContent, getSeoAppTitle } from "~/utils";
 import NextHeadSeo from "next-head-seo";
 import { useForm, FormProvider } from "react-hook-form";
 import { FieldAutocomplete } from "~/components/forms/FieldAutocomplete";
@@ -43,8 +43,9 @@ export const ModuleComponentLocationEmbedCode = ({
 }: {
   props?: any;
 }) => {
-  const { t, i18n } = useAppTranslations();
+  const { t, i18n, getMultilangValue } = useAppTranslations();
   const router = useRouter();
+  const settings = useSettingsContext();
   const cultureMap = useMapContext();
   const config = useConfigContext();
   const [locations, setLocations] = useState({});
@@ -83,6 +84,10 @@ export const ModuleComponentLocationEmbedCode = ({
           "location.embed.title.select",
           "Select locations"
         )} - ${getSeoAppTitle(t)}`}
+        maxDescriptionCharacters={300}
+        description={getMetaDescriptionContent(
+          getMultilangValue(settings?.defaultMetaDesc)
+        )}
       />
       <Grid
         w="100%"
