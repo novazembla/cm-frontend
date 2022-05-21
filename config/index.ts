@@ -49,7 +49,7 @@ export const appConfigMainNav = [
   {
     path: {
       de: "/seite/ueber-die-kulturkarte",
-      en: "/page/about",
+      en: "/page/about-the-culture-map",
     },
     title: {
       de: "Über die Karte",
