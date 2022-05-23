@@ -62,7 +62,7 @@ export const htmlToTrimmedString = (val: any, length: number) => {
 export const getMetaDescriptionContent = (desc: string, fallback?: string) => {
   if (desc && desc.trim()) {
     if (desc?.length > 300) {
-      const out = desc.split(" ");
+      const out = htmlToText(desc).split(" ");
 
       if (out?.length > 1) {
         out[out?.length - 1] = "...";

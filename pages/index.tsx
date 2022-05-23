@@ -51,6 +51,7 @@ const homepageQuery = gql`
     homepage {
       missionStatement
       missionStatementPage
+      metaDesc
       highlights
     }
     ${settingsQueryPartial}
@@ -367,6 +368,7 @@ export const Home = ({ homepage }: { homepage: any }) => {
       <NextHeadSeo
         maxDescriptionCharacters={300}
         description={getMetaDescriptionContent(
+          getMultilangValue(homepage?.metaDesc),
           getMultilangValue(homepage?.missionStatement)
         )}
       />
