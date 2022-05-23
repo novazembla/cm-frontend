@@ -1,4 +1,1 @@
 TODO: 
-- default seo image - search for - https://example.com/default-og.png
-
-- metaDesc output ... read new settings in DB.

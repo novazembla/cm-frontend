@@ -138,7 +138,7 @@ export const LayoutFull = ({ children }: AppProps) => {
               )}`}
               maxDescriptionCharacters={300}
               og={{
-                image: "https://example.com/default-og.png", // TOOD: default image
+                image: `${config.baseUrl}/img/social-media.png`,
                 type: "article",
                 siteName: `${t("logo.culturemap1", "CULTURE MAP")} ${t(
                   "logo.culturemap2",
