@@ -258,6 +258,7 @@ export const Home = ({ homepage }: { homepage: any }) => {
 
       if (highlights.length) {
         cultureMap.setInitallyFitToBounds(false);
+
         cultureMap.setHighlights(highlights);
         setHighlights(highlights);
         parsedHighlightsRef.current = highlights;
@@ -359,9 +360,9 @@ export const Home = ({ homepage }: { homepage: any }) => {
       </Box>
     </Collapse>
   );
-  
+
   return (
-    <MainContent 
+    <MainContent
       isDrawer={isTablet || isDesktopAndUp}
       isVerticalContent={!isTablet && !isDesktopAndUp}
     >

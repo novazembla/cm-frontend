@@ -7,6 +7,7 @@ export class MapViewUnclustered {
   bounds: maplibregl.LngLatBounds;
   events: Record<string, any> = {};
   isVisible: boolean = false;
+  isDataSet: boolean = false;
 
   layers: string[] = ["unclustered-locations"];
 
@@ -82,6 +83,7 @@ export class MapViewUnclustered {
           [self.cultureMap.config.lng, self.cultureMap.config.lat]
         );
       }
+      self.isDataSet = true;
     }
   }
 
@@ -271,6 +273,7 @@ export class MapViewUnclustered {
     const self = this;
     if (self.cultureMap?.map) {
       self.isVisible = false;
+      self.isDataSet = true;
 
       self.cultureMap.removeLayers(self.layers);
 

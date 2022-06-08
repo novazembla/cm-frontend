@@ -7,6 +7,7 @@ export class MapViewClustered {
   bounds: maplibregl.LngLatBounds;
   events: Record<string, any> = {};
   isVisible: boolean = false;
+  isDataSet: boolean = false;
 
   layers: string[] = ["clusters", "cluster-count", "clustered-locations"];
 
@@ -24,7 +25,7 @@ export class MapViewClustered {
       if (!self.cultureMap?.map) return;
 
       self.hide();
-
+      
       if (!self.cultureMap.map.getSource("clustered-locations")) {
         self.cultureMap.map.addSource("clustered-locations", {
           type: "geojson",
@@ -82,6 +83,7 @@ export class MapViewClustered {
           [self.cultureMap.config.lng, self.cultureMap.config.lat]
         );
       }
+      self.isDataSet = true;
     }
   }
 
@@ -397,6 +399,11 @@ export class MapViewClustered {
       );
 
       self.show();
+      
+      const highlights = self.cultureMap.map.getLayer('highlights');
+      if (highlights) {
+        self.cultureMap.map.moveLayer("highlights", "clustered-locations");
+      }
     }
   }
 
@@ -441,7 +448,7 @@ export class MapViewClustered {
     const self = this;
     if (self.cultureMap?.map) {
       self.isVisible = false;
-
+      self.isDataSet = true;
       self.cultureMap.removeLayers(self.layers);
 
       if (Object.keys(self.events).length) {

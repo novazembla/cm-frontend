@@ -18,6 +18,9 @@ export class MapTour {
   bounds: maplibregl.LngLatBounds;
   events: Record<string, any> = {};
   isVisible: boolean = false;
+  isDataSet: boolean = false;
+  isTourStopDataSet: boolean = false;
+  isPathDataSet: boolean = false;
 
   layers: string[] = [
     "tourStops",
@@ -48,6 +51,9 @@ export class MapTour {
       } else {
         (self.cultureMap?.map?.getSource("tourPath") as any)?.setData(path);
       }
+      self.isPathDataSet = true;
+      self.isDataSet = self.isTourStopDataSet && self.isPathDataSet;
+
     }
   }
 
@@ -94,6 +100,8 @@ export class MapTour {
           }
         }
       }
+      self.isTourStopDataSet = true;
+      self.isDataSet = self.isTourStopDataSet && self.isPathDataSet;
     }
   }
 
@@ -344,6 +352,9 @@ export class MapTour {
     self.clearPath();
     self.clearStops();
     self.isVisible = false;
+    self.isDataSet = false;
+    self.isTourStopDataSet = false;
+    self.isPathDataSet = false;
   }
 
   clearPath() {

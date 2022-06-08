@@ -245,7 +245,7 @@ export class CultureMap {
         self.currentView = view;
       };
 
-      if (view === self.currentView) return;
+      if (view === self.currentView && self.views[view]?.isDataSet) return;
 
       if (!self.ready) {
         self.currentView = view;
@@ -280,6 +280,7 @@ export class CultureMap {
         self.popup.hide();
         self.clusterDetail.hide();
         self.views[self.currentView].show();
+
         if (typeof resolve !== "undefined") resolve(true);
       };
       if (!self.ready) {
@@ -491,6 +492,7 @@ export class CultureMap {
     if (self.map) {
       const run = async (resolve?: any) => {
         self.tour.clear();
+        self.setView("clustered");
         if (typeof resolve !== "undefined") resolve(true);
       };
       if (!self.ready) {

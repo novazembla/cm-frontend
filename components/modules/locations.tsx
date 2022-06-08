@@ -336,6 +336,8 @@ export const ModuleComponentLocations = ({
     if (urlParams.get("cluster") === "0") {
       setCurrentMapView("unclustered");
       cultureMap?.setView("unclustered");
+    } else {
+      cultureMap?.setView("clustered");
     }
     cultureMap?.showCurrentView();
 
