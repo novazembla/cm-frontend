@@ -22,7 +22,7 @@ export const Header = (/* props */) => {
 
   const { isDesktopAndUp, isTablet, isTabletWide } = useIsBreakPoint();
 
-  const { t, getMultilangValue } = useAppTranslations();
+  const { t, getMultilangValue , i18n} = useAppTranslations();
 
   const config = useConfigContext();
 
@@ -127,14 +127,19 @@ export const Header = (/* props */) => {
               flexWrap="wrap"
             >
               {" "}
-              {config.nav.main.map((link: any, index: number) => (
-                <ActiveLink
-                  key={`nav-link-${index}`}
-                  href={getMultilangValue(link.path)}
-                >
-                  <MultiLangValue json={link.title} />
-                </ActiveLink>
-              ))}
+              {config.nav.main.map((link: any, index: number) => {
+                if (link.path[i18n?.language]) {
+                  return (
+                    <ActiveLink
+                      key={`nav-link-${index}`}
+                      href={getMultilangValue(link.path)}
+                    >
+                      <MultiLangValue json={link.title} />
+                    </ActiveLink>
+                  );
+                }
+                return null;
+              })}
             </Flex>
           </Flex>
         )}

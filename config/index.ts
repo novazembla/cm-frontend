@@ -5,6 +5,7 @@ import translations from "./translations";
 
 setLocale(translations);
 
+// Please not you can leave values empty to hide a link for a certain language
 export const appConfigMainNav = [
   {
     path: {
@@ -19,11 +20,9 @@ export const appConfigMainNav = [
   {
     path: {
       de: "/veranstaltungen",
-      en: "/events",
     },
     title: {
       de: "Veranstaltungen",
-      en: "Events",
     },
   },
   {

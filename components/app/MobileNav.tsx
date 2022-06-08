@@ -125,13 +125,20 @@ export const MobileNav = () => {
                                 title={t("menu.title", "Menu")}
                               />
                             )}
-                            {config.nav.main.map((link: any, index: number) => (
-                              <chakra.span key={`nav-link-${index}`}>
-                                <ActiveLink href={getMultilangValue(link.path)}>
-                                  <MultiLangValue json={link.title} />
-                                </ActiveLink>
-                              </chakra.span>
-                            ))}
+                            {config.nav.main.map((link: any, index: number) => {
+                              if (link.path[i18n?.language]) {
+                                return (
+                                  <chakra.span key={`nav-link-${index}`}>
+                                    <ActiveLink
+                                      href={getMultilangValue(link.path)}
+                                    >
+                                      <MultiLangValue json={link.title} />
+                                    </ActiveLink>
+                                  </chakra.span>
+                                );
+                              }
+                              return null;
+                            })}
 
                             <IconButton
                               aria-label={t(

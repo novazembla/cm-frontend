@@ -24,7 +24,7 @@ export const Footer = ({
   const config = useConfigContext();
   const { isMobile, isTablet } = useIsBreakPoint();
 
-  const { t, getMultilangValue } = useAppTranslations();
+  const { t, getMultilangValue, i18n } = useAppTranslations();
 
   return (
     <Box
@@ -46,7 +46,6 @@ export const Footer = ({
         md: "45px",
         "2xl": "55px",
       }}
-      
     >
       <Box
         mb={{
@@ -122,33 +121,38 @@ export const Footer = ({
               mb="1.6em"
               sx={{
                 a: {
-                  mb: "0.6em"
-                }
+                  mb: "0.6em",
+                },
               }}
             >
-              {config.nav.main.map((link: any, index: number) => (
-                <ActiveLink
-                  key={`nav-link-${index}`}
-                  href={getMultilangValue(link.path)}
-                >
-                  <MultiLangValue json={link.title} />
-                </ActiveLink>
-              ))}
+              {config.nav.main.map((link: any, index: number) => {
+                if (link.path[i18n?.language]) {
+                  return (
+                    <ActiveLink
+                      key={`nav-link-${index}`}
+                      href={getMultilangValue(link.path)}
+                    >
+                      <MultiLangValue json={link.title} />
+                    </ActiveLink>
+                  );
+                }
+                return null;
+              })}
             </Flex>
-            <Flex
-              direction="column"
-              // sx={{
-              //   lineHeight: "1.5em",
-              // }}
-            >
-              {config.nav.footer.map((link: any, index: number) => (
-                <ActiveLink
-                  key={`nav-footer-${index}`}
-                  href={getMultilangValue(link.path)}
-                >
-                  <MultiLangValue json={link.title} />
-                </ActiveLink>
-              ))}
+            <Flex direction="column">
+              {config.nav.footer.map((link: any, index: number) => {
+                if (link.path[i18n?.language]) {
+                  return (
+                    <ActiveLink
+                      key={`nav-link-${index}`}
+                      href={getMultilangValue(link.path)}
+                    >
+                      <MultiLangValue json={link.title} />
+                    </ActiveLink>
+                  );
+                }
+                return null;
+              })}
             </Flex>
           </Box>
         </Flex>
