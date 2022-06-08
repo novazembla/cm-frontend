@@ -211,8 +211,7 @@ export class CultureMap {
     );
 
     // Explictly remove the padding field because, calculatedOptions already accounts for padding by setting zoom and center accordingly.
-    if (calculatedOptions?.padding)
-      delete calculatedOptions.padding;
+    if (calculatedOptions?.padding) delete calculatedOptions.padding;
 
     if (calculatedOptions?.minZoom) delete calculatedOptions.minZoom;
 
@@ -629,7 +628,7 @@ export class CultureMap {
     } else if (isTabletWide) {
       return [window.innerWidth * 0.3333, 30];
     } else if (isDesktop) {
-      return [725 / 2, 40];
+      return [(window.innerWidth - 725) / 2, 40];
     } else {
       return [(695 + (window.innerWidth * 0.08 - 55)) / 2, 40];
     }
@@ -704,6 +703,12 @@ export class CultureMap {
       const run = async (resolve?: any) => {
         if (isNaN(lng) || isNaN(lat)) return;
         self.map?.stop();
+        self.map?.setPadding({
+          top: 0,
+          right: 0,
+          bottom: 0,
+          left: 0,
+        });
         self.map?.panTo(
           [lng, lat],
           {
@@ -738,6 +743,12 @@ export class CultureMap {
       const run = async (resolve?: any) => {
         if (isNaN(lng) || isNaN(lat)) return;
         self.map?.stop();
+        self.map?.setPadding({
+          top: 0,
+          right: 0,
+          bottom: 0,
+          left: 0,
+        });
         self.map?.panTo(
           [lng, lat],
           {

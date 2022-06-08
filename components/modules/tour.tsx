@@ -300,6 +300,7 @@ export const ModuleComponentTour = ({ tour }: { tour: any; }) => {
             typeof window !== "undefined" &&
             window.scrollY === 0)
         ) {
+          cultureMap.setInitallyFitToBounds(false);
           cultureMap.panTo(
             stops[0].lng,
             stops[0].lat,
