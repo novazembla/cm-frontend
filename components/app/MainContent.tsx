@@ -14,6 +14,7 @@ import { SVG } from "~/components/ui/SVG";
 
 import debounce from "lodash/debounce";
 import { primaryInput } from "detect-it";
+import useIsMounted from "~/hooks/useIsMounted";
 
 const MotionBox = motion(Box);
 
@@ -35,6 +36,7 @@ export const MainContent = ({
   isVerticalContent?: boolean;
   children: React.ReactNode;
 }) => {
+  const isMounted = useIsMounted();
   const mainContentRef = useRef<HTMLDivElement>(null);
   const motionBoxRef = useRef<HTMLDivElement>(null);
   const isAnimationRunningRef = useRef<boolean>(false);
@@ -55,6 +57,7 @@ export const MainContent = ({
   const [isDrawerOpen, setIsDrawerOpen] = useState(true);
 
   const [eventListenerAdded, setEventListenerAdded] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
 
   const controls = useAnimation();
 
@@ -84,6 +87,7 @@ export const MainContent = ({
   });
 
   const onResize = useCallback(() => {
+    if (!isMounted) return;
     let dL = window.innerWidth - 60;
 
     const isMobile = window.matchMedia(
@@ -138,7 +142,7 @@ export const MainContent = ({
         motionBoxRef.current.style.top = "0px";
       }
     }
-  }, [controls, setMainContentStatus, isVerticalContent]);
+  }, [controls, setMainContentStatus, isVerticalContent, isMounted]);
 
   const onResizeDebounced = debounce(onResize, 350);
 
@@ -167,6 +171,7 @@ export const MainContent = ({
   }, [router.asPath, onResize]);
 
   const close = useCallback(() => {
+    if (!isMounted) return;
     if (!isMainContentActive) return;
     if (isAnimationRunningRef.current) return;
 
@@ -184,13 +189,23 @@ export const MainContent = ({
       },
     });
 
+    setIsAnimating(true);
     setTimeout(() => {
+      if (!isMounted) return;
       panActive.current = false;
       isAnimationRunningRef.current = false;
+      setIsAnimating(false);
     }, 350);
-  }, [controls, setMainContentStatus, dragLeft, isMainContentActive]);
+  }, [
+    controls,
+    setMainContentStatus,
+    dragLeft,
+    isMainContentActive,
+    isMounted,
+  ]);
 
   const open = useCallback(() => {
+    if (!isMounted) return;
     if (!isMainContentActive) return;
     if (isAnimationRunningRef.current) return;
 
@@ -206,11 +221,15 @@ export const MainContent = ({
         bounce: false,
       },
     });
+
+    setIsAnimating(true);
     setTimeout(() => {
+      if (!isMounted) return;
       panActive.current = false;
       isAnimationRunningRef.current = false;
+      setIsAnimating(false);
     }, 350);
-  }, [controls, setMainContentStatus, isMainContentActive]);
+  }, [controls, setMainContentStatus, isMainContentActive, isMounted]);
 
   const toggle = () => {
     if (!isMainContentActive) return;
@@ -224,14 +243,16 @@ export const MainContent = ({
   };
 
   useEffect(() => {
+    if (!isMounted) return;
     if (typeof window === "undefined") return;
     setMainContentFunctions(open, close);
-  }, [router.asPath, setMainContentFunctions, open, close]);
+  }, [router.asPath, setMainContentFunctions, open, close, isMounted]);
 
   let toggleLabel = isDrawerOpen
     ? t("mainContent.slideToLeft", "Hide content")
     : t("mainContent.slideToRight", "Show content");
 
+  console.log(!isDrawerOpen, panActive.current, isAnimationRunningRef.current);
   return (
     <>
       {isDrawer && !isVerticalContent && (
