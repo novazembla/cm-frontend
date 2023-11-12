@@ -436,13 +436,13 @@ export const ModuleComponentLocations = ({
     }
 
     const query: any = {
-        s: allVars?.s?.trim() ?? "",
-        and: allVars?.and === "1" || allVars?.and === true,
-        cluster: allVars?.cluster === "1" || allVars?.cluster === true,
-        toi: allVars.typeOfInstitution ?? [],
-        ta:  allVars.targetAudience ?? [],
-        too:  allVars.typeOfOrganisation ?? []
-      };
+      s: allVars?.s?.trim() ?? "",
+      and: allVars?.and === "1" || allVars?.and === true,
+      cluster: allVars?.cluster === "1" || allVars?.cluster === true,
+      toi: allVars.typeOfInstitution ?? [],
+      ta: allVars.targetAudience ?? [],
+      too: allVars.typeOfOrganisation ?? [],
+    };
 
     const queryString = Object.keys(query)
       .reduce((acc: any, key: string) => {
@@ -817,6 +817,9 @@ export const ModuleComponentLocations = ({
                         s: "",
                         cluster: true,
                         and: false,
+                        targetAudience: [],
+                        typeOfInstitution: [],
+                        typeOfOrganisation: [],
                       });
                     }}
                   >
