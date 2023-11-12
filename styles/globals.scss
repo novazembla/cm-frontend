@@ -243,7 +243,14 @@ body {
   filter: invert(13%) sepia(17%) saturate(7488%) hue-rotate(306deg)
     brightness(99%) contrast(106%);
 }
-
+.imgHover {
+  img {
+    transition: opacity 0.3s;
+    &:hover {
+      opacity: 0.5;
+    }
+  }
+}
 .svgHover {
   &:hover .svg {
     filter: invert(13%) sepia(17%) saturate(7488%) hue-rotate(306deg)

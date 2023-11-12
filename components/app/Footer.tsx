@@ -1,14 +1,13 @@
-import React from "react";
+import { Box, chakra, Flex, IconButton, Img, VStack } from "@chakra-ui/react";
+import Image from "next/image";
 import ActiveLink from "~/components/ui/ActiveLink";
 
-import { Flex, IconButton, chakra, Box } from "@chakra-ui/react";
-
-import { useConfigContext } from "~/provider";
 import { MultiLangValue } from "~/components/ui/MultiLangValue";
 import { SVG } from "~/components/ui/SVG";
+import { useConfigContext } from "~/provider";
 
-import { useIsBreakPoint } from "~/hooks/useIsBreakPoint";
 import { useAppTranslations } from "~/hooks/useAppTranslations";
+import { useIsBreakPoint } from "~/hooks/useIsBreakPoint";
 
 import { Logo } from "./Logo";
 
@@ -157,35 +156,101 @@ export const Footer = ({
           </Box>
         </Flex>
       </Flex>
-      <Box w={isMobile ? "66.66%" : "50%"} mt={isMobile ? "3em" : "5em"}>
-        <chakra.a
-          className="svgHover tabbedFocus"
-          href="https://www.berlin.de/ba-lichtenberg/"
-          display="inline-block"
-          w="100%"
-          h="0"
-          pb="20%"
-          position="relative"
-          target="_blank"
-          rel="noreferrer nofollow"
-          title="Bezirksamt Lichtenberg von Berlin"
-        >
-          <chakra.span
-            display="block"
+      <Box w={isMobile ? "66.66%" : "66.66%"} mt={isMobile ? "3em" : "5em"}>
+        <VStack alignItems="flex-start">
+          <chakra.a
+            className="svgHover tabbedFocus"
+            href="https://www.berlin.de/ba-lichtenberg/"
+            display="inline-block"
             w="100%"
-            h="100%"
-            position="absolute"
-            top="0"
-            left="0"
+            h="0"
+            pb="20%"
+            position="relative"
+            target="_blank"
+            rel="noreferrer nofollow"
+            title="Bezirksamt Lichtenberg von Berlin"
           >
-            <SVG
-              className="svg black"
-              type="ba_lichtenberg"
-              width="100%"
-              height="100%"
-            />
-          </chakra.span>
-        </chakra.a>
+            <chakra.span
+              display="block"
+              w="100%"
+              h="100%"
+              position="absolute"
+              top="0"
+              left="0"
+            >
+              <SVG
+                className="svg black"
+                type="ba_lichtenberg"
+                width="100%"
+                height="100%"
+              />
+            </chakra.span>
+          </chakra.a>
+
+          <chakra.a
+            className="svgHover tabbedFocus"
+            href="https://www.berlin.de/sen/web/"
+            display="inline-block"
+            w="100%"
+            h="0"
+            pb="20%"
+            position="relative"
+            target="_blank"
+            rel="noreferrer nofollow"
+            title="Senatsverwaltung für Wirtschaft, Energie und Betriebe"
+          >
+            <chakra.span
+              display="block"
+              w="100%"
+              h="100%"
+              position="absolute"
+              top="0"
+              left="0"
+            >
+              <SVG
+                className="svg black"
+                type="s_energie"
+                width="100%"
+                height="100%"
+              />
+            </chakra.span>
+          </chakra.a>
+
+          <chakra.a
+            className="imgHover tabbedFocus"
+            href={`https://www.visitberlin.de/${i18n.language}`}
+            display="inline-block"
+            w="50%"
+            h="0"
+            pb="20%"
+            position="relative"
+            target="_blank"
+            rel="noreferrer nofollow"
+            title="Senatsverwaltung für Wirtschaft, Energie und Betriebe"
+          >
+            <chakra.span
+              display="block"
+              w="100%"
+              h="100%"
+              position="absolute"
+              top="0"
+              left="0"
+            >
+              <Img
+                src={`/img/visit_berlin_${i18n.language}.png`}
+                width="100%"
+                height="auto"
+                alt="Logo Visit Berlin"
+                sx={{
+                  _hover: {
+                    opacity: 0.5
+                  }
+                }}
+
+              />
+            </chakra.span>
+          </chakra.a>
+        </VStack>
       </Box>
     </Box>
   );

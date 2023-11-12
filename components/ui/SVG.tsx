@@ -17,6 +17,7 @@ import Accordion2SVG from "~/assets/svg/v2/accordion_level_2.svg";
 import ChrevronRightSVG from "~/assets/svg/v2/chevron_right.svg";
 import LargeChrevronSVG from "~/assets/svg/v2/large_chevron.svg";
 import BALichtenberg from "~/assets/svg/logo_ba_lichtenberg.svg";
+import SenatEnergie from "~/assets/svg/logo_senat_energie.svg";
 
 export const SVG = ({
   type,
@@ -94,6 +95,12 @@ export const SVG = ({
     case "large_chevron":
       component = LargeChrevronSVG;
       break;
+    
+    case "s_energie":
+      component = SenatEnergie;
+      break;
+
+
   }
 
   return (
