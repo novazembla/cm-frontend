@@ -93,6 +93,17 @@ export const locationCreateMutationGQL = gql`
   }
 `;
 
+const slugify = (text: string) => {
+  return text
+    .toString()
+    .toLowerCase()
+    .replace(/\s+/g, "-") // Replace spaces with -
+    .replace(/[^\w-]+/g, "") // Remove all non-word chars
+    .replace(/--+/g, "-") // Replace multiple - with single -
+    .replace(/^-+/, "") // Trim - from start of text
+    .replace(/-+$/, ""); // Trim - from end of text
+};
+
 export const ModuleComponentSuggest = () => {
   const { t, i18n, getMultilangValue } = useAppTranslations();
 
@@ -117,83 +128,6 @@ export const ModuleComponentSuggest = () => {
   }, [router.asPath, cultureMap]);
 
   const [mutation] = useMutation(locationCreateMutationGQL);
-
-  // useEffect(() => {
-  //   if (settings?.taxonomies?.typeOfInstitution?.terms) {
-  //     const keysToI = settings?.taxonomies?.typeOfInstitution?.terms?.reduce(
-  //       (acc: any, t: any) => {
-  //         if (t._count?.locations > 0)
-  //           return [...acc, `typeOfInstitution_${t.id}`];
-  //         return acc;
-  //       },
-  //       []
-  //     );
-
-  //     const keysTA = settings?.taxonomies?.targetAudience?.terms?.reduce(
-  //       (acc: any, t: any) => {
-  //         if (t._count?.locations > 0)
-  //           return [...acc, `targetAudience_${t.id}`];
-  //         return acc;
-  //       },
-  //       []
-  //     );
-
-  //     const keysToO = settings?.taxonomies?.typeOfOrganisation?.terms?.reduce(
-  //       (acc: any, t: any) => {
-  //         if (t._count?.locations > 0)
-  //           return [...acc, `typeOfOrganisation_${t.id}`];
-  //         return acc;
-  //       },
-  //       []
-  //     );
-
-  //     setExtendedValidationSchema(
-  //       SuggestionSchema.concat(
-  //         object().shape({
-  //           ...(keysToI?.length > 0
-  //             ? {
-  //                 typeOfInstitution: mixed().when(keysToI, {
-  //                   is: (...args: any[]) => {
-  //                     return !!args.find((a) => a);
-  //                   },
-  //                   then: boolean(),
-  //                   otherwise: number()
-  //                     .typeError("validation.array.minOneItem")
-  //                     .required(),
-  //                 }),
-  //               }
-  //             : {}),
-  //           ...(keysTA?.length > 0
-  //             ? {
-  //                 targetAudience: mixed().when(keysTA, {
-  //                   is: (...args: any[]) => {
-  //                     return !!args.find((a) => a);
-  //                   },
-  //                   then: boolean(),
-  //                   otherwise: number()
-  //                     .typeError("validation.array.minOneItem")
-  //                     .required(),
-  //                 }),
-  //               }
-  //             : {}),
-  //           ...(keysToO?.length > 0
-  //             ? {
-  //                 typeOfOrganisation: mixed().when(keysToO, {
-  //                   is: (...args: any[]) => {
-  //                     return !!args.find((a) => a);
-  //                   },
-  //                   then: boolean(),
-  //                   otherwise: number()
-  //                     .typeError("validation.array.minOneItem")
-  //                     .required(),
-  //                 }),
-  //               }
-  //             : {}),
-  //         })
-  //       )
-  //     );
-  //   }
-  // }, [settings]);
 
   const formMethods = useForm<any>({
     mode: "onTouched",
@@ -241,27 +175,12 @@ export const ModuleComponentSuggest = () => {
         ].reduce((accTerms: any[], tax: any) => {
           return [
             ...accTerms,
-            ...settings?.taxonomies?.[tax]?.terms?.reduce(
-              (acc: any, t: any) => {
-                if (newData[`${tax}_${t.id}`]) return [...acc, { id: t.id }];
-                return acc;
-              },
-              []
-            ),
+            ...(Array.isArray(newData?.[tax])
+              ? (newData[tax] as string[]).map((id: string) => ({id: parseInt(id)}))
+              : []),
           ];
         }, []);
       }
-
-      const slugify = (text: string) => {
-        return text
-          .toString()
-          .toLowerCase()
-          .replace(/\s+/g, "-") // Replace spaces with -
-          .replace(/[^\w-]+/g, "") // Remove all non-word chars
-          .replace(/--+/g, "-") // Replace multiple - with single -
-          .replace(/^-+/, "") // Trim - from start of text
-          .replace(/-+$/, ""); // Trim - from end of text
-      };
 
       const now = new Date().getTime();
 
@@ -349,13 +268,7 @@ export const ModuleComponentSuggest = () => {
         if (settings?.taxonomies?.typeOfInstitution?.terms?.length) {
           resetVars = {
             ...resetVars,
-            ...settings?.taxonomies?.typeOfInstitution?.terms.reduce(
-              (acc: any, t: any) => ({
-                ...acc,
-                [`typeOfInstitution_${t.id}`]: false,
-              }),
-              {}
-            ),
+            typeOfInstitution: [],
           };
         }
       }
@@ -365,13 +278,7 @@ export const ModuleComponentSuggest = () => {
         if (settings?.taxonomies?.typeOfOrganisation?.terms?.length) {
           resetVars = {
             ...resetVars,
-            ...settings?.taxonomies?.typeOfOrganisation?.terms.reduce(
-              (acc: any, t: any) => ({
-                ...acc,
-                [`typeOfOrganisation_${t.id}`]: false,
-              }),
-              {}
-            ),
+            typeOfOrganisation: [],
           };
         }
       }
@@ -381,20 +288,14 @@ export const ModuleComponentSuggest = () => {
         if (settings?.taxonomies?.targetAudience?.terms?.length) {
           resetVars = {
             ...resetVars,
-            ...settings?.taxonomies?.targetAudience?.terms.reduce(
-              (acc: any, t: any) => ({
-                ...acc,
-                [`targetAudience_${t.id}`]: false,
-              }),
-              {} 
-            ),
+            targetAudience: [],
           };
         }
       }
- 
+
       reset(resetVars);
     }
-  }, [settings?.taxonomies, reset]); 
+  }, [settings?.taxonomies, reset]);
 
   const heroImage = watch("heroImage");
   const suggestionSubmittersImageRightsConfirmation = watch(
@@ -406,14 +307,11 @@ export const ModuleComponentSuggest = () => {
     <MainContent isDrawer>
       <NextHeadSeo
         canonical={`${config.baseUrl}${
-          i18n.language === "en"
-            ? "/en/suggest-a-location"
-            : "/ort-vorschlagen"
+          i18n.language === "en" ? "/en/suggest-a-location" : "/ort-vorschlagen"
         }`}
         title={`${t("suggest.title", "Suggest a location")} - ${getSeoAppTitle(
           t
         )}`}
-
         maxDescriptionCharacters={300}
         description={getMetaDescriptionContent(
           getMultilangValue(settings?.suggestionsMetaDesc),

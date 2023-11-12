@@ -7,7 +7,23 @@ import { LoadingIcon } from "~/components/ui/LoadingIcon";
 
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import {
-  Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Button, chakra, Flex, Grid, IconButton, Table, Tbody, Td, Th, Thead, Tr
+  Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
+  Box,
+  Button,
+  chakra,
+  Flex,
+  Grid,
+  IconButton,
+  Table,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
 } from "@chakra-ui/react";
 import { Footer } from "~/components/app/Footer";
 import { MainContent } from "~/components/app/MainContent";
@@ -22,12 +38,14 @@ import { object } from "yup";
 import useCalendar from "@veccu/react-calendar";
 import NextHeadSeo from "next-head-seo";
 import {
-  useConfigContext, useMapContext, useSettingsContext
+  useConfigContext,
+  useMapContext,
+  useSettingsContext,
 } from "~/provider";
 import {
   getMetaDescriptionContent,
   getMultilangSortedList,
-  getSeoAppTitle
+  getSeoAppTitle,
 } from "~/utils";
 import FieldInput from "../forms/FieldInput";
 import { PageTitle } from "../ui/PageTitle";
@@ -190,7 +208,6 @@ export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
           customDate: null,
           eventDateRange: "all",
           eventType: [],
-          
         };
         setActiveTermsET(terms);
       }
@@ -242,7 +259,7 @@ export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
         s: urlParams.get("s") ?? "",
         customDate,
         eventDateRange: urlParams.get("date") ?? "all",
-        eventType: tets.map((id) => id.toString()),       
+        eventType: tets.map((id) => id.toString()),
       });
     }
   }, [filter, reset, activeTermsET]);

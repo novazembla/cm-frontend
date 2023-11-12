@@ -80,83 +80,6 @@ export const ModuleComponentLocations = ({
 
   const settings = useSettingsContext();
 
-  useEffect(() => {
-    if (settings?.taxonomies?.typeOfInstitutions?.terms) {
-      const keysToI = settings?.taxonomies?.typeOfInstitutions?.terms?.reduce(
-        (acc: any, t: any) => {
-          if (t._count?.locations > 0)
-            return [...acc, `typeOfInstitution_${t.id}`];
-          return acc;
-        },
-        []
-      );
-
-      const keysTA = settings?.taxonomies?.targetAudience?.terms?.reduce(
-        (acc: any, t: any) => {
-          if (t._count?.locations > 0)
-            return [...acc, `targetAudience_${t.id}`];
-          return acc;
-        },
-        []
-      );
-
-      const keysToO = settings?.taxonomies?.typeOfOrganisation?.terms?.reduce(
-        (acc: any, t: any) => {
-          if (t._count?.locations > 0)
-            return [...acc, `typeOfOrganisation_${t.id}`];
-          return acc;
-        },
-        []
-      );
-
-      setExtendedValidationSchema(
-        LocationsFilterSchema.concat(
-          object().shape({
-            ...(keysToI?.length > 0
-              ? {
-                  typeOfInstitution: mixed().when(keysToI, {
-                    is: (...args: any[]) => {
-                      return !!args.find((a) => a);
-                    },
-                    then: boolean(),
-                    otherwise: number()
-                      .typeError("validation.array.minOneItem")
-                      .required(),
-                  }),
-                }
-              : {}),
-            ...(keysTA?.length > 0
-              ? {
-                  targetAudience: mixed().when(keysTA, {
-                    is: (...args: any[]) => {
-                      return !!args.find((a) => a);
-                    },
-                    then: boolean(),
-                    otherwise: number()
-                      .typeError("validation.array.minOneItem")
-                      .required(),
-                  }),
-                }
-              : {}),
-            ...(keysToO?.length > 0
-              ? {
-                  typeOfOrganisation: mixed().when(keysToO, {
-                    is: (...args: any[]) => {
-                      return !!args.find((a) => a);
-                    },
-                    then: boolean(),
-                    otherwise: number()
-                      .typeError("validation.array.minOneItem")
-                      .required(),
-                  }),
-                }
-              : {}),
-          })
-        )
-      );
-    }
-  }, [settings]);
-
   const { data, loading, error, fetchMore, refetch } = useQuery(
     locationsQuery,
     {
@@ -184,6 +107,14 @@ export const ModuleComponentLocations = ({
   const formMethods = useForm<any>({
     mode: "onTouched",
     resolver: yupResolver(extendedValidationSchema),
+    defaultValues: {
+      s: "",
+      cluster: true,
+      and: false,
+      targetAudience: [],
+      typeOfInstitution: [],
+      typeOfOrganisation: [],
+    },
   });
 
   const { handleSubmit, reset, watch } = formMethods;
@@ -209,16 +140,11 @@ export const ModuleComponentLocations = ({
           },
           []
         );
+
         if (terms?.length) {
           resetVars = {
             ...resetVars,
-            ...terms.reduce(
-              (acc: any, t: any) => ({
-                ...acc,
-                [`typeOfInstitution_${t.id}`]: false,
-              }),
-              {}
-            ),
+            typeOfInstitution: [],
           };
         }
         setActiveTermsToI(terms);
@@ -233,20 +159,13 @@ export const ModuleComponentLocations = ({
           []
         );
 
-        setActiveTermsToO(terms);
-
         if (terms?.length) {
           resetVars = {
             ...resetVars,
-            ...terms.reduce(
-              (acc: any, t: any) => ({
-                ...acc,
-                [`typeOfOrganisation_${t.id}`]: false,
-              }),
-              {}
-            ),
+            typeOfOrganisation: [],
           };
         }
+        setActiveTermsToO(terms);
       }
       if (settings?.taxonomies?.targetAudience?.terms) {
         const terms = settings?.taxonomies?.targetAudience?.terms?.reduce(
@@ -258,24 +177,21 @@ export const ModuleComponentLocations = ({
           []
         );
 
-        setActiveTermsTA(terms);
-
         if (terms?.length) {
           resetVars = {
             ...resetVars,
-            s: "",
-            cluster: true,
-            and: false,
-            ...terms.reduce(
-              (acc: any, t: any) => ({
-                ...acc,
-                [`targetAudience_${t.id}`]: false,
-              }),
-              {}
-            ),
+            targetAudience: [],
           };
         }
+        setActiveTermsTA(terms);
       }
+
+      resetVars = {
+        ...resetVars,
+        s: "",
+        cluster: true,
+        and: false,
+      };
 
       reset(resetVars);
     }
@@ -300,27 +216,9 @@ export const ModuleComponentLocations = ({
         s: urlParams.get("s") ?? "",
         cluster: !(urlParams.get("cluster") === "0"),
         and: urlParams.get("and") === "1",
-        ...activeTermsToI.reduce(
-          (acc: any, t: any) => ({
-            ...acc,
-            [`typeOfInstitution_${t.id}`]: tois.includes(t.id.toString()),
-          }),
-          {}
-        ),
-        ...activeTermsToO.reduce(
-          (acc: any, t: any) => ({
-            ...acc,
-            [`typeOfOrganisation_${t.id}`]: toos.includes(t.id.toString()),
-          }),
-          {}
-        ),
-        ...activeTermsTA.reduce(
-          (acc: any, t: any) => ({
-            ...acc,
-            [`targetAudience_${t.id}`]: tas.includes(t.id.toString()),
-          }),
-          {}
-        ),
+        typeOfInstitution: tois.map((id) => id.toString()),
+        typeOfOrganisation: toos.map((id) => id.toString()),
+        targetAudience: tas.map((id) => id.toString()),
       });
     }
   }, [filter, reset, activeTermsToI, activeTermsToO, activeTermsTA]);
@@ -391,14 +289,10 @@ export const ModuleComponentLocations = ({
     let where: any = [];
     let termsWhere: any = [];
     let allTerms: any[] = [];
-    const termsToI = Object.keys(allVars).reduce((acc: any, key: any) => {
-      if (key.indexOf("typeOfInstitution_") > -1) {
-        if (allVars[key]) {
-          return [...acc, parseInt(key.split("_")[1])];
-        }
-      }
-      return acc;
-    }, []);
+    const termsToI = allVars.typeOfInstitution.map((id: string) =>
+      parseInt(id)
+    );
+
     if (termsToI?.length) {
       allTerms = [...allTerms, ...termsToI];
       if (allVars?.and === "1" || allVars?.and === true) {
@@ -417,14 +311,9 @@ export const ModuleComponentLocations = ({
       }
     }
 
-    const termsToO = Object.keys(allVars).reduce((acc: any, key: any) => {
-      if (key.indexOf("typeOfOrganisation_") > -1) {
-        if (allVars[key]) {
-          return [...acc, parseInt(key.split("_")[1])];
-        }
-      }
-      return acc;
-    }, []);
+    const termsToO = allVars.typeOfOrganisation.map((id: string) =>
+      parseInt(id)
+    );
     if (termsToO?.length) {
       allTerms = [...allTerms, ...termsToO];
       if (allVars?.and === "1" || allVars?.and === true) {
@@ -443,14 +332,7 @@ export const ModuleComponentLocations = ({
       }
     }
 
-    const termsTA = Object.keys(allVars).reduce((acc: any, key: any) => {
-      if (key.indexOf("targetAudience_") > -1) {
-        if (allVars[key]) {
-          return [...acc, parseInt(key.split("_")[1])];
-        }
-      }
-      return acc;
-    }, []);
+    const termsTA = allVars.targetAudience.map((id: string) => parseInt(id));
     if (termsTA?.length) {
       allTerms = [...allTerms, ...termsTA];
       if (allVars?.and === "1" || allVars?.and === true) {
@@ -553,34 +435,14 @@ export const ModuleComponentLocations = ({
       setCurrentPageIndex(0);
     }
 
-    const query = Object.keys(allVars).reduce(
-      (acc: any, key: any) => {
-        if (key.indexOf("typeOfInstitution_") > -1) {
-          if (allVars[key]) {
-            acc.toi.push(parseInt(key.split("_")[1]));
-          }
-        }
-        if (key.indexOf("typeOfOrganisation_") > -1) {
-          if (allVars[key]) {
-            acc.too.push(parseInt(key.split("_")[1]));
-          }
-        }
-        if (key.indexOf("targetAudience_") > -1) {
-          if (allVars[key]) {
-            acc.ta.push(parseInt(key.split("_")[1]));
-          }
-        }
-        return acc;
-      },
-      {
+    const query: any = {
         s: allVars?.s?.trim() ?? "",
         and: allVars?.and === "1" || allVars?.and === true,
         cluster: allVars?.cluster === "1" || allVars?.cluster === true,
-        toi: [],
-        ta: [],
-        too: [],
-      }
-    );
+        toi: allVars.typeOfInstitution ?? [],
+        ta:  allVars.targetAudience ?? [],
+        too:  allVars.typeOfOrganisation ?? []
+      };
 
     const queryString = Object.keys(query)
       .reduce((acc: any, key: string) => {
