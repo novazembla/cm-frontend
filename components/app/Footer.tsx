@@ -193,7 +193,7 @@ export const Footer = ({
             display="inline-block"
             w="100%"
             h="0"
-            pb="20%"
+            pb="18.18%"
             position="relative"
             target="_blank"
             rel="noreferrer nofollow"
@@ -226,7 +226,9 @@ export const Footer = ({
             position="relative"
             target="_blank"
             rel="noreferrer nofollow"
-            title="Senatsverwaltung für Wirtschaft, Energie und Betriebe"
+            title={`${
+              i18n.language === "de" ? "In Kooperation mit" : "In cooperation with"
+            } Visit Berlin`}
           >
             <chakra.span
               display="block"
