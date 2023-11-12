@@ -83,7 +83,10 @@
     }
   },
   "form": {
-    "unsavedchanges": "Offenbar haben Sie Änderungen nicht gespeichert. Verlassen ohne zu speichern?"
+    "unsavedchanges": "Offenbar haben Sie Änderungen nicht gespeichert. Verlassen ohne zu speichern?",
+    "filter": {
+      "reset": "Filter zurücksetzen"
+    }
   },
   "event": {
     "missingData": {
@@ -145,6 +148,17 @@
   },
   "locations": {
     "title": "Kulturkarte",
+    "filter": {
+      "title": {
+        "keyword": "Nach Stichwort suchen",
+        "typeOfInstitution": "Einrichtungsart",
+        "targetAudience": "Angebote für",
+        "typeOfOrganisation": "Organisationsart",
+        "settings": "Weitere Einstellungen"
+      },
+      "andRelationship": "Alle gewählten Begriffe müssen zugewiesen sein",
+      "clusterResult": "Naheliegende Orte gruppieren"
+    },
     "embed": {
       "title": {
         "preview": "Vorschau",
@@ -170,17 +184,6 @@
     "totalCount_plural": "{{count}} Orte gefunden",
     "totalCountPlural": "{{count}} Orte gefunden",
     "totalCountPlural_plural": "{{count}} Orte gefunden",
-    "filter": {
-      "title": {
-        "keyword": "Nach Stichwort suchen",
-        "typeOfInstitution": "Einrichtungsart",
-        "targetAudience": "Angebote für",
-        "typeOfOrganisation": "Organisationsart",
-        "settings": "Weitere Einstellungen"
-      },
-      "andRelationship": "Alle gewählten Begriffe müssen zugewiesen sein",
-      "clusterResult": "Naheliegende Orte gruppieren"
-    },
     "loadMore": "Weitere Orte laden",
     "totalCount_plural_plural": "{{count}} Orte gefunden"
   },

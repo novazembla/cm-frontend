@@ -87,6 +87,12 @@ export const components = {
             filter: "invert(100%)",
           },
         },
+        _disabled: {
+          "&:hover": {
+            shadow: "none",
+            color: "cm.accentLight",
+          },
+        },
       },
       outline: {
         bg: "white",
@@ -276,7 +282,7 @@ export const components = {
       },
       _focus: {
         boxShadow: "none",
-      }
+      },
     },
   },
   Radio: {
@@ -321,7 +327,7 @@ export const components = {
         },
         _focus: {
           boxShadow: "0 0 3px 3px #E42B20",
-        }
+        },
       },
     },
   },

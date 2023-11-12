@@ -994,6 +994,22 @@ export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
                     )}
                   </Accordion>
                 )}
+
+                <Flex pt={2} justifyContent="flex-end" w="100%">
+                  <Button
+                    variant="ghost"
+                    disabled={!isFiltered}
+                    onClick={() => {
+                      reset({
+                        s: "",
+                        customDate: null,
+                        eventDateRange: "all",
+                      });
+                    }}
+                  >
+                    {t("form.filter.reset", "Reset all filters")}
+                  </Button>
+                </Flex>
               </form>
             </FormProvider>
             <Box pt="1.5em">

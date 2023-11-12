@@ -28,7 +28,11 @@ import { boolean, object, mixed, number } from "yup";
 import { MainContent } from "~/components/app/MainContent";
 import { Footer } from "~/components/app/Footer";
 import { useSettingsContext, useMapContext } from "~/provider";
-import { getMetaDescriptionContent, getMultilangSortedList, getSeoAppTitle } from "~/utils";
+import {
+  getMetaDescriptionContent,
+  getMultilangSortedList,
+  getSeoAppTitle,
+} from "~/utils";
 import NextHeadSeo from "next-head-seo";
 
 import {
@@ -681,7 +685,7 @@ export const ModuleComponentLocations = ({
       <NextHeadSeo
         canonical={`${i18n.language === "en" ? "/en/map" : "/karte"}`}
         title={`${title} - ${getSeoAppTitle(t)}`}
-         maxDescriptionCharacters={300}
+        maxDescriptionCharacters={300}
         description={getMetaDescriptionContent(
           getMultilangValue(settings?.defaultMetaDesc)
         )}
@@ -717,25 +721,22 @@ export const ModuleComponentLocations = ({
                     defaultIndex={accordionDefaultIndex}
                   >
                     <AccordionItem>
-                        <AccordionButton pt="0" className="tabbedFocus">
-                          <Box
-                            flex="1"
-                            textAlign="left"
-                            textStyle="larger"
-                            fontWeight="bold"
-                          >
-                            {t(
-                              "locations.filter.title.keyword",
-                              "Search by keyword"
-                            )}
-                          </Box>
-                          <AccordionIcon
-                            color="cm.accentLight"
-                            fontSize="2xl"
-                          />
-                        </AccordionButton>
-                      
-                      <AccordionPanel pb="1em">
+                      <AccordionButton pt="0" className="tabbedFocus">
+                        <Box
+                          flex="1"
+                          textAlign="left"
+                          textStyle="larger"
+                          fontWeight="bold"
+                        >
+                          {t(
+                            "locations.filter.title.keyword",
+                            "Search by keyword"
+                          )}
+                        </Box>
+                        <AccordionIcon color="cm.accentLight" fontSize="2xl" />
+                      </AccordionButton>
+
+                      <AccordionPanel pt={2} pb="1em">
                         <FieldInput
                           type="text"
                           name="s"
@@ -945,6 +946,21 @@ export const ModuleComponentLocations = ({
                     </AccordionItem>
                   </Accordion>
                 )}
+                <Flex pt={2} justifyContent="flex-end" w="100%">
+                  <Button
+                    variant="ghost"
+                    disabled={!isFiltered}
+                    onClick={() => {
+                      reset({
+                        s: "",
+                        cluster: true,
+                        and: false,
+                      });
+                    }}
+                  >
+                    {t("form.filter.reset", "Reset all filters")}
+                  </Button>
+                </Flex>
               </form>
             </FormProvider>
 
@@ -961,6 +977,7 @@ export const ModuleComponentLocations = ({
               >
                 {(!data || loading) && <LoadingIcon my="0" />}
                 {!loading && !error && <Box>{resultText}</Box>}
+
                 {error && <ErrorMessage type="dataLoad" />}
               </Flex>
             </Box>

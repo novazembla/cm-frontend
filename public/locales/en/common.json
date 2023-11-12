@@ -83,7 +83,10 @@
     }
   },
   "form": {
-    "unsavedchanges": "It looks like you've unsaved changes. Leave without saving?"
+    "unsavedchanges": "It looks like you've unsaved changes. Leave without saving?",
+    "filter": {
+      "reset": "Reset all filters"
+    }
   },
   "event": {
     "missingData": {
@@ -145,6 +148,17 @@
   },
   "locations": {
     "title": "Map",
+    "filter": {
+      "title": {
+        "keyword": "Search by keyword",
+        "typeOfInstitution": "Type of institution",
+        "targetAudience": "Target audience",
+        "typeOfOrganisation": "Type of organisation",
+        "settings": "Other settings"
+      },
+      "andRelationship": "Locations must match all the given terms",
+      "clusterResult": "Cluster results on map"
+    },
     "embed": {
       "title": {
         "preview": "Preview",
@@ -170,17 +184,6 @@
     "totalCount_plural": "{{count}} Locations found",
     "totalCountPlural": "{{count}} Locations found",
     "totalCountPlural_plural": "{{count}} Locations found",
-    "filter": {
-      "title": {
-        "keyword": "Search by keyword",
-        "typeOfInstitution": "Type of institution",
-        "targetAudience": "Target audience",
-        "typeOfOrganisation": "Type of organisation",
-        "settings": "Other settings"
-      },
-      "andRelationship": "Locations must match all the given terms",
-      "clusterResult": "Cluster results on map"
-    },
     "loadMore": "Load more locations",
     "totalCount_plural_plural": "{{count}} locations found"
   },
