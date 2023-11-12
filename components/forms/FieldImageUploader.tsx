@@ -197,12 +197,15 @@ export const FieldImageUploader = ({
             withCredentials: true,
             data: formData,
             onUploadProgress: (ev) => {
-              if (getCancelToken())
+              if (getCancelToken()) {
                 setProgressInfo({
-                  loaded: ev.loaded,
-                  total: ev.total,
-                  percent: Math.round((ev.loaded / ev.total) * 100),
+                  loaded: ev.loaded ?? 0,
+                  total: ev.total ?? 0,
+                  percent: ev.total
+                    ? Math.round((ev.loaded ?? 0 / ev.total) * 100)
+                    : 0,
                 });
+              }
             },
           })
           .then(({ data }: { data: any }) => {
