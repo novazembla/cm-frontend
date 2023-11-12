@@ -6,6 +6,7 @@ export const settingsQueryPartial = `
     mapJsonUrl
     taxMapping
     suggestionsIntro
+    quickSearchInfo
     suggestionsMetaDesc
     suggestionsTandCInfo
     defaultMetaDesc

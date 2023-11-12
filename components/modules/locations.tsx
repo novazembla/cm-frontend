@@ -357,8 +357,7 @@ export const ModuleComponentLocations = ({
       !layzLocationIdsQueryResult.loading &&
       !layzLocationIdsQueryResult.error &&
       layzLocationIdsQueryResult.data?.locationIds?.ids &&
-      cultureMap &&
-      cultureMap?.setCurrentViewData
+      cultureMap
     ) {
       if (layzLocationIdsQueryResult.data?.locationIds?.ids?.length) {
         cultureMap?.setFilteredViewData(
@@ -718,7 +717,6 @@ export const ModuleComponentLocations = ({
                     defaultIndex={accordionDefaultIndex}
                   >
                     <AccordionItem>
-                      <h2>
                         <AccordionButton pt="0" className="tabbedFocus">
                           <Box
                             flex="1"
@@ -736,7 +734,7 @@ export const ModuleComponentLocations = ({
                             fontSize="2xl"
                           />
                         </AccordionButton>
-                      </h2>
+                      
                       <AccordionPanel pb="1em">
                         <FieldInput
                           type="text"

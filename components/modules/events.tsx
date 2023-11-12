@@ -41,10 +41,15 @@ import {
   useMapContext,
   useConfigContext,
 } from "~/provider";
-import { getMetaDescriptionContent, getMultilangSortedList, getSeoAppTitle } from "~/utils";
+import {
+  getMetaDescriptionContent,
+  getMultilangSortedList,
+  getSeoAppTitle,
+} from "~/utils";
 import NextHeadSeo from "next-head-seo";
 import useCalendar from "@veccu/react-calendar";
 import { PageTitle } from "../ui/PageTitle";
+import FieldInput from "../forms/FieldInput";
 
 const ONE_DAY = 1000 * 60 * 60 * 24;
 
@@ -287,6 +292,7 @@ export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
       } catch (err) {}
 
       reset({
+        s: urlParams.get("s") ?? "",
         customDate,
         eventDateRange: urlParams.get("date") ?? "all",
         ...activeTermsET.reduce(
@@ -306,7 +312,8 @@ export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
     const urlParams = new URLSearchParams(filter);
     const aDI = [];
     if (urlParams.get("date") && urlParams.get("date") !== "all") aDI.push(0);
-    if (urlParams.get("tet")) aDI.push(1);
+    if (urlParams.get("s")) aDI.push(1);
+    if (urlParams.get("tet")) aDI.push(2);
 
     setAccordionDefaultIndex(aDI);
   }, [filter]);
@@ -436,6 +443,15 @@ export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
       }
     }
 
+    if (allVars?.s?.trim() && allVars.s.trim().length > 2) {
+      where.push({
+        fullText: {
+          contains: allVars.s,
+          mode: "insensitive",
+        },
+      });
+    }
+
     let newQueryState = {
       ...currentQueryState,
     };
@@ -484,6 +500,7 @@ export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
           return acc;
         },
         {
+          s: allVars?.s?.trim() ?? "",
           date: allVars?.eventDateRange ?? "all",
           customDate: allVars?.customDate
             ? formatDate(allVars?.customDate)
@@ -494,6 +511,9 @@ export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
 
       const queryString = Object.keys(query)
         .reduce((acc: any, key: string) => {
+          if (key === "s" && query[key]?.length)
+            return [...acc, `s=${query[key]}`];
+
           if (key === "date" && query[key])
             return [...acc, `date=${query[key]}`];
 
@@ -507,8 +527,13 @@ export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
         }, [])
         .join("&");
 
+        console.log(queryString);
+
       const queryStringEncoded = Object.keys(query)
         .reduce((acc: any, key: string) => {
+          if (key === "s" && query[key]?.length)
+            return [...acc, `s=${encodeURIComponent(query[key])}`];
+
           if (key === "date" && query[key])
             return [...acc, `date=${query[key]}`];
 
@@ -591,12 +616,10 @@ export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
           i18n.language === "en" ? "/en/events" : "/veranstaltungen"
         }`}
         title={`${t("locations.title", "Map")} - ${getSeoAppTitle(t)}`}
-
         maxDescriptionCharacters={300}
         description={getMetaDescriptionContent(
           getMultilangValue(settings?.defaultMetaDesc)
         )}
-
       />
       <Grid
         w="100%"
@@ -895,28 +918,59 @@ export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
                         )}
                       </AccordionPanel>
                     </AccordionItem>
+                    <AccordionItem>
+                      <AccordionButton pt="0" className="tabbedFocus">
+                        <Box
+                          flex="1"
+                          textAlign="left"
+                          textStyle="larger"
+                          fontWeight="bold"
+                        >
+                          {t(
+                            "locations.filter.title.keyword",
+                            "Search by keyword"
+                          )}
+                        </Box>
+                        <AccordionIcon color="cm.accentLight" fontSize="2xl" />
+                      </AccordionButton>
+
+                      <AccordionPanel pt={2} pb={4}>
+                        <FieldInput
+                          type="text"
+                          name="s"
+                          id="s"
+                          label={t("quicksearch.placeholder", "Keyword")}
+                          settings={{
+                            hideLabel: true,
+                            placeholder: t(
+                              "quicksearch.placeholder",
+                              "Keyword"
+                            ),
+                          }}
+                        />
+                      </AccordionPanel>
+                    </AccordionItem>
                     {activeTermsET?.length > 0 && (
                       <AccordionItem>
-                        <h2>
-                          <AccordionButton className="tabbedFocus">
-                            <Box
-                              flex="1"
-                              textAlign="left"
-                              textStyle="larger"
-                              fontWeight="bold"
-                            >
-                              {t(
-                                "events.filter.title.eventType",
-                                "Type of event"
-                              )}
-                            </Box>
-                            <AccordionIcon
-                              color="cm.accentLight"
-                              fontSize="2xl"
-                            />
-                          </AccordionButton>
-                        </h2>
-                        <AccordionPanel pb={4}>
+                        <AccordionButton pt={0} className="tabbedFocus">
+                          <Box
+                            flex="1"
+                            textAlign="left"
+                            textStyle="larger"
+                            fontWeight="bold"
+                          >
+                            {t(
+                              "events.filter.title.eventType",
+                              "Type of event"
+                            )}
+                          </Box>
+                          <AccordionIcon
+                            color="cm.accentLight"
+                            fontSize="2xl"
+                          />
+                        </AccordionButton>
+
+                        <AccordionPanel pt={2} pb={4}>
                           <FieldCheckboxGroup
                             id="eventType"
                             name="eventType"

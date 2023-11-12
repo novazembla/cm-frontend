@@ -10,11 +10,12 @@ import {
   FormLabel,
   Input,
   IconButton,
+  Button,
   HStack,
-  useBreakpointValue,
+  VStack,
 } from "@chakra-ui/react";
 
-import { useQuickSearchContext } from "~/provider";
+import { useQuickSearchContext, useSettingsContext } from "~/provider";
 import { useIsBreakPoint } from "~/hooks/useIsBreakPoint";
 import { useAppTranslations } from "~/hooks/useAppTranslations";
 
@@ -31,6 +32,8 @@ import { SVG } from "~/components/ui/SVG";
 import { PageTitle } from "~/components/ui/PageTitle";
 
 import { QuickSearchResult } from "./QuickSearchResult";
+import { MultiLangHtml } from "../ui/MultiLangHtml";
+import { useRouter } from "next/router";
 
 const debounce = (fn: Function, ms = 300) => {
   let timeoutId: ReturnType<typeof setTimeout>;
@@ -80,6 +83,8 @@ export const SearchFormSchema = object({
 export const QuickSearchForm = () => {
   const { t, i18n } = useAppTranslations();
   const inputFieldRef = useRef<HTMLInputElement | null>(null);
+  const settings = useSettingsContext();
+  const router = useRouter();
 
   const { isQuickSearchOpen, onQuickSearchToggle } = useQuickSearchContext();
   const { isMobile } = useIsBreakPoint();
@@ -154,12 +159,6 @@ export const QuickSearchForm = () => {
     i18n.language,
     loading,
   ]);
-
-  const contentLeft = useBreakpointValue({
-    base: 0,
-    xl: "50px",
-    "2xl": "calc(8vw - 55px)",
-  });
 
   useEffect(() => {
     if (loading && !isActiveSearch) {
@@ -336,7 +335,52 @@ export const QuickSearchForm = () => {
                       </Box>
                     )}
                     {data?.quickSearch?.length > 0 && (
-                      <QuickSearchResult result={data?.quickSearch} />
+                      <>
+                        <QuickSearchResult result={data?.quickSearch} />
+
+                        <Box marginBottom="1.2em">
+                          <MultiLangHtml json={settings?.quickSearchInfo} />
+                        </Box>
+                        <VStack marginTop="xl" alignItems="flex-start">
+                          <Button
+                            onClick={() => {
+                              if (i18n.language === "de") {
+                                router.push(`/en/map/s=${searchTerm}`);
+                              } else {
+                                router.push(`/karte/s=${searchTerm}`);
+                              }
+                            }}
+                            variant="ghost"
+                            minW="160px"
+                            mb="1em"
+                          >
+                            {t(
+                              "quicksearch.gotoLocationSearch",
+                              "Show results in location search"
+                            )}
+                          </Button>
+                          {i18n.language === "de" && (
+                            <Button
+                              onClick={() => {
+                                if (i18n.language === "de") {
+                                  router.push(`/en/events/s=${searchTerm}`);
+                                } else {
+                                  router.push(
+                                    `/veranstaltungen/s=${searchTerm}`
+                                  );
+                                }
+                              }}
+                              variant="ghost"
+                              minW="160px"
+                            >
+                              {t(
+                                "quicksearch.gotoEventSearch",
+                                "Show results in event search"
+                              )}
+                            </Button>
+                          )}
+                        </VStack>
+                      </>
                     )}
                   </Box>
                 )}

@@ -28,6 +28,8 @@
     "title": "Search",
     "placeholder": "Keyword",
     "found": "found ...",
+    "gotoLocationSearch": "Show results in location search",
+    "gotoEventSearch": "Show results in event search",
     "noResult": "No result for your search",
     "module": {
       "title": {
@@ -90,13 +92,13 @@
     },
     "label": {
       "dateFrom": "From",
+      "dateFromVon": "From",
       "dateUntil": "Until",
       "website": "Website",
       "eventLocation": "Event Location",
       "eventOrganiser": "Event Organiser",
       "category": "Category",
-      "eventDatesMultiple": "Upcoming dates",
-      "dateFromVon": "From"
+      "eventDatesMultiple": "Upcoming dates"
     },
     "detail": {
       "title": "Event"

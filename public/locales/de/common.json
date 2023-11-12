@@ -28,6 +28,8 @@
     "title": "Suche",
     "placeholder": "Stichwort",
     "found": "Suchergebnis ...",
+    "gotoLocationSearch": "Resultat in Kartenpunktsuche anzeigen",
+    "gotoEventSearch": "Nach Veranstaltungen suchen",
     "noResult": "Für Ihr Stichwort konnten keine Einträge gefunden werden",
     "module": {
       "title": {
@@ -90,13 +92,13 @@
     },
     "label": {
       "dateFrom": "Ab",
+      "dateFromVon": "Von",
       "dateUntil": "Bis",
       "website": "Website",
       "eventLocation": "Veranstaltungsort",
       "eventOrganiser": "Veranstalter",
       "category": "Art der Veranstaltung",
-      "eventDatesMultiple": "Weitere Termine",
-      "dateFromVon": "Von"
+      "eventDatesMultiple": "Weitere Termine"
     },
     "detail": {
       "title": "Veranstaltung"
