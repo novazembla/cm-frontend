@@ -1,55 +1,36 @@
-import { useState, useEffect, useRef } from "react";
 import { gql, useQuery } from "@apollo/client";
+import { useEffect, useRef, useState } from "react";
 
+import { ErrorMessage } from "~/components/ui/ErrorMessage";
 import { ListedEvent } from "~/components/ui/ListedEvent";
 import { LoadingIcon } from "~/components/ui/LoadingIcon";
-import { ErrorMessage } from "~/components/ui/ErrorMessage";
 
-import { MainContent } from "~/components/app/MainContent";
-import { Footer } from "~/components/app/Footer";
-import {
-  Box,
-  chakra,
-  Grid,
-  Flex,
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionPanel,
-  AccordionIcon,
-  Button,
-  Table,
-  Th,
-  Td,
-  Tr,
-  Tbody,
-  Thead,
-  Stack,
-  IconButton,
-} from "@chakra-ui/react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
-import { FieldRadioGroup } from "~/components/forms/FieldRadioGroup";
+import {
+  Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Button, chakra, Flex, Grid, IconButton, Table, Tbody, Td, Th, Thead, Tr
+} from "@chakra-ui/react";
+import { Footer } from "~/components/app/Footer";
+import { MainContent } from "~/components/app/MainContent";
 import { FieldCheckboxGroup } from "~/components/forms/FieldCheckboxGroup";
+import { FieldRadioGroup } from "~/components/forms/FieldRadioGroup";
 import { useAppTranslations } from "~/hooks/useAppTranslations";
 
-import { useForm, FormProvider } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { boolean, object, mixed, number } from "yup";
+import { FormProvider, useForm } from "react-hook-form";
+import { object } from "yup";
 
+import useCalendar from "@veccu/react-calendar";
+import NextHeadSeo from "next-head-seo";
 import {
-  useSettingsContext,
-  useMapContext,
-  useConfigContext,
+  useConfigContext, useMapContext, useSettingsContext
 } from "~/provider";
 import {
   getMetaDescriptionContent,
   getMultilangSortedList,
-  getSeoAppTitle,
+  getSeoAppTitle
 } from "~/utils";
-import NextHeadSeo from "next-head-seo";
-import useCalendar from "@veccu/react-calendar";
-import { PageTitle } from "../ui/PageTitle";
 import FieldInput from "../forms/FieldInput";
+import { PageTitle } from "../ui/PageTitle";
 
 const ONE_DAY = 1000 * 60 * 60 * 24;
 
@@ -114,6 +95,7 @@ export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
   const resultRef = useRef<HTMLDivElement>(null);
   const config = useConfigContext();
 
+  const [isFiltered, setIsFiltered] = useState(false);
   const [currentQueryState, setCurrentQueryState] = useState<any>({
     where: {
       ...initialQueryState.where,
@@ -146,34 +128,6 @@ export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
   useEffect(() => {
     if (cultureMap) cultureMap.showCurrentView();
   }, [cultureMap]);
-
-  useEffect(() => {
-    if (settings?.taxonomies?.eventType?.terms) {
-      const keys = settings?.taxonomies?.eventType?.terms?.reduce(
-        (acc: any, t: any) => {
-          if (t._count?.events > 0) return [...acc, `eventType_${t.id}`];
-          return acc;
-        },
-        []
-      );
-
-      setExtendedValidationSchema(
-        EventsFilterSchema.concat(
-          object().shape({
-            eventType: mixed().when(keys, {
-              is: (...args: any[]) => {
-                return !!args.find((a) => a);
-              },
-              then: boolean(),
-              otherwise: number()
-                .typeError("validation.array.minOneItem")
-                .required(),
-            }),
-          })
-        )
-      );
-    }
-  }, [settings]);
 
   const { t, i18n, getMultilangValue } = useAppTranslations();
 
@@ -231,20 +185,13 @@ export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
           },
           []
         );
-        if (terms?.length) {
-          resetVars = {
-            ...resetVars,
-            customDate: null,
-            eventDateRange: "all",
-            ...terms.reduce(
-              (acc: any, t: any) => ({
-                ...acc,
-                [`eventType_${t.id}`]: false,
-              }),
-              {}
-            ),
-          };
-        }
+        resetVars = {
+          ...resetVars,
+          customDate: null,
+          eventDateRange: "all",
+          eventType: [],
+          
+        };
         setActiveTermsET(terms);
       }
 
@@ -295,13 +242,7 @@ export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
         s: urlParams.get("s") ?? "",
         customDate,
         eventDateRange: urlParams.get("date") ?? "all",
-        ...activeTermsET.reduce(
-          (acc: any, t: any) => ({
-            ...acc,
-            [`eventType_${t.id}`]: tets.includes(t.id.toString()),
-          }),
-          {}
-        ),
+        eventType: tets.map((id) => id.toString()),       
       });
     }
   }, [filter, reset, activeTermsET]);
@@ -316,28 +257,20 @@ export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
     if (urlParams.get("tet")) aDI.push(2);
 
     setAccordionDefaultIndex(aDI);
+    setIsFiltered(aDI.length > 0);
   }, [filter]);
 
   const watchVariables = JSON.stringify(watch());
   useEffect(() => {
     const allVars = watch();
 
-    const terms = Object.keys(allVars).reduce((acc: any, key: any) => {
-      if (key.indexOf("eventType_") > -1) {
-        if (allVars[key]) {
-          return [...acc, parseInt(key.split("_")[1])];
-        }
-      }
-      return acc;
-    }, []);
-
     const where: any = [];
-    if (terms?.length) {
+    if ((allVars.eventType ?? [])?.length) {
       where.push({
         terms: {
           some: {
             id: {
-              in: terms,
+              in: allVars.eventType.map((id: string) => parseInt(id)),
             },
           },
         },
@@ -475,11 +408,17 @@ export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
           AND: where,
         },
       };
-      // } else {
+      //  } else {
       //   newQueryState = {
       //     ...newQueryState,
       //     where: {},
       //   };
+    }
+
+    if (where?.length > 1 || allVars?.eventDateRange !== "all") {
+      setIsFiltered(true);
+    } else {
+      setIsFiltered(false);
     }
 
     if (JSON.stringify(currentQueryState) !== JSON.stringify(newQueryState)) {
@@ -489,25 +428,14 @@ export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
         pageSize: initialQueryState.pageSize,
       });
 
-      const query = Object.keys(allVars).reduce(
-        (acc: any, key: any) => {
-          if (key.indexOf("eventType_") > -1) {
-            if (allVars[key]) {
-              acc.tet.push(parseInt(key.split("_")[1]));
-            }
-          }
-
-          return acc;
-        },
-        {
-          s: allVars?.s?.trim() ?? "",
-          date: allVars?.eventDateRange ?? "all",
-          customDate: allVars?.customDate
-            ? formatDate(allVars?.customDate)
-            : null,
-          tet: [],
-        }
-      );
+      const query: any = {
+        s: allVars?.s?.trim() ?? "",
+        date: allVars?.eventDateRange ?? "all",
+        customDate: allVars?.customDate
+          ? formatDate(allVars?.customDate)
+          : null,
+        tet: allVars.eventType ?? [],
+      };
 
       const queryString = Object.keys(query)
         .reduce((acc: any, key: string) => {
@@ -526,8 +454,6 @@ export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
           return acc;
         }, [])
         .join("&");
-
-        console.log(queryString);
 
       const queryStringEncoded = Object.keys(query)
         .reduce((acc: any, key: string) => {
@@ -1004,6 +930,7 @@ export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
                         s: "",
                         customDate: null,
                         eventDateRange: "all",
+                        eventType: [],
                       });
                     }}
                   >

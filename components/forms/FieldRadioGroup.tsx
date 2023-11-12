@@ -6,7 +6,7 @@ import {
   FormControl,
   RadioGroup,
   chakra,
-  VisuallyHidden
+  VisuallyHidden,
 } from "@chakra-ui/react";
 import { useFormContext, Controller } from "react-hook-form";
 import { MultiLangValue } from "~/components/ui/MultiLangValue";
@@ -60,14 +60,10 @@ export const FieldRadioGroup = ({
             control={control}
             name={name}
             defaultValue={defaultValue}
-            render={({ field: { onChange, onBlur, value, ref } }) => {
-              return (
-                <RadioGroup
-                  defaultValue={defaultValue ?? ""}
-                  onChange={onChange}
-                  onBlur={onBlur}
-                >
-                  {options.map((option, index) => (
+            render={({ field: { ref: _ref, ...field } }) => (
+              <RadioGroup {...field}>
+                {options.map((option, index) => {
+                  return (
                     <Radio
                       key={`${name}_${option.id}`}
                       value={option.id}
@@ -83,10 +79,10 @@ export const FieldRadioGroup = ({
                         <MultiLangValue json={option.label} />
                       </chakra.span>
                     </Radio>
-                  ))}
-                </RadioGroup>
-              );
-            }}
+                  );
+                })}
+              </RadioGroup>
+            )}
           />
         </Flex>
         <Box transform="translateY(-10px)">
