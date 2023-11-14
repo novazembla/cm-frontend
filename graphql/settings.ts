@@ -16,6 +16,8 @@ export const settingsQueryPartial = `
       slug
       terms {
         id
+        isStolperstein
+        iconKey
         name
         slug
         color
