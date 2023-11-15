@@ -1,13 +1,13 @@
 import React, { createContext, useContext, useRef, useEffect } from "react";
 import { useState } from "react";
 import type { MapPin } from "~/types";
-import { useConfigContext,  } from "~/provider";
+import { useConfigContext, useSettingsContext } from "~/provider";
 import { useAppTranslations } from "~/hooks/useAppTranslations";
 
 import { CultureMap } from "~/services";
 import { useRouter } from "next/router";
 
-const MapContext = createContext<CultureMap | null>(null)
+const MapContext = createContext<CultureMap | null>(null);
 
 export const useMapContext = () => useContext(MapContext);
 
@@ -19,16 +19,28 @@ export const MapContextProvider = ({
   children: React.ReactNode;
 }) => {
   const router = useRouter();
-  
+
   const translationHelper = useAppTranslations();
   const config = useConfigContext();
+  const settings = useSettingsContext();
+
+  const reducedVisibilityTermIds: number[] =
+    settings?.taxonomies?.["typeOfInstitution"]?.terms?.reduce(
+      (acc: number[], term: any) => {
+        if (!!term?.hasReducedVisibility) acc.push(term?.id);
+        return acc;
+      }, []
+    ) ?? [];
 
   if (router && translationHelper && config && !mapInstance)
-    mapInstance = new CultureMap(router, translationHelper, config);
- 
+    mapInstance = new CultureMap(
+      router,
+      translationHelper,
+      config,
+      reducedVisibilityTermIds
+    );
+
   return (
-    <MapContext.Provider value={mapInstance}>
-      {children}
-    </MapContext.Provider>
+    <MapContext.Provider value={mapInstance}>{children}</MapContext.Provider>
   );
 };

@@ -33,8 +33,7 @@ export const ModuleComponentLocationsEmbed = ({
       !layzLocationIdsQueryResult.loading &&
       !layzLocationIdsQueryResult.error &&
       layzLocationIdsQueryResult.data?.locationIds?.ids &&
-      cultureMap &&
-      cultureMap?.setCurrentViewData
+      cultureMap
     ) {
       if (layzLocationIdsQueryResult.data?.locationIds?.ids?.length) {
         cultureMap?.setFilteredViewData(

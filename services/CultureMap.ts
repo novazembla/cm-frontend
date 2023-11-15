@@ -37,6 +37,8 @@ export class CultureMap {
   locationId: number | null;
   overlayZoomLevel: number;
   geoJsonAllData: any = null;
+  geoJsonAllDataWithoutReducedVisibility: any = null;
+  reducedVisibilityTermIds: number[] = [];
 
   intitiallyFitToBounds: boolean = true;
   isEmbed = false;
@@ -51,7 +53,8 @@ export class CultureMap {
   constructor(
     router: NextRouter,
     tHelper: AppTranslationHelper,
-    config: AppConfig
+    config: AppConfig,
+    reducedVisibilityTermIds: number[]
   ) {
     this.map = null;
     this.mapContainerRef = null;
@@ -59,7 +62,7 @@ export class CultureMap {
 
     this.config = config;
     this.tHelper = tHelper;
-
+    this.reducedVisibilityTermIds = reducedVisibilityTermIds;
     this.router = router;
     this.overlayZoomLevel = 0;
 
@@ -164,13 +167,24 @@ export class CultureMap {
       fetch(`${self.config.apiUrl}/geojson`).then(async (response) => {
         if (response.ok) {
           const data = await response.json();
+          
           if (
             data &&
             data?.type &&
-            data?.type === "FeatureCollection" &&
-            Array.isArray(data?.features)
+            data?.features &&
+            data.type === "FeatureCollection" &&
+            Array.isArray(data.features)
           ) {
             self.geoJsonAllData = data;
+            self.geoJsonAllDataWithoutReducedVisibility = {
+              type: data?.type,
+              features: data.features.filter((feature: any) =>
+                !this.reducedVisibilityTermIds.includes(
+                  feature?.properties?.primaryTermId ?? 0
+                )
+              ),
+            };
+
             self.baseDataLoaded = true;
 
             maybeProcess();

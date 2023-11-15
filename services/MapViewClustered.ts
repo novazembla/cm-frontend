@@ -29,7 +29,7 @@ export class MapViewClustered {
       if (!self.cultureMap.map.getSource("clustered-locations")) {
         self.cultureMap.map.addSource("clustered-locations", {
           type: "geojson",
-          data: data ?? self.cultureMap.geoJsonAllData ?? {},
+          data: data ?? self.cultureMap.geoJsonAllDataWithoutReducedVisibility ?? {},
           cluster: true,
           maxzoom: self.cultureMap.config.maxZoom,
           clusterMaxZoom: self.cultureMap.config.maxZoom, // Max zoom to cluster points on
@@ -38,18 +38,18 @@ export class MapViewClustered {
       } else {
         (
           self.cultureMap?.map?.getSource("clustered-locations") as any
-        )?.setData(data ?? self.cultureMap.geoJsonAllData ?? {});
+        )?.setData(data ?? self.cultureMap.geoJsonAllDataWithoutReducedVisibility ?? {});
       }
 
       let bounds: maplibregl.LngLatBounds | undefined;
 
-      if ((data ?? self.cultureMap.geoJsonAllData ?? {})?.features?.length) {
+      if ((data ?? self.cultureMap.geoJsonAllDataWithoutReducedVisibility ?? {})?.features?.length) {
         for (
           let i = 0;
-          i < (data ?? self.cultureMap.geoJsonAllData ?? {})?.features?.length;
+          i < (data ?? self.cultureMap.geoJsonAllDataWithoutReducedVisibility ?? {})?.features?.length;
           i++
         ) {
-          const coordinates = (data ?? self.cultureMap.geoJsonAllData ?? {})
+          const coordinates = (data ?? self.cultureMap.geoJsonAllDataWithoutReducedVisibility ?? {})
             ?.features[i]?.geometry?.coordinates ?? [
             self.cultureMap.config.lng,
             self.cultureMap.config.lat,
@@ -62,7 +62,7 @@ export class MapViewClustered {
               bounds.extend(coordinates);
             }
           } else {
-            const feature = (data ?? self.cultureMap.geoJsonAllData ?? {})
+            const feature = (data ?? self.cultureMap.geoJsonAllDataWithoutReducedVisibility ?? {})
               ?.features[i];
             console.warn(
               `Skipped location as it is out of bounds: ID(${feature.properties.id.replace(

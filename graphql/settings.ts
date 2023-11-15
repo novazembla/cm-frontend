@@ -16,7 +16,7 @@ export const settingsQueryPartial = `
       slug
       terms {
         id
-        isStolperstein
+        hasReducedVisibility
         iconKey
         name
         slug
