@@ -1,4 +1,4 @@
-import { useState, useEffect, ChangeEvent, useRef } from "react";
+import { useState, useEffect, ChangeEvent, useRef, useMemo } from "react";
 import { RemoveScroll } from "react-remove-scroll";
 import FocusLock from "react-focus-lock";
 
@@ -44,8 +44,8 @@ const debounce = (fn: Function, ms = 300) => {
 };
 
 const searchQuery = gql`
-  query quickSearch($search: String!, $lang: String!) {
-    quickSearch(search: $search, lang: $lang) {
+  query quickSearch($search: String!, $lang: String!, $modules: [String]!) {
+    quickSearch(search: $search, lang: $lang, modules: $modules) {
       module
       totalCount
       items {
@@ -92,8 +92,17 @@ export const QuickSearchForm = () => {
   const [isActiveSearch, setIsActiveSearch] = useState(false);
 
   const [currentSearchTerm, setCurrentSearchTerm] = useState("");
+
+  const modules = useMemo(() => {
+    const modules = ["location", "page", "tour"];
+    if (i18n.language === "de") {
+      modules.push("event");
+    }
+    return modules;
+  }, [i18n.language]);
+
   const [triggerSearch, { data, loading, error }] = useLazyQuery(searchQuery, {
-    variables: { search: "", lang: i18n.language },
+    variables: { search: "", lang: i18n.language, modules },
     fetchPolicy: "network-only",
   });
 
@@ -141,6 +150,7 @@ export const QuickSearchForm = () => {
           variables: {
             search: searchTerm,
             lang: i18n.language,
+            modules,
           },
         });
       } else {
@@ -157,6 +167,7 @@ export const QuickSearchForm = () => {
     setCurrentSearchTerm,
     currentSearchTerm,
     i18n.language,
+    modules,
     loading,
   ]);
 
@@ -173,6 +184,7 @@ export const QuickSearchForm = () => {
         variables: {
           search: newData.search,
           lang: i18n.language,
+          modules,
         },
       });
     }
@@ -321,27 +333,25 @@ export const QuickSearchForm = () => {
               <Box mt="2">
                 {loading && <LoadingIcon />}
                 {error && <ErrorMessage type="dataLoad" />}
+                {!error && !isActiveSearch && (
+                  <Box marginTop="1.2em">
+                    <MultiLangHtml json={settings?.quickSearchInfo} />
+                  </Box>
+                )}
                 {!loading && searchTerm.length > 2 && isActiveSearch && (
                   <Box>
                     {data?.quickSearch?.length > 0 && (
-                      <Box
-                        my="1em"
-                        textStyle="categoriesHighlight"
-                        textTransform="uppercase"
-                        color="cm.text"
-                        fontWeight="bold"
-                      >
-                        {t("quicksearch.found", "found ...")}
-                      </Box>
-                    )}
-                    {data?.quickSearch?.length > 0 && (
                       <>
-                        <QuickSearchResult result={data?.quickSearch} />
-
-                        <Box marginBottom="1.2em">
-                          <MultiLangHtml json={settings?.quickSearchInfo} />
+                        <Box
+                          my="1em"
+                          textStyle="categoriesHighlight"
+                          textTransform="uppercase"
+                          color="cm.text"
+                          fontWeight="bold"
+                        >
+                          {t("quicksearch.found", "found ...")}
                         </Box>
-                        <VStack marginTop="xl" alignItems="flex-start">
+                        <VStack marginTop="1.2em" alignItems="flex-start" marginBottom="1.2em">
                           <Button
                             onClick={() => {
                               if (i18n.language === "de") {
@@ -359,7 +369,7 @@ export const QuickSearchForm = () => {
                               "Show results in location search"
                             )}
                           </Button>
-                          {i18n.language === "de" && (
+                          {modules.includes("event") && (
                             <Button
                               onClick={() => {
                                 if (i18n.language === "de") {
@@ -380,6 +390,11 @@ export const QuickSearchForm = () => {
                             </Button>
                           )}
                         </VStack>
+                      </>
+                    )}
+                    {data?.quickSearch?.length > 0 && (
+                      <>
+                        <QuickSearchResult result={data?.quickSearch} />
                       </>
                     )}
                   </Box>
