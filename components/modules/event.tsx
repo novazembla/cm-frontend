@@ -40,6 +40,7 @@ import NextHeadSeo from "next-head-seo";
 import { PageTitle } from "~/components/ui/PageTitle";
 import { settingsQueryPartial } from "~/graphql";
 import { ShareIcons } from "../ui/ShareIcons";
+import { AccesibilityInformation } from "./accesibilityInformation";
 
 const eventQuery = gql`
   query ($slug: String!) {
@@ -58,6 +59,8 @@ const eventQuery = gql`
       lastEventDate
       terms {
         id
+        taxonomyId
+        iconKey
         name
         slug
       }
@@ -166,6 +169,22 @@ export const ModuleComponentEvent = ({
 
   const [highlight, setHighlight] = useState<MapHighlightType | null>(null);
 
+  const taxonomies =
+    event?.terms?.reduce((acc: any, term: any) => {
+      if (settings?.terms[term.id]?.taxonomyId) {
+        const tax = Object.keys(settings?.taxMapping).find(
+          (key) => parseInt(settings?.taxMapping[key]) === term.taxonomyId
+        );
+
+        if (!tax) return acc;
+
+        if (!(tax in acc)) acc = { ...acc, [tax]: [] };
+
+        acc[tax].push(term);
+        return acc;
+      }
+    }, {}) ?? {};
+
   useEffect(() => {
     if (cultureMap) cultureMap.showCurrentView();
 
@@ -224,7 +243,10 @@ export const ModuleComponentEvent = ({
             "From"
           )} ${begin.toLocaleDateString(
             i18n.language === "de" ? "de-DE" : "en-GB"
-          )} ${t("event.label.dateUntil", "Until").toLowerCase()} ${end.toLocaleDateString(
+          )} ${t(
+            "event.label.dateUntil",
+            "Until"
+          ).toLowerCase()} ${end.toLocaleDateString(
             i18n.language === "de" ? "de-DE" : "en-GB"
           )}`;
         }
@@ -413,7 +435,7 @@ export const ModuleComponentEvent = ({
                   </Box>
                 )}
 
-                {event?.terms?.length > 0 && (
+                {taxonomies?.["eventType"]?.length > 0 && (
                   <Box className="item">
                     <Box
                       mb="0.5em"
@@ -424,7 +446,7 @@ export const ModuleComponentEvent = ({
                       {t("event.label.category", "Category")}
                     </Box>
                     <Box textStyle="card">
-                      {event.terms
+                      {taxonomies?.["eventType"]
                         .map((t: any) => {
                           if (!t) return "";
 
@@ -433,6 +455,13 @@ export const ModuleComponentEvent = ({
                         .join(", ")}
                     </Box>
                   </Box>
+                )}
+
+                {taxonomies?.["accessibility"]?.length > 0 && (
+                  // eslint-disable-next-line react/jsx-no-undef
+                  <AccesibilityInformation
+                    terms={taxonomies?.["accessibility"]}
+                  />
                 )}
               </SimpleGrid>
 

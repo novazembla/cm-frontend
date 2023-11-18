@@ -41,8 +41,6 @@ const parseSettings = (settings: any) => {
               return acc;
             }, {})
           : {},
-
-      
     };
 
     return {

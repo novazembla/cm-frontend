@@ -5,9 +5,11 @@ import { Box, chakra, LinkBox, LinkOverlay, Flex } from "@chakra-ui/react";
 import { useIsBreakPoint } from "~/hooks/useIsBreakPoint";
 import { useAppTranslations } from "~/hooks/useAppTranslations";
 import { SVG } from "~/components/ui/SVG";
+import { useSettingsContext } from "~/provider";
 
 export const ListedEvent = ({ event }: { event: any }) => {
   const { t, i18n, getMultilangValue } = useAppTranslations();
+  const settings = useSettingsContext();
   const { isMobile } = useIsBreakPoint();
 
   let dateInfo: any = t("event.missingData.eventDate", "TBD");
@@ -61,6 +63,10 @@ export const ListedEvent = ({ event }: { event: any }) => {
     }
   }
 
+  const eventTermIds = settings?.taxonomies?.eventType?.terms?.map((term: any) => term.id) ?? [];
+
+  const terms = event?.terms?.filter((term: any) => eventTermIds.includes(term.id))
+
   return (
     <LinkBox
       as="article"
@@ -108,8 +114,8 @@ export const ListedEvent = ({ event }: { event: any }) => {
       </Flex>
       <Flex textStyle="card">
         <Box w="33.33%" pr="3">
-          {event?.terms?.length > 0 ? (
-            event.terms
+          {terms?.length > 0 ? (
+            terms
               .map((t: any) => {
                 if (!t) return "";
 

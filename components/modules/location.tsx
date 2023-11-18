@@ -1,47 +1,48 @@
-import { useEffect, useState } from "react";
 import { gql } from "@apollo/client";
+import { useEffect, useState } from "react";
 
+import { ApiImage } from "~/components/ui/ApiImage";
+import { CardEvent } from "~/components/ui/CardEvent";
+import { Images } from "~/components/ui/Images";
 import { MultiLangHtml } from "~/components/ui/MultiLangHtml";
 import { MultiLangValue } from "~/components/ui/MultiLangValue";
-import { CardEvent } from "~/components/ui/CardEvent";
-import { ApiImage } from "~/components/ui/ApiImage";
-import { Images } from "~/components/ui/Images";
 import { PageTitle } from "~/components/ui/PageTitle";
 
-import { Footer } from "~/components/app/Footer";
-import { getApolloClient } from "~/services";
 import {
-  useMapContext,
-  useConfigContext,
-  useSettingsContext,
-} from "~/provider";
-import {
-  Box,
-  Flex,
   AspectRatio,
-  Text,
+  Box,
   chakra,
+  Flex,
   Grid,
   SimpleGrid,
+  Text,
 } from "@chakra-ui/react";
+import { Footer } from "~/components/app/Footer";
+import {
+  useConfigContext,
+  useMapContext,
+  useSettingsContext,
+} from "~/provider";
+import { getApolloClient } from "~/services";
 import type { MapHighlightType } from "~/services/MapHighlights";
 
+import NextHeadSeo from "next-head-seo";
+import { useAppTranslations } from "~/hooks/useAppTranslations";
+import { useIsBreakPoint } from "~/hooks/useIsBreakPoint";
 import {
-  isEmptyHtml,
   getLocationColors,
+  getMetaDescriptionContent,
   getSeoAppTitle,
   getSeoImage,
-  getMetaDescriptionContent,
+  isEmptyHtml,
 } from "~/utils";
-import NextHeadSeo from "next-head-seo";
-import { useIsBreakPoint } from "~/hooks/useIsBreakPoint";
-import { useAppTranslations } from "~/hooks/useAppTranslations";
 
 import { GetStaticPaths, GetStaticProps } from "next";
-import { MainContent } from "~/components/app/MainContent";
 import { useRouter } from "next/router";
+import { MainContent } from "~/components/app/MainContent";
 import { settingsQueryPartial } from "~/graphql";
 import { ShareIcons } from "../ui/ShareIcons";
+import { AccesibilityInformation } from "./accesibilityInformation";
 
 const ONE_DAY = 1000 * 60 * 60 * 24;
 
@@ -71,6 +72,7 @@ const locationQuery = gql`
         id
         name
         slug
+        iconKey
         taxonomyId
       }
       events {
@@ -179,8 +181,6 @@ export const ModuleComponentLocation = ({
       }
 
       setMeta(meta);
-
-      console.log(`C ${color} ${colorDark}`);
 
       if (color) setColor(color);
 
@@ -589,6 +589,12 @@ export const ModuleComponentLocation = ({
                   </Box>
                   <Box textStyle="card">{location.agency}</Box>
                 </Box>
+              )}
+
+              {taxonomies?.["accessibility"]?.length > 0 && (
+                <AccesibilityInformation
+                  terms={taxonomies?.["accessibility"]}
+                />
               )}
             </SimpleGrid>
 

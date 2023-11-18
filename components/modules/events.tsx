@@ -187,6 +187,7 @@ export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
   const onSubmit = async () => {};
 
   const [activeTermsET, setActiveTermsET] = useState([]);
+  const [activeTermsAccessibility, setActiveTermsAccessibility] = useState([]);
   const [accordionDefaultIndex, setAccordionDefaultIndex] = useState<
     number[] | null
   >(null);
@@ -210,6 +211,25 @@ export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
           eventType: [],
         };
         setActiveTermsET(terms);
+      }
+
+      if (settings?.taxonomies?.accessibility?.terms) {
+        const terms = settings?.taxonomies?.accessibility?.terms?.reduce(
+          (acc: any, t: any) => {
+            if (t._count?.locations > 0) return [...acc, t];
+
+            return acc;
+          },
+          []
+        );
+
+        if (terms?.length) {
+          resetVars = {
+            ...resetVars,
+            accessibility: [],
+          };
+        }
+        setActiveTermsAccessibility(terms);
       }
 
       reset(resetVars);
@@ -242,6 +262,10 @@ export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
         ? urlParams.get("tet")?.split(",") ?? []
         : [];
 
+      const taccs: string[] = urlParams.get("tacc")
+        ? urlParams.get("tacc")?.split(",") ?? []
+        : [];
+
       let customDate = null;
       try {
         if (urlParams.get("customDate"))
@@ -260,6 +284,7 @@ export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
         customDate,
         eventDateRange: urlParams.get("date") ?? "all",
         eventType: tets.map((id) => id.toString()),
+        accessibility: taccs.map((id) => id.toString()),
       });
     }
   }, [filter, reset, activeTermsET]);
@@ -282,12 +307,29 @@ export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
     const allVars = watch();
 
     const where: any = [];
-    if ((allVars.eventType ?? [])?.length) {
+    const termsEventType = allVars?.eventType?.map((id: string) =>
+      parseInt(id)
+    );
+
+    if (termsEventType?.length) {
       where.push({
         terms: {
           some: {
             id: {
-              in: allVars.eventType.map((id: string) => parseInt(id)),
+              in: termsEventType,
+            },
+          },
+        },
+      });
+    }
+
+    const termsAcc = allVars?.accessibility?.map((id: string) => parseInt(id));
+    if (termsAcc?.length) {
+      where.push({
+        terms: {
+          some: {
+            id: {
+              in: termsAcc,
             },
           },
         },
@@ -452,6 +494,7 @@ export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
           ? formatDate(allVars?.customDate)
           : null,
         tet: allVars.eventType ?? [],
+        tacc: allVars.accessibility ?? [],
       };
 
       const queryString = Object.keys(query)
@@ -922,24 +965,25 @@ export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
                     </AccordionItem>
                     {activeTermsET?.length > 0 && (
                       <AccordionItem>
-                        <AccordionButton pt={0} className="tabbedFocus">
-                          <Box
-                            flex="1"
-                            textAlign="left"
-                            textStyle="larger"
-                            fontWeight="bold"
-                          >
-                            {t(
-                              "events.filter.title.eventType",
-                              "Type of event"
-                            )}
-                          </Box>
-                          <AccordionIcon
-                            color="cm.accentLight"
-                            fontSize="2xl"
-                          />
-                        </AccordionButton>
-
+                        <h2>
+                          <AccordionButton pt={0} className="tabbedFocus">
+                            <Box
+                              flex="1"
+                              textAlign="left"
+                              textStyle="larger"
+                              fontWeight="bold"
+                            >
+                              {t(
+                                "events.filter.title.eventType",
+                                "Type of event"
+                              )}
+                            </Box>
+                            <AccordionIcon
+                              color="cm.accentLight"
+                              fontSize="2xl"
+                            />
+                          </AccordionButton>
+                        </h2>
                         <AccordionPanel pt={2} pb={4}>
                           <FieldCheckboxGroup
                             id="eventType"
@@ -952,6 +996,49 @@ export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
                             type="checkbox"
                             options={getMultilangSortedList(
                               activeTermsET.map((term: any) => ({
+                                label: term.name,
+                                id: term.id,
+                              })),
+                              "label",
+                              getMultilangValue
+                            )}
+                          />
+                        </AccordionPanel>
+                      </AccordionItem>
+                    )}
+                    {activeTermsAccessibility?.length > 0 && (
+                      <AccordionItem>
+                        <h2>
+                          <AccordionButton pt="0" className="tabbedFocus">
+                            <Box
+                              flex="1"
+                              textAlign="left"
+                              textStyle="larger"
+                              fontWeight="bold"
+                            >
+                              {t(
+                                "locations.filter.title.accesibility",
+                                "Accessibility Information"
+                              )}
+                            </Box>
+                            <AccordionIcon
+                              color="cm.accentLight"
+                              fontSize="2xl"
+                            />
+                          </AccordionButton>
+                        </h2>
+                        <AccordionPanel pb={4}>
+                          <FieldCheckboxGroup
+                            id="accessibility"
+                            name="accessibility"
+                            isRequired={false}
+                            label={t(
+                              "locations.filter.title.accesibility",
+                              "Accessibility Information"
+                            )}
+                            type="checkbox"
+                            options={getMultilangSortedList(
+                              activeTermsAccessibility.map((term: any) => ({
                                 label: term.name,
                                 id: term.id,
                               })),
@@ -975,6 +1062,7 @@ export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
                         customDate: null,
                         eventDateRange: "all",
                         eventType: [],
+                        accessibilty: [],
                       });
                     }}
                   >
@@ -1005,11 +1093,6 @@ export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
                   {data?.events?.events.map((event: any) => (
                     <ListedEvent key={`event-${event.id}`} event={event} />
                   ))}
-                  {/* <VirtualScroller
-                scrollableContainer={scrollContainerRef.current}
-                items={data?.events?.events}
-                itemComponent={Event}
-              /> */}
                 </Box>
               )}
 

@@ -172,6 +172,7 @@ export const ModuleComponentSuggest = () => {
           "typeOfInstitution",
           "targetAudience",
           "typeOfOrganisation",
+          "accessibility",
         ].reduce((accTerms: any[], tax: any) => {
           return [
             ...accTerms,
@@ -258,6 +259,7 @@ export const ModuleComponentSuggest = () => {
   const [activeTermsToI, setActiveTermsToI] = useState([]);
   const [activeTermsToO, setActiveTermsToO] = useState([]);
   const [activeTermsTA, setActiveTermsTA] = useState([]);
+  const [activeTermsAccessibility, setActiveTermsAccessibility] = useState([]);
 
   useEffect(() => {
     let resetVars = {};
@@ -289,6 +291,17 @@ export const ModuleComponentSuggest = () => {
           resetVars = {
             ...resetVars,
             targetAudience: [],
+          };
+        }
+      }
+
+      if (settings?.taxonomies?.accessibility?.terms) {
+        setActiveTermsAccessibility(settings?.taxonomies?.accessibility?.terms);
+
+        if (settings?.taxonomies?.accessibility?.terms?.length) {
+          resetVars = {
+            ...resetVars,
+            accessibility: [],
           };
         }
       }
@@ -960,6 +973,36 @@ export const ModuleComponentSuggest = () => {
                               type="checkbox"
                               options={getMultilangSortedList(
                                 activeTermsToO.map((term: any) => ({
+                                  label: term.name,
+                                  id: term.id,
+                                })),
+                                "label",
+                                getMultilangValue
+                              )}
+                            />
+                          </Box>
+                        </FieldRow>
+                      )}
+                      {activeTermsAccessibility?.length > 0 && (
+                        <FieldRow>
+                          <Box>
+                            <chakra.h3 textStyle="formOptions" mb="2px">
+                              {t(
+                                "suggestion.tax.title.accessibility",
+                                "Accessibility Information"
+                              )}
+                            </chakra.h3>
+                            <FieldCheckboxGroup
+                              id="accessibility"
+                              name="accessibility"
+                              isRequired={false}
+                              label={t(
+                                "suggestion.tax.title.accessibility",
+                                "Accessibility Information"
+                              )}
+                              type="checkbox"
+                              options={getMultilangSortedList(
+                                activeTermsAccessibility.map((term: any) => ({
                                   label: term.name,
                                   id: term.id,
                                 })),
