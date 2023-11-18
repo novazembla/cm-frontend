@@ -6,7 +6,15 @@ import { MultiLangHtml } from "~/components/ui/MultiLangHtml";
 import { MainContent } from "~/components/app/MainContent";
 import { Footer } from "~/components/app/Footer";
 import { getApolloClient } from "~/services";
-import { Box, Text, chakra, Grid, Flex } from "@chakra-ui/react";
+import {
+  Box,
+  Text,
+  chakra,
+  Grid,
+  Flex,
+  VStack,
+  Button,
+} from "@chakra-ui/react";
 import { GetStaticPaths, GetStaticProps } from "next";
 import {
   useConfigContext,
@@ -24,7 +32,7 @@ import { useAppTranslations } from "~/hooks/useAppTranslations";
 import { PageTitle } from "~/components/ui/PageTitle";
 import { settingsQueryPartial } from "~/graphql";
 
-const pageQuery = gql`
+export const pageQuery = gql`
   query ($slug: String!) {
     ${settingsQueryPartial}
     page(slug: $slug) {
@@ -84,6 +92,8 @@ export const ModuleComponentPage = ({ page }: { page: any }) => {
       );
     }
   }, [settings, getMultilangValue]);
+
+  console.log(page);
 
   return (
     <MainContent isDrawer>
@@ -152,6 +162,36 @@ export const ModuleComponentPage = ({ page }: { page: any }) => {
                   },
                 ]}
               />
+
+              {page?.slug?.de === "inhalte-vorschlagen" && (
+                <VStack marginTop="6" alignItems="flex-start" gap="2">
+                  <Button
+                    onClick={() => {
+                      router.push(`/ort-vorschlagen`);
+                    }}
+                    variant="ghost"
+                    minW="160px"
+                  >
+                    {t(
+                      "suggestContent.button.suggestLocation",
+                      "Ort vorschlagen"
+                    )}
+                  </Button>
+
+                  <Button
+                    onClick={() => {
+                      router.push(`/veranstaltung-vorschlagen`);
+                    }}
+                    variant="ghost"
+                    minW="160px"
+                  >
+                    {t(
+                      "suggestContent.button.suggestLocation",
+                      "Veranstaltung vorschlagen"
+                    )}
+                  </Button>
+                </VStack>
+              )}
             </Box>
           </Box>
         </Box>

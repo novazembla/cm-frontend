@@ -37,11 +37,11 @@ export const appConfigMainNav = [
   },
   {
     path: {
-      de: "/ort-vorschlagen",
+      de: "/seite/inhalte-vorschlagen",
       en: "/suggest-a-location",
     },
     title: {
-      de: "Ort vorschlagen",
+      de: "Inhalte vorschlagen",
       en: "Suggest a location",
     },
   },
