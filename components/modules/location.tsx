@@ -462,35 +462,7 @@ export const ModuleComponentLocation = ({
               </Box>
             )}
 
-            {!isEmptyHtml(
-              getMultilangHtml(location.accessibilityInformation)
-            ) && (
-              <Box
-                className="item"
-                px={{
-                  base: "20px",
-                  md: "30px",
-                  "2xl": "35px",
-                }}
-                pb="1em"
-              >
-                <Box
-                  mb="0.5em"
-                  color="cm.accentDark"
-                  textTransform="uppercase"
-                  textStyle="categories"
-                >
-                  {t(
-                    "location.title.accessibilityInformation",
-                    "Accessibility Information"
-                  )}
-                  :
-                </Box>
-                <Box textStyle="card">
-                  <MultiLangHtml json={location.accessibilityInformation} />
-                </Box>
-              </Box>
-            )}
+            
 
             <SimpleGrid
               columns={2}
@@ -594,6 +566,7 @@ export const ModuleComponentLocation = ({
               {taxonomies?.["accessibility"]?.length > 0 && (
                 <AccesibilityInformation
                   terms={taxonomies?.["accessibility"]}
+                  accessibilityInformation={location?.accessibilityInformation}
                 />
               )}
             </SimpleGrid>

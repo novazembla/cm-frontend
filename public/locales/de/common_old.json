@@ -204,5 +204,10 @@
     "array": {
       "minOneItem": "Bitte wähle mindestens ein Element aus"
     }
+  },
+  "taxonomy": {
+    "label": {
+      "accessibility": "Accessibility Information"
+    }
   }
 }

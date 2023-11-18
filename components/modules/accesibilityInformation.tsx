@@ -1,8 +1,16 @@
 import { Box } from "@chakra-ui/react";
 import { useAppTranslations } from "~/hooks/useAppTranslations";
+import { isEmptyHtml } from "~/utils";
+import { MultiLangHtml } from "../ui/MultiLangHtml";
 
-export const AccesibilityInformation = ({ terms }: { terms: any }) => {
-  const { t, getMultilangValue } = useAppTranslations();
+export const AccesibilityInformation = ({
+  terms,
+  accessibilityInformation,
+}: {
+  terms: any;
+  accessibilityInformation?: string;
+}) => {
+  const { t, getMultilangValue, getMultilangHtml } = useAppTranslations();
 
   const filteredList = terms?.filter((term: any) => !!term?.iconKey);
 
@@ -16,9 +24,17 @@ export const AccesibilityInformation = ({ terms }: { terms: any }) => {
         textTransform="uppercase"
         textStyle="categories"
       >
-        {t("taxonomy.label.accessibility", "Accessibility Information")}
+        {t(
+          "location.title.accessibilityInformation",
+          "Accessibility Information"
+        )}
       </Box>
       <Box textStyle="card">
+        {!isEmptyHtml(getMultilangHtml(accessibilityInformation)) && (
+          <Box mb="4">
+            <MultiLangHtml json={accessibilityInformation} />
+          </Box>
+        )}
         <Box flexWrap="wrap" display="flex" gap="2">
           {filteredList.map((term: any) => (
             // eslint-disable-next-line @next/next/no-img-element

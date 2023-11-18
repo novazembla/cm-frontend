@@ -88,6 +88,24 @@
       "reset": "Filter zurücksetzen"
     }
   },
+  "location": {
+    "title": {
+      "accessibilityInformation": "Informationen zur Barrierefreiheit",
+      "offers": "Angebot",
+      "eventsHeldAt": "Veranstaltungen"
+    },
+    "detail": {
+      "title": "Ort"
+    },
+    "label": {
+      "agency": "Träger"
+    },
+    "embed": {
+      "title": {
+        "select": "Individuell ausgewählte Orte einbetten"
+      }
+    }
+  },
   "event": {
     "missingData": {
       "eventDate": "Wird zu einem späteren Zeitpunkt bekannt gegeben",
@@ -151,6 +169,7 @@
     "filter": {
       "title": {
         "keyword": "Nach Stichwort suchen",
+        "accesibility": "Accessibility Information",
         "typeOfInstitution": "Einrichtungsart",
         "targetAudience": "Angebote für",
         "typeOfOrganisation": "Organisationsart",
@@ -196,24 +215,6 @@
       "tour": "Tour",
       "event": "Veranstaltung",
       "tourStop": "Tourstop"
-    }
-  },
-  "location": {
-    "detail": {
-      "title": "Ort"
-    },
-    "title": {
-      "offers": "Angebot",
-      "accessibilityInformation": "Informationen zur Barrierefreiheit",
-      "eventsHeldAt": "Veranstaltungen"
-    },
-    "label": {
-      "agency": "Träger"
-    },
-    "embed": {
-      "title": {
-        "select": "Individuell ausgewählte Orte einbetten"
-      }
     }
   },
   "taxonomy": {
@@ -363,7 +364,8 @@
       "title": {
         "typeOfInstitution": "Einrichtungsart",
         "targetAudience": "Angebote für",
-        "typeOfOrganisation": "Organisationsart"
+        "typeOfOrganisation": "Organisationsart",
+        "accessibility": "Accessibility Information"
       }
     },
     "button": {

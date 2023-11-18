@@ -195,5 +195,10 @@
       "unbold": "Remove bold text format",
       "bold": "Format text bold"
     }
+  },
+  "taxonomy": {
+    "label": {
+      "accessibility": "Accessibility Information"
+    }
   }
 }

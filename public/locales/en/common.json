@@ -88,6 +88,24 @@
       "reset": "Reset all filters"
     }
   },
+  "location": {
+    "title": {
+      "accessibilityInformation": "Accessibility Information",
+      "offers": "Offering the following",
+      "eventsHeldAt": "Events held at the location"
+    },
+    "detail": {
+      "title": "Location"
+    },
+    "label": {
+      "agency": "Agency"
+    },
+    "embed": {
+      "title": {
+        "select": "Select locations"
+      }
+    }
+  },
   "event": {
     "missingData": {
       "eventDate": "TBD",
@@ -151,6 +169,7 @@
     "filter": {
       "title": {
         "keyword": "Search by keyword",
+        "accesibility": "Accessibility Information",
         "typeOfInstitution": "Type of institution",
         "targetAudience": "Target audience",
         "typeOfOrganisation": "Type of organisation",
@@ -196,24 +215,6 @@
       "tour": "Tour",
       "event": "Event",
       "tourStop": "Tour stop"
-    }
-  },
-  "location": {
-    "detail": {
-      "title": "Location"
-    },
-    "title": {
-      "offers": "Offering the following",
-      "accessibilityInformation": "Accessibility Information",
-      "eventsHeldAt": "Events held at the location"
-    },
-    "label": {
-      "agency": "Agency"
-    },
-    "embed": {
-      "title": {
-        "select": "Select locations"
-      }
     }
   },
   "taxonomy": {
@@ -363,7 +364,8 @@
       "title": {
         "typeOfInstitution": "Type of institution",
         "targetAudience": "Target audience",
-        "typeOfOrganisation": "Type of organisation"
+        "typeOfOrganisation": "Type of organisation",
+        "accessibility": "Accessibility Information"
       }
     },
     "button": {
