@@ -1,8 +1,4 @@
-import React, {
-  createContext,
-  useContext,
-  useState,
-} from "react";
+import React, { createContext, useContext, useState } from "react";
 import { isObject } from "~/utils";
 
 let currentSettingsInMemory = {};
@@ -10,10 +6,9 @@ let currentSettingsInMemory = {};
 // create context
 const SettingsContext = createContext<any>(currentSettingsInMemory);
 
-
 const parseSettings = (settings: any) => {
   if (settings && isObject(settings)) {
-    return {
+    const result = {
       ...settings,
       taxonomies:
         settings?.taxonomies?.length > 0 && settings?.taxMapping
@@ -46,7 +41,21 @@ const parseSettings = (settings: any) => {
               return acc;
             }, {})
           : {},
+
+      
     };
+
+    return {
+      ...result,
+      reducedVisibilityTermIds:
+        result?.taxonomies?.["typeOfInstitution"]?.terms?.reduce(
+          (acc: number[], term: any) => {
+            if (!!term?.hasReducedVisibility) acc.push(term?.id);
+            return acc;
+          },
+          []
+        ) ?? [],
+    }
   }
 
   return null;
@@ -62,7 +71,7 @@ export const SettingsContextProvider = ({
   frontendSettings: any;
   children: React.ReactNode;
 }) => {
-  const [settings, setSettings] = useState(parseSettings(frontendSettings));
+  const [settings] = useState(parseSettings(frontendSettings));
 
   return (
     <SettingsContext.Provider value={settings}>

@@ -176,6 +176,8 @@ export class CultureMap {
             Array.isArray(data.features)
           ) {
             self.geoJsonAllData = data;
+
+
             self.geoJsonAllDataWithoutReducedVisibility = {
               type: data?.type,
               features: data.features.filter((feature: any) =>
@@ -183,7 +185,7 @@ export class CultureMap {
                   feature?.properties?.primaryTermId ?? 0
                 )
               ),
-            };
+            }; 
 
             self.baseDataLoaded = true;
 

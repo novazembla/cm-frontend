@@ -24,20 +24,12 @@ export const MapContextProvider = ({
   const config = useConfigContext();
   const settings = useSettingsContext();
 
-  const reducedVisibilityTermIds: number[] =
-    settings?.taxonomies?.["typeOfInstitution"]?.terms?.reduce(
-      (acc: number[], term: any) => {
-        if (!!term?.hasReducedVisibility) acc.push(term?.id);
-        return acc;
-      }, []
-    ) ?? [];
-
   if (router && translationHelper && config && !mapInstance)
     mapInstance = new CultureMap(
       router,
       translationHelper,
       config,
-      reducedVisibilityTermIds
+      settings.reducedVisibilityTermIds
     );
 
   return (

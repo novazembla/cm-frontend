@@ -293,8 +293,8 @@ export const ModuleComponentLocations = ({
       parseInt(id)
     );
 
-    if (termsToI?.length) {
-      allTerms = [...allTerms, ...termsToI];
+    if (termsToI?.length > 0) {
+      allTerms = [...termsToI];
       if (allVars?.and === "1" || allVars?.and === true) {
         termsWhere = [
           ...termsWhere,
@@ -386,6 +386,22 @@ export const ModuleComponentLocations = ({
           OR: termsWhere,
         });
       }
+    }
+
+    // if no particulair Type Of Institution has been selected all 
+    // reduced visiblity terms should be hidden.
+    if (!termsToI?.length) {
+      where.push({
+        AND: {
+          terms: {
+            none: {
+              id: {
+                in: settings.reducedVisibilityTermIds,
+              },
+            },
+          },
+        },
+      });
     }
 
     if (where?.length) {

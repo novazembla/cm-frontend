@@ -126,7 +126,7 @@ export const ModuleComponentLocation = ({
   const config = useConfigContext();
   const settings = useSettingsContext();
   const { t, getMultilangValue, getMultilangHtml, i18n } = useAppTranslations();
-  const [color, setColor] = useState("#333");
+  const [color, setColor] = useState(config.colorDark);
   const [colorDark, setColorDark] = useState(config.colorDark);
   const [meta, setMeta] = useState("");
 
@@ -156,6 +156,7 @@ export const ModuleComponentLocation = ({
   useEffect(() => {
     if (location && settings) {
       let meta;
+
       const { color, colorDark } = getLocationColors(location, settings);
 
       if (location?.primaryTerms?.length > 0) {
@@ -178,6 +179,8 @@ export const ModuleComponentLocation = ({
       }
 
       setMeta(meta);
+
+      console.log(`C ${color} ${colorDark}`);
 
       if (color) setColor(color);
 
@@ -274,7 +277,7 @@ export const ModuleComponentLocation = ({
         : ""
     }   
   `;
-  
+
   return (
     <MainContent layerStyle="lightGray">
       <NextHeadSeo
