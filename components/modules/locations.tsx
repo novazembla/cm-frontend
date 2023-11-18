@@ -114,6 +114,7 @@ export const ModuleComponentLocations = ({
       targetAudience: [],
       typeOfInstitution: [],
       typeOfOrganisation: [],
+      accessibility: [],
     },
   });
 
@@ -124,6 +125,7 @@ export const ModuleComponentLocations = ({
   const [activeTermsToI, setActiveTermsToI] = useState([]);
   const [activeTermsToO, setActiveTermsToO] = useState([]);
   const [activeTermsTA, setActiveTermsTA] = useState([]);
+  const [activeTermsAccessibility, setActiveTermsAccessibility] = useState([]);
   const [accordionDefaultIndex, setAccordionDefaultIndex] = useState<
     number[] | null
   >(null);
@@ -185,6 +187,25 @@ export const ModuleComponentLocations = ({
         }
         setActiveTermsTA(terms);
       }
+      
+      if (settings?.taxonomies?.accessibility?.terms) {
+        const terms = settings?.taxonomies?.accessibility?.terms?.reduce(
+          (acc: any, t: any) => {
+            if (t._count?.locations > 0) return [...acc, t];
+
+            return acc;
+          },
+          []
+        );
+
+        if (terms?.length) {
+          resetVars = {
+            ...resetVars,
+            accessibility: [],
+          };
+        }
+        setActiveTermsAccessibility(terms);
+      }
 
       resetVars = {
         ...resetVars,
@@ -212,6 +233,10 @@ export const ModuleComponentLocations = ({
         ? urlParams.get("ta")?.split(",") ?? []
         : [];
 
+      const taccs: string[] = urlParams.get("tacc")
+        ? urlParams.get("tacc")?.split(",") ?? []
+        : [];
+
       reset({
         s: urlParams.get("s") ?? "",
         cluster: !(urlParams.get("cluster") === "0"),
@@ -219,9 +244,13 @@ export const ModuleComponentLocations = ({
         typeOfInstitution: tois.map((id) => id.toString()),
         typeOfOrganisation: toos.map((id) => id.toString()),
         targetAudience: tas.map((id) => id.toString()),
+        accessibility: taccs.map((id) => id.toString()),
       });
     }
-  }, [filter, reset, activeTermsToI, activeTermsToO, activeTermsTA]);
+  }, [
+    filter,
+    reset
+  ]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -232,6 +261,7 @@ export const ModuleComponentLocations = ({
     if (urlParams.get("toi")) aDI.push(1);
     if (urlParams.get("ta")) aDI.push(2);
     if (urlParams.get("too")) aDI.push(3);
+    if (urlParams.get("tacc")) aDI.push(4);
     if (urlParams.get("and") === "1" || urlParams.get("cluster") === "0")
       aDI.push(4);
 
@@ -289,10 +319,10 @@ export const ModuleComponentLocations = ({
     let where: any = [];
     let termsWhere: any = [];
     let allTerms: any[] = [];
-    const termsToI = allVars.typeOfInstitution.map((id: string) =>
+    
+    const termsToI = allVars?.typeOfInstitution?.map((id: string) =>
       parseInt(id)
     );
-
     if (termsToI?.length > 0) {
       allTerms = [...termsToI];
       if (allVars?.and === "1" || allVars?.and === true) {
@@ -311,7 +341,7 @@ export const ModuleComponentLocations = ({
       }
     }
 
-    const termsToO = allVars.typeOfOrganisation.map((id: string) =>
+    const termsToO = allVars?.typeOfOrganisation?.map((id: string) =>
       parseInt(id)
     );
     if (termsToO?.length) {
@@ -332,13 +362,32 @@ export const ModuleComponentLocations = ({
       }
     }
 
-    const termsTA = allVars.targetAudience.map((id: string) => parseInt(id));
+    const termsTA = allVars?.targetAudience?.map((id: string) => parseInt(id));
     if (termsTA?.length) {
       allTerms = [...allTerms, ...termsTA];
       if (allVars?.and === "1" || allVars?.and === true) {
         termsWhere = [
           ...termsWhere,
           ...termsTA.map((t: number) => ({
+            terms: {
+              some: {
+                id: {
+                  in: [t],
+                },
+              },
+            },
+          })),
+        ];
+      }
+    }
+
+    const termsAcc = allVars?.accessibility?.map((id: string) => parseInt(id));
+    if (termsAcc?.length) {
+      allTerms = [...allTerms, ...termsAcc];
+      if (allVars?.and === "1" || allVars?.and === true) {
+        termsWhere = [
+          ...termsWhere,
+          ...termsAcc.map((t: number) => ({
             terms: {
               some: {
                 id: {
@@ -388,7 +437,8 @@ export const ModuleComponentLocations = ({
       }
     }
 
-    // if no particulair Type Of Institution has been selected all 
+    // reducedVisibility
+    // if no particulair Type Of Institution has been selected all
     // reduced visiblity terms should be hidden.
     if (!termsToI?.length) {
       where.push({
@@ -458,6 +508,7 @@ export const ModuleComponentLocations = ({
       toi: allVars.typeOfInstitution ?? [],
       ta: allVars.targetAudience ?? [],
       too: allVars.typeOfOrganisation ?? [],
+      tacc: allVars.accessibility ?? [],
     };
 
     const queryString = Object.keys(query)
@@ -524,6 +575,7 @@ export const ModuleComponentLocations = ({
     cultureMap,
     watch,
     refetch,
+    settings.reducedVisibilityTermIds,
     layzLocationIdsQuery,
     currentQueryState,
     i18n?.language,
@@ -599,20 +651,25 @@ export const ModuleComponentLocations = ({
                     defaultIndex={accordionDefaultIndex}
                   >
                     <AccordionItem>
-                      <AccordionButton pt="0" className="tabbedFocus">
-                        <Box
-                          flex="1"
-                          textAlign="left"
-                          textStyle="larger"
-                          fontWeight="bold"
-                        >
-                          {t(
-                            "locations.filter.title.keyword",
-                            "Search by keyword"
-                          )}
-                        </Box>
-                        <AccordionIcon color="cm.accentLight" fontSize="2xl" />
-                      </AccordionButton>
+                      <h2>
+                        <AccordionButton pt="0" className="tabbedFocus">
+                          <Box
+                            flex="1"
+                            textAlign="left"
+                            textStyle="larger"
+                            fontWeight="bold"
+                          >
+                            {t(
+                              "locations.filter.title.keyword",
+                              "Search by keyword"
+                            )}
+                          </Box>
+                          <AccordionIcon
+                            color="cm.accentLight"
+                            fontSize="2xl"
+                          />
+                        </AccordionButton>
+                      </h2>
 
                       <AccordionPanel pt={2} pb="1em">
                         <FieldInput
@@ -760,6 +817,50 @@ export const ModuleComponentLocations = ({
                       </AccordionItem>
                     )}
 
+                    {activeTermsAccessibility?.length > 0 && (
+                      <AccordionItem>
+                        <h2>
+                          <AccordionButton pt="0" className="tabbedFocus">
+                            <Box
+                              flex="1"
+                              textAlign="left"
+                              textStyle="larger"
+                              fontWeight="bold"
+                            >
+                              {t(
+                                "locations.filter.title.accesibility",
+                                "Accessibility Information"
+                              )}
+                            </Box>
+                            <AccordionIcon
+                              color="cm.accentLight"
+                              fontSize="2xl"
+                            />
+                          </AccordionButton>
+                        </h2>
+                        <AccordionPanel pb={4}>
+                          <FieldCheckboxGroup
+                            id="accessibility"
+                            name="accessibility"
+                            isRequired={false}
+                            label={t(
+                              "locations.filter.title.accesibility",
+                              "Accessibility Information"
+                            )}
+                            type="checkbox"
+                            options={getMultilangSortedList(
+                              activeTermsAccessibility.map((term: any) => ({
+                                label: term.name,
+                                id: term.id,
+                              })),
+                              "label",
+                              getMultilangValue
+                            )}
+                          />
+                        </AccordionPanel>
+                      </AccordionItem>
+                    )}
+
                     <AccordionItem>
                       <h2>
                         <AccordionButton pt="0" className="tabbedFocus">
@@ -836,6 +937,7 @@ export const ModuleComponentLocations = ({
                         targetAudience: [],
                         typeOfInstitution: [],
                         typeOfOrganisation: [],
+                        accessibility: [],
                       });
                     }}
                   >
