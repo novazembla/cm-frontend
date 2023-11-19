@@ -226,7 +226,8 @@
   },
   "suggestContent": {
     "button": {
-      "suggestLocation": "Suggest an event"
+      "suggestLocation": "Suggest an event",
+      "suggestEvent": "Veranstaltung vorschlagen"
     }
   },
   "module": {

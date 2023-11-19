@@ -93,8 +93,6 @@ export const ModuleComponentPage = ({ page }: { page: any }) => {
     }
   }, [settings, getMultilangValue]);
 
-  console.log(page);
-
   return (
     <MainContent isDrawer>
       <NextHeadSeo
@@ -186,7 +184,7 @@ export const ModuleComponentPage = ({ page }: { page: any }) => {
                     minW="160px"
                   >
                     {t(
-                      "suggestContent.button.suggestLocation",
+                      "suggestContent.button.suggestEvent",
                       "Veranstaltung vorschlagen"
                     )}
                   </Button>
