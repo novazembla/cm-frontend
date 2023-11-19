@@ -17,6 +17,7 @@
     "@babel/plugin-syntax-import-assertions": "^7.17.12",
     "@chakra-ui/icons": "^1.1.1",
     "@chakra-ui/react": "^1.7.2",
+    "@floating-ui/react": "^0.26.2",
     "@hookform/resolvers": "^2.8.2",
     "@svgr/webpack": "^6.2.0",
     "@veccu/react-calendar": "^2.3.3",

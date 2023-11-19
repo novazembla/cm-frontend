@@ -50,6 +50,33 @@
     "buttonNo": "No, thanks",
     "buttonYes": "Okay"
   },
+  "event": {
+    "calendar": {
+      "previousMonth": "Previous month",
+      "nextMonth": "Next month",
+      "chooseDay": "Select day {{dayAndMonth}}"
+    },
+    "missingData": {
+      "eventDate": "TBD",
+      "eventLocation": "TBD"
+    },
+    "label": {
+      "dateFrom": "From",
+      "dateFromVon": "From",
+      "dateUntil": "Until",
+      "website": "Website",
+      "eventLocation": "Event Location",
+      "eventOrganiser": "Event Organiser",
+      "category": "Category",
+      "eventDatesMultiple": "Upcoming dates"
+    },
+    "detail": {
+      "title": "Event"
+    },
+    "title": {
+      "location": "Location"
+    }
+  },
   "forms": {
     "select": {
       "autocomplete": {
@@ -104,33 +131,6 @@
       "title": {
         "select": "Select locations"
       }
-    }
-  },
-  "event": {
-    "missingData": {
-      "eventDate": "TBD",
-      "eventLocation": "TBD"
-    },
-    "label": {
-      "dateFrom": "From",
-      "dateFromVon": "From",
-      "dateUntil": "Until",
-      "website": "Website",
-      "eventLocation": "Event Location",
-      "eventOrganiser": "Event Organiser",
-      "category": "Category",
-      "eventDatesMultiple": "Upcoming dates"
-    },
-    "detail": {
-      "title": "Event"
-    },
-    "title": {
-      "location": "Location"
-    },
-    "calendar": {
-      "previousMonth": "Previous month",
-      "nextMonth": "Next month",
-      "chooseDay": "Select day {{dayAndMonth}}"
     }
   },
   "text": {
@@ -224,6 +224,204 @@
       "typeOfOrganisation": "Type of Organisation"
     }
   },
+  "suggestContent": {
+    "button": {
+      "suggestLocation": "Suggest an event"
+    }
+  },
+  "module": {
+    "events": {
+      "forms": {
+        "eventdates": {
+          "table": {
+            "column": {
+              "date": {
+                "label": "Date"
+              }
+            }
+          }
+        },
+        "event": {
+          "table": {
+            "column": {
+              "begin": {
+                "label": "Begin"
+              },
+              "end": {
+                "label": "End"
+              }
+            }
+          },
+          "field": {
+            "begin": {
+              "label": "Begin"
+            },
+            "end": {
+              "label": "End"
+            },
+            "dates": {
+              "removedate": "Remove",
+              "clone": "Clone current line"
+            }
+          }
+        }
+      }
+    }
+  },
+  "table": {
+    "label": {
+      "actions": "Actions"
+    }
+  },
+  "suggestion": {
+    "imageConfirmation": {
+      "required": "Please confirm that the image can be published on our website"
+    },
+    "tAndC": {
+      "required": "Please confirm our terms and conditions"
+    },
+    "section": {
+      "image": {
+        "title": "Image",
+        "description": "Do you have an image of the location and are you the bearer of the rights? Then upload your image here."
+      },
+      "suggestor": {
+        "title": "About yourself",
+        "description": "In case we have further questions please give us your name and email address. We will keep this information private."
+      },
+      "about": {
+        "title": "About the location",
+        "description": "Please tell us something about the suggested location."
+      },
+      "address": {
+        "title": "Address",
+        "description": "Please enter the address of the location. We will use this information to place the location on the map"
+      },
+      "contact": {
+        "title": "Contact information",
+        "description": "How can people contact the location? This information will be listed on our website."
+      },
+      "online": {
+        "title": "Website(s)",
+        "description": "Can the location be found online?"
+      },
+      "taxonomies": {
+        "title": "The location is ...",
+        "description": "Please indicate the attributes under which the location should be found in the search."
+      }
+    },
+    "field": {
+      "label": {
+        "suggestionSubmittersImageRightsConfirmation": "I confirm that I bear the image rights and that the image can be freely used on the website",
+        "image": "Image",
+        "alt": "Image description",
+        "credits": "Image credits",
+        "suggestionSubmittersName": "Your name",
+        "suggestionSubmittersEmail": "Your email address",
+        "phone": "Phone number",
+        "comments": "Further comments",
+        "suggestionSubmittersTandCAcceptance": "I agree to data processing of my information in accordance with the DSVGO/GDPR.",
+        "ownerOfLocation": "I confirm that the information I have given is correct.",
+        "title": "Name of location",
+        "mandatoryDescriptionInEnglish": "Description in English",
+        "mandatoryDescriptionInGerman": "Description in German",
+        "otherLanguageDescriptionInGerman": "Description in German",
+        "otherLanguageDescriptionInEnglish": "Description in English",
+        "street": "Street",
+        "houseNumber": "House number",
+        "postcode": "Post code",
+        "city": "City",
+        "email": "Email address",
+        "website": "Website",
+        "facebook": "Facebook",
+        "instagram": "Instagram",
+        "twitter": "Twitter",
+        "youtube": "Youtube"
+      },
+      "placeholder": {
+        "alt": "Brief image description",
+        "credits": "The image credits",
+        "suggestionSubmittersName": "Please enter your name",
+        "suggestionSubmittersEmail": "Please enter your email address",
+        "phone": "030/1234567",
+        "comments": "Do you have any other notes or comments?",
+        "title": "Please enter the name of the suggested location",
+        "description": "Please describe the location briefly",
+        "otherLanguageDescriptionInGerman": "Please describe the location in German too, if possible",
+        "otherLanguageDescriptionInEnglish": "Please describe the location in English",
+        "street1": "Siegfriedstr.",
+        "houseNumber": "11",
+        "postcode": "12345",
+        "email": "Your email address",
+        "website": "https://www.example.com"
+      }
+    },
+    "button": {
+      "submit": "Submit suggestion"
+    },
+    "writeError": "We could unfortunately not save your suggestion at the moment. Please try again later.",
+    "successfullySubmitted": "Thank you! Your suggestion has been successfully submitted",
+    "successfullySubmittedReviewInfor": "We will review it manually and put your suggestion online as fast as possible",
+    "tax": {
+      "title": {
+        "typeOfInstitution": "Type of institution",
+        "targetAudience": "Target audience",
+        "typeOfOrganisation": "Type of organisation",
+        "accessibility": "Accessibility Information"
+      }
+    }
+  },
+  "eventSuggestion": {
+    "writeErrorEvent": "We could unfortunately not save your suggestion at the moment. Please try again later.",
+    "title": "Suggest an event",
+    "successfullySubmittedEvent": "Thank you! Your suggestion has been successfully submitted",
+    "successfullySubmittedEventReviewInformation": "We will review it manually and put your suggestion online as fast as possible",
+    "section": {
+      "about": {
+        "title": "About the event",
+        "description": "Please tell us something about the suggested event."
+      },
+      "dates": {
+        "title": "Event Dates"
+      },
+      "taxonomies": {
+        "title": "The event is ...",
+        "description": "Please indicate the attributes under the event should be found in the search."
+      },
+      "online": {
+        "title": "Website(s)",
+        "description": "Can the event be found online?"
+      }
+    },
+    "field": {
+      "label": {
+        "title": "Event title",
+        "description": "Description",
+        "organiser": "Organiser",
+        "address": "Address",
+        "website": "Website",
+        "facebook": "Facebook",
+        "instagram": "Instagram"
+      },
+      "placeholder": {
+        "title": "Please enter the name of the suggested event",
+        "description": "Please describe the event briefly",
+        "organiser": "Who organises the event",
+        "address": "Where takes the event place",
+        "website": "https://www.example.com"
+      },
+      "isFree": {
+        "title": "Participation fee",
+        "toggleLabel": "The event is free"
+      }
+    },
+    "tax": {
+      "title": {
+        "eventType": "Type of event",
+        "accessibility": "Accessibility Information"
+      }
+    }
+  },
   "validation": {
     "error": {
       "postcode": "Please provide a valid postcode"
@@ -272,104 +470,6 @@
       "min": "Please select at least {{min}} item",
       "max": "You can only select less than or equal to {{max}} items",
       "length": "Please select {{length}} item(s)"
-    }
-  },
-  "suggestion": {
-    "imageConfirmation": {
-      "required": "Please confirm that the image can be published on our website"
-    },
-    "tAndC": {
-      "required": "Please confirm our terms and conditions"
-    },
-    "writeError": "We could unfortunately not save your suggestion at the moment. Please try again later.",
-    "successfullySubmitted": "Thank you! Your suggestion has been successfully submitted",
-    "successfullySubmittedReviewInfor": "We will review it manually and put your suggestion online as fast as possible",
-    "section": {
-      "about": {
-        "title": "About the location",
-        "description": "Please tell us something about the suggested location."
-      },
-      "address": {
-        "title": "Address",
-        "description": "Please enter the address of the location. We will use this information to place the location on the map"
-      },
-      "contact": {
-        "title": "Contact information",
-        "description": "How can people contact the location? This information will be listed on our website."
-      },
-      "image": {
-        "title": "Image",
-        "description": "Do you have an image of the location and are you the bearer of the rights? Then upload your image here."
-      },
-      "online": {
-        "title": "Website(s)",
-        "description": "Can the location be found online?"
-      },
-      "taxonomies": {
-        "title": "The location is ...",
-        "description": "Please indicate the attributes under which the location should be found in the search."
-      },
-      "suggestor": {
-        "title": "About yourself",
-        "description": "In case we have further questions please give us your name and email address. We will keep this information private."
-      }
-    },
-    "field": {
-      "label": {
-        "title": "Name of location",
-        "mandatoryDescriptionInEnglish": "Description in English",
-        "mandatoryDescriptionInGerman": "Description in German",
-        "otherLanguageDescriptionInGerman": "Description in German",
-        "otherLanguageDescriptionInEnglish": "Description in English",
-        "street": "Street",
-        "houseNumber": "House number",
-        "postcode": "Post code",
-        "city": "City",
-        "phone": "Phone number",
-        "email": "Email address",
-        "suggestionSubmittersImageRightsConfirmation": "I confirm that I bear the image rights and that the image can be freely used on the website",
-        "image": "Image",
-        "alt": "Image description",
-        "credits": "Image credits",
-        "website": "Website",
-        "facebook": "Facebook",
-        "instagram": "Instagram",
-        "twitter": "Twitter",
-        "youtube": "Youtube",
-        "suggestionSubmittersName": "Your name",
-        "suggestionSubmittersEmail": "Your email address",
-        "comments": "Further comments",
-        "suggestionSubmittersTandCAcceptance": "I agree to data processing of my information in accordance with the DSVGO/GDPR.",
-        "ownerOfLocation": "I confirm that the information I have given is correct."
-      },
-      "placeholder": {
-        "title": "Please enter the name of the suggested location",
-        "description": "Please describe the location briefly",
-        "otherLanguageDescriptionInGerman": "Please describe the location in German too, if possible",
-        "otherLanguageDescriptionInEnglish": "Please describe the location in English",
-        "street1": "Siegfriedstr.",
-        "houseNumber": "11",
-        "postcode": "12345",
-        "phone": "030/1234567",
-        "email": "Your email address",
-        "alt": "Brief image description",
-        "credits": "The image credits",
-        "website": "https://www.example.com",
-        "suggestionSubmittersName": "Please enter your name",
-        "suggestionSubmittersEmail": "Please enter your email address",
-        "comments": "Do you have any other notes or comments?"
-      }
-    },
-    "tax": {
-      "title": {
-        "typeOfInstitution": "Type of institution",
-        "targetAudience": "Target audience",
-        "typeOfOrganisation": "Type of organisation",
-        "accessibility": "Accessibility Information"
-      }
-    },
-    "button": {
-      "submit": "Submit suggestion"
     }
   },
   "suggest": {

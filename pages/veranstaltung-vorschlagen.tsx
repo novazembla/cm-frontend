@@ -3,14 +3,14 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { GetStaticProps } from "next";
 
 import LayoutFull from "~/components/app/LayoutFull";
-import { ModuleComponentSuggestLocation } from "~/components/modules/suggest-location";
+import { ModuleComponentSuggestEvent } from "~/components/modules/suggest-event";
 import { useRouter } from "next/router";
 import { settingsQuery } from "~/graphql";
 import { getApolloClient } from "~/services";
 
 const SuggestLocation = ({ page }: { page: any }) => {
   const router = useRouter()
-  return <ModuleComponentSuggestLocation key={`kpv-${router.asPath}`}  />;
+  return <ModuleComponentSuggestEvent key={`kpv-${router.asPath}`}  />;
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {

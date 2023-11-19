@@ -50,6 +50,33 @@
     "buttonNo": "Nein, danke",
     "buttonYes": "Ja, gerne"
   },
+  "event": {
+    "calendar": {
+      "previousMonth": "Vorheriger Monat",
+      "nextMonth": "Nächster Monat",
+      "chooseDay": "Tag auswählen {{dayAndMonth}}"
+    },
+    "missingData": {
+      "eventDate": "Wird zu einem späteren Zeitpunkt bekannt gegeben",
+      "eventLocation": "Wird zu einem späteren Zeitpunkt bekannt gegeben"
+    },
+    "label": {
+      "dateFrom": "Ab",
+      "dateFromVon": "Von",
+      "dateUntil": "Bis",
+      "website": "Website",
+      "eventLocation": "Veranstaltungsort",
+      "eventOrganiser": "Veranstalter",
+      "category": "Art der Veranstaltung",
+      "eventDatesMultiple": "Weitere Termine"
+    },
+    "detail": {
+      "title": "Veranstaltung"
+    },
+    "title": {
+      "location": "Ort"
+    }
+  },
   "forms": {
     "select": {
       "autocomplete": {
@@ -104,33 +131,6 @@
       "title": {
         "select": "Individuell ausgewählte Orte einbetten"
       }
-    }
-  },
-  "event": {
-    "missingData": {
-      "eventDate": "Wird zu einem späteren Zeitpunkt bekannt gegeben",
-      "eventLocation": "Wird zu einem späteren Zeitpunkt bekannt gegeben"
-    },
-    "label": {
-      "dateFrom": "Ab",
-      "dateFromVon": "Von",
-      "dateUntil": "Bis",
-      "website": "Website",
-      "eventLocation": "Veranstaltungsort",
-      "eventOrganiser": "Veranstalter",
-      "category": "Art der Veranstaltung",
-      "eventDatesMultiple": "Weitere Termine"
-    },
-    "detail": {
-      "title": "Veranstaltung"
-    },
-    "title": {
-      "location": "Ort"
-    },
-    "calendar": {
-      "previousMonth": "Vorheriger Monat",
-      "nextMonth": "Nächster Monat",
-      "chooseDay": "Tag auswählen {{dayAndMonth}}"
     }
   },
   "text": {
@@ -224,6 +224,204 @@
       "typeOfOrganisation": "Trägerart"
     }
   },
+  "suggestContent": {
+    "button": {
+      "suggestLocation": "Veranstaltung vorschlagen"
+    }
+  },
+  "module": {
+    "events": {
+      "forms": {
+        "eventdates": {
+          "table": {
+            "column": {
+              "date": {
+                "label": "Datum"
+              }
+            }
+          }
+        },
+        "event": {
+          "table": {
+            "column": {
+              "begin": {
+                "label": "Beginn"
+              },
+              "end": {
+                "label": "Ende"
+              }
+            }
+          },
+          "field": {
+            "begin": {
+              "label": "Beginn"
+            },
+            "end": {
+              "label": "Ende"
+            },
+            "dates": {
+              "removedate": "Löschen",
+              "clone": "Zeile duplizieren"
+            }
+          }
+        }
+      }
+    }
+  },
+  "table": {
+    "label": {
+      "actions": "Aktionen"
+    }
+  },
+  "suggestion": {
+    "imageConfirmation": {
+      "required": "Bitte bestätigen Sie, dass das Bild auf unserer Webseite publiziert werden darf"
+    },
+    "tAndC": {
+      "required": "Bitte stimmen Sie zu"
+    },
+    "section": {
+      "image": {
+        "title": "Bild",
+        "description": "Haben Sie ein Bild das Sie hochladen möchten und liegen die Bildrechte bei Ihnen?"
+      },
+      "suggestor": {
+        "title": "Über Sie selbst",
+        "description": "Für den Fall, dass wir Nachfragen haben. Diese Angaben werden nicht veröffentlicht."
+      },
+      "about": {
+        "title": "Über den Ort",
+        "description": "Bitte beschreiben Sie den Ort"
+      },
+      "address": {
+        "title": "Adresse",
+        "description": "Bitte geben Sie die Adresse des vorgeschlagenen Ortes an. Wir nutzen diese um den Ort auf der Karte zu lokalisieren."
+      },
+      "contact": {
+        "title": "Kontaktinformationen",
+        "description": "Wir werden diese Information öffentlich zugänglich machen."
+      },
+      "online": {
+        "title": "Website(n)",
+        "description": "Kann die Organisation online gefunden werden?"
+      },
+      "taxonomies": {
+        "title": "Die Organisation ist ...",
+        "description": "Bitte geben Sie die Attribute an unter der die Organisation in der Suche gefunden werden soll."
+      }
+    },
+    "field": {
+      "label": {
+        "suggestionSubmittersImageRightsConfirmation": "Bitte bestätigen Sie das die Bildrechte bei Ihnen liegen, danach können Sie das Foto hochladen.",
+        "image": "Bild",
+        "alt": "Kurze Bildbeschreibung",
+        "credits": "Urheberrechtsinformation",
+        "suggestionSubmittersName": "Ihr Name",
+        "suggestionSubmittersEmail": "Ihre Emailadresse",
+        "phone": "Telefonnummer",
+        "comments": "Weitere Anmerkungen",
+        "suggestionSubmittersTandCAcceptance": "Ich stimme einer Datenverarbeitung im Sinne der DSVGO zu.",
+        "ownerOfLocation": " Ich bestätige die Richtigkeit der oben angegebenen Daten.",
+        "title": "Name des Ortes",
+        "mandatoryDescriptionInEnglish": "Englische Kurzbeschreibung",
+        "mandatoryDescriptionInGerman": "Deutsche Kurzbeschreibung",
+        "otherLanguageDescriptionInGerman": "Deutsche Kurzbeschreibung",
+        "otherLanguageDescriptionInEnglish": "Englische Kurzbeschreibung",
+        "street": "Straße",
+        "houseNumber": "Hausnummer",
+        "postcode": "Postleitzahl",
+        "city": "Stadt",
+        "email": "Emailadresse",
+        "website": "Website",
+        "facebook": "Facebook",
+        "instagram": "Instagram",
+        "twitter": "Twitter",
+        "youtube": "Youtube"
+      },
+      "placeholder": {
+        "alt": "Das Bild zeigt ...",
+        "credits": "Urheberechtsinformation",
+        "suggestionSubmittersName": "Bitte geben Sie Ihren Namen an",
+        "suggestionSubmittersEmail": "Bitte geben Sie Ihre Emailaddressse an",
+        "phone": "030/1234567",
+        "comments": "Haben Sie weitere Anmerkungen oder Kommentare?",
+        "title": "Bitte geben Sie den Namen der Organisation an",
+        "description": "Bitte beschreiben Sie die Organisation",
+        "otherLanguageDescriptionInGerman": "Falls möglich beschreiben Sie bitte den Ort auch auf deutsch",
+        "otherLanguageDescriptionInEnglish": "Falls möglich beschreiben Sie bitte den Ort auch auf englisch",
+        "street1": "Siegfriedstr.",
+        "houseNumber": "11",
+        "postcode": "12345",
+        "email": "Ihre Emailaddressse",
+        "website": "https://www.example.com"
+      }
+    },
+    "button": {
+      "submit": "Vorschlag abschicken"
+    },
+    "writeError": "Entschuldigung, wir konnten leider Ihren Ortsvorschlag nicht speichern. Bitte versuchen Sie es zu einem späteren Zeitpunkt noch einmal.",
+    "successfullySubmitted": "Vielen Dank! Ihr Ortsvorschlag wurde gespeichert",
+    "successfullySubmittedReviewInfor": "Wir werden diesen schnellstmöglich veröffentlichen",
+    "tax": {
+      "title": {
+        "typeOfInstitution": "Einrichtungsart",
+        "targetAudience": "Angebote für",
+        "typeOfOrganisation": "Organisationsart",
+        "accessibility": "Accessibility Information"
+      }
+    }
+  },
+  "eventSuggestion": {
+    "writeErrorEvent": "Entschuldigung, wir konnten leider Ihren Veranstaltungsvorschlag nicht speichern. Bitte versuchen Sie es zu einem späteren Zeitpunkt noch einmal.",
+    "title": "Veranstaltung vorschlagen",
+    "successfullySubmittedEvent": "Vielen Dank! Ihr Veranstaltungsvorschlag wurde gespeichert",
+    "successfullySubmittedEventReviewInformation": "Wir werden diesen schnellstmöglich veröffentlichen",
+    "section": {
+      "about": {
+        "title": "Über die Veranstaltung",
+        "description": "Bitte beschreiben Sie die Veranstaltung"
+      },
+      "dates": {
+        "title": "Veranstaltungszeitpunkt(e)"
+      },
+      "taxonomies": {
+        "title": "Die Veranstaltung ist ...",
+        "description": "Bitte geben Sie die Attribute an unter der die Veranstaltung in der Suche gefunden werden soll."
+      },
+      "online": {
+        "title": "Webseiten",
+        "description": "Kann die Veranstaltung online gefunden werden?"
+      }
+    },
+    "field": {
+      "label": {
+        "title": "Titel",
+        "description": "Beschreibung",
+        "organiser": "Veranstalter",
+        "address": "Veranstaltungsort",
+        "website": "Webseite",
+        "facebook": "Facebook",
+        "instagram": "Instagram"
+      },
+      "placeholder": {
+        "title": "Bitte geben Sie den Titel der Veranstaltung an",
+        "description": "Bitte beschreiben Sie die Veranstaltung kurz",
+        "organiser": "Wer organisiert die Veranstaltung?",
+        "address": "Wo finden die Veranstaltung statt?",
+        "website": "https://www.beispiel.de"
+      },
+      "isFree": {
+        "title": "Veranstaltungskosten",
+        "toggleLabel": "Diese Veranstaltung ist kostenfrei"
+      }
+    },
+    "tax": {
+      "title": {
+        "eventType": "Type of event",
+        "accessibility": "Accessibility Information"
+      }
+    }
+  },
   "validation": {
     "error": {
       "postcode": "Bitte geben Sie Ihre Postleitzahl an"
@@ -272,104 +470,6 @@
       "min": "Dieses Feld muss mindestens {{min}} Elemente enthalten",
       "max": "Dieses Feld muss weniger oder gleich {{max}} Elemente enthalten",
       "length": "Dieses muss {{length}} Elemente haben"
-    }
-  },
-  "suggestion": {
-    "imageConfirmation": {
-      "required": "Please confirm that the image can be published on our website"
-    },
-    "tAndC": {
-      "required": "Bitte stimmen Sie zu"
-    },
-    "writeError": "Entschuldigung, wir konnten leider Ihren Ortsvorschlag nicht speichern. Bitte versuchen Sie es zu einem späteren Zeitpunkt noch einmal.",
-    "successfullySubmitted": "Vielen Dank! Ihr Ortsvorschlag wurde gespeichert",
-    "successfullySubmittedReviewInfor": "Wir werden diesen schnellstmöglich veröffentlichen",
-    "section": {
-      "about": {
-        "title": "Über den Ort",
-        "description": "Bitte beschreiben Sie den Ort"
-      },
-      "address": {
-        "title": "Adresse",
-        "description": "Bitte geben Sie die Adresse des vorgeschlagenen Ortes an. Wir nutzen diese um den Ort auf der Karte zu lokalisieren."
-      },
-      "contact": {
-        "title": "Kontaktinformationen",
-        "description": "Wir werden diese Information öffentlich zugänglich machen."
-      },
-      "image": {
-        "title": "Bild",
-        "description": "Haben Sie ein Bild das Sie hochladen möchten und liegen die Bildrechte bei Ihnen?"
-      },
-      "online": {
-        "title": "Website(n)",
-        "description": "Kann die Organisation online gefunden werden?"
-      },
-      "taxonomies": {
-        "title": "Die Organisation ist ...",
-        "description": "Bitte geben Sie die Attribute an unter der die Organisation in der Suche gefunden werden soll."
-      },
-      "suggestor": {
-        "title": "Über Sie selbst",
-        "description": "Für den Fall, dass wir Nachfragen haben. Diese Angaben werden nicht veröffentlicht."
-      }
-    },
-    "field": {
-      "label": {
-        "title": "Name des Ortes",
-        "mandatoryDescriptionInEnglish": "Englische Kurzbeschreibung",
-        "mandatoryDescriptionInGerman": "Deutsche Kurzbeschreibung",
-        "otherLanguageDescriptionInGerman": "Deutsche Kurzbeschreibung",
-        "otherLanguageDescriptionInEnglish": "Englische Kurzbeschreibung",
-        "street": "Straße",
-        "houseNumber": "Hausnummer",
-        "postcode": "Postleitzahl",
-        "city": "Stadt",
-        "phone": "Telefonnummer",
-        "email": "Emailadresse",
-        "suggestionSubmittersImageRightsConfirmation": "Bitte bestätigen Sie das die Bildrechte bei Ihnen liegen, danach können Sie das Foto hochladen.",
-        "image": "Bild",
-        "alt": "Kurze Bildbeschreibung",
-        "credits": "Urheberrechtsinformation",
-        "website": "Website",
-        "facebook": "Facebook",
-        "instagram": "Instagram",
-        "twitter": "Twitter",
-        "youtube": "Youtube",
-        "suggestionSubmittersName": "Ihr Name",
-        "suggestionSubmittersEmail": "Ihre Emailadresse",
-        "comments": "Weitere Anmerkungen",
-        "suggestionSubmittersTandCAcceptance": "Ich stimme einer Datenverarbeitung im Sinne der DSVGO zu.",
-        "ownerOfLocation": " Ich bestätige die Richtigkeit der oben angegebenen Daten."
-      },
-      "placeholder": {
-        "title": "Bitte geben Sie den Namen der Organisation an",
-        "description": "Bitte beschreiben Sie die Organisation",
-        "otherLanguageDescriptionInGerman": "Falls möglich beschreiben Sie bitte den Ort auch auf deutsch",
-        "otherLanguageDescriptionInEnglish": "Falls möglich beschreiben Sie bitte den Ort auch auf englisch",
-        "street1": "Siegfriedstr.",
-        "houseNumber": "11",
-        "postcode": "12345",
-        "phone": "030/1234567",
-        "email": "Ihre Emailaddressse",
-        "alt": "Das Bild zeigt ...",
-        "credits": "Urheberechtsinformation",
-        "website": "https://www.example.com",
-        "suggestionSubmittersName": "Bitte geben Sie Ihren Namen an",
-        "suggestionSubmittersEmail": "Bitte geben Sie Ihre Emailaddressse an",
-        "comments": "Haben Sie weitere Anmerkungen oder Kommentare?"
-      }
-    },
-    "tax": {
-      "title": {
-        "typeOfInstitution": "Einrichtungsart",
-        "targetAudience": "Angebote für",
-        "typeOfOrganisation": "Organisationsart",
-        "accessibility": "Accessibility Information"
-      }
-    },
-    "button": {
-      "submit": "Vorschlag abschicken"
     }
   },
   "suggest": {

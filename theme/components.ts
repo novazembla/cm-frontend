@@ -119,6 +119,13 @@ export const components = {
             filter: "invert(100%)",
           },
         },
+        _disabled: {
+          "&:hover": {
+            shadow: "none",
+            bg: "white !important",
+            color: "cm.accentLight",
+          },
+        },
       },
       solid: {
         bg: "white",

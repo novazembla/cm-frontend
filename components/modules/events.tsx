@@ -5,7 +5,6 @@ import { ErrorMessage } from "~/components/ui/ErrorMessage";
 import { ListedEvent } from "~/components/ui/ListedEvent";
 import { LoadingIcon } from "~/components/ui/LoadingIcon";
 
-import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import {
   Accordion,
   AccordionButton,
@@ -14,16 +13,8 @@ import {
   AccordionPanel,
   Box,
   Button,
-  chakra,
   Flex,
   Grid,
-  IconButton,
-  Table,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr,
 } from "@chakra-ui/react";
 import { Footer } from "~/components/app/Footer";
 import { MainContent } from "~/components/app/MainContent";
@@ -35,7 +26,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { FormProvider, useForm } from "react-hook-form";
 import { object } from "yup";
 
-import useCalendar from "@veccu/react-calendar";
 import NextHeadSeo from "next-head-seo";
 import {
   useConfigContext,
@@ -49,6 +39,8 @@ import {
 } from "~/utils";
 import FieldInput from "../forms/FieldInput";
 import { PageTitle } from "../ui/PageTitle";
+
+import { Calendar } from "../forms/Calendar";
 
 const ONE_DAY = 1000 * 60 * 60 * 24;
 
@@ -134,14 +126,9 @@ export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
   const [extendedValidationSchema, setExtendedValidationSchema] =
     useState(EventsFilterSchema);
-  const [customDate, setCustomDate] = useState<Date | null>(null);
+  const [customDate, setCustomDate] = useState<Date | null>(new Date());
 
   const settings = useSettingsContext();
-
-  const { headers, body, cursorDate, navigation } = useCalendar({
-    defaultWeekStart: 1,
-    defaultDate: customDate ?? undefined,
-  });
 
   useEffect(() => {
     if (cultureMap) cultureMap.showCurrentView();
@@ -248,7 +235,6 @@ export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
 
       if (customDate && urlParams.get("date") === "ownDate") {
         setCustomDate(customDate);
-        navigation.setDate(customDate);
       }
     } catch (err) {}
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -275,7 +261,6 @@ export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
 
         if (customDate) {
           setCustomDate(customDate);
-          // calendarNavigationSetDate(customDate);
         }
       } catch (err) {}
 
@@ -592,7 +577,6 @@ export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
     }
   }, [loading, data?.events?.totalCount, currentPageIndex]);
 
-  const today = new Date(new Date().setHours(0, 0, 0, 0));
   const urlParams = new URLSearchParams(filter);
 
   return (
@@ -704,224 +688,20 @@ export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
                             ]}
                           />
                           {getValues("eventDateRange") === "ownDate" && (
-                            <>
-                              <Flex
-                                w="100%"
-                                justifyContent="space-between"
-                                maxW="300px"
-                                mt="1em"
-                                mx="auto"
-                                alignItems="center"
-                                mb=""
-                              >
-                                <IconButton
-                                  aria-label={t(
-                                    "event.calendar.previousMonth",
-                                    "Previous month"
-                                  )}
-                                  className="tabbedFocus"
-                                  icon={<ChevronLeftIcon />}
-                                  onClick={navigation.toPrev}
-                                  variant="unstyled"
-                                  color="cm.accentLight"
-                                  fontSize="2xl"
-                                  _hover={{
-                                    bg: "transparent",
-                                    color: "cm.accentDark",
-                                  }}
-                                  _active={{
-                                    color: "cm.accentDark",
-                                  }}
-                                />
-                                <Box textStyle="navigation">
-                                  {cursorDate.toLocaleDateString(
-                                    i18n.language,
-                                    {
-                                      month: "long",
-                                      year: "numeric",
-                                    }
-                                  )}
-                                </Box>
-                                <IconButton
-                                  variant="unstyled"
-                                  aria-label={t(
-                                    "event.calendar.nextMonth",
-                                    "Next month"
-                                  )}
-                                  className="tabbedFocus"
-                                  icon={<ChevronRightIcon />}
-                                  onClick={navigation.toNext}
-                                  color="cm.accentLight"
-                                  fontSize="2xl"
-                                  _hover={{
-                                    bg: "transparent",
-                                    color: "cm.accentDark",
-                                  }}
-                                  _active={{
-                                    color: "cm.accentDark",
-                                  }}
-                                />
-                              </Flex>
-
-                              <Table
-                                w="100%"
-                                maxW="300px"
-                                variant="unstyled"
-                                mx="auto"
-                                mb="1em"
-                              >
-                                <Thead>
-                                  <Tr>
-                                    {headers.weekDays.map(({ key, value }) => {
-                                      return (
-                                        <Th key={key} px="1" textAlign="center">
-                                          <chakra.span
-                                            textStyle="calendar"
-                                            fontWeight="bold"
-                                          >
-                                            {value.toLocaleDateString(
-                                              i18n.language,
-                                              { weekday: "short" }
-                                            )}
-                                          </chakra.span>
-                                        </Th>
-                                      );
-                                    })}
-                                  </Tr>
-                                </Thead>
-                                <Tbody>
-                                  {body.value.map(({ key, value: days }) => {
-                                    return (
-                                      <Tr key={key}>
-                                        {days.map(
-                                          ({ key, value, isCurrentDate }) => {
-                                            if (value < today)
-                                              return (
-                                                <Td
-                                                  pt="0"
-                                                  px="1"
-                                                  pb="2"
-                                                  key={key}
-                                                  color="#999"
-                                                  textStyle="calendar"
-                                                  textAlign="center"
-                                                >
-                                                  <Box
-                                                    w="30px"
-                                                    h="30px"
-                                                    border="1px solid"
-                                                    lineHeight="30px"
-                                                    borderColor="transparent"
-                                                    borderRadius="20"
-                                                    textStyle="calendar"
-                                                    textAlign="center"
-                                                    mx="auto"
-                                                  >
-                                                    {value.toLocaleDateString(
-                                                      i18n.language,
-                                                      { day: "numeric" }
-                                                    )}
-                                                  </Box>
-                                                </Td>
-                                              );
-                                            return (
-                                              <Td
-                                                key={key}
-                                                textStyle="calendar"
-                                                textAlign="center"
-                                                pt="0"
-                                                px="1"
-                                                pb="2"
-                                              >
-                                                <Button
-                                                  variant="unstyled"
-                                                  w="30px"
-                                                  h="30px"
-                                                  minW="30px"
-                                                  mx="auto"
-                                                  border="1px solid"
-                                                  fontSize={{
-                                                    base: "13px",
-                                                    md: "17px",
-                                                  }}
-                                                  lineHeight="24px"
-                                                  borderColor={
-                                                    value.valueOf() ===
-                                                    customDate?.valueOf()
-                                                      ? "cm.accentLight"
-                                                      : value.valueOf() ===
-                                                        today.valueOf()
-                                                      ? "cm.accentDark"
-                                                      : "transparent"
-                                                  }
-                                                  borderRadius="20"
-                                                  fontWeight="normal"
-                                                  transition="all 0.3s"
-                                                  className="tabbedFocus"
-                                                  _hover={{
-                                                    bg: "transparent",
-                                                    color: "cm.text",
-                                                    borderColor:
-                                                      "cm.accentLight",
-                                                  }}
-                                                  _active={{
-                                                    bg: "cm.accentLight",
-                                                    color: "white",
-                                                    borderColor:
-                                                      "cm.accenLight",
-                                                  }}
-                                                  onClick={() => {
-                                                    setValue(
-                                                      "customDate",
-                                                      new Date(
-                                                        value.setHours(
-                                                          0,
-                                                          0,
-                                                          0,
-                                                          0
-                                                        )
-                                                      )
-                                                    );
-                                                    setCustomDate(
-                                                      new Date(
-                                                        value.setHours(
-                                                          0,
-                                                          0,
-                                                          0,
-                                                          0
-                                                        )
-                                                      )
-                                                    );
-                                                  }}
-                                                  aria-label={t(
-                                                    "event.calendar.chooseDay",
-                                                    "Select day {{dayAndMonth}}",
-                                                    {
-                                                      dayAndMonth: `${value.toLocaleDateString(
-                                                        i18n.language,
-                                                        {
-                                                          day: "numeric",
-                                                          year: "numeric",
-                                                        }
-                                                      )}`,
-                                                    }
-                                                  )}
-                                                >
-                                                  {value.toLocaleDateString(
-                                                    i18n.language,
-                                                    { day: "numeric" }
-                                                  )}
-                                                </Button>
-                                              </Td>
-                                            );
-                                          }
-                                        )}
-                                      </Tr>
-                                    );
-                                  })}
-                                </Tbody>
-                              </Table>
-                            </>
+                            <Box mt="1em" mb="1em">
+                              <Calendar
+                                defaultDate={customDate}
+                                onDateSelect={(value) => {
+                                  setValue(
+                                    "customDate",
+                                    new Date(value.setHours(0, 0, 0, 0))
+                                  );
+                                  setCustomDate(
+                                    new Date(value.setHours(0, 0, 0, 0))
+                                  );
+                                }}
+                              />
+                            </Box>
                           )}
                         </Box>
                       </AccordionPanel>

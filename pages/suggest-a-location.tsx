@@ -3,12 +3,12 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { GetStaticProps } from "next";
 
 import LayoutFull from "~/components/app/LayoutFull";
-import { ModuleComponentSuggest } from "~/components/modules/suggest";
+import { ModuleComponentSuggestLocation } from "~/components/modules/suggest-location";
 import { settingsQuery } from "~/graphql";
 import { getApolloClient } from "~/services";
 
 export const SuggestLocation = () => {
-  return <ModuleComponentSuggest />;
+  return <ModuleComponentSuggestLocation />;
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {

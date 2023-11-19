@@ -104,7 +104,7 @@ const slugify = (text: string) => {
     .replace(/-+$/, ""); // Trim - from end of text
 };
 
-export const ModuleComponentSuggest = () => {
+export const ModuleComponentSuggestLocation = () => {
   const { t, i18n, getMultilangValue } = useAppTranslations();
 
   const config = useConfigContext();
