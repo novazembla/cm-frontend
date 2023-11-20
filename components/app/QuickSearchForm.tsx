@@ -355,9 +355,9 @@ export const QuickSearchForm = () => {
                           <Button
                             onClick={() => {
                               if (i18n.language === "de") {
-                                router.push(`/en/map/s=${searchTerm}`);
-                              } else {
                                 router.push(`/karte/s=${searchTerm}`);
+                              } else {
+                                router.push(`/en/map/s=${searchTerm}`);
                               }
                             }}
                             variant="ghost"
