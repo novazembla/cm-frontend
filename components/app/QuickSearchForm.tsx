@@ -373,11 +373,11 @@ export const QuickSearchForm = () => {
                             <Button
                               onClick={() => {
                                 if (i18n.language === "de") {
-                                  router.push(`/en/events/s=${searchTerm}`);
-                                } else {
                                   router.push(
                                     `/veranstaltungen/s=${searchTerm}`
                                   );
+                                } else {
+                                  router.push(`/en/events/s=${searchTerm}`);
                                 }
                               }}
                               variant="ghost"
