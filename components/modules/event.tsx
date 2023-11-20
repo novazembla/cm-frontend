@@ -40,7 +40,7 @@ import NextHeadSeo from "next-head-seo";
 import { PageTitle } from "~/components/ui/PageTitle";
 import { settingsQueryPartial } from "~/graphql";
 import { ShareIcons } from "../ui/ShareIcons";
-import { AccesibilityInformation } from "./accesibilityInformation";
+import { AccessibilityInformation } from "./accessibilityInformation";
 
 const eventQuery = gql`
   query ($slug: String!) {
@@ -459,7 +459,7 @@ export const ModuleComponentEvent = ({
 
                 {taxonomies?.["accessibility"]?.length > 0 && (
                   // eslint-disable-next-line react/jsx-no-undef
-                  <AccesibilityInformation
+                  <AccessibilityInformation
                     terms={taxonomies?.["accessibility"]}
                   />
                 )}

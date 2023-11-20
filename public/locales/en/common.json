@@ -147,6 +147,9 @@
     "totalCount_plural": "{{count}} events found",
     "totalCountPlural": "{{count}} events found",
     "totalCountPlural_plural": "{{count}} events found",
+    "page": {
+      "title": "Events"
+    },
     "filter": {
       "title": {
         "dateRange": "Date (range)",
@@ -165,11 +168,10 @@
     "loadMore": "Load more events"
   },
   "locations": {
-    "title": "Map",
     "filter": {
       "title": {
         "keyword": "Search by keyword",
-        "accesibility": "Accessibility Information",
+        "accessibility": "Accessibility Information",
         "typeOfInstitution": "Type of institution",
         "targetAudience": "Target audience",
         "typeOfOrganisation": "Type of organisation",
@@ -203,11 +205,9 @@
     "totalCount_plural": "{{count}} Locations found",
     "totalCountPlural": "{{count}} Locations found",
     "totalCountPlural_plural": "{{count}} Locations found",
+    "title": "Map",
     "loadMore": "Load more locations",
     "totalCount_plural_plural": "{{count}} locations found"
-  },
-  "page": {
-    "title": "Events"
   },
   "card": {
     "meta": {

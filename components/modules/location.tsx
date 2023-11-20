@@ -42,7 +42,7 @@ import { useRouter } from "next/router";
 import { MainContent } from "~/components/app/MainContent";
 import { settingsQueryPartial } from "~/graphql";
 import { ShareIcons } from "../ui/ShareIcons";
-import { AccesibilityInformation } from "./accesibilityInformation";
+import { AccessibilityInformation } from "./accessibilityInformation";
 
 const ONE_DAY = 1000 * 60 * 60 * 24;
 
@@ -564,7 +564,7 @@ export const ModuleComponentLocation = ({
               )}
 
               {taxonomies?.["accessibility"]?.length > 0 && (
-                <AccesibilityInformation
+                <AccessibilityInformation
                   terms={taxonomies?.["accessibility"]}
                   accessibilityInformation={location?.accessibilityInformation}
                 />

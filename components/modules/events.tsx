@@ -203,7 +203,7 @@ export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
       if (settings?.taxonomies?.accessibility?.terms) {
         const terms = settings?.taxonomies?.accessibility?.terms?.reduce(
           (acc: any, t: any) => {
-            if (t._count?.locations > 0) return [...acc, t];
+            if (t._count?.events > 0) return [...acc, t];
 
             return acc;
           },
@@ -585,7 +585,7 @@ export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
         canonical={`${config.baseUrl}${
           i18n.language === "en" ? "/en/events" : "/veranstaltungen"
         }`}
-        title={`${t("locations.title", "Map")} - ${getSeoAppTitle(t)}`}
+        title={`${t("events.page.title", "Events")} - ${getSeoAppTitle(t)}`}
         maxDescriptionCharacters={300}
         description={getMetaDescriptionContent(
           getMultilangValue(settings?.defaultMetaDesc)
@@ -602,7 +602,7 @@ export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
       >
         <Box layerStyle="pageBg">
           <Box layerStyle="page">
-            <PageTitle h1 type="high" title={t("page.title", "Events")} />
+            <PageTitle h1 type="high" title={t("events.page.title", "Events")} />
 
             <FormProvider {...formMethods}>
               <form noValidate onSubmit={handleSubmit(onSubmit)}>
@@ -797,7 +797,7 @@ export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
                               fontWeight="bold"
                             >
                               {t(
-                                "locations.filter.title.accesibility",
+                                "locations.filter.title.accessibility",
                                 "Accessibility Information"
                               )}
                             </Box>
@@ -813,7 +813,7 @@ export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
                             name="accessibility"
                             isRequired={false}
                             label={t(
-                              "locations.filter.title.accesibility",
+                              "locations.filter.title.accessibility",
                               "Accessibility Information"
                             )}
                             type="checkbox"

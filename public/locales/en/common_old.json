@@ -88,6 +88,11 @@
       "contactInfo": "Contact information",
       "categories": "Categories",
       "events": "Events"
+    },
+    "filter": {
+      "title": {
+        "accessibility": "Accessibility Information"
+      }
     }
   },
   "menu": {
@@ -126,7 +131,8 @@
     }
   },
   "page": {
-    "eventcount": "Events"
+    "eventcount": "Events",
+    "title": "Events"
   },
   "apiimage": {
     "errormsg": "The image could unfortunately not be processed. Please try uploading again.",

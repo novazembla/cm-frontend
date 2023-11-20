@@ -828,7 +828,7 @@ export const ModuleComponentLocations = ({
                               fontWeight="bold"
                             >
                               {t(
-                                "locations.filter.title.accesibility",
+                                "locations.filter.title.accessibility",
                                 "Accessibility Information"
                               )}
                             </Box>
@@ -844,7 +844,7 @@ export const ModuleComponentLocations = ({
                             name="accessibility"
                             isRequired={false}
                             label={t(
-                              "locations.filter.title.accesibility",
+                              "locations.filter.title.accessibility",
                               "Accessibility Information"
                             )}
                             type="checkbox"

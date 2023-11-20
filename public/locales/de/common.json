@@ -147,6 +147,9 @@
     "totalCount_plural": "{{count}} Veranstaltungen gefunden",
     "totalCountPlural": "{{count}} Veranstaltungen gefunden",
     "totalCountPlural_plural": "{{count}} Veranstaltungen gefunden",
+    "page": {
+      "title": "Veranstaltungen"
+    },
     "filter": {
       "title": {
         "dateRange": "Zeitraum",
@@ -165,11 +168,10 @@
     "loadMore": "Weitere Veranstaltungen anzeigen"
   },
   "locations": {
-    "title": "Kulturkarte",
     "filter": {
       "title": {
         "keyword": "Nach Stichwort suchen",
-        "accesibility": "Accessibility Information",
+        "accessibility": "Informationen zur Barrierefreiheit",
         "typeOfInstitution": "Einrichtungsart",
         "targetAudience": "Angebote für",
         "typeOfOrganisation": "Organisationsart",
@@ -203,11 +205,9 @@
     "totalCount_plural": "{{count}} Orte gefunden",
     "totalCountPlural": "{{count}} Orte gefunden",
     "totalCountPlural_plural": "{{count}} Orte gefunden",
+    "title": "Kulturkarte",
     "loadMore": "Weitere Orte laden",
     "totalCount_plural_plural": "{{count}} Orte gefunden"
-  },
-  "page": {
-    "title": "Veranstaltungen"
   },
   "card": {
     "meta": {

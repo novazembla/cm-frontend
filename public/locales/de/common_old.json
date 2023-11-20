@@ -88,6 +88,11 @@
       "contactInfo": "Contact information",
       "categories": "Categories",
       "events": "Events"
+    },
+    "filter": {
+      "title": {
+        "accessibility": "Informationen zur Barrierefreiheit"
+      }
     }
   },
   "menu": {
@@ -126,7 +131,8 @@
     }
   },
   "page": {
-    "eventcount": "Veranstaltungen"
+    "eventcount": "Veranstaltungen",
+    "title": "Veranstaltungen"
   },
   "apiimage": {
     "errormsg": "The image could unfortunately not be processed. Please try uploading again.",

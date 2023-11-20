@@ -3,7 +3,7 @@ import { useAppTranslations } from "~/hooks/useAppTranslations";
 import { isEmptyHtml } from "~/utils";
 import { MultiLangHtml } from "../ui/MultiLangHtml";
 
-export const AccesibilityInformation = ({
+export const AccessibilityInformation = ({
   terms,
   accessibilityInformation,
 }: {
