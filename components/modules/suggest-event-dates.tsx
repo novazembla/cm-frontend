@@ -9,6 +9,7 @@ import {
   Th,
   Thead,
   VisuallyHidden,
+  chakra,
 } from "@chakra-ui/react";
 
 import { FloatingFocusManager } from "@floating-ui/react";
@@ -38,9 +39,13 @@ export const SuggestEventDates = () => {
 
   return (
     <Box>
-      <Table position="relative" w="100%">
+      <Table
+        position="relative"
+        w="100%"
+        display={{ base: "block", md: "table" }}
+      >
         <Thead>
-          <tr>
+          <chakra.tr display={{ base: "none", md: "table-row" }}>
             <Th
               pl="0"
               borderColor="cm.accentDark"
@@ -87,13 +92,33 @@ export const SuggestEventDates = () => {
             >
               {t("table.label.actions", "Actions")}
             </Th>
-          </tr>
+          </chakra.tr>
         </Thead>
         <tbody>
           {fields.map((f, index) => {
             const field = f as any;
             return (
-              <tr key={f.fieldId}>
+              <chakra.tr
+                key={f.fieldId}
+                display={{ base: "flex", md: "table-row" }}
+                flexWrap="wrap"
+                borderBottom={{
+                  base: "var(--chakra-borders-1px)",
+                  md: "none",
+                }}
+                borderColor="cm.accentDark"
+                paddingBottom={{
+                  base: "2",
+                  md: "none",
+                }}
+                _last={{
+                  border:"none",
+
+                  "> td": {
+                    border:"none"
+                  }
+                }}
+              >
                 <Td
                   pl="0"
                   borderColor={
@@ -101,7 +126,32 @@ export const SuggestEventDates = () => {
                       ? "transparent"
                       : "cm.accentDark"
                   }
+                  display={{ base: "flex", md: "table-cell" }}
+                  flexDirection="column"
+                  w={{ base: "100%", md: "50%" }}
+                  paddingRight={{ base: "0", md: "4" }}
+                  paddingBottom={{ base: "0", md: "4" }}
+                  borderBottom={{
+                    base: "none",
+                    md: "var(--chakra-borders-1px)",
+                  }}
                 >
+                  <VisuallyHidden display={{ base: "none", md: "block" }}>
+                    {t(
+                      "module.events.forms.eventdates.table.column.date.label",
+                      "Date"
+                    )}
+                  </VisuallyHidden>
+                  <Box
+                    paddingBottom="1"
+                    display={{ md: "none" }}
+                    fontSize="smaller"
+                  >
+                    {t(
+                      "module.events.forms.eventdates.table.column.date.label",
+                      "Date"
+                    )}
+                  </Box>
                   <Controller
                     control={control}
                     name={`dates[${index}].date`}
@@ -131,16 +181,32 @@ export const SuggestEventDates = () => {
                       ? "transparent"
                       : "cm.accentDark"
                   }
-                  width="100px"
+                  display={{ base: "flex", md: "table-cell" }}
+                  flexDirection="column"
+                  w={{ base: "30%", md: "100px" }}
+                  paddingRight={{ base: "2", md: "4" }}
+                  borderBottom={{
+                    md: "var(--chakra-borders-1px)",
+                  }}
                 >
                   {/* eslint-disable-next-line jsx-a11y/label-has-for */}
                   <label htmlFor={`dates${index}begin`}>
-                    <VisuallyHidden>
+                    <VisuallyHidden display={{ base: "none", md: "block" }}>
                       {t(
-                        "module.events.forms.event.field.begin.label",
+                        "module.events.forms.event.table.column.begin.label",
                         "Begin"
                       )}
                     </VisuallyHidden>
+                    <Box
+                      paddingBottom="1"
+                      display={{ md: "none" }}
+                      fontSize="smaller"
+                    >
+                      {t(
+                        "module.events.forms.event.table.column.begin.label",
+                        "Begin"
+                      )}
+                    </Box>
                     <Controller
                       control={control}
                       name={`dates[${index}].begin`}
@@ -197,13 +263,26 @@ export const SuggestEventDates = () => {
                       ? "transparent"
                       : "cm.accentDark"
                   }
-                  width="100px"
+                  display={{ base: "flex", md: "table-cell" }}
+                  flexDirection="column"
+                  w={{ base: "30%", md: "100px" }}
+                  paddingRight={{ base: "2", md: "4" }}
+                  borderBottom={{
+                    md: "var(--chakra-borders-1px)",
+                  }}
                 >
                   {/* eslint-disable-next-line jsx-a11y/label-has-for */}
                   <label htmlFor={`dates${index}end`}>
-                    <VisuallyHidden>
+                    <VisuallyHidden display={{ base: "none", md: "block" }}>
                       {t("module.events.forms.event.field.end.label", "End")}
                     </VisuallyHidden>
+                    <Box
+                      paddingBottom="1"
+                      display={{ md: "none" }}
+                      fontSize="smaller"
+                    >
+                      {t("module.events.forms.event.field.end.label", "End")}
+                    </Box>
                     <Controller
                       control={control}
                       name={`dates[${index}].end`}
@@ -260,14 +339,25 @@ export const SuggestEventDates = () => {
                       ? "transparent"
                       : "cm.accentDark"
                   }
-                  _last={{
-                    p: 0,
-                    "> div": {
-                      p: 0,
-                      h: "100%",
-                    },
+                  display={{ base: "flex", md: "table-cell" }}
+                  flexDirection="column"
+                  alignItems="center"
+                  w={{ base: "40%", md: "100px" }}
+                  paddingRight={{ base: "2", md: "4" }}
+                  borderBottom={{
+                    md: "var(--chakra-borders-1px)",
                   }}
                 >
+                  <VisuallyHidden display={{ base: "none", md: "block" }}>
+                    {t("table.label.actions", "Actions")}
+                  </VisuallyHidden>
+                  <Box
+                    paddingBottom="1"
+                    display={{ md: "none" }}
+                    fontSize="smaller"
+                  >
+                    {t("table.label.actions", "Actions")}
+                  </Box>
                   <Flex justifyContent="center">
                     <HStack mx="auto">
                       <IconButton
@@ -321,7 +411,7 @@ export const SuggestEventDates = () => {
                     </HStack>
                   </Flex>
                 </Td>
-              </tr>
+              </chakra.tr>
             );
           })}
         </tbody>

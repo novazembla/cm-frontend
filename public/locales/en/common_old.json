@@ -214,5 +214,18 @@
     "tAndC": {
       "required": "Please confirm our terms and conditions"
     }
+  },
+  "module": {
+    "events": {
+      "forms": {
+        "event": {
+          "field": {
+            "begin": {
+              "label": "Begin"
+            }
+          }
+        }
+      }
+    }
   }
 }

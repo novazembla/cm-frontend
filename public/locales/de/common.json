@@ -254,9 +254,6 @@
             }
           },
           "field": {
-            "begin": {
-              "label": "Beginn"
-            },
             "end": {
               "label": "Ende"
             },
