@@ -443,7 +443,7 @@ export const ModuleComponentLocations = ({
     if (!termsToI?.length) {
       where.push({
         AND: {
-          terms: {
+          primaryTerms: {
             none: {
               id: {
                 in: settings.reducedVisibilityTermIds,

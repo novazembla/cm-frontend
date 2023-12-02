@@ -187,6 +187,7 @@ export class CultureMap {
               ),
             }; 
 
+            console.log(self.geoJsonAllData?.features?.length, self.geoJsonAllDataWithoutReducedVisibility?.features?.length )
             self.baseDataLoaded = true;
 
             maybeProcess();
