@@ -71,6 +71,16 @@ export const appConfigFooterNav = [
   },
   {
     path: {
+      de: "/seite/barrierefreiheit",
+      en: "/page/accessibility-information",
+    },
+    title: {
+      de: "Barrierefreiheit",
+      en: "Accessibility Information",
+    },
+  },
+  {
+    path: {
       de: "/seite/orte-einbinden",
       en: "/page/embed-locations",
     },
