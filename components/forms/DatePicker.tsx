@@ -52,7 +52,7 @@ export const DatePicker = ({ name, value , onChange }: {
       <Input
         readOnly
         {...getReferenceProps()}
-        ref={(r) => {
+        ref={(r: any) => {
           inputRef.current = r;
           refs.setReference(r);
         }}
