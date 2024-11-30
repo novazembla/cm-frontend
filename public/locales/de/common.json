@@ -365,7 +365,7 @@
         "typeOfInstitution": "Einrichtungsart",
         "targetAudience": "Angebote für",
         "typeOfOrganisation": "Organisationsart",
-        "accessibility": "Accessibility Information"
+        "accessibility": "Barrierefreiheit"
       }
     }
   },
@@ -415,8 +415,8 @@
     },
     "tax": {
       "title": {
-        "eventType": "Type of event",
-        "accessibility": "Accessibility Information"
+        "eventType": "Art der Veranstaltung",
+        "accessibility": "Barrierefreiheit"
       }
     }
   },

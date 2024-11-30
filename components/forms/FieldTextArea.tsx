@@ -28,6 +28,7 @@ export interface FieldTextAreaSettings {
   defaultValue?: any;
   valid?: boolean;
   hideLabel?: boolean;
+  maxLength?: number;
   autoResize?: {
     min: number;
     max: number;
@@ -41,6 +42,7 @@ export const FieldTextArea = ({
   name,
   isRequired,
   isDisabled,
+  maxLength,
 }: {
   settings?: FieldTextAreaSettings;
   id: string;
@@ -48,6 +50,7 @@ export const FieldTextArea = ({
   isDisabled?: boolean;
   label: string;
   name: string;
+  maxLength?: number;
 }) => {
   const fieldRef = useRef<HTMLTextAreaElement | null>(null);
   
@@ -100,6 +103,7 @@ export const FieldTextArea = ({
   let input = (
     <Textarea
       h="200px"
+      maxLength={maxLength}
       variant="outline"
       name={name}
       onBlur={(event) => {

@@ -52,6 +52,7 @@ const eventQuery = gql`
       address
       organiser
       meta
+      socialMedia
       isFree
       description
       metaDesc

@@ -45,7 +45,7 @@ import { SuggestEventDates } from "./suggest-event-dates";
 
 export const EventSuggestionSchema = object().shape({
   title: string().required(),
-  description: string().required(),
+  description: string().max(2000).required(),
   address: string(),
   organiser: string(),
   isFree: boolean(),
@@ -71,15 +71,15 @@ export const EventSuggestionSchema = object().shape({
   suggestionSubmittersImageRightsConfirmation: mixed().when("heroImage", {
     is: (value: any) => value && !isNaN(value) && value > 0,
     then: boolean()
-      .required("eventSuggestion.imageConfirmation.required")
-      .oneOf([true], "eventSuggestion.imageConfirmation.required"),
+      .required("suggestion.imageConfirmation.required")
+      .oneOf([true], "suggestion.imageConfirmation.required"),
     otherwise: boolean(),
   }),
 
   // t("suggestion.tAndC.required", "Please confirm our terms and conditions")
   suggestionTandC: boolean()
-    .required("eventSuggestion.tAndC.required")
-    .oneOf([true], "eventSuggestion.tAndC.required"),
+    .required("suggestion.tAndC.required")
+    .oneOf([true], "suggestion.tAndC.required"),
 });
 
 export const eventCreateMutationGQL = gql`
@@ -209,6 +209,13 @@ export const ModuleComponentSuggestEvent = () => {
             isFree: !!newData?.isFree,
             dates: {
               create: newData.dates,
+            },
+            socialMedia: {
+              ...pick(newData, [
+                "facebook",
+                "instagram",
+                "website"
+              ]),
             },
             meta: {
               ...pick(newData, [
@@ -454,6 +461,7 @@ export const ModuleComponentSuggestEvent = () => {
                               "eventSuggestion.field.placeholder.description",
                               "Please describe the event briefly"
                             ),
+
                           }}
                         />
                       </FieldRow>
