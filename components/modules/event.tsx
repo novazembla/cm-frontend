@@ -285,6 +285,17 @@ export const ModuleComponentEvent = ({
     }
   }
 
+  const links = [];
+  if (event?.socialMedia?.website && event.socialMedia.website.trim()) {
+    links.push(event.socialMedia.website);
+  }
+  if (event?.socialMedia?.facebook && event.socialMedia.facebook.trim()) {
+    links.push(event.socialMedia.facebook);
+  }
+  if (event?.socialMedia?.instagram && event.socialMedia.instagram.trim()) {
+    links.push(event.socialMedia.instagram);
+  }
+
   return (
     <MainContent>
       <NextHeadSeo
@@ -365,7 +376,7 @@ export const ModuleComponentEvent = ({
                 )}
               </Box>
 
-              {event?.meta?.event?.event_homepage && (
+              {links.length > 0 && (
                 <Box className="item" mb="1em">
                   <Box
                     mb="0.5em"
@@ -373,25 +384,26 @@ export const ModuleComponentEvent = ({
                     textTransform="uppercase"
                     textStyle="categories"
                   >
-                    {t("event.label.website", "Website")}
+                    {links.length > 1 ? t("event.label.websites", "Websites") : t("event.label.website", "Website")}
                   </Box>
                   <Box textStyle="card">
-                    <Link
-                      target="_blank"
-                      rel="no-referral no-follow"
-                      href={event?.meta?.event?.event_homepage}
-                      display="inline-block"
-                      textDecoration="underline"
-                      textDecorationColor="cm.accentLight"
-                      maxW="100%"
-                      overflow="hidden"
-                      whiteSpace="nowrap"
-                      textOverflow="ellipsis"
-                    >
-                      {event?.meta?.event?.event_homepagename
-                        ? event?.meta?.event?.event_homepagename
-                        : event?.meta?.event?.event_homepage}
-                    </Link>
+                    {links.map((link) => <Box key={link}>
+                      <Link
+                        target="_blank"
+                        rel="no-referral no-follow"
+                        href={link}
+                        display="inline-block"
+                        textDecoration="underline"
+                        textDecorationColor="cm.accentLight"
+                        maxW="100%"
+                        overflow="hidden"
+                        whiteSpace="nowrap"
+                        textOverflow="ellipsis"
+                      >
+                        {link}
+                      </Link>
+                    </Box>)}
+                    
                   </Box>
                 </Box>
               )}

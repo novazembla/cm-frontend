@@ -64,7 +64,8 @@
       "dateFrom": "Ab",
       "dateFromVon": "Von",
       "dateUntil": "Bis",
-      "website": "Website",
+      "websites": "Webseiten",
+      "website": "Webseite",
       "eventLocation": "Veranstaltungsort",
       "eventOrganiser": "Veranstalter",
       "category": "Art der Veranstaltung",
@@ -300,7 +301,7 @@
         "description": "Wir werden diese Information öffentlich zugänglich machen."
       },
       "online": {
-        "title": "Website(n)",
+        "title": "Webseite(n)",
         "description": "Kann die Organisation online gefunden werden?"
       },
       "taxonomies": {
@@ -330,7 +331,7 @@
         "postcode": "Postleitzahl",
         "city": "Stadt",
         "email": "Emailadresse",
-        "website": "Website",
+        "website": "Webseite",
         "facebook": "Facebook",
         "instagram": "Instagram",
         "twitter": "Twitter",
