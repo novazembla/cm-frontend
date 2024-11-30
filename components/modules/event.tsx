@@ -51,7 +51,6 @@ const eventQuery = gql`
       slug
       address
       organiser
-      meta
       socialMedia
       isFree
       description
