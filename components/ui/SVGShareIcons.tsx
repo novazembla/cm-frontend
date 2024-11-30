@@ -2,7 +2,7 @@ import {
   RiFacebookFill,
   RiMessengerLine,
   RiWhatsappLine,
-  RiTwitterLine,
+  RiTwitterXLine,
   RiFileCopyLine,
 } from "react-icons/ri";
 
@@ -29,7 +29,7 @@ export const SVGShareIcons = ({
 
     case "twitter":
       return (
-        <RiTwitterLine
+        <RiTwitterXLine
           style={{
             fill: "#000",
             width,

@@ -42,7 +42,7 @@ export const ShareIcons = ({ title, url }: { title: string; url: string }) => {
           py="1px"
           pl="2px"
         >
-          <SVGShareIcons type="twitter" width="28px" height="28px" />
+          <SVGShareIcons type="twitter" width="28px" height="24px" />
         </chakra.a>
 
         {primaryInput === "touch" && (
