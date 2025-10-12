@@ -42,35 +42,33 @@ export const QuickSearchItem = ({
 
   return (
     <Box mt="2">
-      <NextLink
+     
+      <chakra.a
         href={`/${path}/${getMultilangValue(item.slug)}`}
-        locale={i18n.language}
-        passHref
+      locale={i18n.language}
+        as={NextLink}
+        textDecoration="none !important"
+        onClick={() => {
+          onQuickSearchToggle();
+        }}
+        display="flex !important"
+        justifyContent="space-between"
+        alignItems="center"
+        border="none !important"
+        textDecorationColor="none"
+        padding="0 !important"
+        pl={isMobile ? "0" : "8% !important"}
+        transition="none"
       >
-        <chakra.a
-          textDecoration="none !important"
-          onClick={() => {
-            onQuickSearchToggle();
-          }}
-          display="flex !important"
-          justifyContent="space-between"
-          alignItems="center"
-          border="none !important"
-          textDecorationColor="none"
-          padding="0 !important"
-          pl={isMobile ? "0" : "8% !important"}
-          transition="none"
-        >
-          <chakra.span display="block" pr="2">
-            <chakra.span className="clampTwoLines" fontWeight="bold">
-              <MultiLangValue json={item.title} />
-            </chakra.span>
+        <chakra.span display="block" pr="2">
+          <chakra.span className="clampTwoLines" fontWeight="bold">
+            <MultiLangValue json={item.title} />
           </chakra.span>
-          <chakra.span display="block">
-            <SVG type="chevron_right" width="20px" height="20px" />
-          </chakra.span>
-        </chakra.a>
-      </NextLink>
+        </chakra.span>
+        <chakra.span display="block">
+          <SVG type="chevron_right" width="20px" height="20px" />
+        </chakra.span>
+      </chakra.a>
     </Box>
   );
 };

@@ -32,10 +32,8 @@ export const ActiveLink = ({
       : "";
 
   return (
-    <NextLink href={href}>
-      <a {...{ className, target }} onClick={(props as any)?.onClick} style={style}>
-        {children}
-      </a>
+    <NextLink href={href} {...{ className, target }} onClick={(props as any)?.onClick} style={style}>
+      {children}
     </NextLink>
   );
 };

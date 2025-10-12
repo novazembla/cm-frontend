@@ -86,16 +86,14 @@ export const ListedEvent = ({ event }: { event: any }) => {
         </Box>
         <Box w="66.66%">
           <chakra.h2 className="headline" color="cm.text">
-            <NextLink
-              passHref
+            <LinkOverlay
+              as={NextLink}
               href={`${i18n.language === "en" ? "/en" : ""}/${
                 i18n.language === "de" ? "veranstaltung" : "event"
               }/${getMultilangValue(event?.slug)}`}
-            >
-              <LinkOverlay textDecoration="none" textStyle="headline">
-                <MultiLangValue json={event?.title} />
-              </LinkOverlay>
-            </NextLink>
+              textDecoration="none" textStyle="headline">
+              <MultiLangValue json={event?.title} />
+            </LinkOverlay>
           </chakra.h2>
         </Box>
       </Flex>

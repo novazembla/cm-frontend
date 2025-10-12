@@ -20,28 +20,29 @@ export const InlineLanguageButtons = () => {
             if (lang === i18n.language) return acc;
 
             acc.push(
-              <NextLink key={lang} href={router.asPath} locale={lang} passHref>
-                <Link
-                  textTransform="uppercase"
-                  color="cm.accentLight"
-                  textStyle="navigation"
-                  textDecoration="none !important"
-                  _hover={{ color: "cm.accentDark" }}
-                  title={
-                    i18n.language === "de"
-                      ? t(
-                          "language.changeToEnglish",
-                          "Change to English version"
-                        )
-                      : t(
-                          "language.changeToGerman",
-                          "Zur deutschen Version wechseln"
-                        )
-                  }
-                >
-                  {lang}
-                </Link>
-              </NextLink>
+              <Link
+                key={lang}
+                href={router.asPath} locale={lang} 
+                as={NextLink}
+                textTransform="uppercase"
+                color="cm.accentLight"
+                textStyle="navigation"
+                textDecoration="none !important"
+                _hover={{ color: "cm.accentDark" }}
+                title={
+                  i18n.language === "de"
+                    ? t(
+                        "language.changeToEnglish",
+                        "Change to English version"
+                      )
+                    : t(
+                        "language.changeToGerman",
+                        "Zur deutschen Version wechseln"
+                      )
+                }
+              >
+                {lang}
+              </Link>
             );
             return acc;
           }, [] as any)

@@ -169,21 +169,18 @@ export const CardTourStop = ({
               },
             }}
           >
-            <NextLink
-              passHref
+            <LinkOverlay
+              as={NextLink}
               href={`${
                 i18n.language === "en" ? "/en" : ""
               }/tour/${getMultilangValue(tour.slug)}/${tourStop?.number}`}
+              textStyle="headline"
+              textDecoration="none"
+              minH={isMobile ? "50px" : undefined}
+              className={isMobile ? "clampTwoLines" : "clampThreeLines"}
             >
-              <LinkOverlay
-                textStyle="headline"
-                textDecoration="none"
-                minH={isMobile ? "50px" : undefined}
-                className={isMobile ? "clampTwoLines" : "clampThreeLines"}
-              >
-                <MultiLangValue json={tourStop.title} />
-              </LinkOverlay>
-            </NextLink>
+              <MultiLangValue json={tourStop.title} />
+            </LinkOverlay>
           </chakra.h2>
         </Box>
       </Flex>

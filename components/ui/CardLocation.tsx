@@ -156,21 +156,18 @@ export const CardLocation = ({
               },
             }}
           >
-            <NextLink
+            <LinkOverlay
               href={`${
                 i18n.language === "en" ? "/en" : ""
               }/${type}/${getMultilangValue(location.slug)}/`}
-              passHref
+              as={NextLink}
+              textStyle="headline"
+              textDecoration="none"
+              minH={isMobile ? "50px" : undefined}
+              className={isMobile ? "clampTwoLines" : "clampThreeLines"}
             >
-              <LinkOverlay
-                textStyle="headline"
-                textDecoration="none"
-                minH={isMobile ? "50px" : undefined}
-                className={isMobile ? "clampTwoLines" : "clampThreeLines"}
-              >
-                <MultiLangValue json={location.title} />
-              </LinkOverlay>
-            </NextLink>
+              <MultiLangValue json={location.title} />
+            </LinkOverlay>
           </chakra.h2>
         </Box>
       </Flex>

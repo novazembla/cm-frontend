@@ -557,52 +557,46 @@ export const ModuleComponentTour = ({ tour }: { tour: any; }) => {
                                 },
                               }}
                             >
-                              <NextLink
-                                passHref
+                            <LinkOverlay
+                                as={NextLink}
                                 href={`${
                                   i18n.language === "en" ? "/en" : ""
                                 }/tour/${getMultilangValue(tour.slug)}/0`}
+                                textStyle="headline"
+                                textDecoration="none"
+                                minH={isMobile ? "50px" : undefined}
+                                className={
+                                  isMobile
+                                    ? "clampTwoLines"
+                                    : "clampFourLines"
+                                }
                               >
-                                <LinkOverlay
-                                  textStyle="headline"
-                                  textDecoration="none"
-                                  minH={isMobile ? "50px" : undefined}
-                                  className={
-                                    isMobile
-                                      ? "clampTwoLines"
-                                      : "clampFourLines"
-                                  }
-                                >
-                                  <MultiLangValue json={tour.title} />
-                                </LinkOverlay>
-                              </NextLink>
+                                <MultiLangValue json={tour.title} />
+                              </LinkOverlay>
                             </chakra.h1>
                           </>
                         )}
                         {isMobile && (
-                          <NextLink
-                            passHref
+                          <LinkOverlay
+                            as={NextLink}
                             href={`${
                               i18n.language === "en" ? "/en" : ""
                             }/tour/${getMultilangValue(tour.slug)}/0`}
+                            textStyle="headline"
+                            textDecoration="none"
+                            className={
+                              isMobile ? "clampTwoLines" : "clampFourLines"
+                            }
                           >
-                            <LinkOverlay
-                              textStyle="headline"
-                              textDecoration="none"
-                              className={
-                                isMobile ? "clampTwoLines" : "clampFourLines"
-                              }
+                            <Flex
+                              textStyle="categoriesHighlight"
+                              color={color}
+                              h={!isMobile ? "35px" : undefined}
+                              alignItems="flex-end"
                             >
-                              <Flex
-                                textStyle="categoriesHighlight"
-                                color={color}
-                                h={!isMobile ? "35px" : undefined}
-                                alignItems="flex-end"
-                              >
-                                {t("tour.title.aboutTheTour", "About the tour")}
-                              </Flex>
-                            </LinkOverlay>
-                          </NextLink>
+                              {t("tour.title.aboutTheTour", "About the tour")}
+                            </Flex>
+                          </LinkOverlay>
                         )}
                       </Box>
 
