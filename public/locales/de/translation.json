@@ -1,0 +1,547 @@
+{
+  "apiimage": {
+    "uploaded": "Bild wird auf dem Server verarbeitet"
+  },
+  "button": {
+    "showLess": "Weniger anzeigen",
+    "showMore": "Alle anzeigen"
+  },
+  "card": {
+    "meta": {
+      "event": "Veranstaltung",
+      "location": "Ort",
+      "tour": "Tour",
+      "tourStop": "Tourstop"
+    }
+  },
+  "error": {
+    "dataLoad": "Leider konnten wir die benötigten Daten nicht laden. Bitte versuchen Sie es zu einem späteren Zeitpunkt wieder.",
+    "internalServerError": "Ein interner Fehler verhindert leider die Darstellung dieses Inhaltes",
+    "pagenotfound": "Seite nicht gefunden",
+    "pleaseReloadInAFewMoments": "Leider konnten wir die angforderte Seite nicht laden. Bitte versuchen Sie es zu einem späteren Zeitpunkt wieder.",
+    "pleasetryagain": "Leider konnten wir den von Ihnen angeforderten Inhalt nicht darstellen. Bitte versuchen Sie es erneut."
+  },
+  "event": {
+    "calendar": {
+      "chooseDay": "Tag auswählen {{dayAndMonth}}",
+      "nextMonth": "Nächster Monat",
+      "previousMonth": "Vorheriger Monat"
+    },
+    "detail": {
+      "title": "Veranstaltung"
+    },
+    "label": {
+      "category": "Art der Veranstaltung",
+      "dateFrom": "Ab",
+      "dateFromVon": "Von",
+      "dateUntil": "Bis",
+      "eventDatesMultiple": "Weitere Termine",
+      "eventLocation": "Veranstaltungsort",
+      "eventOrganiser": "Veranstalter",
+      "website": "Webseite",
+      "websites": "Webseiten"
+    },
+    "missingData": {
+      "eventDate": "Wird zu einem späteren Zeitpunkt bekannt gegeben",
+      "eventLocation": "Wird zu einem späteren Zeitpunkt bekannt gegeben"
+    },
+    "title": {
+      "location": "Ort"
+    }
+  },
+  "events": {
+    "filter": {
+      "eventDateRange": {
+        "all": "Alle",
+        "chooseDate": "Eigenes Datum wählen",
+        "next7days": "Nächsten 7 Tage",
+        "today": "Heute",
+        "tomorrow": "Morgen",
+        "weekend": "Nächstes Wochenende"
+      },
+      "title": {
+        "dateRange": "Zeitraum",
+        "eventDateRange": "Zeitraum",
+        "eventType": "Art der Veranstaltung"
+      }
+    },
+    "loadMore": "Weitere Veranstaltungen anzeigen",
+    "page": {
+      "title": "Veranstaltungen"
+    },
+    "totalCount_one": "events.totalCount",
+    "totalCount_other": "events.totalCount",
+    "totalCountPlural_one": "events.totalCountPlural",
+    "totalCountPlural_other": "events.totalCountPlural"
+  },
+  "eventSuggestion": {
+    "field": {
+      "isFree": {
+        "title": "Veranstaltungskosten",
+        "toggleLabel": "Diese Veranstaltung ist kostenfrei"
+      },
+      "label": {
+        "address": "Veranstaltungsort",
+        "description": "Beschreibung",
+        "facebook": "Facebook",
+        "instagram": "Instagram",
+        "organiser": "Veranstalter",
+        "title": "Titel",
+        "website": "Webseite"
+      },
+      "placeholder": {
+        "address": "Wo finden die Veranstaltung statt?",
+        "description": "Bitte beschreiben Sie die Veranstaltung kurz",
+        "organiser": "Wer organisiert die Veranstaltung?",
+        "title": "Bitte geben Sie den Titel der Veranstaltung an",
+        "website": "https://www.beispiel.de"
+      }
+    },
+    "section": {
+      "about": {
+        "description": "Bitte beschreiben Sie die Veranstaltung",
+        "title": "Über die Veranstaltung"
+      },
+      "dates": {
+        "title": "Veranstaltungszeitpunkt(e)"
+      },
+      "online": {
+        "description": "Kann die Veranstaltung online gefunden werden?",
+        "title": "Webseiten"
+      },
+      "taxonomies": {
+        "description": "Bitte geben Sie die Attribute an unter der die Veranstaltung in der Suche gefunden werden soll.",
+        "title": "Die Veranstaltung ist ..."
+      }
+    },
+    "successfullySubmittedEvent": "Vielen Dank! Ihr Veranstaltungsvorschlag wurde gespeichert",
+    "successfullySubmittedEventReviewInformation": "Wir werden diesen schnellstmöglich veröffentlichen",
+    "tax": {
+      "title": {
+        "accessibility": "Barrierefreiheit",
+        "eventType": "Art der Veranstaltung"
+      }
+    },
+    "title": "Veranstaltung vorschlagen",
+    "writeErrorEvent": "Entschuldigung, wir konnten leider Ihren Veranstaltungsvorschlag nicht speichern. Bitte versuchen Sie es zu einem späteren Zeitpunkt noch einmal."
+  },
+  "form": {
+    "filter": {
+      "reset": "Filter zurücksetzen"
+    },
+    "unsavedchanges": "Offenbar haben Sie Änderungen nicht gespeichert. Verlassen ohne zu speichern?"
+  },
+  "forms": {
+    "select": {
+      "autocomplete": {
+        "search": {
+          "loading": "Wir durchsuchen unsere Datenbank",
+          "notfound": "Keine Einträge gefunden"
+        }
+      }
+    }
+  },
+  "header": {
+    "skipToContent": "Zum Inhalt springen"
+  },
+  "homepage": {
+    "title": {
+      "highlights": "Highlights"
+    }
+  },
+  "imageuploader": {
+    "cancelupload": "Upload abbrechen",
+    "droperror": {
+      "invalidtype": "Dieses Dateiformat kann nicht verwendet werden.",
+      "toolarge": "Die ausgewählte Datei ist zu groß.",
+      "toosmall": "Die ausgewählte Datei ist zu klein."
+    },
+    "error": "Leider konnten wir Ihren Upload nicht abschließen, bitte versuchen Sie es später noch einmal.",
+    "filesizeabove": "Min. Dateigrösse {{minFileSize}}",
+    "filesizebelow": "Max. Dateigrösse {{maxFileSize}}",
+    "filesizebetween": "Dateigrösse zwischen {{minFileSize}} und {{maxFileSize}}",
+    "pleasedroporclick": "Hier ein Bild hinziehen und fallen lassen oder klicken Sie um eine Bilddatei auszuwählen.",
+    "uploading": "Hochladen"
+  },
+  "language": {
+    "changeToEnglish": "Change to English version",
+    "changeToGerman": "Zur deutschen Version wechseln"
+  },
+  "location": {
+    "detail": {
+      "title": "Ort"
+    },
+    "embed": {
+      "title": {
+        "select": "Individuell ausgewählte Orte einbetten"
+      }
+    },
+    "label": {
+      "agency": "Träger"
+    },
+    "title": {
+      "accessibilityInformation": "Informationen zur Barrierefreiheit",
+      "eventsHeldAt": "Veranstaltungen",
+      "offers": "Angebot"
+    }
+  },
+  "locations": {
+    "embed": {
+      "button": {
+        "copy": "HTML kopieren"
+      },
+      "noLocationSelected": "Bitte wählen Sie einen oder mehrere Orte mit der Hilfe des obrigen Formularfelds aus",
+      "select": {
+        "button": {
+          "removeLocation": "Ort von der Liste entfernen"
+        },
+        "searchField": "Ortsname",
+        "searchForLocations": "Bitte suche Sie nach Orten und wählen diese dann aus",
+        "title": {
+          "selectedLocations": "Ausgewählte Orte"
+        }
+      },
+      "title": {
+        "embedCode": "Embedcode",
+        "filter": "Ortssuche",
+        "preview": "Vorschau"
+      }
+    },
+    "filter": {
+      "andRelationship": "Alle gewählten Begriffe müssen zugewiesen sein",
+      "clusterResult": "Naheliegende Orte gruppieren",
+      "title": {
+        "accessibility": "Informationen zur Barrierefreiheit",
+        "keyword": "Nach Stichwort suchen",
+        "settings": "Weitere Einstellungen",
+        "targetAudience": "Angebote für",
+        "typeOfInstitution": "Einrichtungsart",
+        "typeOfOrganisation": "Organisationsart"
+      }
+    },
+    "loadMore": "Weitere Orte laden",
+    "title": "Kulturkarte",
+    "totalCount_one": "locations.totalCount",
+    "totalCount_other": "locations.totalCount",
+    "totalCountPlural_one": "locations.totalCountPlural",
+    "totalCountPlural_other": "locations.totalCountPlural"
+  },
+  "logo": {
+    "culturemap1": "KULTURKARTE",
+    "culturemap2": "Lichtenberg"
+  },
+  "mainContent": {
+    "slideToLeft": "Hauptinhalt ausblenden",
+    "slideToRight": "Hauptinhalt einblenden"
+  },
+  "menu": {
+    "button": {
+      "backToTop": "Nach oben",
+      "closeMenu": "Menü aneigen",
+      "closeSearch": "Suchfenster schließen",
+      "findMyLocation": "Mein Standort anzeigen",
+      "openMenu": "Menü schließen",
+      "openSearch": "Suchfenster öffnen",
+      "suggestLocation": "Kulturellen Ort vorschlagen",
+      "zoomIntoMap": "Karte vergrößern",
+      "zoomOutOfMap": "Karte verkleinern"
+    },
+    "title": "Menü"
+  },
+  "mission": {
+    "statement": {
+      "close": "Schließen",
+      "read": "Mehr lesen"
+    }
+  },
+  "module": {
+    "events": {
+      "forms": {
+        "event": {
+          "field": {
+            "dates": {
+              "clone": "Zeile duplizieren",
+              "removedate": "Löschen"
+            },
+            "end": {
+              "label": "Ende"
+            }
+          },
+          "table": {
+            "column": {
+              "begin": {
+                "label": "Beginn"
+              },
+              "end": {
+                "label": "Ende"
+              }
+            }
+          }
+        },
+        "eventdates": {
+          "table": {
+            "column": {
+              "date": {
+                "label": "Datum"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "quicksearch": {
+    "found": "Suchergebnis ...",
+    "gotoEventSearch": "Nach Veranstaltungen suchen",
+    "gotoLocationSearch": "Resultat in Kartenpunktsuche anzeigen",
+    "module": {
+      "title": {
+        "event": "Veranstaltungen",
+        "location": "Kulturelle Orte",
+        "page": "Seiten",
+        "singEvent": "Veranstaltung",
+        "singLocation": "Kultureller Ort",
+        "singPage": "Seite",
+        "singTour": "Tour",
+        "tour": "Touren"
+      }
+    },
+    "noResult": "Für Ihr Stichwort konnten keine Einträge gefunden werden",
+    "placeholder": "Stichwort",
+    "title": "Suche"
+  },
+  "share": {
+    "copyUrl": "In die Zwischenablage kopieren",
+    "onFacebook": "Auf Facebook teilen",
+    "onFbMessenger": "Mit Facebook messenger versenden",
+    "onTwitter": "Auf Twitter teilen",
+    "onWhatsapp": "Mit Whatsapp versenden"
+  },
+  "suggest": {
+    "title": "Kulturellen Ort vorschlagen"
+  },
+  "suggestContent": {
+    "button": {
+      "suggestEvent": "Veranstaltung vorschlagen",
+      "suggestLocation": "Kartenpunkt vorschlagen"
+    }
+  },
+  "suggestion": {
+    "button": {
+      "submit": "Vorschlag abschicken"
+    },
+    "field": {
+      "label": {
+        "alt": "Kurze Bildbeschreibung",
+        "city": "Stadt",
+        "comments": "Weitere Anmerkungen",
+        "credits": "Urheberrechtsinformation",
+        "email": "Emailadresse",
+        "facebook": "Facebook",
+        "houseNumber": "Hausnummer",
+        "image": "Bild",
+        "instagram": "Instagram",
+        "mandatoryDescriptionInEnglish": "Englische Kurzbeschreibung",
+        "mandatoryDescriptionInGerman": "Deutsche Kurzbeschreibung",
+        "otherLanguageDescriptionInEnglish": "Englische Kurzbeschreibung",
+        "otherLanguageDescriptionInGerman": "Deutsche Kurzbeschreibung",
+        "ownerOfLocation": " Ich bestätige die Richtigkeit der oben angegebenen Daten.",
+        "phone": "Telefonnummer",
+        "postcode": "Postleitzahl",
+        "street": "Straße",
+        "suggestionSubmittersEmail": "Ihre Emailadresse",
+        "suggestionSubmittersImageRightsConfirmation": "Bitte bestätigen Sie das die Bildrechte bei Ihnen liegen, danach können Sie das Foto hochladen.",
+        "suggestionSubmittersName": "Ihr Name",
+        "suggestionSubmittersTandCAcceptance": "Ich stimme einer Datenverarbeitung im Sinne der DSVGO zu.",
+        "title": "Name des Ortes",
+        "twitter": "Twitter",
+        "website": "Webseite",
+        "youtube": "Youtube"
+      },
+      "placeholder": {
+        "alt": "Das Bild zeigt ...",
+        "comments": "Haben Sie weitere Anmerkungen oder Kommentare?",
+        "credits": "Urheberechtsinformation",
+        "description": "Bitte beschreiben Sie die Organisation",
+        "email": "Ihre Emailaddressse",
+        "houseNumber": "11",
+        "otherLanguageDescriptionInEnglish": "Falls möglich beschreiben Sie bitte den Ort auch auf englisch",
+        "otherLanguageDescriptionInGerman": "Falls möglich beschreiben Sie bitte den Ort auch auf deutsch",
+        "phone": "030/1234567",
+        "postcode": "12345",
+        "street1": "Siegfriedstr.",
+        "suggestionSubmittersEmail": "Bitte geben Sie Ihre Emailaddressse an",
+        "suggestionSubmittersName": "Bitte geben Sie Ihren Namen an",
+        "title": "Bitte geben Sie den Namen der Organisation an",
+        "website": "https://www.example.com"
+      }
+    },
+    "imageConfirmation": {
+      "required": "Bitte bestätigen Sie, dass das Bild auf unserer Webseite publiziert werden darf"
+    },
+    "section": {
+      "about": {
+        "description": "Bitte beschreiben Sie den Ort",
+        "title": "Über den Ort"
+      },
+      "address": {
+        "description": "Bitte geben Sie die Adresse des vorgeschlagenen Ortes an. Wir nutzen diese um den Ort auf der Karte zu lokalisieren.",
+        "title": "Adresse"
+      },
+      "contact": {
+        "description": "Wir werden diese Information öffentlich zugänglich machen.",
+        "title": "Kontaktinformationen"
+      },
+      "image": {
+        "description": "Haben Sie ein Bild das Sie hochladen möchten und liegen die Bildrechte bei Ihnen?",
+        "title": "Bild"
+      },
+      "online": {
+        "description": "Kann die Organisation online gefunden werden?",
+        "title": "Webseite(n)"
+      },
+      "suggestor": {
+        "description": "Für den Fall, dass wir Nachfragen haben. Diese Angaben werden nicht veröffentlicht.",
+        "title": "Über Sie selbst"
+      },
+      "taxonomies": {
+        "description": "Bitte geben Sie die Attribute an unter der die Organisation in der Suche gefunden werden soll.",
+        "title": "Die Organisation ist ..."
+      }
+    },
+    "successfullySubmitted": "Vielen Dank! Ihr Ortsvorschlag wurde gespeichert",
+    "successfullySubmittedReviewInfor": "Wir werden diesen schnellstmöglich veröffentlichen",
+    "tAndC": {
+      "required": "Bitte stimmen Sie zu"
+    },
+    "tax": {
+      "title": {
+        "accessibility": "Barrierefreiheit",
+        "targetAudience": "Angebote für",
+        "typeOfInstitution": "Einrichtungsart",
+        "typeOfOrganisation": "Organisationsart"
+      }
+    },
+    "writeError": "Entschuldigung, wir konnten leider Ihren Ortsvorschlag nicht speichern. Bitte versuchen Sie es zu einem späteren Zeitpunkt noch einmal."
+  },
+  "table": {
+    "label": {
+      "actions": "Aktionen"
+    }
+  },
+  "taxonomy": {
+    "label": {
+      "targetAudience": "Angebote für",
+      "typeOfInstitution": "Einrichtungsart",
+      "typeOfOrganisation": "Trägerart"
+    }
+  },
+  "text": {
+    "photo": {
+      "credits": "Foto"
+    }
+  },
+  "tour": {
+    "backToTour": "Zurück zur Tour",
+    "button": {
+      "viewAllTourStops": "Tour ansehen"
+    },
+    "card": {
+      "tourStops": "Stops"
+    },
+    "detail": {
+      "facts": "Fakten",
+      "label": {
+        "distance": "Distanz",
+        "duration": "Dauer",
+        "start": "Start",
+        "stop": "Ende",
+        "stops": "Stops"
+      }
+    },
+    "introduction": "Einleitung",
+    "listings": {
+      "title": "Touren"
+    },
+    "title": {
+      "aboutTheTour": "Über die Tour",
+      "tour": "Tour"
+    },
+    "tourStop": {
+      "meta": "Tourstop {{number}}"
+    }
+  },
+  "tours": {
+    "embed": {
+      "chooseTour": "Bitte wählen Sie eine Tour zum einbetten aus"
+    }
+  },
+  "trackingPopup": {
+    "buttonNo": "Nein, danke",
+    "buttonYes": "Ja, gerne",
+    "desc": "Um unser Angebot kontinuierlich verbessern zu können würden wir gerne die einzelnen Seiten die Sie besuchen aufzeichnen.",
+    "title": "Nutzungsverlauf"
+  },
+  "translation": {
+    "comingSoon": "Wir arbeiten an der deutschen Übersetzung."
+  },
+  "translationnotfound": "Übersetzung nicht gefunden",
+  "ui": {
+    "button": {
+      "label": {
+        "hide": "Ausblenden",
+        "show": "Anzeigen"
+      }
+    }
+  },
+  "validation": {
+    "array": {
+      "length": "Dieses muss {{length}} Elemente haben",
+      "max": "Dieses Feld muss weniger oder gleich {{max}} Elemente enthalten",
+      "min": "Dieses Feld muss mindestens {{min}} Elemente enthalten"
+    },
+    "boolean": {
+      "isValue": "Dieses Feld muss {{value}} sein"
+    },
+    "date": {
+      "max": "Dieses Feld muss früher sein als {{max}}",
+      "min": "Dieses Feld muss später sein als {{min}}"
+    },
+    "error": {
+      "postcode": "Bitte geben Sie Ihre Postleitzahl an"
+    },
+    "mixed": {
+      "default": "Dieses Feld ist nicht korrekt ausgefüllt",
+      "defined": "Bitte füllen Sie dieses Feld aus",
+      "notOneOf": "Dieses Feld muss einer der folgenden Typen sein: {{values}}",
+      "notType": "Dieses Feld muss vom Typ {{type}} sein",
+      "oneOf": "Dieses Feld muss einer der folgenden Werte haben: {{values}}",
+      "required": "Bitte füllen Sie dieses Feld aus"
+    },
+    "notunique": "Dieser Wert ist nicht einzigartig",
+    "number": {
+      "integer": "Dieses Feld muss eine ganze Zahl sein",
+      "lessThan": "Dieses Feld muss kleiner sein als {{less}}",
+      "max": "Dieses Feld muss kleiner oder gleich {{max}} sein",
+      "min": "Dieses Feld muss größer oder gleich {{min}} sein",
+      "moreThan": "Dieses Feld muss grösser sein als {{more}}",
+      "negative": "Dieses Feld muss eine negative Zahl sein",
+      "positive": "Dieses Feld muss eine positive Zahl sein"
+    },
+    "object": {
+      "noUnknown": "Dieses Feld hat nicht spezifizierte Schlüssel: {{unknown}}"
+    },
+    "string": {
+      "email": "Dieses Feld muss eine gültige E-Mail-Adresse sein",
+      "length": "Dieses Feld muss exakt {{length}} Zeichen lang sein",
+      "lowercase": "Dieses Feld muss ein String in Kleinbuchstaben sein",
+      "matches": "Dieses Feld muss mit folgendem übereinstimmen: \"{{regex}}\"",
+      "max": "Dieses Feld darf maximal {{max}} Zeichen lang sein",
+      "min": "Dieses Feld muss mindestens {{min}} Zeichen lang sein",
+      "trim": "Dieses Feld darf kein Leerzeichen am Anfang oder Ende haben",
+      "uppercase": "Dieses Feld muss ein String in Grossbuchstaben sein",
+      "url": "Dieses Feld muss eine gültige URL sein",
+      "uuid": "Dieses Feld muss eine gültige UUID sein"
+    }
+  }
+}
