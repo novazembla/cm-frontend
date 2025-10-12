@@ -118,6 +118,7 @@ export const MobileNav = () => {
                             layerStyle="page"
                             position="relative"
                             w="100%"
+                            role="navigation"
                           >
                             {isTablet && (
                               <PageTitle

@@ -71,6 +71,7 @@ export const Header = (/* props */) => {
       sx={{
         touchAction: "none",
       }}
+      role="banner"
     >
       <Flex
         alignItems="flex-end"
@@ -101,6 +102,7 @@ export const Header = (/* props */) => {
               justifyContent="flex-end"
               textStyle="navigation"
               textAlign="right"
+              role="navigation"
               pl={{
                 base: "2em",
                 xl: "0%",

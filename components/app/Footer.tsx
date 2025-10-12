@@ -45,6 +45,7 @@ export const Footer = ({
         md: "45px",
         "2xl": "55px",
       }}
+      role="contentinfo"
     >
       <Box
         mb={{

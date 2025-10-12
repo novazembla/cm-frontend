@@ -474,6 +474,7 @@ export const MainContent = ({
               ref={mainContentRef}
               className="mainContent"
               id="content"
+              role="main"
               minH={
                 isMobile
                   ? isVerticalContent
