@@ -87,9 +87,9 @@ export class MapTour {
             if (self.cultureMap.inBounds(coordinates)) {
               self.bounds.extend(coordinates);
             } else {
-              const feature = stops?.features[i]?.features[i];
+              const feature = stops?.features?.[i]?.features?.[i];
               console.warn(
-                `Skipped location as it is out of bounds: ID(${feature.properties.id.replace(
+                `Skipped location as it is out of bounds: ID(${feature?.properties?.id?.replace(
                   "loc-",
                   ""
                 )}) - ${self.cultureMap.tHelper.getMultilangValue(

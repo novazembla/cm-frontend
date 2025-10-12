@@ -34,21 +34,17 @@ module.exports = withBundleAnalyzer(
       scrollRestoration: true,
     },
 
-    // https://github.com/vercel/next.js/discussions/15344
-    // https://nextjs.org/docs/api-reference/next.config.js/redirects
-    async redirects() {
-      return [
+    async rewrites() {
+      return [ 
         {
-          source: "/sitemap.xml",
-          destination: "/sitemap_index.xml",
-          permanent: true,
+          source: '/sitemap.xml',
+          destination: '/api/sitemap/sitemap_index.xml',
         },
         {
-          source: "/sitemaps.xml",
-          destination: "/sitemap_index.xml",
-          permanent: true,
+          source: '/:file(sitemap(?:[-_].+)?\\.xml)',
+          destination: '/api/sitemap/:file',
         },
-      ];
+      ]
     },
 
     async headers() {
