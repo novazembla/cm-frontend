@@ -26,7 +26,6 @@ import {
 } from "~/provider";
 
 export const LayoutFull = ({ children }: AppProps) => {
-  const settings = useSettingsContext();
   const config = useConfigContext();
   const { t } = useAppTranslations();
   const { isMobile, isTablet } = useIsBreakPoint();
@@ -89,8 +88,8 @@ export const LayoutFull = ({ children }: AppProps) => {
       if (typeof window === "undefined") return;
       window.removeEventListener("resize", onResize);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    
+  }, [onResize]);
 
   let mapJsonBaseUrl;
 

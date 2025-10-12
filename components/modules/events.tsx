@@ -556,9 +556,15 @@ export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
     config.eventLookAheadDays,
   ]);
 
-  let resultText = t("events.totalCount", "{{count}} event found", {
-    count: data?.events?.totalCount ?? 0
+  const totalCount: number =  data?.events?.totalCount ?? 0;
+  let resultText = t("events.totalCount_one", "{{totalCount}} event found", {
+    totalCount,
   });
+  if (totalCount > 1) {
+    resultText = t("events.totalCount_other", "{{totalCount}} events found", {
+      totalCount,
+    });
+  }
  
   useEffect(() => {
     if (

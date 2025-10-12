@@ -583,9 +583,15 @@ export const ModuleComponentLocations = ({
     type,
   ]);
 
-  let resultText = t("locations.totalCount", "{{count}} location found", {
-    count: data?.locations?.totalCount ?? 0,
+  const totalCount: number =  data?.locations?.totalCount ?? 0;
+  let resultText = t("locations.totalCount_one", "{{totalCount}} location found", {
+    totalCount,
   });
+  if (totalCount > 1) {
+    resultText = t("locations.totalCount_other", "{{totalCount}} locations found", {
+      totalCount,
+    });
+  }
 
   useEffect(() => {
     if (
@@ -646,7 +652,7 @@ export const ModuleComponentLocations = ({
                     allowMultiple
                     defaultIndex={accordionDefaultIndex}
                   >
-                    <AccordionItem>
+                    <AccordionItem overflow="visible">
                       <h2>
                         <AccordionButton pt="0" className="tabbedFocus">
                           <Box

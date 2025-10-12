@@ -69,8 +69,8 @@
     "page": {
       "title": "Veranstaltungen"
     },
-    "totalCount_one": "{{count}} Event gefunden",
-    "totalCount_other": "{{count}} Events gefunden"
+    "totalCount_one": "{{totalCount}} Event gefunden",
+    "totalCount_other": "{{totalCount}} Events gefunden"
   },
   "eventSuggestion": {
     "field": {
@@ -219,8 +219,8 @@
     },
     "loadMore": "Weitere Orte laden",
     "title": "Kulturkarte",
-    "totalCount_one": "{{count}} Ort gefunden",
-    "totalCount_other": "{{count}} Orte gefunden"
+    "totalCount_one": "{{totalCount}} Ort gefunden",
+    "totalCount_other": "{{totalCount}} Orte gefunden"
   },
   "logo": {
     "culturemap1": "KULTURKARTE",
