@@ -586,10 +586,6 @@ export const ModuleComponentLocations = ({
   let resultText = t("locations.totalCount", "{{count}} location found", {
     count: data?.locations?.totalCount ?? 0,
   });
-  if (data?.locations?.totalCount == 1)
-    resultText = t("locations.totalCountPlural", "{{count}} locations found", {
-      count: data?.locations?.totalCount,
-    });
 
   useEffect(() => {
     if (

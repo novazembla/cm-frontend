@@ -10,7 +10,8 @@
     "build:live": "NODE_ENV=production next build",
     "start": "next start",
     "lint": "next lint",
-    "translate": "i18next './{components,config,hooks,pages,services}/**/*.{ts,tsx}'"
+    "i18n:status": "npx i18next-cli status",
+    "i18n:extract": "npx i18next-cli extract"
   },
   "dependencies": {
     "@apollo/client": "^3.4.7",

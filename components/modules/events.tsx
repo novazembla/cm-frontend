@@ -557,13 +557,9 @@ export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
   ]);
 
   let resultText = t("events.totalCount", "{{count}} event found", {
-    count: data?.events?.totalCount ?? 0,
+    count: data?.events?.totalCount ?? 0
   });
-  if (data?.events?.totalCount == 1)
-    resultText = t("events.totalCountPlural", "{{count}} events found", {
-      count: data?.events?.totalCount,
-    });
-
+ 
   useEffect(() => {
     if (
       !loading &&

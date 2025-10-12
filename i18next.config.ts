@@ -1,9 +1,10 @@
+import { m } from 'framer-motion';
 import { defineConfig } from 'i18next-cli';
 
 export default defineConfig({
   locales: [
-    "de",
-    "en"
+    "en",
+    "de"
   ],
   extract: {
     input: "./{components,config,hooks,pages,services}/**/*.{ts,tsx}",

@@ -69,10 +69,8 @@
     "page": {
       "title": "Events"
     },
-    "totalCount_one": "",
-    "totalCount_other": "",
-    "totalCountPlural_one": "",
-    "totalCountPlural_other": ""
+    "totalCount_one": "{{count}} event found",
+    "totalCount_other": "{{count}} events found"
   },
   "eventSuggestion": {
     "field": {
@@ -221,10 +219,8 @@
     },
     "loadMore": "Load more locations",
     "title": "Map",
-    "totalCount_one": "",
-    "totalCount_other": "",
-    "totalCountPlural_one": "",
-    "totalCountPlural_other": ""
+    "totalCount_one": "{{count}} location found",
+    "totalCount_other": "{{count}} locations found"
   },
   "logo": {
     "culturemap1": "CULTURE MAP",
