@@ -224,7 +224,7 @@ export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
   }, [settings?.taxonomies, reset]);
 
   useEffect(() => {
-    let customDate = null;
+    let customDate: Date | null = null;
     try {
       const urlParams = new URLSearchParams(filter);
 
@@ -252,7 +252,7 @@ export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
         ? urlParams.get("tacc")?.split(",") ?? []
         : [];
 
-      let customDate = null;
+      let customDate: Date | null = null;
       try {
         if (urlParams.get("customDate"))
           customDate = new Date(
@@ -278,7 +278,7 @@ export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
     if (typeof window === "undefined") return;
 
     const urlParams = new URLSearchParams(filter);
-    const aDI = [];
+    const aDI: number[] = [];
     if (urlParams.get("date") && urlParams.get("date") !== "all") aDI.push(0);
     if (urlParams.get("s")) aDI.push(1);
     if (urlParams.get("tet")) aDI.push(2);
@@ -865,7 +865,7 @@ export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
             </Box>
             <Box w="100%">
               {data?.events?.events?.length > 0 && (
-                <Box size="md" mt="3" w="100%">
+                <Box mt="3" w="100%">
                   {data?.events?.events.map((event: any) => (
                     <ListedEvent key={`event-${event.id}`} event={event} />
                   ))}

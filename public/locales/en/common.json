@@ -69,8 +69,8 @@
     "page": {
       "title": "Events"
     },
-    "totalCount_one": "{{count}} event found",
-    "totalCount_other": "{{count}} events found"
+    "totalCount_one": "events.totalCount",
+    "totalCount_other": "events.totalCount"
   },
   "eventSuggestion": {
     "field": {
@@ -84,7 +84,7 @@
         "facebook": "Facebook",
         "instagram": "Instagram",
         "organiser": "Organiser",
-        "title": "Event title",
+        "title": "Event Title",
         "website": "Website"
       },
       "placeholder": {
@@ -157,7 +157,7 @@
     "error": "Unfortunately, we could not finish you upload please try again later",
     "filesizeabove": "Size min. {{minFileSize}}",
     "filesizebelow": "Size max. {{maxFileSize}}",
-    "filesizebetween": "Size must be between {{minFileSize}} and {{maxFileSize}}",
+    "filesizebetween": "Size between {{minFileSize}} and {{maxFileSize}}",
     "pleasedroporclick": "Drag & drop an image here, or click to select one",
     "uploading": "Uploading"
   },
@@ -207,7 +207,7 @@
     },
     "filter": {
       "andRelationship": "Locations must match all the given terms",
-      "clusterResult": "Cluster results on map",
+      "clusterResult": "Cluster result on map",
       "title": {
         "accessibility": "Accessibility Information",
         "keyword": "Search by keyword",
@@ -219,8 +219,8 @@
     },
     "loadMore": "Load more locations",
     "title": "Map",
-    "totalCount_one": "{{count}} location found",
-    "totalCount_other": "{{count}} locations found"
+    "totalCount_one": "locations.totalCount",
+    "totalCount_other": "locations.totalCount"
   },
   "logo": {
     "culturemap1": "CULTURE MAP",
@@ -292,14 +292,14 @@
     "gotoLocationSearch": "Show results in location search",
     "module": {
       "title": {
-        "event": "Event(s)",
-        "location": "Location(s)",
+        "event": "events",
+        "location": "locations",
         "page": "Pages",
         "singEvent": "event",
         "singLocation": "location",
         "singPage": "page",
         "singTour": "tour",
-        "tour": "Tour(s)"
+        "tour": "tours"
       }
     },
     "noResult": "No result for your search",
@@ -319,7 +319,7 @@
   "suggestContent": {
     "button": {
       "suggestEvent": "Veranstaltung vorschlagen",
-      "suggestLocation": "Suggest an event"
+      "suggestLocation": "Ort vorschlagen"
     }
   },
   "suggestion": {
@@ -341,28 +341,28 @@
         "mandatoryDescriptionInGerman": "Description in German",
         "otherLanguageDescriptionInEnglish": "Description in English",
         "otherLanguageDescriptionInGerman": "Description in German",
-        "ownerOfLocation": "I confirm that the information I have given is correct.",
+        "ownerOfLocation": "I am legally responsible for the location",
         "phone": "Phone number",
         "postcode": "Post code",
         "street": "Street",
         "suggestionSubmittersEmail": "Your email address",
-        "suggestionSubmittersImageRightsConfirmation": "I confirm that I bear the image rights and that the image can be freely used on the website",
+        "suggestionSubmittersImageRightsConfirmation": "I confirm that the uploaded image can be used freely on the website",
         "suggestionSubmittersName": "Your name",
-        "suggestionSubmittersTandCAcceptance": "I agree to data processing of my information in accordance with the DSVGO/GDPR.",
+        "suggestionSubmittersTandCAcceptance": "I accept the terms and conditions",
         "title": "Name of location",
         "twitter": "Twitter",
         "website": "Website",
         "youtube": "Youtube"
       },
       "placeholder": {
-        "alt": "Brief image description",
+        "alt": "Short description of the image",
         "comments": "Do you have any other notes or comments?",
         "credits": "The image credits",
         "description": "Please describe the location briefly",
         "email": "Your email address",
         "houseNumber": "11",
-        "otherLanguageDescriptionInEnglish": "Please describe the location in English",
-        "otherLanguageDescriptionInGerman": "Please describe the location in German too, if possible",
+        "otherLanguageDescriptionInEnglish": "If you can please describe the location in English too",
+        "otherLanguageDescriptionInGerman": "If you can please describe the location in German too",
         "phone": "030/1234567",
         "postcode": "12345",
         "street1": "Siegfriedstr.",
@@ -389,7 +389,7 @@
         "title": "Contact information"
       },
       "image": {
-        "description": "Do you have an image of the location and are you the bearer of the rights? Then upload your image here.",
+        "description": "Would you have an image of the location at hand?",
         "title": "Image"
       },
       "online": {
@@ -401,7 +401,7 @@
         "title": "About yourself"
       },
       "taxonomies": {
-        "description": "Please indicate the attributes under which the location should be found in the search.",
+        "description": "Please indicate the attributes under the location should be found in the search.",
         "title": "The location is ..."
       }
     },
@@ -450,8 +450,8 @@
       "label": {
         "distance": "Distance",
         "duration": "Duration",
-        "start": "Begin",
-        "stop": "End",
+        "start": "Start",
+        "stop": "Stop",
         "stops": "Stops"
       }
     },

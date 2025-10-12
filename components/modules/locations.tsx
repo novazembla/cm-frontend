@@ -256,7 +256,7 @@ export const ModuleComponentLocations = ({
     if (typeof window === "undefined") return;
 
     const urlParams = new URLSearchParams(filter);
-    const aDI = [];
+    const aDI: number[] = [];
     if (urlParams.get("s")) aDI.push(0);
     if (urlParams.get("toi")) aDI.push(1);
     if (urlParams.get("ta")) aDI.push(2);
@@ -965,7 +965,7 @@ export const ModuleComponentLocations = ({
           {type === "listing" && (
             <Box>
               {data?.locations?.locations?.length > 0 && (
-                <Box size="md" mt="20px">
+                <Box mt="20px">
                   {data?.locations?.locations.map((location: any) => (
                     <Box key={`location-${location.id}`} pb="20px">
                       <CardLocation location={location} />

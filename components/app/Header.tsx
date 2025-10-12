@@ -219,7 +219,6 @@ export const Header = (/* props */) => {
                       w="40px"
                       h="40px"
                       zIndex={isQuickSearchOpen ? 1 : 2}
-                      initial={{ opacity: 1 }}
                     >
                       <IconButton
                         aria-label={t("menu.button.openSearch", "Open search")}

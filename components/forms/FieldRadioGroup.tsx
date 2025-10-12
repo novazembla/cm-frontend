@@ -66,7 +66,7 @@ export const FieldRadioGroup = ({
                   return (
                     <Radio
                       key={`${name}_${option.id}`}
-                      value={option.id}
+                      value={`${option?.id ?? ""}`}
                       pr="6"
                       mb="2"
                       sx={{

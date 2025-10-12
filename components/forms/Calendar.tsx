@@ -12,7 +12,7 @@ import {
   Thead,
   Tr
 } from "@chakra-ui/react";
-import useCalendar from "@veccu/react-calendar";
+import { useCalendar } from '@h6s/calendar/dist/index.js';
 import { useTranslation } from "react-i18next";
 
 export const Calendar = ({
@@ -85,7 +85,7 @@ export const Calendar = ({
       <Table w="100%" maxW="300px" variant="unstyled" mx="auto">
         <Thead>
           <Tr>
-            {headers.weekDays.map(({ key, value }) => {
+            {headers.weekdays.map(({ key, value }) => {
               return (
                 <Th key={key} px="1" textAlign="center">
                   <chakra.span textStyle="calendar" fontWeight="bold">

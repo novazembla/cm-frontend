@@ -165,7 +165,7 @@ export const ModuleComponentSuggestLocation = () => {
             }
           : undefined;
 
-      let terms = [];
+      let terms: string[] = [];
 
       if (settings?.taxonomies?.typeOfInstitution?.terms) {
         terms = [

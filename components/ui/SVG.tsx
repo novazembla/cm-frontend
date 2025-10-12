@@ -34,76 +34,77 @@ export const SVG = ({
   className?: string;
   position?: string;
 }) => {
-  let component = ArrowSVG;
+  let Component = ArrowSVG;
 
   switch (type) {
     case "arrow-up":
-      component = ArrowUpSVG;
+      Component = ArrowUpSVG;
       break;
     case "ba_lichtenberg":
-      component = BALichtenberg;
+      Component = BALichtenberg;
       break;
 
     case "search":
-      component = SearchSVG;
+      Component = SearchSVG;
       break;
 
     case "menu-mobile":
-      component = MenuMobileSVG;
+      Component = MenuMobileSVG;
       break;
 
     case "menu-tablet":
-      component = MenuTabletSVG;
+      Component = MenuTabletSVG;
       break;
 
     case "cross":
-      component = CrossSVG;
+      Component = CrossSVG;
       break;
 
     case "suggestion":
-      component = SuggestionSVG;
+      Component = SuggestionSVG;
       break;
 
     case "location":
-      component = WhereAmISVG;
+      Component = WhereAmISVG;
       break;
 
     case "ok":
-      component = OkSVG;
+      Component = OkSVG;
       break;
 
     case "plus":
-      component = PlusSVG;
+      Component = PlusSVG;
       break;
 
     case "minus":
-      component = MinusSVG;
+      Component = MinusSVG;
       break;
 
     case "accordion_1":
-      component = Accordion1SVG;
+      Component = Accordion1SVG;
       break;
 
     case "accordion_2":
-      component = Accordion2SVG;
+      Component = Accordion2SVG;
       break;
 
     case "chevron_right":
-      component = ChrevronRightSVG;
+      Component = ChrevronRightSVG;
       break;
 
     case "large_chevron":
-      component = LargeChrevronSVG;
+      Component = LargeChrevronSVG;
       break;
     
     case "s_energie":
-      component = SenatEnergie;
+      Component = SenatEnergie;
       break;
 
 
   }
 
   return (
+    // <Box className={className} as={Component} w={width} h={height} />
     <Box
       className={className}
       w={width}
@@ -112,7 +113,7 @@ export const SVG = ({
       backgroundPosition={position}
       backgroundRepeat="no-repeat"
       backgroundSize={size}
-      backgroundImage={`url(${component})`}
+      backgroundImage={`url(${Component})`}
     ></Box>
   );
 };

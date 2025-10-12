@@ -67,7 +67,7 @@ export const TrimmedTextWithBottomEdge = ({
 
   return (
     <Box>
-      <chakra.span hyphens="auto" ref={span}>
+      <chakra.span sx={{ hyphens: "auto" }} ref={span}>
         {out}
       </chakra.span>
       {out !== text && <chakra.span>&hellip;</chakra.span>}

@@ -20,14 +20,14 @@ const themeConfig = {
     body: "Berlin Type",
   },
   components,
-  breakpoints: createBreakpoints({
+  breakpoints: {
     // 16px default font size * ...em
     sm: "21em", // ~360px
     md: "45em", // ~720px
     lg: "62em", // ~992px
     xl: "75em", // 1200px - aka "Desktop"
     "2xl": "120em", // ~1920px - aka "Screen"
-  }),
+  },
   styles: {
     global: {
       "html, body": {

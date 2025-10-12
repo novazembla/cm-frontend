@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Key } from "react";
 import { gql } from "@apollo/client";
 
 import { MultiLangHtml } from "~/components/ui/MultiLangHtml";
@@ -284,15 +284,15 @@ export const ModuleComponentEvent = ({
     }
   }
 
-  const links = [];
-  if (event?.socialMedia?.website && event.socialMedia.website.trim()) {
-    links.push(event.socialMedia.website);
+  const links: String[] = [];
+  if ((event as any)?.socialMedia?.website && (event as any).socialMedia.website.trim()) {
+    links.push(event?.socialMedia?.website ?? "");
   }
   if (event?.socialMedia?.facebook && event.socialMedia.facebook.trim()) {
-    links.push(event.socialMedia.facebook);
+    links.push(event?.socialMedia?.facebook ?? "");
   }
   if (event?.socialMedia?.instagram && event.socialMedia.instagram.trim()) {
-    links.push(event.socialMedia.instagram);
+    links.push(event?.socialMedia?.instagram ?? "");
   }
 
   return (
@@ -386,11 +386,11 @@ export const ModuleComponentEvent = ({
                     {links.length > 1 ? t("event.label.websites", "Websites") : t("event.label.website", "Website")}
                   </Box>
                   <Box textStyle="card">
-                    {links.map((link) => <Box key={link}>
+                    {links.map((link) => <Box key={link as Key}>
                       <Link
                         target="_blank"
                         rel="no-referral no-follow"
-                        href={link}
+                        href={link as string}
                         display="inline-block"
                         textDecoration="underline"
                         textDecorationColor="cm.accentLight"

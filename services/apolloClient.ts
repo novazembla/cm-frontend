@@ -122,14 +122,14 @@ const createApolloClient = (config: AppConfig) => {
     defaultOptions: {
       watchQuery: {
         fetchPolicy: "cache-and-network",
-        errorPolicy: "ignore",
+        errorPolicy: "ignore"
       },
       query: {
         fetchPolicy: "cache-first",
-        errorPolicy: "all",
+        errorPolicy: "all"
       },
       mutate: {
-        errorPolicy: "all",
+        errorPolicy: "all"
       },
     },
   });

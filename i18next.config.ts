@@ -8,6 +8,7 @@ export default defineConfig({
   ],
   extract: {
     input: "./{components,config,hooks,pages,services}/**/*.{ts,tsx}",
-    output: "public/locales/{{language}}/{{namespace}}.json"
-  }
+    output: "public/locales/{{language}}/{{namespace}}.json",
+    defaultNS: 'common'
+  },
 });

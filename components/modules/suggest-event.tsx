@@ -169,7 +169,7 @@ export const ModuleComponentSuggestEvent = () => {
             }
           : undefined;
 
-      let terms = [];
+      let terms: string[] = [];
 
       if (settings?.taxonomies?.typeOfInstitution?.terms) {
         terms = ["eventType", "accessibility"].reduce(

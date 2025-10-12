@@ -4,7 +4,7 @@ import { useLazyQuery, DocumentNode } from "@apollo/client";
 import debounce from "lodash/debounce";
 import { useFormContext } from "react-hook-form";
 import { flattenErrors } from "./helpers";
-import { usePopper } from "@chakra-ui/popper";
+import { usePopper } from "@chakra-ui/react";
 
 import {
   FormLabel,
