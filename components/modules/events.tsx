@@ -106,6 +106,7 @@ export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
   const config = useConfigContext();
 
   const [isFiltered, setIsFiltered] = useState(false);
+  const [isKeywordOpened, setKeywordIsOpen] = useState(false);
   const [currentQueryState, setCurrentQueryState] = useState<any>({
     where: {
       ...initialQueryState.where,
@@ -581,6 +582,8 @@ export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
 
   const urlParams = new URLSearchParams(filter);
 
+  console.log(isKeywordOpened);
+
   return (
     <MainContent>
       <NextHeadSeo
@@ -708,9 +711,15 @@ export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
                         </Box>
                       </AccordionPanel>
                     </AccordionItem>
-                    <AccordionItem>
-                      <h2>
-                        <AccordionButton pt="0" className="tabbedFocus">
+                    <AccordionItem
+                      sx={{
+                        "> div": {
+                        "overflow": isKeywordOpened ? "visible !important" : undefined
+                      }
+                     }}
+                    >
+                      <h2 >
+                        <AccordionButton pt="0" className="tabbedFocus" onClick={() => {setKeywordIsOpen(!isKeywordOpened)}}>
                           <Box
                             flex="1"
                             textAlign="left"

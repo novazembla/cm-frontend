@@ -1,5 +1,3 @@
 TODO: 
 - Upgrade node on server
 - Set Origin header based on .env in next config
-- fix halo in accordion
-- fix SVGs    

@@ -61,6 +61,7 @@ export const ModuleComponentLocations = ({
   const cultureMap = useMapContext();
 
   const [isFiltered, setIsFiltered] = useState<boolean>(false);
+  const [isKeywordOpened, setKeywordIsOpen] = useState(false);
   const [currentMapView, setCurrentMapView] = useState("clustered");
   const [iframeQuery, setIframeQuery] = useState("");
 
@@ -652,9 +653,15 @@ export const ModuleComponentLocations = ({
                     allowMultiple
                     defaultIndex={accordionDefaultIndex}
                   >
-                    <AccordionItem overflow="visible">
+                    <AccordionItem
+                      sx={{
+                        "> div": {
+                        "overflow": isKeywordOpened ? "visible !important" : undefined
+                      }
+                     }}
+                    >
                       <h2>
-                        <AccordionButton pt="0" className="tabbedFocus">
+                        <AccordionButton pt="0" className="tabbedFocus" onClick={() => {setKeywordIsOpen(!isKeywordOpened)}}>
                           <Box
                             flex="1"
                             textAlign="left"
