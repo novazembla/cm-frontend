@@ -422,7 +422,7 @@ export const FieldImageUploader = ({
                       fontSize="2xl"
                       width="40px"
                       height="40px"
-                      icon={<SVG type="cross" width="60px" height="60px" />}
+                      icon={<SVG type="cross" wrapped width={60} height={60} fill />}
                       color="cm.accentLight"
                       bg="transparent"
                       borderColor="transparent"

@@ -651,8 +651,8 @@ export const ModuleComponentTour = ({ tour }: { tour: any; }) => {
                           >
                             <SVG
                               type="arrow-right"
-                              width={isMobile ? "30px" : "40px"}
-                              height={isMobile ? "17px" : "22px"}
+                              width={isMobile ? 30 : 40}
+                              height={isMobile ? 17 : 22}
                             />
                           </Box>
                         </Flex>

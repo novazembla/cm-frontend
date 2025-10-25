@@ -40,7 +40,7 @@ export const Map = ({ layout }: { layout: string }) => {
   const { isMobile, isTablet, isTabletWide, isDesktopAndUp } =
     useIsBreakPoint();
 
-  const buttonDiameter = isMobile ? "38px" : "55px";
+  const buttonDiameter = isMobile ? 38 : 55;
   const buttonSpacing = isMobile ? "10px" : "14px";
   const [mapLoaded, setMapLoaded] = useState(false);
 
@@ -221,10 +221,10 @@ export const Map = ({ layout }: { layout: string }) => {
                     icon={
                       <SVG
                         type="cross"
-                        width={buttonDiameter}
-                        height={buttonDiameter}
+                        fill
                       />
                     }
+                    position="relative"
                     borderRadius="100"
                     p="0"
                     paddingInlineStart="0"
@@ -265,10 +265,10 @@ export const Map = ({ layout }: { layout: string }) => {
                     icon={
                       <SVG
                         type="search"
-                        width={buttonDiameter}
-                        height={buttonDiameter}
+                        fill
                       />
                     }
+                    position="relative"
                     borderRadius="100"
                     p="0"
                     paddingInlineStart="0"
@@ -311,10 +311,10 @@ export const Map = ({ layout }: { layout: string }) => {
               icon={
                 <SVG
                   type="plus"
-                  width={buttonDiameter}
-                  height={buttonDiameter}
+                  fill
                 />
               }
+              position="relative"
               borderRadius="100"
               p="0"
               paddingInlineStart="0"
@@ -344,10 +344,10 @@ export const Map = ({ layout }: { layout: string }) => {
               icon={
                 <SVG
                   type="minus"
-                  width={buttonDiameter}
-                  height={buttonDiameter}
+                  fill
                 />
               }
+              position="relative"
               borderRadius="100"
               p="0"
               paddingInlineStart="0"
@@ -379,10 +379,10 @@ export const Map = ({ layout }: { layout: string }) => {
                 icon={
                   <SVG
                     type="location"
-                    width={buttonDiameter}
-                    height={buttonDiameter}
+                    fill
                   />
                 }
+                position="relative"
                 borderRadius="100"
                 p="0"
                 paddingInlineStart="0"

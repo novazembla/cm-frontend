@@ -66,7 +66,7 @@ export const QuickSearchItem = ({
           </chakra.span>
         </chakra.span>
         <chakra.span display="block">
-          <SVG type="chevron_right" width="20px" height="20px" />
+          <SVG type="chevron_right" width={20} height={20} />
         </chakra.span>
       </chakra.a>
     </Box>

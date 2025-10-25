@@ -67,12 +67,14 @@ export const Footer = ({
             variant="unstyled"
             aria-label={t("menu.button.backToTop", "Back to top")}
             icon={
+              
               <SVG
                 type="arrow-up"
-                width={isMobile ? "17px" : "22px"}
-                height={isMobile ? "30px" : "40px"}
+                wrapped width={isMobile ? 17 : 22} height={isMobile ? 30 : 40}
+                fill
               />
             }
+            position="relative"
             borderRadius="0"
             p="0"
             className="svgHover tabbedFocus"
@@ -182,8 +184,7 @@ export const Footer = ({
               <SVG
                 className="svg black"
                 type="ba_lichtenberg"
-                width="100%"
-                height="100%"
+                fill
               />
             </chakra.span>
           </chakra.a>
@@ -211,8 +212,7 @@ export const Footer = ({
               <SVG
                 className="svg black"
                 type="s_energie"
-                width="100%"
-                height="100%"
+                fill
               />
             </chakra.span>
           </chakra.a>

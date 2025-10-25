@@ -226,8 +226,8 @@ export const ModuleComponentTourIntroduction = ({ tour }: { tour: any }) => {
                   icon={
                     <SVG
                       type="cross"
-                      width={isMobile ? "50px" : "80px"}
-                      height={isMobile ? "50px" : "80px"}
+                      wrapped width={isMobile ? 50 : 80} height={isMobile ? 50 : 80}
+                      fill
                     />
                   }
                   borderRadius="0"

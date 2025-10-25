@@ -187,7 +187,7 @@ export const ModuleComponentLocationEmbedCode = ({
                             "locations.embed.select.button.removeLocation",
                             "Remove location from list"
                           )}
-                          icon={<SVG type="cross" width="60px" height="60px" />}
+                          icon={<SVG type="cross" wrapped width={60} height={60} fill />}
                           borderRadius="0"
                           p="0"
                           className="svgHover tabbedFocus"

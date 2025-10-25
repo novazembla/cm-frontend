@@ -343,8 +343,9 @@ export const MainContent = ({
                 _focus={{
                   bg: "#999",
                 }}
+                position="relative"
                 aria-label={toggleLabel}
-                icon={<SVG type="large_chevron" width="24px" height="24px" />}
+                icon={<SVG type="large_chevron" fill wrapped width={24} height={24}/>}
                 p="0"
                 color="cm.accentLight"
                 onClick={toggle}

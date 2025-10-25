@@ -306,8 +306,8 @@ export const QuickSearchForm = () => {
                       icon={
                         <SVG
                           type="arrow-right"
-                          width={isMobile ? "40px" : "50px"}
-                          height={isMobile ? "17px" : "22px"}
+                          wrapped width={isMobile ? 40 : 50} height={isMobile ? 17 : 22}
+                          fill
                         />
                       }
                       borderRadius="0"
@@ -419,7 +419,7 @@ export const QuickSearchForm = () => {
               {!isMobile && (
                 <IconButton
                   aria-label={t("menu.button.closeSearch", "Close search")}
-                  icon={<SVG type="cross" width="60px" height="60px" />}
+                  icon={<SVG type="cross" wrapped width={60} height={60} fill />}
                   position="absolute"
                   top="0px"
                   right="-20px"

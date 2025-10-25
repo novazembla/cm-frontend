@@ -19,7 +19,7 @@ export const TextErrorMessage = ({
   if (typeof error === "string") {
     message = t(error);
   } else if (typeof error === "object" && error.key && error.values) {
-    message = t(error.key, error.values);
+    message = t(error.key, error.values as Record<string, any>);
   }
 
   if (!message || message.trim().length === 0) return null;

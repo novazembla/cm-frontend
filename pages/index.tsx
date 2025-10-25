@@ -320,15 +320,15 @@ export const Home = ({ homepage }: { homepage: any }) => {
                 >
                   <SVG
                     type="arrow-right"
-                    width={isMobile ? "30px" : "40px"}
-                    height={isMobile ? "17px" : "22px"}
+                    wrapped width={isMobile ? 30 : 40} height={isMobile ? 17 : 22}
+                    fill
                   />
                 </chakra.a>
               </NextLink>
             )}
             {isMobile && (
               <IconButton
-                icon={<SVG type="cross" width="200%" height="200%" />}
+                icon={<SVG type="cross" wrapped width={isMobile ? 60 : 80} height={isMobile ? 60 : 80} fill />}
                 w={isMobile ? "30px" : "40px"}
                 h={isMobile ? "30px" : "40px"}
                 minW="30px"

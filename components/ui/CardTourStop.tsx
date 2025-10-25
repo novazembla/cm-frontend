@@ -221,14 +221,19 @@ export const CardTourStop = ({
                     position: "absolute",
                     bottom: "-6px",
                     right: 0,
+                    w: 17,
+                    h: 22
                   }
-                : {}),
+                : {
+                  w: 30,
+                  h: 40
+                }),
             }}
           >
             <SVG
               type="arrow-right"
-              width={isMobile ? "30px" : "40px"}
-              height={isMobile ? "17px" : "22px"}
+              wrapped width={isMobile ? 30 : 40} height={isMobile ? 17 : 22}
+              fill
             />
           </Box>
         </Flex>

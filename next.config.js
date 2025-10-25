@@ -62,15 +62,15 @@ module.exports = withBundleAnalyzer(
       //   appendOnly: true,
       //   level: "verbose",
       // };
-      config.module.rules.push(
-        {
-          test: /\.svg$/,
-          issuer: {
-            and: [/\.(js|ts)x?$/]
-          },
-          use: ['@svgr/webpack'],
-        }
-      );
+      // config.module.rules.push(
+      //   {
+      //     test: /\.svg$/,
+      //     issuer: {
+      //       and: [/\.(js|ts)x?$/]
+      //     },
+      //     use: ['@svgr/webpack'],
+      //   }
+      // );
       return config;
     },
   })

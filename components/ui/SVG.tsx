@@ -1,5 +1,6 @@
 import React from "react";
 import { Box } from "@chakra-ui/react";
+import Image from 'next/image';
 
 import ArrowSVG from "~/assets/svg/v2/arrow_right.svg";
 import ArrowUpSVG from "~/assets/svg/v2/arrow_up.svg";
@@ -19,21 +20,46 @@ import LargeChrevronSVG from "~/assets/svg/v2/large_chevron.svg";
 import BALichtenberg from "~/assets/svg/logo_ba_lichtenberg.svg";
 import SenatEnergie from "~/assets/svg/logo_senat_energie.svg";
 
+type SVGBaseProps = {
+  type: string;
+  className?: string;
+};
+
+type SVGFixedSizeProps = SVGBaseProps & {
+  width: number;
+  height: number;
+  fill?: false;
+  objectFit?: never;
+  wrapped?: never;
+};
+
+type SVGFillProps = SVGBaseProps & {
+  fill: true;
+  objectFit?: "contain" | "cover";
+  width?: never;
+  height?: never;
+  wrapped?: never;
+};
+
+type SVGWrappedProps = SVGBaseProps & {
+  width: number;
+  height: number;
+  wrapped: true;
+  objectFit?: "contain" | "cover";
+  fill?: boolean;
+};
+
+type SVGProps = SVGFixedSizeProps | SVGFillProps | SVGWrappedProps;
+
 export const SVG = ({
   type,
   width,
   height,
+  fill,
+  objectFit,
   className = "svg",
-  size = "contain",
-  position = "center center",
-}: {
-  type: string;
-  width: string;
-  height: string;
-  size?: string;
-  className?: string;
-  position?: string;
-}) => {
+  wrapped
+}: SVGProps) => {
   let Component = ArrowSVG;
 
   switch (type) {
@@ -100,20 +126,26 @@ export const SVG = ({
       Component = SenatEnergie;
       break;
 
-
   }
-
-  return (
-    // <Box className={className} as={Component} w={width} h={height} />
-    <Box
+  const Img = <Image
       className={className}
-      w={width}
-      h={height}
-      flexShrink={0}
-      backgroundPosition={position}
-      backgroundRepeat="no-repeat"
-      backgroundSize={size}
-      backgroundImage={`url(${Component})`}
-    ></Box>
-  );
+      alt=""
+      src={Component}
+      width={!fill ? width : undefined}
+      height={!fill ? height : undefined}
+      objectFit={objectFit ?? "contain"}
+      fill={fill}
+    ></Image>
+  
+  return wrapped ? <Box sx={
+                      {
+                        "position": "relative",
+                        "width": `${width}px`,
+                        "height": `${height}px`,
+                        "flexGrow": 0,
+                        "flexShrink": 0
+                      }
+                    }>
+                      {Img}
+                    </Box> : Img;
 };

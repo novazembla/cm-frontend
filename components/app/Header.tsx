@@ -174,7 +174,8 @@ export const Header = (/* props */) => {
                           "menu.button.closeSearch",
                           "Close search"
                         )}
-                        icon={<SVG type="cross" width="80px" height="80px" />}
+                        icon={<SVG wrapped width={80} height={80} type="cross" fill />}
+                        position="relative"
                         borderRadius="0"
                         p="0"
                         className="svgHover tabbedFocus"
@@ -222,7 +223,8 @@ export const Header = (/* props */) => {
                     >
                       <IconButton
                         aria-label={t("menu.button.openSearch", "Open search")}
-                        icon={<SVG type="search" width="64px" height="62px" />}
+                        icon={<SVG wrapped width={64} height={62} type="search" fill />}
+                        position="relative"
                         borderRadius="0"
                         p="0"
                         className="svgHover tabbedFocus"
@@ -276,7 +278,8 @@ export const Header = (/* props */) => {
                   >
                     <IconButton
                       aria-label={t("menu.button.closeMenu", "Close menu")}
-                      icon={<SVG type="cross" width="80px" height="80px" />}
+                      icon={<SVG wrapped width={80} height={80} type="cross" fill />}
+                      position="relative"
                       borderRadius="0"
                       p="0"
                       className="svgHover tabbedFocus"
@@ -323,9 +326,8 @@ export const Header = (/* props */) => {
                   >
                     <IconButton
                       aria-label={t("menu.button.openMenu", "Open menu")}
-                      icon={
-                        <SVG type="menu-tablet" width="30px" height="30px" />
-                      }
+                      icon={<SVG wrapped width={30} height={30} type="menu-tablet" fill />                      }
+                      position="relative"
                       borderRadius="0"
                       p="0"
                       className="svgHover tabbedFocus"

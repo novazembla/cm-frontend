@@ -363,8 +363,8 @@ export const ModuleComponentSuggestLocation = () => {
                     <Box>
                       <SVG
                         type="ok"
-                        width="70px"
-                        height="70px"
+                        fill
+                        wrapped width={70} height={70}
                         className="svg-dark"
                       />
                     </Box>

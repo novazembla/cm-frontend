@@ -146,9 +146,7 @@ export const MobileNav = () => {
                                 "menu.button.closeMenu",
                                 "Close menu"
                               )}
-                              icon={
-                                <SVG type="cross" width="60px" height="60px" />
-                              }
+                              icon={<SVG type="cross" fill  wrapped width={60} height={60}/>}
                               position="absolute"
                               top="20px"
                               right="20px"
@@ -229,7 +227,10 @@ export const MobileNav = () => {
                 <IconButton
                   variant="outline"
                   aria-label={t("menu.button.closeMenu", "Close menu")}
-                  icon={<SVG type="cross" width="58px" height="58px" />}
+                  icon={
+                    <chakra.div position="relative" width="100%" height="100%">
+                      <SVG type="cross" fill />
+                    </chakra.div>}
                   borderRadius="100"
                   p="0"
                   paddingInlineStart="0"
@@ -265,7 +266,10 @@ export const MobileNav = () => {
                 <IconButton
                   variant="outline"
                   aria-label={t("menu.button.openMenu", "Open menu")}
-                  icon={<SVG type="menu-mobile" width="64px" height="64px" />}
+                  icon={
+                    <chakra.div position="relative" width="100%" height="100%">
+                      <SVG type="menu-mobile" fill />
+                    </chakra.div>}
                   borderRadius="100"
                   p="0"
                   paddingInlineStart="0"
@@ -313,7 +317,11 @@ export const MobileNav = () => {
                   <IconButton
                     variant="outline"
                     aria-label={t("menu.button.closeSearch", "Close search")}
-                    icon={<SVG type="cross" width="52px" height="52px" />}
+                    icon={
+                      <chakra.div position="relative" width="100%" height="100%">
+                        <SVG type="cross" fill />
+                      </chakra.div>
+                    }
                     borderRadius="100"
                     p="0"
                     paddingInlineStart="0"
@@ -350,7 +358,11 @@ export const MobileNav = () => {
                     variant="outline"
                     aria-label={t("menu.button.openSearch", "Open search")}
                     borderRadius="48px"
-                    icon={<SVG type="search" width="48px" height="48px" />}
+                    icon={
+                      <chakra.div position="relative" width="100%" height="100%">
+                        <SVG type="search" fill />
+                      </chakra.div>
+                    }
                     w="48px"
                     h="48px"
                     border="none"
@@ -383,7 +395,11 @@ export const MobileNav = () => {
                 "Suggest a new location"
               )}
               borderRadius="100"
-              icon={<SVG type="suggestion" width="48px" height="48px" />}
+              icon={
+                <chakra.div position="relative" width="100%" height="100%">
+                  <SVG type="suggestion" fill />
+                </chakra.div>
+              }
               w="48px"
               h="48px"
               border="none"
