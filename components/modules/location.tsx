@@ -124,7 +124,7 @@ export const ModuleComponentLocation = ({
 }) => {
   const router = useRouter();
   const cultureMap = useMapContext();
-  const { isMobile } = useIsBreakPoint();
+  const { isMobile, isTablet, isTabletWide, isDesktopAndUp } = useIsBreakPoint();
   const config = useConfigContext();
   const settings = useSettingsContext();
   const { t, getMultilangValue, getMultilangHtml, i18n } = useAppTranslations();
@@ -306,6 +306,8 @@ export const ModuleComponentLocation = ({
       >
         <Box px="20px" pt="0.5em">
           <PageTitle
+            backlink
+            url={i18n.language === "en" ? "/en/map" : "/karte"}
             title={t("location.detail.title", "Location")}
             type="short"
           />
@@ -465,7 +467,7 @@ export const ModuleComponentLocation = ({
             
 
             <SimpleGrid
-              columns={2}
+              columns={isTablet || isTabletWide || isDesktopAndUp ? 2 : 1}
               spacingX="0.5em"
               spacingY="1em"
               px={{

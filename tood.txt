@@ -1,3 +1,29 @@
 TODO: 
 - Upgrade node on server
 - Set Origin header based on .env in next config
+
+
+Folgende Arbeiten für die Kulturkarte empfehlen wir und können im kalkulierten Finanzrahmen umgesetzt werden:
+-      Umstellung der Adresssuche auf OpenStreetMap (funktioniert nicht mehr seit Ende August)
+-      Inhalte vorschlagen- Umwandlung von Umlauten in den Slugs, z.B. ö → oe
+-      Angabe Ticketpreise verbindlich (als Textfeld, um Preisspannen angeben zu können)
+-      Highlights auf Startseite selbstlöschend im backend nach Ablauf der Veranstaltung
+-      Struktur (Auszeichnung von Landmarks), hinzufügen von „Aria role Attributen“ (button/navigation)
+-      CSP-Header wird ergänzt
+-      Access Control Origin Header gesetzt mit Wildcard wird u.U. wegen embed-code benötigt, wird geprüft und, falls möglich, geändert
+
+
+NEARLY DONE:
+-      Veranstaltungen Desktop 1- statt 2-spaltig 
+      TODO: confirm that new listing view is better. 
+-      „zurück“-Element kann ergänzt werden, hat aber Design-Implikationen
+      TODO: confirm that they want to use the backlink, then implement it everywhere? 
+      TODO: confirm that they want to remove the X from tours or keep it
+
+DONE:
+-      Aktualisierung der Codebasis, Update sämtlicher medium, high und critical Common Vulnerability Scorings (CVCs)
+-      Kartenpunkte Mobilansicht 1- statt 2-spaltig (Einrichtungsart, etc.)
+
+
+NO-ACTION NEEDED:
+-      Tastaturbedienbarkeit: Kartenpunkte sind über die Auflistung erreichbar, Karteninhalt wird für screenreader durch aria-hidden=“true“ verborgen

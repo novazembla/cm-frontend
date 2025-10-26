@@ -36,9 +36,15 @@ export const ListedEvent = ({ event }: { event: any }) => {
               {t("event.label.dateFromVon", "From")}{" "}
               {begin.toLocaleDateString(
                 i18n.language === "de" ? "de-DE" : "en-GB"
-              )}<br/>
-              {t("event.label.dateUntil", "Until")}{" "}
-              {end.toLocaleDateString(
+              )}
+              {
+                isMobile ? <>
+                  <chakra.span textTransform="lowercase"> {t("event.label.dateUntil", "Until")} </chakra.span>
+                </> : 
+                <>
+                  <br/>{t("event.label.dateUntil", "Until")}
+                </>
+              }{end.toLocaleDateString(
                 i18n.language === "de" ? "de-DE" : "en-GB"
               )}
             </>
@@ -67,8 +73,21 @@ export const ListedEvent = ({ event }: { event: any }) => {
 
   const terms = event?.terms?.filter((term: any) => eventTermIds.includes(term.id))
 
-  return (
-    <LinkBox
+  return isMobile ? 
+    <ContentMobile dateInfo={dateInfo} timeInfo={timeInfo} event={event} terms={terms}/> :
+    <ContentTablet dateInfo={dateInfo} timeInfo={timeInfo} event={event} terms={terms}/>
+
+};
+
+function ContentTablet({
+  dateInfo,
+  timeInfo,
+  event,
+  terms
+}) {
+  const { t, i18n, getMultilangValue } = useAppTranslations();
+  
+  return <LinkBox
       as="article"
       mb="1em"
       pb="1em"
@@ -135,12 +154,94 @@ export const ListedEvent = ({ event }: { event: any }) => {
           <Box alignSelf="flex-end">
             <SVG
               type="arrow-right"
-              width={isMobile ? 30 : 40}
-              height={isMobile ? 17 : 22}
+              width={40}
+              height={22}
             />
           </Box>
         </Flex>
       </Flex>
     </LinkBox>
-  );
-};
+}
+
+function ContentMobile({
+  dateInfo,
+  timeInfo,
+  event,
+  terms
+}) {
+  const { t, i18n, getMultilangValue } = useAppTranslations();
+  
+  return <LinkBox
+      as="article"
+      mb="1em"
+      pb="1em"
+      borderBottom="1px solid"
+      borderColor="cm.accentDark"
+      _last={{
+        border: "none",
+      }}
+    > 
+      <Box textStyle="card" pb="0.5em">
+        {dateInfo} {timeInfo}
+      </Box>
+      <Box mb="1em">
+        <chakra.h2 className="headline" color="cm.text">
+          <LinkOverlay
+            as={NextLink}
+            href={`${i18n.language === "en" ? "/en" : ""}/${
+              i18n.language === "de" ? "veranstaltung" : "event"
+            }/${getMultilangValue(event?.slug)}`}
+            textDecoration="none" textStyle="headline">
+            <MultiLangValue json={event?.title} />
+          </LinkOverlay>
+        </chakra.h2>
+      </Box>
+      <Box
+        mb="0.5em"
+        color="cm.accentDark"
+        textTransform="uppercase"
+        textStyle="categories"
+      >
+        {t("event.label.category", "Category")}
+      </Box>
+      <Box mb="1em">
+        {terms?.length > 0 ? (
+            terms
+              .map((t: any) => {
+                if (!t) return "";
+
+                return getMultilangValue(t?.name);
+              })
+              .join(", ")
+          ) : (
+            <></>
+          )}
+      </Box>
+      <Flex
+        mb="0.5em"
+        color="cm.accentDark"
+        textTransform="uppercase"
+        textStyle="categories"
+      >
+        <Box w="66.66%" textStyle="">
+          {t("event.label.eventLocation", "Event Location")}
+        </Box>
+      </Flex>
+      <Flex>
+        <Box w="calc(100% - 30px)">
+          {event?.address ? (
+            <Box dangerouslySetInnerHTML={{ __html: event?.address }} />
+          ) : (
+            <>{t("event.missingData.eventLocation", "TBD")}</>
+          )}
+        </Box>
+        <Box alignSelf="flex-end">
+          <SVG
+            type="arrow-right"
+            width={30}
+            height={17}
+          />
+        </Box>
+      </Flex>
+    </LinkBox>
+}

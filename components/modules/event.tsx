@@ -408,7 +408,7 @@ export const ModuleComponentEvent = ({
               )}
 
               <SimpleGrid
-                columns={isMobile ? 1 : 2}
+                columns={1}
                 spacingX="0.5em"
                 spacingY="1em"
               >
