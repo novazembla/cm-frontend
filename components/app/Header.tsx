@@ -103,6 +103,7 @@ export const Header = (/* props */) => {
               textStyle="navigation"
               textAlign="right"
               role="navigation"
+              aria-label={t('navigation.primary', "main navigation")}
               pl={{
                 base: "2em",
                 xl: "0%",

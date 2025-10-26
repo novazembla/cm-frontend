@@ -119,6 +119,7 @@ export const MobileNav = () => {
                             position="relative"
                             w="100%"
                             role="navigation"
+                            aria-label={t('navigation.primary', "primary navigation")}
                           >
                             {isTablet && (
                               <PageTitle
@@ -207,6 +208,8 @@ export const MobileNav = () => {
           sx={{
             touchAction: "none",
           }}
+          role="navigation"
+          aria-label={t('navigation.toolbar', "toolbar")}
         >
           <Box position="relative" w="52px" h="52px" order={2}>
             <motion.div

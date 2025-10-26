@@ -2,6 +2,11 @@
   "apiimage": {
     "uploaded": "Processing image"
   },
+  "aria": {
+    "region": {
+      "main": "main content"
+    }
+  },
   "button": {
     "showLess": "Show less",
     "showMore": "Show all"
@@ -247,6 +252,7 @@
   "mission": {
     "statement": {
       "close": "close",
+      "link": "arrow right",
       "read": "read mission statement"
     }
   },
@@ -285,6 +291,13 @@
         }
       }
     }
+  },
+  "navigation": {
+    "primary": "primary navigation",
+    "quicksearchAndMap": "Quicksearch and map navigation",
+    "secondary": "secondary navigation",
+    "sponsors": "project commissioners and sponsors",
+    "toolbar": "toolbar"
   },
   "quicksearch": {
     "found": "found ...",

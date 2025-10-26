@@ -476,6 +476,7 @@ export const MainContent = ({
               className="mainContent"
               id="content"
               role="main"
+              aria-label={t("aria.region.main", "main content")}
               minH={
                 isMobile
                   ? isVerticalContent

@@ -2,6 +2,11 @@
   "apiimage": {
     "uploaded": "Bild wird auf dem Server verarbeitet"
   },
+  "aria": {
+    "region": {
+      "main": "Hauptinhalt"
+    }
+  },
   "button": {
     "showLess": "Weniger anzeigen",
     "showMore": "Alle anzeigen"
@@ -247,6 +252,7 @@
   "mission": {
     "statement": {
       "close": "Schließen",
+      "link": "Pfeil nach rechts",
       "read": "Mehr lesen"
     }
   },
@@ -285,6 +291,13 @@
         }
       }
     }
+  },
+  "navigation": {
+    "primary": "Hauptnavigation",
+    "quicksearchAndMap": "Schnellsuche und Kartennavigation (wenn sichtbar)",
+    "secondary": "Weitere Inhalte",
+    "sponsors": "Auftraggeber und Unterstützer",
+    "toolbar": "Werkzeuge"
   },
   "quicksearch": {
     "found": "Suchergebnis ...",

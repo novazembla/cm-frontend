@@ -113,10 +113,12 @@ export const Footer = ({
             base: "column",
           }}
         >
-          <Box
+          <chakra.nav
             alignSelf={isMobile ? "flex-end" : undefined}
             pr={isMobile ? "20px" : undefined}
             minW={isMobile ? "66.66%" : undefined}
+            role="navigation"
+            aria-label={t('navigation.secondary', "secondary navigation")}
           >
             <Flex
               direction="column"
@@ -156,10 +158,12 @@ export const Footer = ({
                 return null;
               })}
             </Flex>
-          </Box>
+          </chakra.nav>
         </Flex>
       </Flex>
-      <Box w={isMobile ? "66.66%" : "66.66%"} mt={isMobile ? "3em" : "5em"}>
+      <chakra.nav
+        aria-label={t('navigation.sponsors', "project commissioners and sponsors")}
+        w={isMobile ? "66.66%" : "66.66%"} mt={isMobile ? "3em" : "5em"}>
         <VStack alignItems="flex-start">
           <chakra.a
             className="svgHover tabbedFocus"
@@ -184,6 +188,7 @@ export const Footer = ({
               <SVG
                 className="svg black"
                 type="ba_lichtenberg"
+                alt="Logo Bezirksamt Lichtenberg von Berlin"
                 fill
               />
             </chakra.span>
@@ -212,6 +217,7 @@ export const Footer = ({
               <SVG
                 className="svg black"
                 type="s_energie"
+                alt="Logo Senatsverwaltung für Wirtschaft, Energie und Betriebe"
                 fill
               />
             </chakra.span>
@@ -254,7 +260,7 @@ export const Footer = ({
             </chakra.span>
           </chakra.a>
         </VStack>
-      </Box>
+      </chakra.nav>
     </Box>
   );
 };

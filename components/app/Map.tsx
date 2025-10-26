@@ -12,7 +12,7 @@ import {
   useConfigContext,
 } from "~/provider";
 
-import { Box, IconButton, Flex } from "@chakra-ui/react";
+import { chakra, Box, IconButton, Flex } from "@chakra-ui/react";
 import { SVG } from "~/components/ui/SVG";
 import type { CultureMap } from "~/services/CultureMap";
 
@@ -160,7 +160,7 @@ export const Map = ({ layout }: { layout: string }) => {
     : false;
   return (
     <>
-      <Box
+      <chakra.nav
         position="fixed"
         right={isTabletWide || isDesktopAndUp ? "20px" : "10px"}
         top={
@@ -179,6 +179,7 @@ export const Map = ({ layout }: { layout: string }) => {
         opacity={buttonVisible ? 1 : 0}
         pointerEvents={buttonVisible ? undefined : "none"}
         aria-hidden="true"
+        aria-label={t('navigation.quicksearchAndMap', 'Quicksearch and map navigation')}
         role="presentation"
       >
         <Flex
@@ -400,7 +401,7 @@ export const Map = ({ layout }: { layout: string }) => {
             </Box>
           )}
         </Flex>
-      </Box>
+      </chakra.nav>
       <Box
         className="map-wrap"
         position="fixed"

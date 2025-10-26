@@ -321,6 +321,7 @@ export const Home = ({ homepage }: { homepage: any }) => {
                   <SVG
                     type="arrow-right"
                     wrapped width={isMobile ? 30 : 40} height={isMobile ? 17 : 22}
+                    alt={t("mission.statement.link", "arrow right")}
                     fill
                   />
                 </chakra.a>

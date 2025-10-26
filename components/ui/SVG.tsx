@@ -23,6 +23,7 @@ import SenatEnergie from "~/assets/svg/logo_senat_energie.svg";
 type SVGBaseProps = {
   type: string;
   className?: string;
+  alt?: string;
 };
 
 type SVGFixedSizeProps = SVGBaseProps & {
@@ -58,7 +59,8 @@ export const SVG = ({
   fill,
   objectFit,
   className = "svg",
-  wrapped
+  wrapped,
+  alt
 }: SVGProps) => {
   let Component = ArrowSVG;
 
@@ -129,7 +131,7 @@ export const SVG = ({
   }
   const Img = <Image
       className={className}
-      alt=""
+      alt={alt ?? ""}
       src={Component}
       width={!fill ? width : undefined}
       height={!fill ? height : undefined}
