@@ -279,7 +279,7 @@ export const ModuleComponentLocation = ({
   `;
 
   return (
-    <MainContent layerStyle="lightGray">
+    <MainContent>
       <NextHeadSeo
         canonical={`${config.baseUrl}${
           i18n.language === "en" ? "/en" : ""
@@ -303,6 +303,7 @@ export const ModuleComponentLocation = ({
           base: "calc(100vh - 60px)",
           xl: "calc(100vh - 80px)",
         }}
+        layerStyle="lightGray"
       >
         <Box px="20px" pt="0.5em">
           <PageTitle

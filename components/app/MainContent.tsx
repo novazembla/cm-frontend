@@ -359,6 +359,7 @@ export const MainContent = ({
           </Box>
         </motion.div>
       )}
+    
       <MotionBox
         key={`drawer-${router.asPath}`}
         className="motionDragContainer"

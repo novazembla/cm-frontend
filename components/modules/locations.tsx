@@ -614,7 +614,7 @@ export const ModuleComponentLocations = ({
       : t("locations.title", "Map");
 
   return (
-    <MainContent layerStyle="lightGray">
+    <MainContent>
       <NextHeadSeo
         canonical={`${i18n.language === "en" ? "/en/map" : "/karte"}`}
         title={`${title} - ${getSeoAppTitle(t)}`}
@@ -632,6 +632,7 @@ export const ModuleComponentLocations = ({
           base: "calc(100vh - 60px)",
           xl: "calc(100vh - 80px)",
         }}
+        layerStyle="lightGray"
       >
         <Box px="20px" pt="0.5em">
           <PageTitle title={title} type="short" />

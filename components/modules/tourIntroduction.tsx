@@ -106,7 +106,7 @@ export const ModuleComponentTourIntroduction = ({ tour }: { tour: any }) => {
 
   let meta: any = t("card.meta.tour", "Tour");
   return (
-    <MainContent layerStyle="lightGray">
+    <MainContent>
       <NextHeadSeo
         canonical={`${config.baseUrl}${
           i18n.language === "en" ? "/en" : ""
@@ -131,6 +131,7 @@ export const ModuleComponentTourIntroduction = ({ tour }: { tour: any }) => {
           base: "calc(100vh - 60px)",
           xl: "calc(100vh - 80px)",
         }}
+        layerStyle="lightGray"
       >
         <Box px="20px" pt="0.5em">
           <PageTitle title={getMultilangValue(tour?.title)} type="short" />
