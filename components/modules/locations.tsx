@@ -74,6 +74,7 @@ export const ModuleComponentLocations = ({
     ],
   });
 
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
   const [extendedValidationSchema, setExtendedValidationSchema] = useState(
     LocationsFilterSchema
@@ -482,6 +483,15 @@ export const ModuleComponentLocations = ({
         ...newQueryState,
         pageIndex: 0,
         pageSize: locationsInitialQueryState.pageSize,
+
+      }).then(() => {
+        if (!isInitialLoad) {
+          resultRef?.current?.scrollIntoView({
+            block: "center",
+            behavior: "smooth",
+          });
+        }
+        setIsInitialLoad(false);
       });
 
       if (where.length > 0) {
@@ -492,7 +502,9 @@ export const ModuleComponentLocations = ({
             },
           });
         }
-        setIsFiltered(true);
+        if (where.length > 1 || termsToI?.length > 0) {
+          setIsFiltered(true);
+        }
       } else {
         cultureMap?.setCurrentViewData(undefined, true);
         cultureMap?.showCurrentView();
@@ -582,6 +594,8 @@ export const ModuleComponentLocations = ({
     i18n?.language,
     filter,
     type,
+    setIsInitialLoad,
+    isInitialLoad
   ]);
 
   const totalCount: number =  data?.locations?.totalCount ?? 0;
@@ -593,20 +607,6 @@ export const ModuleComponentLocations = ({
       totalCount,
     });
   }
-
-  useEffect(() => {
-    if (
-      !loading &&
-      isFiltered &&
-      data?.locations?.totalCount !== "undefined" &&
-      currentPageIndex === 0
-    ) {
-      resultRef?.current?.scrollIntoView({
-        block: "center",
-        behavior: "smooth",
-      });
-    }
-  }, [loading, data?.locations?.totalCount, currentPageIndex, isFiltered]);
 
   const title =
     type === "embed"

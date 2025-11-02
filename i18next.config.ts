@@ -1,4 +1,3 @@
-import { m } from 'framer-motion';
 import { defineConfig } from 'i18next-cli';
 
 export default defineConfig({

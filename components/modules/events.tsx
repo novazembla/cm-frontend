@@ -105,6 +105,7 @@ export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
   const resultRef = useRef<HTMLDivElement>(null);
   const config = useConfigContext();
 
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
   const [isFiltered, setIsFiltered] = useState(false);
   const [isKeywordOpened, setKeywordIsOpen] = useState(false);
   const [currentQueryState, setCurrentQueryState] = useState<any>({
@@ -471,6 +472,14 @@ export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
         ...newQueryState,
         pageIndex: 0,
         pageSize: initialQueryState.pageSize,
+      }).then(() => {
+        if (!isInitialLoad) {
+          resultRef?.current?.scrollIntoView({
+            block: "center",
+            behavior: "smooth",
+          });
+        }
+        setIsInitialLoad(false);
       });
 
       const query: any = {
@@ -555,6 +564,8 @@ export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
     i18n?.language,
     filter,
     config.eventLookAheadDays,
+    setIsInitialLoad,
+    isInitialLoad
   ]);
 
   const totalCount: number =  data?.events?.totalCount ?? 0;
@@ -567,22 +578,7 @@ export const ModuleComponentEvents = ({ filter }: { filter?: string }) => {
     });
   }
  
-  useEffect(() => {
-    if (
-      !loading &&
-      data?.events?.totalCount !== "undefined" &&
-      currentPageIndex === 0
-    ) {
-      resultRef?.current?.scrollIntoView({
-        block: "center",
-        behavior: "smooth",
-      });
-    }
-  }, [loading, data?.events?.totalCount, currentPageIndex]);
-
   const urlParams = new URLSearchParams(filter);
-
-  console.log(isKeywordOpened);
 
   return (
     <MainContent>
