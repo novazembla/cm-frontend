@@ -1,9 +1,9 @@
 import { useState, useRef, useCallback, useEffect } from "react";
-import { Box, IconButton, useBreakpointValue, chakra } from "@chakra-ui/react";
+import { Box, IconButton, useBreakpointValue } from "@chakra-ui/react";
 import { useIsBreakPoint } from "~/hooks/useIsBreakPoint";
 import { useAppTranslations } from "~/hooks/useAppTranslations";
 
-import { motion, useAnimation } from "framer-motion";
+import { AnimatePresence, motion, useAnimation } from "framer-motion";
 import { useRouter } from "next/router";
 import {
   useMenuButtonContext,
@@ -471,22 +471,31 @@ export const MainContent = ({
             pt={isVerticalContent ? 0 : contentPaddingTop}
             h="100%"
           >
-            <chakra.main
-              ref={mainContentRef}
-              className="mainContent"
-              id="content"
-              role="main"
-              aria-label={t("aria.region.main", "main content")}
-              minH={
-                isMobile
-                  ? isVerticalContent
-                    ? undefined
-                    : "calc(100vh - 60px)"
-                  : "calc(100vh - 80px)"
-              }
-            >
-              {children}
-            </chakra.main>
+            <AnimatePresence>
+              <motion.main
+                ref={mainContentRef}
+                className="mainContent"
+                id="content"
+                role="main"
+                aria-label={t("aria.region.main", "main content")}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.35 }}
+                style={{
+                  willChange: "opacity, transform",
+                  backfaceVisibility: "hidden",
+                  transform: "translateZ(0)",
+                  minHeight: isMobile
+                    ? isVerticalContent
+                      ? undefined
+                      : "calc(100vh - 60px)"
+                    : "calc(100vh - 80px)",
+                }}
+              >
+                {children}
+              </motion.main>
+            </AnimatePresence>
           </Box>
         </Box>
       </MotionBox>
