@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 
 import { useIsBreakPoint } from "~/hooks/useIsBreakPoint";
 import { SVG } from "~/components/ui/SVG";
+import { useAppTranslations } from "~/hooks/useAppTranslations";
 
 export const PageTitle = ({
   title,
@@ -20,6 +21,7 @@ export const PageTitle = ({
   h1?: boolean;
   center?: boolean;
 }) => {
+  const { t } = useAppTranslations();
   const { isMobile } = useIsBreakPoint();
   const router = useRouter();
 
@@ -40,12 +42,27 @@ export const PageTitle = ({
   );
 
   return (
-    <Flex mb={type === "high" ? (isMobile ? "2em" : "3em") : "0.6em"} gap="0.5em">
+    <Flex mb={type === "high" ? (isMobile ? "2em" : "3em") : "0.6em"} gap="0.5em" alignItems="center"
+          justifyContent="center">
       {
-        backlink ? <Link href={url ?? "#"} onClick={back} transform="rotate(180deg)"><SVG
-              type="arrow-right"
-              width={isMobile ? 30 : 40}
-              height={isMobile ? 17 : 22}
+        backlink ? <Link href={url ?? "#"} onClick={back} transform="rotate(180deg)"
+          display="inline-flex"
+          width="24px"
+          height="24px"
+          alignItems="center"
+          justifyContent="center"
+          title={t('link.back.title', 'back')}
+          mt={"2px"}
+        ><SVG
+              // type="arrow-right"
+              // width={isMobile ? 30 : 40}
+              // height={isMobile ? 17 : 22}
+              type="cross"
+              alt={t('link.back.icon', 'back link icon')}
+              wrapped
+              fill
+              width={isMobile ? 30 : 50}
+              height={isMobile ? 17 : 50}
             /></Link> : null
       }
       {h1 ? (

@@ -13,7 +13,7 @@ import {
   Tr
 } from "@chakra-ui/react";
 import { useCalendar } from '@h6s/calendar/dist/index.js';
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 
 export const Calendar = ({
   defaultDate,

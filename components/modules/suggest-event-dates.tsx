@@ -15,7 +15,7 @@ import {
 import { FloatingFocusManager } from "@floating-ui/react";
 import { useState } from "react";
 import { Controller, useFieldArray, useFormContext } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 import { HiOutlineTrash } from "react-icons/hi";
 import { MdPlusOne } from "react-icons/md";
 

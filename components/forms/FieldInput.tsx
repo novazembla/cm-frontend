@@ -19,7 +19,7 @@ import {
   VisuallyHidden,
 } from "@chakra-ui/react";
 
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 import { HiOutlineEyeOff, HiOutlineEye } from "react-icons/hi";
 
 import { FieldErrorMessage } from "./FieldErrorMessage";
