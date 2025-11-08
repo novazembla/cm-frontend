@@ -44,6 +44,10 @@ module.exports = withBundleAnalyzer(
           source: '/:file(sitemap(?:[-_].+)?\\.xml)',
           destination: '/api/sitemap/:file',
         },
+        {
+          source: '/sitemap/:file(sitemap(?:[-_].+)?\\.xml)',
+          destination: '/api/sitemap/:file',
+        }
       ]
     },
 
