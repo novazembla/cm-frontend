@@ -89,6 +89,7 @@
         "facebook": "Facebook",
         "instagram": "Instagram",
         "organiser": "Veranstalter",
+        "ticketFee": "Veranstaltungskosten",
         "title": "Titel",
         "website": "Webseite"
       },
@@ -96,6 +97,7 @@
         "address": "Wo finden die Veranstaltung statt?",
         "description": "Bitte beschreiben Sie die Veranstaltung kurz",
         "organiser": "Wer organisiert die Veranstaltung?",
+        "ticketFee": "12 Euro",
         "title": "Bitte geben Sie den Titel der Veranstaltung an",
         "website": "https://www.beispiel.de"
       }
@@ -169,6 +171,12 @@
   "language": {
     "changeToEnglish": "Change to English version",
     "changeToGerman": "Zur deutschen Version wechseln"
+  },
+  "link": {
+    "back": {
+      "icon": "Zurück Icon",
+      "title": "Zurück"
+    }
   },
   "location": {
     "detail": {
@@ -430,6 +438,9 @@
         "typeOfInstitution": "Einrichtungsart",
         "typeOfOrganisation": "Organisationsart"
       }
+    },
+    "ticketFee": {
+      "required": "Bitte erläutern Sie die Kosten der Teilnahme an der Veranstaltung (Eintrittspreis, etc.)"
     },
     "writeError": "Entschuldigung, wir konnten leider Ihren Ortsvorschlag nicht speichern. Bitte versuchen Sie es zu einem späteren Zeitpunkt noch einmal."
   },
