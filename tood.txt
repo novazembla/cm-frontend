@@ -1,5 +1,4 @@
 TODO: 
-- Fix sitemap children listings... 
 - Domain: Update FE start scripts (in ./bin and cm_frontend_deploy)
 - Domain: Install Cron Job FE start scripts (in ./bin and cm_frontend_deploy)
   
@@ -20,7 +19,6 @@ TODO:
 </IfModule>
 
 OPEN 
--    Highlights auf Startseite selbstlöschend im backend nach Ablauf der Veranstaltung
 -    Access Control Origin Header gesetzt mit Wildcard wird u.U. wegen embed-code benötigt, wird geprüft und, falls möglich, geändert
 
 NEARLY DONE: 
@@ -31,6 +29,7 @@ NEARLY DONE:
 -    CSP-Header wird ergänzt (needs to be doployed on prod)
 
 DONE:
+-    Highlights auf Startseite selbstlöschend im backend nach Ablauf der Veranstaltung
 -     Angabe Ticketpreise verbindlich (als Textfeld, um Preisspannen angeben zu können)
 -     Inhalte vorschlagen- Umwandlung von Umlauten in den Slugs, z.B. ö → oe
 -     Veranstaltungen Desktop 1- statt 2-spaltig 

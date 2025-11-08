@@ -221,7 +221,7 @@ export const Home = ({ homepage }: { homepage: any }) => {
             });
           }
 
-          if (highlight.type === "event" && highlight?.location) {
+          if (highlight.type === "event" && highlight?.location && new Date() <= new Date(highlight.lastEventDate ?? new Date())) {
             hAcc.push({
               id: highlight?.location.id,
               lng: highlight?.location?.lng,
@@ -362,6 +362,8 @@ export const Home = ({ homepage }: { homepage: any }) => {
     </Collapse>
   );
 
+  const activeHighlights = (homepage?.highlights ?? []).filter(h => h.type !== "event" || new Date() <= new Date(h.lastEventDate ?? new Date()));
+
   return (
     <MainContent
       isDrawer={isTablet || isDesktopAndUp}
@@ -377,7 +379,7 @@ export const Home = ({ homepage }: { homepage: any }) => {
       <Box>
         {missionStatement &&
           (isMobile ? <Portal>{missionStatement}</Portal> : missionStatement)}
-        {homepage?.highlights?.length > 0 && (
+        {activeHighlights?.length > 0 && (
           <Box
             layerStyle="lightGray"
             overflow="hidden"
@@ -461,7 +463,7 @@ export const Home = ({ homepage }: { homepage: any }) => {
                         : undefined
                     }
                   >
-                    {homepage?.highlights.map((h: any) => {
+                    {activeHighlights.map((h: any) => {
                       if (h.type === "location") {
                         return (
                           <Box
