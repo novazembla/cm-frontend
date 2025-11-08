@@ -42,6 +42,7 @@ import {
   useSettingsContext,
 } from "~/provider";
 import { SuggestEventDates } from "./suggest-event-dates";
+import { slugify } from "~/utils/slugify";
 
 export const EventSuggestionSchema = object().shape({
   title: string().required(),
@@ -49,6 +50,13 @@ export const EventSuggestionSchema = object().shape({
   address: string(),
   organiser: string(),
   isFree: boolean(),
+  // t("suggestion.ticketFee.required", "Please state the admission costs for the event")
+  ticketFee: mixed().when("isFree", {
+    is: (value: any) => !!!value,
+    then: string()
+      .required("suggestion.ticketFee.required").max(100),
+    otherwise: string(),
+  }),
   alt: mixed().when("heroImage", {
     is: (value: any) => value && !isNaN(value) && value > 0,
     then: string().required(),
@@ -89,17 +97,6 @@ export const eventCreateMutationGQL = gql`
     }
   }
 `;
-
-const slugify = (text: string) => {
-  return text
-    .toString()
-    .toLowerCase()
-    .replace(/\s+/g, "-") // Replace spaces with -
-    .replace(/[^\w-]+/g, "") // Remove all non-word chars
-    .replace(/--+/g, "-") // Replace multiple - with single -
-    .replace(/^-+/, "") // Trim - from start of text
-    .replace(/-+$/, ""); // Trim - from end of text
-};
 
 export const ModuleComponentSuggestEvent = () => {
   const { t, i18n, getMultilangValue } = useAppTranslations();
@@ -142,7 +139,7 @@ export const ModuleComponentSuggestEvent = () => {
     handleSubmit,
     reset,
     watch,
-    formState: { isDirty },
+    formState: { isDirty }
   } = formMethods;
 
   const onSubmit = async (
@@ -207,6 +204,7 @@ export const ModuleComponentSuggestEvent = () => {
             address: newData?.address ?? "",
             organiser: newData?.organiser ?? "",
             isFree: !!newData?.isFree,
+            ticketFee: newData?.ticketFee ?? "",
             dates: {
               create: newData.dates,
             },
@@ -304,6 +302,7 @@ export const ModuleComponentSuggestEvent = () => {
     "suggestionSubmittersImageRightsConfirmation"
   );
 
+  const isFree = watch("isFree");
   // t("eventSuggestion.writeErrorEvent", "We could unfortunately not save your suggestion at the moment. Please try again later.")
   return (
     <MainContent isDrawer>
@@ -521,6 +520,26 @@ export const ModuleComponentSuggestEvent = () => {
                           defaultChecked={false}
                         />
                       </Flex>
+
+                      {!isFree && <FieldRow>
+                        <FieldInput
+                          name="ticketFee"
+                          id="ticketFee"
+                          type="text"
+                          label={t(
+                            "eventSuggestion.field.label.ticketFee",
+                            "Admission Cost"
+                          )}
+                          isRequired={!isFree}
+                          settings={{
+                            hideLabel: false,
+                            placeholder: t(
+                              "eventSuggestion.field.placeholder.ticketFee",
+                              "8 - 12 Euro"
+                            ),
+                          }}
+                        />
+                      </FieldRow>}
                     </Box>
 
                     <Box

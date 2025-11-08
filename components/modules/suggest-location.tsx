@@ -41,6 +41,7 @@ import {
 import pick from "lodash/pick";
 import { useRouter } from "next/router";
 import { PageTitle } from "~/components/ui/PageTitle";
+import { slugify } from "~/utils/slugify";
 
 export const SuggestionSchema = object().shape({
   title: string().required(),
@@ -93,16 +94,6 @@ export const locationCreateMutationGQL = gql`
   }
 `;
 
-const slugify = (text: string) => {
-  return text
-    .toString()
-    .toLowerCase()
-    .replace(/\s+/g, "-") // Replace spaces with -
-    .replace(/[^\w-]+/g, "") // Remove all non-word chars
-    .replace(/--+/g, "-") // Replace multiple - with single -
-    .replace(/^-+/, "") // Trim - from start of text
-    .replace(/-+$/, ""); // Trim - from end of text
-};
 
 export const ModuleComponentSuggestLocation = () => {
   const { t, i18n, getMultilangValue } = useAppTranslations();
