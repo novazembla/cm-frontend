@@ -31,6 +31,7 @@ NEARLY DONE:
 DONE:
 -    Highlights auf Startseite selbstlöschend im backend nach Ablauf der Veranstaltung
 -     Angabe Ticketpreise verbindlich (als Textfeld, um Preisspannen angeben zu können)
+      - ticketpreis is in BE optional (kalender import hat keine preise, FE enforced aber die constraint)
 -     Inhalte vorschlagen- Umwandlung von Umlauten in den Slugs, z.B. ö → oe
 -     Veranstaltungen Desktop 1- statt 2-spaltig 
 -     Umstellung der Adresssuche auf OpenStreetMap (funktioniert nicht mehr seit Ende August) 
