@@ -47,7 +47,7 @@ export const PageTitle = ({
       gap="0.3em"
       alignItems="center"
       justifyContent="center"
-      layerStyle={type !== "short" ? "headingPullOut" : undefined}
+      layerStyle={type !== "short" ? backlink ? "headingPullOut" : "headingPullOutShort" : undefined}
     >
       {
         backlink ? <Link href={url ?? "#"} onClick={back} transform="rotate(180deg)"

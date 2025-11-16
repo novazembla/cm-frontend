@@ -237,6 +237,14 @@ const themeConfig = {
     full: "9999px",
   },
   layerStyles: {
+    headingPullOutShort: {
+      transform: {
+        // base: "translateX(-10px)",
+        // sm: "translateX(-10px)",
+        md: "translateX(-25px)",
+        "2xl": "translateX(-35px)",
+      },
+    },
     headingPullOut: {
       transform: {
         // base: "translateX(-10px)",
