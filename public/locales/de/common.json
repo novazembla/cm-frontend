@@ -94,10 +94,10 @@
         "website": "Webseite"
       },
       "placeholder": {
-        "address": "Wo finden die Veranstaltung statt?",
-        "description": "Bitte beschreiben Sie die Veranstaltung kurz",
-        "organiser": "Wer organisiert die Veranstaltung?",
-        "ticketFee": "12 Euro",
+        "address": "Wo findet die Veranstaltung statt?\nStrasse Hausnummer\nPLZ Berlin\nggf. Telefonnummer oder Email",
+        "description": "Bitte beschreiben Sie die Veranstaltung kurz (max. 2000 Zeichen)",
+        "organiser": "Wer organisiert die Veranstaltung?\nggf. Ansprechpartner\nStrasse Hausnummer\nPLZ Berlin\nggf. Telefonnummer oder Email",
+        "ticketFee": "Bitte geben Sie einen einheitlichen Ticketpreis im Format \"Tickets *,00 €\" oder \"Ticketpreise von *,00 € bis *,00 €\"",
         "title": "Bitte geben Sie den Titel der Veranstaltung an",
         "website": "https://www.beispiel.de"
       }

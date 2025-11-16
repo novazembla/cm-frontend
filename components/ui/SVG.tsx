@@ -135,7 +135,9 @@ export const SVG = ({
       src={Component}
       width={!fill ? width : undefined}
       height={!fill ? height : undefined}
-      objectFit={objectFit ?? "contain"}
+      style={{
+        objectFit: objectFit ?? "contain",
+      }}
       fill={fill}
     ></Image>
   

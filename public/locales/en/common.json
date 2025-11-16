@@ -97,7 +97,7 @@
         "address": "Where takes the event place",
         "description": "Please describe the event briefly",
         "organiser": "Who organises the event",
-        "ticketFee": "8 - 12 Euro",
+        "ticketFee": "Please specify the admission fee(s) in the format \"Adminssion *,00 €\" or \"Admission from *,00 € to *,00 €\"",
         "title": "Please enter the name of the suggested event",
         "website": "https://www.example.com"
       }
