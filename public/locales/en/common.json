@@ -35,11 +35,18 @@
     "detail": {
       "title": "Event"
     },
+    "info": {
+      "adminssionFee": {
+        "freeEntrance": "Free entrance",
+        "unknown": "Not specified"
+      }
+    },
     "label": {
       "category": "Category",
       "dateFrom": "From",
       "dateFromVon": "From",
       "dateUntil": "Until",
+      "eventAddmissionFee": "Addmission Fee",
       "eventDatesMultiple": "Upcoming dates",
       "eventLocation": "Event Location",
       "eventOrganiser": "Event Organiser",
@@ -462,7 +469,6 @@
     }
   },
   "tour": {
-    "backToTour": "Back to tour",
     "button": {
       "viewAllTourStops": "View all tour stops"
     },

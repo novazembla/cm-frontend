@@ -22,10 +22,10 @@ OPEN
 -    Access Control Origin Header gesetzt mit Wildcard wird u.U. wegen embed-code benötigt, wird geprüft und, falls möglich, geändert
 
 NEARLY DONE: 
--     Ticket fee needs to be shown on event or event detail
 -     CSP-Header wird ergänzt (needs to be doployed on prod)
 
 DONE:
+-     Ticket fee needs to be shown on event or event detail
 -     Update/Restyle placeholder in event suggestion form. 
 -     „zurück“-Element kann ergänzt werden, hat aber Design-Implikationen
 -     Highlights auf Startseite selbstlöschend im backend nach Ablauf der Veranstaltung

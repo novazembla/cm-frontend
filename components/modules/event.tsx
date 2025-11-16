@@ -53,6 +53,7 @@ const eventQuery = gql`
       organiser
       socialMedia
       isFree
+      ticketFee
       description
       metaDesc
       firstEventDate
@@ -295,6 +296,16 @@ export const ModuleComponentEvent = ({
     links.push(event?.socialMedia?.instagram ?? "");
   }
 
+  let admissionFee = t("event.info.adminssionFee.unknown", "Not specified");
+  if (!event?.isFree) {
+    const ticketFee = (event?.ticketFee ?? "").trim()
+    if (!!ticketFee) {
+      admissionFee = ticketFee;
+    }
+  } else {
+    admissionFee = t("event.info.adminssionFee.freeEntrance", "Free entrance");
+  }
+
   return (
     <MainContent>
       <NextHeadSeo
@@ -417,6 +428,19 @@ export const ModuleComponentEvent = ({
                 spacingX="0.5em"
                 spacingY="1em"
               >
+                <Box className="item">
+                  <Box
+                    mb="0.5em"
+                    color="cm.accentDark"
+                    textTransform="uppercase"
+                    textStyle="categories"
+                  >
+                    {t("event.label.eventAddmissionFee", "Addmission Fee")}
+                  </Box>
+                  <Box textStyle="card">
+                    {admissionFee}
+                  </Box>
+                </Box>
                 {!isEmptyHtml(event?.address ?? "") && (
                   <Box className="item">
                     <Box

@@ -35,11 +35,18 @@
     "detail": {
       "title": "Veranstaltung"
     },
+    "info": {
+      "adminssionFee": {
+        "freeEntrance": "kostenfrei",
+        "unknown": "keine Angabe"
+      }
+    },
     "label": {
       "category": "Art der Veranstaltung",
       "dateFrom": "Ab",
       "dateFromVon": "Von",
       "dateUntil": "Bis",
+      "eventAddmissionFee": "Tickets",
       "eventDatesMultiple": "Weitere Termine",
       "eventLocation": "Veranstaltungsort",
       "eventOrganiser": "Veranstalter",
@@ -462,7 +469,6 @@
     }
   },
   "tour": {
-    "backToTour": "Zurück zur Tour",
     "button": {
       "viewAllTourStops": "Tour ansehen"
     },
