@@ -22,14 +22,12 @@ OPEN
 -    Access Control Origin Header gesetzt mit Wildcard wird u.U. wegen embed-code benötigt, wird geprüft und, falls möglich, geändert
 
 NEARLY DONE: 
--    „zurück“-Element kann ergänzt werden, hat aber Design-Implikationen
-     TODO: confirm that they want to use the backlink, then implement it everywhere? 
-     TODO: confirm that they want to remove the X from tours or keep it
-
+- Ticket fee needs to be shown on event or event detail
 -    CSP-Header wird ergänzt (needs to be doployed on prod)
 
 DONE:
--    Highlights auf Startseite selbstlöschend im backend nach Ablauf der Veranstaltung
+-     „zurück“-Element kann ergänzt werden, hat aber Design-Implikationen
+-     Highlights auf Startseite selbstlöschend im backend nach Ablauf der Veranstaltung
 -     Angabe Ticketpreise verbindlich (als Textfeld, um Preisspannen angeben zu können)
       - ticketpreis is in BE optional (kalender import hat keine preise, FE enforced aber die constraint)
 -     Inhalte vorschlagen- Umwandlung von Umlauten in den Slugs, z.B. ö → oe

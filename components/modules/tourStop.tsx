@@ -183,7 +183,14 @@ export const ModuleComponentTourStop = ({
       >
         <Box>
           <Box px="20px" pt="0.5em">
-            <PageTitle title={getMultilangValue(tour?.title)} type="short" />
+            <PageTitle
+              title={getMultilangValue(tour?.title)}
+              type="short"
+              backlink
+              url={`${config.baseUrl}${
+                i18n.language === "en" ? "/en" : ""
+              }/tour/${getMultilangValue(tour?.slug)}/0`}
+            />
 
             <Box bg="#fff" borderRadius="lg" overflow="hidden">
               {image?.id && (
@@ -272,42 +279,6 @@ export const ModuleComponentTourStop = ({
                   >
                     <MultiLangValue json={tourStop.title} />
                   </chakra.h1>
-                  <IconButton
-                    aria-label={t("tour.backToTour", "Back to tour")}
-                    icon={
-                      <SVG
-                        type="cross"
-                        wrapped width={isMobile ? 50 : 80} height={isMobile ? 50 : 80}
-                        fill
-                      />
-                    }
-                    borderRadius="0"
-                    p="0"
-                    className="svgHover tabbedFocus"
-                    _focus={{
-                      bg: "transparent",
-                      boxShadow: "none",
-                    }}
-                    paddingInlineStart="0"
-                    paddingInlineEnd="0"
-                    padding="0"
-                    bg="transparent"
-                    w={isMobile ? "30px" : "40px"}
-                    h={isMobile ? "30px" : "40px"}
-                    minW="30px"
-                    overflow="hidden"
-                    onClick={onNavigationButtonClick}
-                    transition="background-color 0.3s"
-                    _hover={{
-                      bg: "transparent",
-                    }}
-                    _active={{
-                      bg: "transparent",
-                    }}
-                    transform={
-                      isMobile ? "translateY(-5px) translateX(5px)" : undefined
-                    }
-                  />
                 </Flex>
               </Box>
 

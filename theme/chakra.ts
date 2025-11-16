@@ -241,8 +241,8 @@ const themeConfig = {
       transform: {
         // base: "translateX(-10px)",
         // sm: "translateX(-10px)",
-        md: "translateX(-25px)",
-        "2xl": "translateX(-35px)",
+        md: "translateX(-35px)",
+        "2xl": "translateX(-45px)",
       },
     },
     lightGray: {

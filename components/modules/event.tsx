@@ -322,7 +322,12 @@ export const ModuleComponentEvent = ({
       >
         <Box layerStyle="pageBg">
           <Box layerStyle="page">
-            <PageTitle type="high" title={t("event.detail.title", "Event")} />
+            <PageTitle
+              type="highNoTuck"
+              title={t("event.detail.title", "Event")}
+              backlink
+              url={i18n.language === "en" ? "/en/events" : "/veranstaltungen"}
+            />
 
             <Box color="cm.text">
               {event?.heroImage && event?.heroImage.id && (

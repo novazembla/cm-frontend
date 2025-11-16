@@ -17,7 +17,7 @@ export const PageTitle = ({
   backlink?: boolean;
   url?: string;
   title: string;
-  type: string;
+  type: "high" | "highNoTuck" | "medium" | "short";
   h1?: boolean;
   center?: boolean;
 }) => {
@@ -42,8 +42,13 @@ export const PageTitle = ({
   );
 
   return (
-    <Flex mb={type === "high" ? (isMobile ? "2em" : "3em") : "0.6em"} gap="0.5em" alignItems="center"
-          justifyContent="center">
+    <Flex 
+      mb={type === "high" || type === "highNoTuck" ? (isMobile ? "2em" : "3em") : "0.6em"}
+      gap="0.3em"
+      alignItems="center"
+      justifyContent="center"
+      layerStyle={type !== "short" ? "headingPullOut" : undefined}
+    >
       {
         backlink ? <Link href={url ?? "#"} onClick={back} transform="rotate(180deg)"
           display="inline-flex"
@@ -61,8 +66,8 @@ export const PageTitle = ({
               alt={t('link.back.icon', 'back link icon')}
               wrapped
               fill
-              width={isMobile ? 30 : 50}
-              height={isMobile ? 17 : 50}
+              width={isMobile ? 40 : 50}
+              height={isMobile ? 40 : 50}
             /></Link> : null
       }
       {h1 ? (
@@ -77,7 +82,6 @@ export const PageTitle = ({
           color="cm.text"
           fontWeight="bold"
           textAlign={center ? "center" : undefined}
-          layerStyle={type !== "short" ? "headingPullOut" : undefined}
         >
           {title}
         </chakra.h1>
@@ -93,7 +97,6 @@ export const PageTitle = ({
           color="cm.text"
           fontWeight="bold"
           textAlign={center ? "center" : undefined}
-          layerStyle={type !== "short" ? "headingPullOut" : undefined}
         >
           {title}
         </chakra.p>

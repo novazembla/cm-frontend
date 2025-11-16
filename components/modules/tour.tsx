@@ -412,6 +412,8 @@ export const ModuleComponentTour = ({ tour }: { tour: any; }) => {
                   }
                   type="short"
                   center={isMobile}
+                  backlink
+                  url={i18n.language === "en" ? "/en/tours" : "/touren"}
                 />
               </Box>
 
