@@ -71,7 +71,7 @@ export const Home = ({ homepage }: { homepage: any }) => {
   const isMobileRef = useRef<boolean>(false);
   const containersRef = useRef<any>(null);
   const parsedHighlightsRef = useRef<any>(null);
-  const currentHightlightIndexRef = useRef<number>(0);
+  const currentHightlightIndexRef = useRef<number>(-1);
   const footerRef = useRef<HTMLDivElement>(null);
   const highlightsCardsContainerRef = useRef<HTMLDivElement>(null);
 
@@ -163,7 +163,7 @@ export const Home = ({ homepage }: { homepage: any }) => {
         },
         0
       );
-
+      
       if (currentHightlightIndexRef.current !== newIndex) {
         if (parsedHighlightsRef.current?.[newIndex]) {
           currentHightlightIndexRef.current = newIndex;
@@ -206,6 +206,15 @@ export const Home = ({ homepage }: { homepage: any }) => {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
+
+    if (settings && cultureMap) {
+      cultureMap?.panOrMoveTo(
+        settings?.centerOfGravity?.lng ?? config?.lng,
+        settings?.centerOfGravity?.lat ?? config?.lat,
+        !isMobileRef.current,
+        isMobileRef.current && !isMSOpen
+      );
+    }
 
     if (homepage?.highlights?.length > 0 && settings && cultureMap) {
       const highlights = homepage?.highlights.reduce(

@@ -43,6 +43,7 @@ export class CultureMap {
   intitiallyFitToBounds: boolean = true;
   isEmbed = false;
   loaded = false;
+  firstPanOrMove = true;
   styleLoaded = false;
   baseDataLoaded = false;
   ready = false;
@@ -787,6 +788,23 @@ export class CultureMap {
       } else {
         run();
       }
+    }
+  }
+
+  panOrMoveTo(
+    lng: number,
+    lat: number,
+    withDrawer?: boolean,
+    withVerticalScroller?: boolean
+  ) {
+    const self = this;
+    if (self.map) {
+      if (self.firstPanOrMove) {
+        self.moveTo(lng, lat, withDrawer, withVerticalScroller);
+        self.firstPanOrMove = false;
+      } else {
+        self.panTo(lng, lat, withDrawer, withVerticalScroller);
+      } 
     }
   }
 
