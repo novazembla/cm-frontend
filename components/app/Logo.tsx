@@ -13,7 +13,7 @@ export const Logo = ({ layout }: { layout: string }) => {
       <Link
         as={ActiveLink}
         activeClassName="activeLogo"
-        href={`${config.baseUrl}${i18n.language === "en" ? "/en" : ""}`}
+        href={`${config.baseUrl}${i18n.language === "en" ? "/en" : "/"}`}
         color="#333"
         textDecoration="none !important"
         whiteSpace="nowrap"

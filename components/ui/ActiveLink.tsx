@@ -29,7 +29,7 @@ export const ActiveLink = ({
   const className =
     asPath === href || asPath === (props as any).as
       ? `${activeClassName}`.trim()
-      : "";
+      : undefined;
 
   return (
     <NextLink href={href} {...{ className, target }} onClick={(props as any)?.onClick} style={style}>
