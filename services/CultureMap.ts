@@ -240,6 +240,13 @@ export class CultureMap {
   setInitallyFitToBounds = (flag: boolean) =>
     (this.intitiallyFitToBounds = flag);
 
+  setCenter(lng: number, lat: number) {
+    const self = this;
+    if (self.map) {
+      self.map.setCenter([lng, lat]);
+    }
+  }
+  
   setView(view: string) {
     const self = this;
     if (self.map) {

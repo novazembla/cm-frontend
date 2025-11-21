@@ -208,6 +208,10 @@ export const Home = ({ homepage }: { homepage: any }) => {
     if (typeof window === "undefined") return;
 
     if (settings && cultureMap) {
+      cultureMap?.setCenter(
+        settings?.centerOfGravity?.lng ?? config?.lng,
+        settings?.centerOfGravity?.lat ?? config?.lat
+      );
       cultureMap?.panOrMoveTo(
         settings?.centerOfGravity?.lng ?? config?.lng,
         settings?.centerOfGravity?.lat ?? config?.lat,
@@ -278,7 +282,7 @@ export const Home = ({ homepage }: { homepage: any }) => {
         cultureMap.clearHighlights();
       }
     };
-  }, [homepage?.highlights, settings, cultureMap, config, isMobile]);
+  }, [homepage?.highlights, settings, isMSOpen, cultureMap, config, isMobile]);
 
   if (!homepage) return <></>;
 

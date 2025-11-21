@@ -1,7 +1,7 @@
 TODO: 
 - Domain: Update FE start scripts (in ./bin and cm_frontend_deploy)
 - Domain: Install Cron Job FE start scripts (in ./bin and cm_frontend_deploy)
-  
+- Set Center of Gravity ...
 - Upgrade node on prod server
       nvm install 24
       nvm alias default 24
