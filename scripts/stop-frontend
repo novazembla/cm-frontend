@@ -1,7 +1,7 @@
 #!/bin/bash
 # stop-frontend.sh
 
-PORT=3011
+PORT=3001
 
 echo "$(date '+%Y-%m-%d %H:%M:%S') attempting to stop next-server on port $PORT" >> $HOME/var/log/monit.log
 

@@ -1,4 +1,4 @@
-TODO: 
+DONE:
 - Domain: Update FE start scripts (in ./bin and cm_frontend_deploy)
 - Domain: Install Cron Job FE start scripts (in ./bin and cm_frontend_deploy)
 - Set Center of Gravity ...
@@ -7,24 +7,8 @@ TODO:
       nvm alias default 24
       nvm use 24
       update all helper scrips as they hardcode nvm use 20
-
-- Set CSP Header (adjust domains ...)
-<IfModule mod_headers.c>
-      Header set Content-Security-Policy "default-src 'self'; \
-            img-src 'self' data: bzl-test.hs-example.de bzl-test.hs-map.example.de; \
-            script-src 'self' 'unsafe-inline' api.bzl-test.hs-bzl-test.hs-example.de map.bzl-test.hs-example.de; \
-            style-src 'self' 'unsafe-inline'; \
-            connect-src 'self' api.bzl-test.hs-example.de map.bzl-test.hs-example.de; \
-            worker-src 'self' blob:;"
-</IfModule>
-
-OPEN 
 -    Access Control Origin Header gesetzt mit Wildcard wird u.U. wegen embed-code benötigt, wird geprüft und, falls möglich, geändert
-
-NEARLY DONE: 
 -     CSP-Header wird ergänzt (needs to be doployed on prod)
-
-DONE:
 -     Ticket fee needs to be shown on event or event detail
 -     Update/Restyle placeholder in event suggestion form. 
 -     „zurück“-Element kann ergänzt werden, hat aber Design-Implikationen

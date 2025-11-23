@@ -5,7 +5,7 @@ export HOME=/home/pacs/bzl00/users/domain
 export PATH=$HOME/bin:/usr/local/bin:/usr/bin:/bin
 source $HOME/.nvm/nvm.sh
 export NODE_ENV=production
-export PORT=3011
+export PORT=3001
 
 cd $HOME/cm-frontend-live
 
