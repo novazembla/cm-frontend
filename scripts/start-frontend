@@ -1,7 +1,7 @@
 #!/bin/bash
 # start-frontend.sh
 
-export HOME=/home/pacs/bzl01/users/domain
+export HOME=/home/pacs/bzl00/users/domain
 export PATH=$HOME/bin:/usr/local/bin:/usr/bin:/bin
 source $HOME/.nvm/nvm.sh
 export NODE_ENV=production
