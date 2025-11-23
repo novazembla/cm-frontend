@@ -1,0 +1,18 @@
+#!/bin/bash
+# stop-frontend.sh
+
+PORT=3011
+
+export HOME=/home/pacs/bzl00/users/domain
+
+FILE="$HOME/var/run/apps-frontend.pid"
+
+if [ ! -f "$FILE" ]; then
+    exit 0
+fi
+
+PID=$(ss -ltnp 2>/dev/null | grep ":$PORT " | awk -F',' '{print $2}' | cut -d'=' -f2)
+
+if [ -z "$PID" ]; then
+    $HOME/bin/start-frontend
+fi

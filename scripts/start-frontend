@@ -1,0 +1,47 @@
+#!/bin/bash
+# start-frontend.sh
+
+export HOME=/home/pacs/bzl01/users/domain
+export PATH=$HOME/bin:/usr/local/bin:/usr/bin:/bin
+source $HOME/.nvm/nvm.sh
+export NODE_ENV=production
+export PORT=3011
+
+cd $HOME/cm-frontend-live
+
+mkdir -p $HOME/var/run
+rm -f $HOME/var/run/apps-frontend.pid
+
+echo "$(date '+%Y-%m-%d %H:%M:%S') - Next.js starting" >> $HOME/var/log/monit.log
+# Start Next.js in background
+./node_modules/.bin/next start -p $PORT >> $HOME/var/log/apps-frontend.log 2>&1 &
+
+# Capture the PID of the actual Node process running Next.js
+sleep 5  # give it a moment to start
+
+echo "$(date '+%Y-%m-%d %H:%M:%S') - Next.js started waiting for next-server to come online" >> $HOME/var/log/monit.log
+PID=""
+for i in {1..30}; do
+  PID=$(ss -ltnp 2>/dev/null | grep ":$PORT " | awk -F',' '{print $2}' | cut -d'=' -f2)
+  if [ -n "$PID" ]; then
+   echo $PID > $HOME/var/run/apps-frontend.pid
+   echo "Next.js started with PID $PID"
+   echo "$(date '+%Y-%m-%d %H:%M:%S') - Next.js started with PID $PID" >> $HOME/var/log/monit.log
+   break
+  fi
+  echo "service not up an running, waiting for it to come online"
+  echo "$(date '+%Y-%m-%d %H:%M:%S') - service not yet started" >> $HOME/var/log/monit.log
+  sleep 1
+done
+
+if [ -z "$PID" ]; then
+    echo "Failed to start Next.js server"
+    echo "$(date '+%Y-%m-%d %H:%M:%S') - Next.js failed to identify PID" >> $HOME/var/log/monit.log
+    exit 1
+fi
+
+echo "$(date '+%Y-%m-%d %H:%M:%S') - confirming PID" >> $HOME/var/log/monit.log
+kill -0 $PID
+echo "$(date '+%Y-%m-%d %H:%M:%S') - confirmed" >> $HOME/var/log/monit.log
+
+echo "$(date '+%Y-%m-%d %H:%M:%S') next-server + PID confirmed"

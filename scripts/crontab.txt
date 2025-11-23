@@ -1,0 +1,1 @@
+* * * * * /home/pacs/bzl00/users/domain/bin/check-frontend

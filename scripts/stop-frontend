@@ -1,0 +1,16 @@
+#!/bin/bash
+# stop-frontend.sh
+
+PORT=3011
+
+echo "$(date '+%Y-%m-%d %H:%M:%S') attempting to stop next-server on port $PORT" >> $HOME/var/log/monit.log
+
+PID=$(ss -ltnp 2>/dev/null | grep ":$PORT " | awk -F',' '{print $2}' | cut -d'=' -f2)
+if [ -n "$PID" ]; then
+    kill $PID
+    echo "$(date '+%Y-%m-%d %H:%M:%S') stopped next-server PID" >> $HOME/var/log/monit.log
+fi
+
+if [ -z "$PID" ]; then
+    echo "$(date '+%Y-%m-%d %H:%M:%S') no running instance of next-server found" >> $HOME/var/log/monit.log
+fi
